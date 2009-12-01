@@ -34,14 +34,14 @@ namespace Adenson.Configuration
 
 		internal static object GetSection(string section)
 		{
-			object result = ConfigSectionHelper.GetSection("Adenson", section); //the new way
-			if (result == null) result = GetSection("Adenson.Utils", section); //Logger and DirectoryInfo uses this
-			if (result == null && section == "Logger") result = GetSection("Adenson.Log", section);
-			if (result == null && section == "SqlHelper") result = GetSection("Adenson.Data", section);
-			if (result == null && section == "DirectoryInfo")
+			object result = ConfigSectionHelper.GetSection("adenson", section); //the new way
+			if (result == null) result = ConfigSectionHelper.GetSection("adenson.Utils", section); //Logger and DirectoryInfo uses this
+			if (result == null && section == "logger") result = ConfigSectionHelper.GetSection("adenson.log", section);
+			if (result == null && section == "sqlhelper") result = ConfigSectionHelper.GetSection("adenson.data", section);
+			if (result == null && section == "directoryinfo")
 			{
-				result = GetSection("Adenson.IO", section);
-				if (result == null) GetSection("Adenson.Utils", "IOUtils");
+				result = GetSection("adenson.io", section);
+				if (result == null) GetSection("adenson.utils", "ioutils");
 			}
 
 			return result;
