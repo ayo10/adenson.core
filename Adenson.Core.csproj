@@ -27,7 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -79,6 +79,9 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -123,6 +126,7 @@
     <Compile Include="Cryptography\KeyFormat.cs" />
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

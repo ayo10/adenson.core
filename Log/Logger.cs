@@ -21,10 +21,10 @@ namespace Adenson.Log
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static string configEmailErrorTo, configSource;
 		private static ushort configBatchLogSize = 0;
-		private static LogSeverity configSeverityLevel = LogSeverity.None;
+		private static LogSeverity configSeverityLevel = LogSeverity.Error;
 		private static LogType configLogType = LogType.None;
 		private static SqlHelperBase sqlHelper;
-		private static object isInWindowsContext, isInWebContext, isUsingSNWeb;
+		private static object isInWindowsContext, isInWebContext, isUsingWeb;
 		private static string executablePath; 
 		private Type _type;
 		private ushort _batchLogSize = 10;
@@ -38,12 +38,16 @@ namespace Adenson.Log
 
 		static Logger()
 		{
-			Dictionary<string, string> config = ConfigSectionHelper.GetDictionary("Logger");
+			#if DEBUG
+			configLogType = LogType.DiagnosticsDebug;
+			configSeverityLevel = LogSeverity.Debug;
+			#endif
+			Dictionary<string, string> config = ConfigSectionHelper.GetDictionary("logger");
 			if (config != null)
 			{
-				if (config.ContainsKey("LogType"))
+				if (config.ContainsKey("logType", StringComparison.CurrentCultureIgnoreCase))
 				{
-					string logType = config["LogType"];
+					string logType = config.GetValue("logType");
 					if (logType.IndexOf("|") > 0)
 					{
 						string[] splits = logType.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
@@ -55,12 +59,11 @@ namespace Adenson.Log
 					else configLogType = (LogType)Enum.Parse(typeof(LogType), logType);
 				}
 
-				if (config.ContainsKey("Severity")) configSeverityLevel = (LogSeverity)Enum.Parse(typeof(LogSeverity), config["Severity"], true);
-				else if (config.ContainsKey("SeverityLevel")) configSeverityLevel = (LogSeverity)Enum.Parse(typeof(LogSeverity), config["SeverityLevel"], true);
-				if (config.ContainsKey("EmailErrorTo")) configEmailErrorTo = config["EmailErrorTo"];
-				if (config.ContainsKey("BatchSize")) configBatchLogSize = Convert.ToUInt16(config["BatchSize"]);
-				if (config.ContainsKey("ErrorAlertType")) configErrorAlertType = ErrorAlertType.Parse(config["ErrorAlertType"]);
-				if (config.ContainsKey("Source")) configSource = config["Source"];
+				if (config.ContainsKey("severity", StringComparison.CurrentCultureIgnoreCase)) configSeverityLevel = (LogSeverity)Enum.Parse(typeof(LogSeverity), config.GetValue("severity"), true);
+				if (config.ContainsKey("emailErrorTo", StringComparison.CurrentCultureIgnoreCase)) configEmailErrorTo = config.GetValue("emailErrorTo");
+				if (config.ContainsKey("batchSize", StringComparison.CurrentCultureIgnoreCase)) configBatchLogSize = Convert.ToUInt16(config.GetValue("batchSize"));
+				if (config.ContainsKey("errorAlertType", StringComparison.CurrentCultureIgnoreCase)) configErrorAlertType = ErrorAlertType.Parse(config.GetValue("errorAlertType"));
+				if (config.ContainsKey("source", StringComparison.CurrentCultureIgnoreCase)) configSource = config.GetValue("source");
 			}
 			else
 			{
@@ -74,7 +77,7 @@ namespace Adenson.Log
 				{
 					configLogType = LogType.WebProjects;
 					#if DEBUG 
-					if (Logger.IsUsingAdensonWeb()) configErrorAlertType = ErrorAlertType.Parse("Adenson.Web.UI, Adenson.Web.UI.MessageBox, Show");
+					if (Logger.IsUsingWeb()) configErrorAlertType = ErrorAlertType.Parse("Adenson.Web.UI, Adenson.Web.UI.MessageBox, Show");
 					#endif
 				}
 				if (Logger.CheckIsInWindowsContext())
@@ -684,19 +687,19 @@ namespace Adenson.Log
 			}
 			return (bool)isInWebContext;
 		}
-		private static bool IsUsingAdensonWeb()
+		private static bool IsUsingWeb()
 		{
-			if (isUsingSNWeb == null)
+			if (isUsingWeb == null)
 			{
 				try
 				{
 					Assembly.Load("Adenson.Web.UI");
-					isUsingSNWeb = true;
+					isUsingWeb = true;
 				}
 				catch {}
-				isUsingSNWeb = false;
+				isUsingWeb = false;
 			}
-			return (bool)isUsingSNWeb;
+			return (bool)isUsingWeb;
 		}
 
 		#endregion
