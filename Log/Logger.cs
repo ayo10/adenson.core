@@ -72,26 +72,11 @@ namespace Adenson.Log
 				#else
 				configSeverityLevel = LogSeverity.Error;
 				#endif
-
-				if (Logger.CheckIsInWebContext())
-				{
-					configLogType = LogType.WebProjects;
-					#if DEBUG 
-					if (Logger.IsUsingWeb()) configErrorAlertType = ErrorAlertType.Parse("Adenson.Web.UI, Adenson.Web.UI.MessageBox, Show");
-					#endif
-				}
-				if (Logger.CheckIsInWindowsContext())
-				{
-					configLogType = LogType.WinFormProjects;
-					#if DEBUG 
-					configErrorAlertType = ErrorAlertType.Parse("System.Windows.Forms, System.Windows.Forms.MessageBox, Show");
-					#endif
-				}
-				else configLogType = LogType.ConsoleProjects;
+				configLogType = LogType.ConsoleProjects;
 			}
 
 			if ((configLogType & LogType.EventLog) != LogType.None && string.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
-			string connString = ConnectionStrings.TryGet("logger", true);
+			string connString = ((configLogType & LogType.DataBase) == 0) ? null : ConnectionStrings.TryGet("logger", true);
 			if (!String.IsNullOrEmpty(connString)) sqlHelper = SqlHelperProvider.Create(connString, true);
 		}
 
@@ -231,8 +216,6 @@ namespace Adenson.Log
 		{
 			get
 			{
-				Logger.CheckIsInWebContext();
-				Logger.CheckIsInWindowsContext();
 				if (!string.IsNullOrEmpty(executablePath)) return executablePath;
 				Assembly assembly = Assembly.GetEntryAssembly();
 				if (assembly == null) assembly = Assembly.GetExecutingAssembly();
@@ -648,58 +631,6 @@ namespace Adenson.Log
 				Thread.Sleep(1000);
 				ActualFileWrite(filePath, str, numAttempts);
 			}
-		}
-		private static bool CheckIsInWindowsContext()
-		{
-			if (isInWindowsContext == null)
-			{
-				try
-				{
-					Assembly assembly = Assembly.Load("System.Windows.Form");
-					Type type = assembly.GetType("System.Windows.Form.Application");
-					PropertyInfo info = type.GetProperty("ExecutablePath", BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-					executablePath = (string)info.GetValue(null, null);
-					isInWindowsContext = true;
-				}
-				catch { }
-				isInWindowsContext = false;
-			}
-			return (bool)isInWindowsContext;
-		}
-		private static bool CheckIsInWebContext()
-		{
-			if (isInWebContext == null)
-			{
-				try
-				{
-					Assembly assembly = Assembly.Load("System.Web");
-					Type type = assembly.GetType("HttpContext");
-					PropertyInfo info = type.GetProperty("Current", BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-					object currentContext = info.GetValue(null, null);
-					info = currentContext.GetType().GetProperty("Request", BindingFlags.Public | BindingFlags.Instance);
-					object request = info.GetValue(currentContext, null);
-					info = request.GetType().GetProperty("RawUrl", BindingFlags.Public | BindingFlags.Instance);
-					executablePath = (string)info.GetValue(request, null);
-					isInWebContext = true;
-				}
-				catch { }
-				isInWebContext = false;
-			}
-			return (bool)isInWebContext;
-		}
-		private static bool IsUsingWeb()
-		{
-			if (isUsingWeb == null)
-			{
-				try
-				{
-					Assembly.Load("Adenson.Web.UI");
-					isUsingWeb = true;
-				}
-				catch {}
-				isUsingWeb = false;
-			}
-			return (bool)isUsingWeb;
 		}
 
 		#endregion
