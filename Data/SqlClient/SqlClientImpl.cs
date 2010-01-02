@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Adenson.Data.SqlClient
 {
@@ -54,6 +55,27 @@ namespace Adenson.Data.SqlClient
 			if (sqltransaction != null) command.Transaction = sqltransaction;
 			this.AssignParameters(command, commandText, parameterValues);
 			return this.ExecuteNonQuery(command);
+		}
+		public override int[] ExecuteNonQueryBatched(params string[] commandTexts)
+		{
+			if (commandTexts.Length == 1)
+			{
+				string str = commandTexts[0];
+				string[] splits = str.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+				if (splits.Any(s => String.Equals(s, "GO")))
+				{
+					splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+					List<string> sqls = new List<string>();
+					foreach (string s in splits.Select(s => s.Trim()))
+					{
+						if (s == String.Empty) continue;
+						//if (s.StartsWith("SET ", StringComparison.CurrentCultureIgnoreCase)) continue;
+						sqls.Add(s);
+					}
+					return base.ExecuteNonQueryBatched(sqls.ToArray());
+				}
+			}
+			return base.ExecuteNonQueryBatched(commandTexts);
 		}
 		public override IDataReader ExecuteReader(CommandType type, string commandText, params object[] parameterValues)
 		{

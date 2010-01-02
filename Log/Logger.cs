@@ -24,8 +24,6 @@ namespace Adenson.Log
 		private static LogSeverity configSeverityLevel = LogSeverity.Error;
 		private static LogType configLogType = LogType.None;
 		private static SqlHelperBase sqlHelper;
-		private static object isInWindowsContext, isInWebContext, isUsingWeb;
-		private static string executablePath; 
 		private Type _type;
 		private ushort _batchLogSize = 10;
 		private ErrorAlertType _errorAlertType;
@@ -75,7 +73,7 @@ namespace Adenson.Log
 				configLogType = LogType.ConsoleProjects;
 			}
 
-			if ((configLogType & LogType.EventLog) != LogType.None && string.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
+			if ((configLogType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
 			string connString = ((configLogType & LogType.DataBase) == 0) ? null : ConnectionStrings.TryGet("logger", true);
 			if (!String.IsNullOrEmpty(connString)) sqlHelper = SqlHelperProvider.Create(connString, true);
 		}
@@ -122,7 +120,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if source is null and logType includes EventLog</exception>
 		public Logger(Type type, LogType logType, string source) : this(type)
 		{
-			if ((logType & LogType.EventLog) != LogType.None && string.IsNullOrEmpty(source)) throw new ArgumentNullException("source", ExceptionMessages.EventLogTypeWithSourceNull);
+			if ((logType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", ExceptionMessages.EventLogTypeWithSourceNull);
 			_logType = logType;
 			_source = source;
 		}
@@ -185,7 +183,7 @@ namespace Adenson.Log
 		/// </summary>
 		public string EmailErrorTo
 		{
-			get { return string.IsNullOrEmpty(_emailErrorTo) ? configEmailErrorTo : _emailErrorTo; }
+			get { return String.IsNullOrEmpty(_emailErrorTo) ? configEmailErrorTo : _emailErrorTo; }
 			set { _emailErrorTo = value; }
 		}
 		/// <summary>
@@ -208,7 +206,7 @@ namespace Adenson.Log
 		/// </summary>
 		public string Source
 		{
-			get { return string.IsNullOrEmpty(_source) ? configSource : _source; }
+			get { return String.IsNullOrEmpty(_source) ? configSource : _source; }
 			internal set { _source = value; }
 		}
 
@@ -216,11 +214,10 @@ namespace Adenson.Log
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(executablePath)) return executablePath;
 				Assembly assembly = Assembly.GetEntryAssembly();
 				if (assembly == null) assembly = Assembly.GetExecutingAssembly();
 				if (assembly == null) assembly = Assembly.GetCallingAssembly();
-				if (assembly == null) return string.Empty;
+				if (assembly == null) return String.Empty;
 				return Uri.EscapeUriString(assembly.CodeBase);
 			}
 		}
@@ -244,7 +241,7 @@ namespace Adenson.Log
 		public void LogInfo(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Info)) return;
-			this.Write(LogSeverity.Info, arguments == null ? message : string.Format(message, arguments));
+			this.Write(LogSeverity.Info, arguments == null ? message : String.Format(message, arguments));
 		}
 		/// <summary>
 		/// Logs the value into the log of type debug, converting value to string
@@ -262,7 +259,7 @@ namespace Adenson.Log
 		public void LogDebug(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Debug)) return;
-			this.Write(LogSeverity.Debug, arguments == null ? message : string.Format(message, arguments));
+			this.Write(LogSeverity.Debug, arguments == null ? message : String.Format(message, arguments));
 		}
 		/// <summary>
 		/// Called to log errors of type Warning converting value to string
@@ -280,7 +277,7 @@ namespace Adenson.Log
 		public void LogWarning(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Warning)) return;
-			this.Write(LogSeverity.Warning, arguments == null ? message : string.Format(message, arguments));
+			this.Write(LogSeverity.Warning, arguments == null ? message : String.Format(message, arguments));
 		}
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
@@ -297,7 +294,7 @@ namespace Adenson.Log
 		/// <param name="arguments">Arguments, if any to format message</param>
 		public void LogError(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Error, arguments == null ? message : string.Format(message, arguments));
+			this.Write(LogSeverity.Error, arguments == null ? message : String.Format(message, arguments));
 		}
 		/// <summary>
 		/// Called to log errors of type Error
@@ -378,11 +375,11 @@ namespace Adenson.Log
 		{
 			if ((entry.LogType & LogType.Console) != LogType.None)
 			{
-				Console.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().Substring(0, 1), entry.Date.ToString(SR.LoggerDateFormat), TypeToString(entry.Type), entry.Message));
+				Console.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString(SR.LoggerDateFormat), entry.Type.Name, entry.Message));
 			}
 			if ((entry.LogType & LogType.DiagnosticsDebug) != LogType.None)
 			{
-				Debug.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().Substring(0, 1), entry.Date.ToString(SR.LoggerDateFormat), TypeToString(entry.Type), entry.Message));
+				Debug.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString(SR.LoggerDateFormat), entry.Type.Name, entry.Message));
 			}
 		}
 
@@ -481,7 +478,7 @@ namespace Adenson.Log
 			Logger.SuspendLogging(typeof(ConnectionStrings));
 			string connectionString = ConnectionStrings.Get("logger");
 			Logger.ResumeLogging(typeof(ConnectionStrings));
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException(ExceptionMessages.LoggerNoConnString);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentException(ExceptionMessages.LoggerNoConnString);
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 			foreach (LogEntry row in entries)
 			{
@@ -494,7 +491,7 @@ namespace Adenson.Log
 			}
 			catch (Exception ex)
 			{
-				Logger.LogInternalError(ex, true);
+				Logger.LogInternalError(ex);
 			}
 			return false;
 		}
@@ -512,7 +509,7 @@ namespace Adenson.Log
 			}
 			catch (Exception ex)
 			{
-				Logger.LogInternalError(ex, true);
+				Logger.LogInternalError(ex);
 			}
 			return false;
 		}
@@ -531,7 +528,7 @@ namespace Adenson.Log
 			}
 			catch (Exception ex)
 			{
-				Logger.LogInternalError(ex, true);
+				Logger.LogInternalError(ex);
 			}
 			return false;
 		}
@@ -550,28 +547,17 @@ namespace Adenson.Log
 			}
 		}
 
-		private static object TypeToString(Type type)
+		private static void LogInternalError(Exception ex)
 		{
-			string str = type == null ? "None" : type.Name;
-			if (str.Length <= 15) return str.PadRight(15);
-			else return string.Concat(str.Substring(0, 7), "..", str.Substring(str.Length - 6));
-		}
-		private static void LogInternalError(Exception ex, bool logToSystemFile)
-		{
+			#if DEBUG
+			System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+			#else
 			try
 			{
-#if DEBUG
-				System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-#else
 				EventLog.WriteEntry("SnUtilsLogger", ConvertToString(ex), EventLogEntryType.Warning);
-#endif
-				//if (logToSystemFile)
-				//{
-				//    string path = Path.Combine(Environment.SystemDirectory, string.Concat("snutils.", SR.VarEventLogFile));
-				//    ActualFileWrite(path, ConvertToString(ex), 1);
-				//}
 			}
 			catch { }
+			#endif
 		}
 		private static void ActualFileWrite(string str, int numAttempts) 
 		{
@@ -590,9 +576,9 @@ namespace Adenson.Log
 					if (traceFile.LastWriteTime.Date < DateTime.Now.AddDays(-1))
 					{
 						string postPend = traceFile.LastWriteTime.ToString("yyyyMMdd");
-						string traceFileName = string.Concat(fileName, postPend, extension);
+						string traceFileName = String.Concat(fileName, postPend, extension);
 						FileInfo[] fs = traceFile.Directory.GetFiles("*" + traceFileName);
-						if (fs.Length > 0) traceFileName = string.Concat(fileName, postPend, fs.Length, extension);
+						if (fs.Length > 0) traceFileName = String.Concat(fileName, postPend, fs.Length, extension);
 						traceFile.MoveTo(traceFileName);
 					}
 				}
@@ -616,7 +602,7 @@ namespace Adenson.Log
 				catch (Exception ex)
 				{
 					failed = true;
-					Logger.LogInternalError(ex, false);
+					Logger.LogInternalError(ex);
 				}
 				finally
 				{
