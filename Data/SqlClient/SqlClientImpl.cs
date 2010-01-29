@@ -62,15 +62,22 @@ namespace Adenson.Data.SqlClient
 			{
 				string str = commandTexts[0];
 				string[] splits = str.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				if (splits.Any(s => String.Equals(s, "GO")))
+				if (splits.Any(s => String.Equals(s, "GO", StringComparison.CurrentCultureIgnoreCase)))
 				{
-					splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+					//doing below for some odd reason changes the order of strings
+					//splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+					
 					List<string> sqls = new List<string>();
-					foreach (string s in splits.Select(s => s.Trim()))
+					string last = String.Empty;
+					foreach (string ins in splits.Select(s => s.Trim()))
 					{
-						if (s == String.Empty) continue;
-						//if (s.StartsWith("SET ", StringComparison.CurrentCultureIgnoreCase)) continue;
-						sqls.Add(s);
+						if (ins == String.Empty) continue;
+						if (String.Equals(ins, "GO", StringComparison.CurrentCultureIgnoreCase))
+						{
+							if (last != String.Empty) sqls.Add(last.Trim());
+							last = string.Empty;
+						}
+						else last += ins + Environment.NewLine;
 					}
 					return base.ExecuteNonQueryBatched(sqls.ToArray());
 				}
