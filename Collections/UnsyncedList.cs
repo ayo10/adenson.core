@@ -387,7 +387,7 @@ namespace Adenson.Collections
 		/// Performs the specified action on each element of the list.
 		/// </summary>
 		/// <param name="action">The action delegate to perform on each element of the list.</param>
-		/// <exception name="ArgumentNullException">action is null.
+		/// <exception name="ArgumentNullException">action is null.</exception>
 		public void ForEach(Action<T> action)
 		{
 			readWriteLock.AcquireReaderLock(-1);
