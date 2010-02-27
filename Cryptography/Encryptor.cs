@@ -22,7 +22,7 @@ namespace Adenson.Cryptography
 			//<Encryptor Type="AES" Key="jzAH8SMGI+x7XfD0PuUp9jGaVWoOQdDK5Cb9qzTbFq8=" Vector="teY2aQzLPW3ThSKxTB31Kw==" KeyFormat="Base64"/>
 			foreach (Configuration.EncryptorElement elem in section.Encryptors)
 			{
-				if (elem.EncryptorType == EncryptorType.Custom && string.IsNullOrEmpty(elem.TypeName)) throw new InvalidOperationException(ExceptionMessages.CustomEncryptorMissingAttributes);
+				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrEmpty(elem.TypeName)) throw new InvalidOperationException(ExceptionMessages.CustomEncryptorMissingAttributes);
 				encryptors.Add(elem.Name, elem.GetEncryptor());
 			}
 		}
@@ -57,7 +57,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Encrypt(string key, string toEncrypt)
 		{
-			if (string.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
 			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
 			return encryptors[key].Encrypt(toEncrypt);
@@ -80,7 +80,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Decrypt(string key, string toDecrypt)
 		{
-			if (string.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
 			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt", ExceptionMessages.ArgumentNull);
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
 
@@ -104,7 +104,7 @@ namespace Adenson.Cryptography
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 			}
 			return false;
 		}
@@ -126,7 +126,7 @@ namespace Adenson.Cryptography
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 			}
 			return false;
 		}

@@ -1,13 +1,5 @@
 using System;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Xml;
-using Adenson.Log;
 
 namespace Adenson.Configuration
 {
@@ -18,14 +10,17 @@ namespace Adenson.Configuration
 	/// </summary>
 	public static class ConnectionStrings
 	{
+		#region Constants
+		public const string DefaultKey = "default";
+		#endregion
 		#region Properties
 
 		/// <summary>
 		/// Gets the default connection string
 		/// </summary>
-		public static string Default
+		public static ConnectionStringSettings Default
 		{
-			get { return Get("default", false); }
+			get { return Get(ConnectionStrings.DefaultKey, false); }
 		}
 
 		#endregion
@@ -38,7 +33,7 @@ namespace Adenson.Configuration
 		/// <param name="key">The lookup key for the connection string!</param>
 		/// <returns>A connection string</returns>
 		/// <remarks>calls GetCS(key, true)</remarks>
-		public static string Get(string key)
+		public static ConnectionStringSettings Get(string key)
 		{
 			return Get(key, true);
 		}
@@ -46,16 +41,16 @@ namespace Adenson.Configuration
 		/// Gets a connection string using the key
 		/// </summary>
 		/// <param name="key">Key to use to do a lookup</param>
-		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if string.IsNullOrEmpty(result) == true</param>
+		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true</param>
 		/// <returns>A connection string</returns>
 		/// <exception cref="ArgumentNullException">if key is null or empty</exception>
 		/// <exception cref="ArgumentOutOfRangeException">if no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>
-		public static string Get(string key, bool useDefaultIfNull)
+		public static ConnectionStringSettings Get(string key, bool useDefaultIfNull)
 		{
-			if (string.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-			string result = ConnectionStrings.GetValue(key);
-			if (string.IsNullOrEmpty(result) && useDefaultIfNull) result = ConnectionStrings.Default;
-			if (result == null) throw new ArgumentOutOfRangeException(key, String.Format("No Connection String Found either for {0} or {1}", key, "default"));
+			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
+			if (result == null && useDefaultIfNull) result = ConnectionStrings.Default;
+			if (result == null) throw new ArgumentOutOfRangeException(key, String.Format("No connection String Found either for {0} or {1}", key, ConnectionStrings.DefaultKey));
 			return result;
 		}
 		/// <summary>
@@ -64,34 +59,33 @@ namespace Adenson.Configuration
 		/// <param name="key">The lookup key for the connection string!</param>
 		/// <returns>A connection string</returns>
 		/// <remarks>calls GetCS(key, true)</remarks>
-		public static string TryGet(string key)
+		public static bool TryGet(string key, out ConnectionStringSettings connectionSetting)
 		{
-			return ConnectionStrings.TryGet(key, false);
+			return ConnectionStrings.TryGet(key, false, out connectionSetting);
 		}
 		/// <summary>
 		/// Calls ConnectionStrings.GetCS, catching ArgumentOutOfRangeException that would have been thrown.
 		/// </summary>
 		/// <param name="key">Key to use to do a lookup</param>
-		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if string.IsNullOrEmpty(result) == true, null otherwise</param>
+		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true, null otherwise</param>
 		/// <returns>A connection string</returns>
-		public static string TryGet(string key, bool useDefaultIfNull)
+		public static bool TryGet(string key, bool useDefaultIfNull, out ConnectionStringSettings connectionSetting)
 		{
 			try
 			{
-				return ConnectionStrings.Get(key, useDefaultIfNull);
+				connectionSetting = ConnectionStrings.Get(key, useDefaultIfNull);
+				return true;
 			}
 			catch
 			{
 			}
-			return null;
+			connectionSetting = null;
+			return false;
 		}
 
-		private static string GetValue(string key)
+		private static ConnectionStringSettings GetValue(string key)
 		{
-			string result = null;
-			ConnectionStringSettings cs = ConfigurationManager.ConnectionStrings[key];
-			if (cs != null) result = cs.ConnectionString;
-			return result;
+			return ConfigurationManager.ConnectionStrings[key];
 		}
 
 		#endregion

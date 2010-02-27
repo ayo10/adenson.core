@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using Adenson.Configuration;
+using Adenson.Log;
 
 namespace Adenson.Data
 {
@@ -13,7 +16,7 @@ namespace Adenson.Data
 		#region Variables
 		private bool mustCloseConnection = true;
 		private ConnectionManager _connection;
-		private Log.Logger logger;
+		private static Logger logger = Logger.GetLogger(typeof(SqlHelperBase));
 		#endregion
 		#region Constructors
 
@@ -22,23 +25,23 @@ namespace Adenson.Data
 		/// ConnectionStrings.GetCS(connectionKey) to retrieve the connection string
 		/// </summary>
 		/// <param name="connectionKey">The connection key to use</param>
-		public SqlHelperBase(string connectionKey) : this(connectionKey, false)
+		public SqlHelperBase(string connectionKey)
 		{
+			if (String.IsNullOrEmpty(connectionKey)) throw new ArgumentNullException("connectionKey");
+			ConnectionStringSettings connectionString;
+			if (!ConnectionStrings.TryGet(connectionKey, false, out connectionString)) throw new ArgumentNullException("ConnectionString", "Unable to determine connection string");
+			this.ConnectionString = connectionString.ConnectionString;
 		}
 		/// <summary>
 		/// When implemented, should instantiate a new instance of the sql helper using specified connection as a
 		/// connection string if isConnectionString is true, else uses ConnectionStrings.GetCS to retrieve it
 		/// </summary>
-		/// <param name="connectionKeyOrString"></param>
-		/// <param name="isConnectionString">if the first parameter is a connection string</param>
-		public SqlHelperBase(string connectionKeyOrString, bool isConnectionString)
+		/// <param name="connectionString"></param>
+		public SqlHelperBase(ConnectionStringSettings connectionString)
 		{
-			if (string.IsNullOrEmpty(connectionKeyOrString)) throw new ArgumentNullException("connectionKeyOrString", ExceptionMessages.ArgumentNullOrEmpty);
-			if (isConnectionString) this.ConnectionString = connectionKeyOrString;
-			else this.ConnectionString = Configuration.ConnectionStrings.Get(connectionKeyOrString, false);
-			if (string.IsNullOrEmpty(this.ConnectionString)) throw new ArgumentNullException("ConnectionString", "Unable to determine connection string");
-
-			logger = new Adenson.Log.Logger(this.GetType());
+			if (connectionString == null) throw new ArgumentNullException("connectionString");
+			if (String.IsNullOrEmpty(connectionString.ConnectionString)) throw new ArgumentNullException("connectionString.ConnectionString");
+			this.ConnectionString = connectionString.ConnectionString;
 		}
 		
 		#endregion
@@ -110,7 +113,7 @@ namespace Adenson.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 				throw;
 			}
 		}
@@ -168,7 +171,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (string.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
 			}
 
 			try
@@ -215,7 +218,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (string.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
 			}
 
 			try
@@ -277,7 +280,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (string.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
 			}
 
 			try
@@ -352,5 +355,6 @@ namespace Adenson.Data
 		}
 
 		#endregion
+
 	}
 }

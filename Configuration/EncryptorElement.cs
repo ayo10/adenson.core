@@ -65,7 +65,7 @@ namespace Adenson.Configuration
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(this.Key)) return EncryptorElement.DefaultKey;
+				if (String.IsNullOrEmpty(this.Key)) return EncryptorElement.DefaultKey;
 				switch (this.KeyFormat)
 				{
 					case KeyFormat.CommaDelimitedBytes: return this.Split(this.Key);
@@ -77,7 +77,7 @@ namespace Adenson.Configuration
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(this.Vector)) return EncryptorElement.DefaultIV;
+				if (String.IsNullOrEmpty(this.Vector)) return EncryptorElement.DefaultIV;
 				switch (this.KeyFormat)
 				{
 					case KeyFormat.CommaDelimitedBytes: return this.Split(this.Vector);
@@ -99,7 +99,7 @@ namespace Adenson.Configuration
 				case EncryptorType.TripleDES: encryptor = new TripleDES(this.KeyInBytes, this.VectorInBytes); break;
 				case EncryptorType.Custom:
 					Type encType = null;
-					if (!string.IsNullOrEmpty(this.AssemblyName))
+					if (!String.IsNullOrEmpty(this.AssemblyName))
 					{
 						System.Reflection.Assembly assembly = AppDomain.CurrentDomain.Load(this.AssemblyName);
 						encType = assembly.GetType(this.TypeName);

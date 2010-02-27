@@ -23,7 +23,7 @@ namespace Adenson.Data.SqlClient
 		/// <param name="commandParameters">An array of SqlParamters to be cached</param>
 		public static void CacheParameterSet(string connectionString, string commandText, params SqlParameter[] commandParameters)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -37,7 +37,7 @@ namespace Adenson.Data.SqlClient
 		/// <returns>An array of SqlParamters</returns>
 		public static SqlParameter[] GetCachedParameterSet(string connectionString, string commandText)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -70,8 +70,8 @@ namespace Adenson.Data.SqlClient
 		/// <returns>An array of SqlParameters</returns>
 		public static SqlParameter[] GetSpParameterSet(string connectionString, string spName, bool includeReturnValueParameter)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
@@ -140,7 +140,7 @@ namespace Adenson.Data.SqlClient
 		private static SqlParameter[] GetSpParameterSetInternal(SqlConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connection.ConnectionString + ":" + spName + (includeReturnValueParameter ? ":include ReturnValue Parameter" : String.Empty);
 
@@ -166,7 +166,7 @@ namespace Adenson.Data.SqlClient
 		private static SqlParameter[] DiscoverSpParameterSet(SqlConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			SqlCommand cmd = new SqlCommand(spName, connection);
 			cmd.CommandType = CommandType.StoredProcedure;

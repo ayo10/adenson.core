@@ -47,7 +47,7 @@ namespace Adenson.Data
 		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
 		public static SqlHelperBase Create()
 		{
-			return SqlHelperProvider.Create(ConnectionStrings.Default, true);
+			return SqlHelperProvider.Create(ConnectionStrings.Default);
 		}
 		/// <summary>
 		/// Creates a new ISqlHelper instance, information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
@@ -71,7 +71,7 @@ namespace Adenson.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 				throw;
 			}
 		}
@@ -98,7 +98,7 @@ namespace Adenson.Data
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 				throw;
 			}
 		}
@@ -116,17 +116,18 @@ namespace Adenson.Data
 		/// <exception cref="BadImageFormatException">The assembly specified in the configuration file is not a valid assembly, could also be as a result of Version 2.0 or later of the common language runtime is currently loaded and assemblyName was compiled with a later version.</exception>
 		/// <exception cref="System.IO.FileNotFoundException">The assembly specified in the configuration file was not found.</exception>
 		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
-		public static SqlHelperBase Create(string connectionKeyOrString, bool isConnectionString)
+		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
-			if (assemblyName == null && typeName == null || assemblyName == "Adenson.Core" && typeName == "Adenson.Data.SqlClient.SqlClientImpl") return new SqlClient.SqlClientImpl(connectionKeyOrString, isConnectionString);
+			if (connectionString == null) throw new ArgumentNullException("connectionString");
+			if (assemblyName == null && typeName == null || assemblyName == "Adenson.Core" && typeName == "Adenson.Data.SqlClient.SqlClientImpl") return new SqlClient.SqlClientImpl(connectionString);
 			try
 			{
 				AppDomain.CurrentDomain.Load(assemblyName);
-				return (SqlHelperBase)AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.CreateInstance, null, new object[] { connectionKeyOrString, isConnectionString }, null, null, null);
+				return (SqlHelperBase)AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null, null);
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex);
+				logger.Error(ex);
 				throw;
 			}
 		}

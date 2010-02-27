@@ -133,7 +133,7 @@ namespace Adenson.IO
 		/// <exception cref="ArgumentException">path does not specify a valid file path or contains invalid DirectoryInfo characters.</exception>
 		public DirectoryInfo CreateSubdirectory(string path)
 		{
-			if (string.IsNullOrEmpty(path)) throw new ArgumentNullException("path", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(path)) throw new ArgumentNullException("path", ExceptionMessages.ArgumentNullOrEmpty);
 			if (path.StartsWith("//")) throw new ArgumentException("Path cannot be UNC", "path");
 			string dirPath = path;
 			if (path.IndexOf("://") == -1) dirPath = Path.Combine(this.FullName, path);

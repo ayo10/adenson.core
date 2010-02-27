@@ -23,7 +23,7 @@ namespace Adenson.Data.OleDb
 		/// <param name="commandParameters">An array of OleDbParamters to be cached</param>
 		public static void CacheParameterSet(string connectionString, string commandText, params OleDbParameter[] commandParameters)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -38,7 +38,7 @@ namespace Adenson.Data.OleDb
 		/// <returns>An array of OleDbParamters</returns>
 		public static OleDbParameter[] GetCachedParameterSet(string connectionString, string commandText)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -72,8 +72,8 @@ namespace Adenson.Data.OleDb
 		/// <returns>An array of OleDbParameters</returns>
 		public static OleDbParameter[] GetSpParameterSet(string connectionString, string spName, bool includeReturnValueParameter)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			using (OleDbConnection connection = new OleDbConnection(connectionString))
 			{
@@ -142,7 +142,7 @@ namespace Adenson.Data.OleDb
 		private static OleDbParameter[] GetSpParameterSetInternal(OleDbConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			string hashKey = connection.ConnectionString + ":" + spName + (includeReturnValueParameter ? ":include ReturnValue Parameter" : String.Empty);
 
@@ -168,7 +168,7 @@ namespace Adenson.Data.OleDb
 		private static OleDbParameter[] DiscoverSpParameterSet(OleDbConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 
 			OleDbCommand cmd = new OleDbCommand(spName, connection);
 			cmd.CommandType = CommandType.StoredProcedure;

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 
 namespace Adenson.Data.SqlClient
@@ -18,7 +20,7 @@ namespace Adenson.Data.SqlClient
 		public SqlClientImpl(string connectionKey) : base(connectionKey)
 		{
 		}
-		public SqlClientImpl(string connectionKeyOrString, bool isConnectionString) : base(connectionKeyOrString, isConnectionString)
+		public SqlClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
 

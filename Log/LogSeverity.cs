@@ -22,7 +22,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Only messages called with Warning and Error are logged
 		/// </summary>
-		Warning = 8,
+		Warn = 8,
 		/// <summary>
 		/// Only messages called with Error are logged
 		/// </summary>
