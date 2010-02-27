@@ -1,8 +1,9 @@
 using System;
-using System.Data;
-using System.Data.OleDb;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
 using System.Data.Common;
+using System.Data.OleDb;
 
 namespace Adenson.Data.OleDb
 {
@@ -17,7 +18,7 @@ namespace Adenson.Data.OleDb
 		public OleDbClientImpl(string connectionKey) : base(connectionKey)
 		{
 		}
-		public OleDbClientImpl(string connectionKeyOrString, bool isConnectionString) : base(connectionKeyOrString, isConnectionString)
+		public OleDbClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
 
@@ -128,7 +129,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override void ClearParameterCache(string spName)
 		{
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
 			OleDbParameterCache.Clear(spName);
 		}
 		public override bool CheckTableExists(string tableName)
@@ -169,7 +170,7 @@ namespace Adenson.Data.OleDb
 
 		private static void CheckArgument(string argument, string paramName)
 		{
-			if (string.IsNullOrEmpty(argument)) throw new ArgumentNullException(paramName, ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(argument)) throw new ArgumentNullException(paramName, ExceptionMessages.ArgumentNull);
 		}
 		private static OleDbCommand CheckCommand(IDbCommand command)
 		{

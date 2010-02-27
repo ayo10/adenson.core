@@ -213,7 +213,7 @@ namespace Adenson
 		/// <returns>The value</returns>
 		public virtual object GetValue(string key)
 		{
-			if (string.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNullOrEmpty);
 
 			Dictionary<string, ResourceData> dictionary = null;
 			typesResourcesTable.TryGetValue(this.Type.FullName, out dictionary);

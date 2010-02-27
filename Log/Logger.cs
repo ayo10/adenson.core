@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -19,16 +18,21 @@ namespace Adenson.Log
 		private static List<LogEntry> entries = new List<LogEntry>();
 		private static ErrorAlertType configErrorAlertType = null;
 		private static List<Type> suspendedTypes = new List<Type>();
-		private static string configEmailErrorTo, configSource;
+		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
+		private static string configEmailErrorTo;
+
+		private static string configSource;
 		private static ushort configBatchLogSize = 0;
 		private static LogSeverity configSeverityLevel = LogSeverity.Error;
 		private static LogType configLogType = LogType.None;
+		private static string configDateTimeFormat = "HH:mm:ss:fff";
 		private static SqlHelperBase sqlHelper;
 		private Type _type;
-		private ushort _batchLogSize = 10;
+		private ushort _batchLogSize;
 		private ErrorAlertType _errorAlertType;
 		private LogType _logType = LogType.None;
 		private LogSeverity _severity = LogSeverity.None;
+		private string _dateTimeFormat;
 		private string _emailErrorTo;
 		private string _source;
 		#endregion
@@ -62,6 +66,7 @@ namespace Adenson.Log
 				if (config.ContainsKey("batchSize", StringComparison.CurrentCultureIgnoreCase)) configBatchLogSize = Convert.ToUInt16(config.GetValue("batchSize"));
 				if (config.ContainsKey("errorAlertType", StringComparison.CurrentCultureIgnoreCase)) configErrorAlertType = ErrorAlertType.Parse(config.GetValue("errorAlertType"));
 				if (config.ContainsKey("source", StringComparison.CurrentCultureIgnoreCase)) configSource = config.GetValue("source");
+				if (config.ContainsKey("dateTimeFormat", StringComparison.CurrentCultureIgnoreCase)) configDateTimeFormat = config.GetValue<string>("datetimeformat");
 			}
 			else
 			{
@@ -74,8 +79,7 @@ namespace Adenson.Log
 			}
 
 			if ((configLogType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
-			string connString = ((configLogType & LogType.DataBase) == 0) ? null : ConnectionStrings.TryGet("logger", true);
-			if (!String.IsNullOrEmpty(connString)) sqlHelper = SqlHelperProvider.Create(connString, true);
+			if ((configLogType & LogType.DataBase) != 0) sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
 		}
 
 		/// <summary>	
@@ -145,6 +149,10 @@ namespace Adenson.Log
 		~Logger()
 		{
 			Logger.Flush(this.LogType);
+			lock (staticLoggers)
+			{
+				if (staticLoggers.ContainsKey(this.Type)) staticLoggers.Remove(this.Type);
+			}
 		}
 
 		#endregion
@@ -209,6 +217,14 @@ namespace Adenson.Log
 			get { return String.IsNullOrEmpty(_source) ? configSource : _source; }
 			internal set { _source = value; }
 		}
+		/// <summary>
+		/// Gets the string tht will be used as source for Window's Event Log
+		/// </summary>
+		public string DateTimeFormat
+		{
+			get { return (String.IsNullOrEmpty(this._dateTimeFormat) ? configDateTimeFormat : this._dateTimeFormat); }
+			set { this._dateTimeFormat = value; }
+		}
 
 		internal string RequestPath
 		{
@@ -229,16 +245,16 @@ namespace Adenson.Log
 		/// Logs the value into the log of type info, converting value to string
 		/// </summary>
 		/// <param name="value">The value</param>
-		public void LogInfo(object value)
+		public void Info(object value)
 		{
-			this.LogInfo(Convert.ToString(value));
+			this.Info(Convert.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Info
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public void LogInfo(string message, params object[] arguments)
+		public void Info(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Info)) return;
 			this.Write(LogSeverity.Info, arguments == null ? message : String.Format(message, arguments));
@@ -247,16 +263,16 @@ namespace Adenson.Log
 		/// Logs the value into the log of type debug, converting value to string
 		/// </summary>>
 		/// <param name="value">The value</param>
-		public void LogDebug(object value)
+		public void Debug(object value)
 		{
-			this.LogDebug(Convert.ToString(value));
+			this.Debug(Convert.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Debug
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public void LogDebug(string message, params object[] arguments)
+		public void Debug(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Debug)) return;
 			this.Write(LogSeverity.Debug, arguments == null ? message : String.Format(message, arguments));
@@ -265,34 +281,34 @@ namespace Adenson.Log
 		/// Called to log errors of type Warning converting value to string
 		/// </summary>
 		/// <param name="value">The value</param>
-		public void LogWarning(object value)
+		public void Warn(object value)
 		{
-			this.LogWarning(Convert.ToString(value));
+			this.Warn(Convert.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Warning
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public void LogWarning(string message, params object[] arguments)
+		public void Warn(string message, params object[] arguments)
 		{
-			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Warning)) return;
-			this.Write(LogSeverity.Warning, arguments == null ? message : String.Format(message, arguments));
+			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Warn)) return;
+			this.Write(LogSeverity.Warn, arguments == null ? message : String.Format(message, arguments));
 		}
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
 		/// </summary>
 		/// <param name="value">The value</param>
-		public void LogError(object value)
+		public void Error(object value)
 		{
-			this.LogError(Convert.ToString(value));
+			this.Error(Convert.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Error
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public void LogError(string message, params object[] arguments)
+		public void Error(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Error, arguments == null ? message : String.Format(message, arguments));
 		}
@@ -300,16 +316,16 @@ namespace Adenson.Log
 		/// Called to log errors of type Error
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
-		public void LogError(Exception ex)
+		public void Error(Exception ex)
 		{
-			this.LogError(ex, false);
+			this.Error(ex, false);
 		}
 		/// <summary>
 		/// Called to log errors of type Error
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
 		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
-		public void LogError(Exception ex, bool phoneHome)
+		public void Error(Exception ex, bool phoneHome)
 		{
 			string message = Logger.ConvertToString(ex);
 			LogEntry entry = this.Write(LogSeverity.Error, message);
@@ -353,7 +369,7 @@ namespace Adenson.Log
 			entry.Message = message;
 			entry.Source = this.Source;
 			entry.Path = this.RequestPath;
-			entry.Date = DateTime.Now;
+			entry.Date = DateTime.Now.ToString(this.DateTimeFormat);
 			entry.LogType = this.LogType;
 			entries.Add(entry);
 
@@ -375,11 +391,11 @@ namespace Adenson.Log
 		{
 			if ((entry.LogType & LogType.Console) != LogType.None)
 			{
-				Console.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString(SR.LoggerDateFormat), entry.Type.Name, entry.Message));
+				Console.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date, entry.Type.Name, entry.Message));
 			}
 			if ((entry.LogType & LogType.DiagnosticsDebug) != LogType.None)
 			{
-				Debug.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString(SR.LoggerDateFormat), entry.Type.Name, entry.Message));
+				System.Diagnostics.Debug.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date, entry.Type.Name, entry.Message));
 			}
 		}
 
@@ -387,14 +403,28 @@ namespace Adenson.Log
 		#region Static Methods
 
 		/// <summary>
+		/// Gets a pre initialized (or new) Logger for specified type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns>Existing, or newly minted logger</returns>
+		public static Logger GetLogger(Type type)
+		{
+			if (type == null) throw new ArgumentException("type");
+			lock (staticLoggers)
+			{
+				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
+				return staticLoggers[type];
+			}
+		}
+		/// <summary>
 		/// Instantiates a Logger object, then calls LogInfo 
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public static void LogInfo(Type type, string message, params object[] arguments)
+		public static void Info(Type type, string message, params object[] arguments)
 		{
-			new Logger(type).LogInfo(message, arguments);
+			Logger.GetLogger(type).Info(message, arguments);
 		}
 		/// <summary>
 		/// Instantiates a Logger object, then calls LogDebug
@@ -402,9 +432,28 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public static void LogDebug(Type type, string message, params object[] arguments)
+		public static void Debug(Type type, string message, params object[] arguments)
 		{
-			new Logger(type).LogDebug(message, arguments);
+			Logger.GetLogger(type).Debug(message, arguments);
+		}
+		/// <summary>
+		/// Called to log errors of type Warning converting value to string
+		/// </summary>
+		/// <param name="type">Type where Logger is being called on</param>
+		/// <param name="value">The value</param>
+		public static void Warn(Type type, object value)
+		{
+			Logger.GetLogger(type).Warn(value);
+		}
+		/// <summary>
+		/// Called to log errors of type Warning
+		/// </summary>
+		/// <param name="type">Type where Logger is being called on</param>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		public static void Warn(Type type, string message, params object[] arguments)
+		{
+			Logger.GetLogger(type).Warn(message, arguments);
 		}
 		/// <summary>
 		/// Instantiates a Logger object, then calls LogError
@@ -412,18 +461,18 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		public static void LogError(Type type, string message, params object[] arguments)
+		public static void Error(Type type, string message, params object[] arguments)
 		{
-			new Logger(type).LogError(message, arguments);
+			Logger.GetLogger(type).Error(message, arguments);
 		}
 		/// <summary>
 		/// Instantiates a Logger object, then calls LogError
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="ex">The Exception object to log</param>
-		public static void LogError(Type type, Exception ex)
+		public static void Error(Type type, Exception ex)
 		{
-			new Logger(type).LogError(ex);
+			Logger.GetLogger(type).Error(ex);
 		}
 		/// <summary>
 		/// Instantiates a Logger object, then calls LogError
@@ -431,9 +480,9 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="ex">The Exception object to log</param>
 		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
-		public static void LogError(Type type, Exception ex, bool phoneHome)
+		public static void Error(Type type, Exception ex, bool phoneHome)
 		{
-			new Logger(type).LogError(ex, phoneHome);
+			Logger.GetLogger(type).Error(ex, phoneHome);
 		}
 		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
@@ -475,10 +524,6 @@ namespace Adenson.Log
 		{
 			if (sqlHelper == null) return false;
 
-			Logger.SuspendLogging(typeof(ConnectionStrings));
-			string connectionString = ConnectionStrings.Get("logger");
-			Logger.ResumeLogging(typeof(ConnectionStrings));
-			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentException(ExceptionMessages.LoggerNoConnString);
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 			foreach (LogEntry row in entries)
 			{
@@ -513,6 +558,7 @@ namespace Adenson.Log
 			}
 			return false;
 		}
+
 		internal static bool SaveToEntryLog()
 		{
 			try
@@ -521,7 +567,7 @@ namespace Adenson.Log
 				{
 					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
 					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
-					else if (entry.Severity == LogSeverity.Warning) eventLogEntryType = EventLogEntryType.Warning;
+					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
 					EventLog.WriteEntry(entry.Source, String.Format(SR.VarLoggerEventLogMessage, DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
 				}
 				return true;
@@ -539,6 +585,7 @@ namespace Adenson.Log
 				if (suspendedTypes.Contains(type)) suspendedTypes.Remove(type);
 			}
 		}
+
 		internal static void SuspendLogging(params Type[] types)
 		{
 			foreach (Type type in types)

@@ -17,7 +17,7 @@ namespace Adenson.Xml
 		{
 			try
 			{
-				return string.IsNullOrEmpty(value) ? false : bool.Parse(value);
+				return String.IsNullOrEmpty(value) ? false : bool.Parse(value);
 			}
 			catch
 			{

@@ -23,7 +23,7 @@ namespace Adenson.Data.Odbc
 		/// <param name="commandParameters">An array of OdbcParamters to be cached</param>
 		public static void CacheParameterSet(string connectionString, string commandText, params OdbcParameter[] commandParameters)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -38,7 +38,7 @@ namespace Adenson.Data.Odbc
 		/// <returns>An array of OdbcParamters</returns>
 		public static OdbcParameter[] GetCachedParameterSet(string connectionString, string commandText)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
 
 			string hashKey = connectionString + ":" + commandText;
@@ -72,8 +72,8 @@ namespace Adenson.Data.Odbc
 		/// <returns>An array of OdbcParameters</returns>
 		public static OdbcParameter[] GetSpParameterSet(string connectionString, string spName, bool includeReturnValueParameter)
 		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
 
 			using (OdbcConnection connection = new OdbcConnection(connectionString))
 			{
@@ -142,7 +142,7 @@ namespace Adenson.Data.Odbc
 		private static OdbcParameter[] GetSpParameterSetInternal(OdbcConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
 
 			string hashKey = connection.ConnectionString + ":" + spName + (includeReturnValueParameter ? ":include ReturnValue Parameter" : String.Empty);
 
@@ -168,7 +168,7 @@ namespace Adenson.Data.Odbc
 		private static OdbcParameter[] DiscoverSpParameterSet(OdbcConnection connection, string spName, bool includeReturnValueParameter)
 		{
 			if (connection == null) throw new ArgumentNullException("connection", ExceptionMessages.ArgumentNull);
-			if (string.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
 
 			OdbcCommand cmd = new OdbcCommand(spName, connection);
 			cmd.CommandType = CommandType.StoredProcedure;

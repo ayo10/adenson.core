@@ -54,16 +54,16 @@ namespace Adenson.Net
 			SmtpClient smtp = new SmtpClient(smtpHost);
 			try
 			{
-				logger.LogDebug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
+				logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
 				if (sendAsync) smtp.SendAsync(message, null);
 				else smtp.Send(message);
-				logger.LogDebug("Send Success");
+				logger.Debug("Send Success");
 				return true;
 			}
 			catch (Exception ex)
 			{
-				logger.LogError("Exception({0})", ex.Message);
-				logger.LogDebug("Failed sending mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
+				logger.Error(ex);
+				logger.Debug("Failed sending mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
 				return false;
 			}
 		}
@@ -132,13 +132,13 @@ namespace Adenson.Net
 			if (!result)
 			{
 				string host = ConfigurationManager.AppSettings["SmtpServer"];
-				if (!string.IsNullOrEmpty(host)) result = Mailer.Send(host, message);
+				if (!String.IsNullOrEmpty(host)) result = Mailer.Send(host, message);
 				if (!result) result = Mailer.Send("localhost", message, sendAsyc);
 				if (!result) result = Mailer.Send("mail.adenson.com", message, sendAsyc);
 				if (!result) result = Mailer.Send("mail.adenson.net", message, sendAsyc);
 				if (!result) result = Mailer.Send("ns1.adenson.net", message, sendAsyc);
 
-				if (!result) logger.LogError(SR.MsgMailerWarning);
+				if (!result) logger.Error(SR.MsgMailerWarning);
 			}
 
 			return result;
@@ -151,7 +151,7 @@ namespace Adenson.Net
 			mailMessage.From = new MailAddress(from);
 			foreach (string str in to)
 			{
-				if (string.IsNullOrEmpty(str)) throw new ArgumentNullException("to", ExceptionMessages.EmailAddressInvalid);
+				if (String.IsNullOrEmpty(str)) throw new ArgumentNullException("to", ExceptionMessages.EmailAddressInvalid);
 				mailMessage.To.Add(str);
 			}
 			mailMessage.Subject = subject;
