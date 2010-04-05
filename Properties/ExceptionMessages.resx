@@ -186,6 +186,9 @@
   <data name="SectionNotDictionarySection" xml:space="preserve">
     <value>The section is not of DictionarySectionHandler.</value>
   </data>
+  <data name="SqlCommandTypeTextNotSupported" xml:space="preserve">
+    <value>Only command type 'Text' is supported.</value>
+  </data>
   <data name="SqlImplWrongType" xml:space="preserve">
     <value>This is a {0} implementation, what are you doing passing in a non {0} object.</value>
   </data>

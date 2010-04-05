@@ -31,7 +31,6 @@ namespace Adenson.Data.Odbc
 		}
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			OdbcClientImpl.CheckArgument(commandText, "commandText");
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -47,7 +46,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			OdbcClientImpl.CheckArgument(commandText, "commandText");
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -67,7 +66,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			OdbcClientImpl.CheckArgument(commandText, "commandText");
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -87,7 +86,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			OdbcClientImpl.CheckArgument(commandText, "commandText");
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -109,20 +108,6 @@ namespace Adenson.Data.Odbc
 		{
 			return new OdbcConnection(this.ConnectionString);
 		}
-		public override IDbConnection OpenConnection()
-		{
-			if (!this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
-			this.Manager.AllowClose = false;
-			this.Manager.Open();
-			return this.Manager.Connection;
-		}
-		public override void CloseConnection()
-		{
-			if (this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection must be called before CloseConnection.");
-			this.Manager.AllowClose = false;
-			this.Manager.AllowClose = true;
-			this.Manager.Close();
-		}
 		public override void ClearParameterCache()
 		{
 			OdbcParameterCache.Clear();
@@ -132,6 +117,10 @@ namespace Adenson.Data.Odbc
 			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
 			OdbcParameterCache.Clear(spName);
 		}
+		public override bool CheckColumnExists(string tableName, string columnName)
+		{
+			throw new NotImplementedException();
+		}
 		public override bool CheckTableExists(string tableName)
 		{
 			bool result = false;
@@ -140,10 +129,6 @@ namespace Adenson.Data.Odbc
 				result = reader.Read();
 			}
 			return result;
-		}
-		public override void Dispose()
-		{
-			this.Manager.Dispose();
 		}
 
 		private void AssignParameters(OdbcCommand command, string commandText, object[] parameterValues)
@@ -168,10 +153,6 @@ namespace Adenson.Data.Odbc
 			}
 		}
 
-		private static void CheckArgument(string argument, string paramName)
-		{
-			if (String.IsNullOrEmpty(argument)) throw new ArgumentNullException("paramName", ExceptionMessages.ArgumentNull);
-		}
 		private static OdbcCommand CheckCommand(IDbCommand command)
 		{
 			if (command == null) throw new ArgumentNullException("command", ExceptionMessages.ArgumentNull);

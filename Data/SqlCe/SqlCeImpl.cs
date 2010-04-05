@@ -1,0 +1,341 @@
+﻿using System;
+using System.Configuration;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlServerCe;
+using System.Globalization;
+using Adenson.Log;
+
+namespace Adenson.Data.SqlCe
+{
+	public sealed class SqlCeImpl : SqlHelperBase
+	{
+		#region Variables
+		private static Logger logger = new Logger(typeof(SqlCeImpl));
+		#endregion
+		#region Constructor
+
+		public SqlCeImpl(string connectionKey) : base(connectionKey)
+		{
+		}
+		public SqlCeImpl(ConnectionStringSettings connectionString) : base(connectionString)
+		{
+		}
+
+		#endregion
+		#region ExecuteNonQuery
+
+		public override int ExecuteNonQuery(CommandType type, string commandText, params object[] parameterValues)
+		{
+			return this.ExecuteNonQuery(type, null, commandText, parameterValues);
+		}
+		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		{
+			if (type != CommandType.Text) throw new NotSupportedException(ExceptionMessages.SqlCommandTypeTextNotSupported);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+
+			if (transaction != null && transaction.Connection == null) throw new ArgumentException("The transaction was rollbacked or commited, please provide an open transaction.", "transaction");
+
+			SqlCeParameter[] commandParameters = ConvertParameters(ref commandText, parameterValues);
+			SqlCeCommand command = new SqlCeCommand();
+			bool mustCloseConnection = false;
+			PrepareCommand(command, (SqlCeConnection)transaction.Connection, (SqlCeTransaction)transaction, commandText, commandParameters, out mustCloseConnection);
+
+			return this.ExecuteNonQuery(command);
+		}
+
+		#endregion ExecuteNonQuery
+		#region ExecuteReader
+
+		private enum SqlCeConnectionOwnership
+		{
+			/// <summary>Connection is owned and managed by SqlHelper</summary>
+			Internal,
+			/// <summary>Connection is owned and managed by the caller</summary>
+			External
+		}
+
+		/// <summary>
+		/// Create and prepare a SqlCeCommand, and call ExecuteReader with the appropriate CommandBehavior.
+		/// </summary>
+		/// <param name="connection">A valid SqlCeConnection, on which to execute this command</param>
+		/// <param name="transaction">A valid SqlCeTransaction, or 'null'</param>
+		/// <param name="commandType">The CommandType (stored procedure, text, etc.)</param>
+		/// <param name="commandText">The stored procedure name or T-SQL command</param>
+		/// <param name="commandParameters">An array of SqlCeParameters to be associated with the command or 'null' if no parameters are required</param>
+		/// <param name="connectionOwnership">Indicates whether the connection parameter was provided by the caller, or created by SqlHelper</param>
+		/// <returns>SqlCeDataReader containing the results of the command</returns>
+		private static SqlCeDataReader ExecuteReader(SqlCeConnection connection, SqlCeTransaction transaction, string commandText, SqlCeParameter[] commandParameters, SqlCeConnectionOwnership connectionOwnership)
+		{
+			if (connection == null) throw new ArgumentNullException("connection");
+
+			bool mustCloseConnection = false;
+			// Create a command and prepare it for execution
+			SqlCeCommand cmd = new SqlCeCommand();
+			try
+			{
+				PrepareCommand(cmd, connection, transaction, commandText, commandParameters, out mustCloseConnection);
+
+				// Create a reader
+				SqlCeDataReader dataReader;
+
+				// Call ExecuteReader with the appropriate CommandBehavior
+				if (connectionOwnership == SqlCeConnectionOwnership.External) dataReader = cmd.ExecuteReader();
+				else dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+				// Detach the SqlCeParameters from the command object, so they can be used again.
+				// HACK: There is a problem here, the output parameter values are fletched
+				// when the reader is closed, so if the parameters are detached from the command
+				// then the SqlCeReader can´t set its values.
+				// When this happen, the parameters can´t be used again in other command.
+				bool canClear = true;
+				foreach (SqlCeParameter commandParameter in cmd.Parameters)
+				{
+					if (commandParameter.Direction != ParameterDirection.Input) canClear = false;
+				}
+
+				if (canClear) cmd.Parameters.Clear();
+
+				return dataReader;
+			}
+			catch (SqlCeException ex)
+			{
+				if (mustCloseConnection) connection.Close();
+				logger.Error(ex);
+				throw;
+			}
+		}
+		/// <summary>
+		/// Execute a SqlCeCommand (that returns a resultset and takes no parameters) against the provided SqlCeConnection.
+		/// </summary>
+		/// <param name="connection">A valid SqlCeConnection</param>
+		/// <param name="commandType">The CommandType (stored procedure, text, etc.)</param>
+		/// <param name="commandText">The stored procedure name or T-SQL command</param>
+		/// <returns>A SqlCeDataReader containing the resultset generated by the command</returns>
+		public SqlCeDataReader ExecuteReader(SqlCeConnection connection, string commandText)
+		{
+			// Pass through the call providing null for the set of SqlCeParameters
+			return ExecuteReader(connection, commandText, (SqlCeParameter[])null);
+		}
+		/// <summary>
+		/// Execute a SqlCeCommand (that returns a resultset) against the specified SqlCeConnection
+		/// using the provided parameters.
+		/// </summary>
+		/// <param name="connection">A valid SqlCeConnection</param>
+		/// <param name="commandType">The CommandType (stored procedure, text, etc.)</param>
+		/// <param name="commandText">The stored procedure name or T-SQL command</param>
+		/// <param name="commandParameters">An array of SqlCeParamters used to execute the command</param>
+		/// <returns>A SqlCeDataReader containing the resultset generated by the command</returns>
+		public SqlCeDataReader ExecuteReader(CommandType type, string commandText, params object[] parameterValues)
+		{
+			SqlCeParameter[] parameters = ConvertParameters(ref commandText, parameterValues);
+			return ExecuteReader(connection, commandText, parameters);
+		}
+		/// <summary>
+		/// Execute a SqlCeCommand (that returns a resultset) against the specified SqlCeConnection
+		/// using the provided parameters.
+		/// </summary>
+		/// <param name="connection">A valid SqlCeConnection</param>
+		/// <param name="commandType">The CommandType (stored procedure, text, etc.)</param>
+		/// <param name="commandText">The stored procedure name or T-SQL command</param>
+		/// <param name="commandParameters">An array of SqlCeParamters used to execute the command</param>
+		/// <returns>A SqlCeDataReader containing the resultset generated by the command</returns>
+		public SqlCeDataReader ExecuteReader(CommandType type, string commandText, params object[] commandParameters)
+		{
+			// Pass through the call to the private overload using a null transaction value and an externally owned connection
+			return ExecuteReader(connection, null, commandText, commandParameters, SqlCeConnectionOwnership.External);
+		}
+		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		{
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+
+			SqlCeCommand command = new SqlCeCommand(commandText);
+			command.CommandType = type;
+			if (transaction != null) command.Transaction = transaction;
+			if (OdbcClientImpl.IsNotEmpty(parameterValues))
+			{
+				OdbcParameter[] commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
+				AssignParameterValues(commandParameters, parameterValues);
+				command.Parameters.AddRange(commandParameters);
+			}
+			return this.ExecuteReader(command);
+		}
+
+		#endregion ExecuteReader
+		#region ExecuteDataset
+
+		public override DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues)
+		{
+			return this.ExecuteDataSet(type, null, commandText, parameterValues);
+		}
+		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		{
+			if (type != CommandType.Text) throw new NotSupportedException(ExceptionMessages.SqlCommandTypeTextNotSupported);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
+
+			SqlCeCommand command = new SqlCeCommand(commandText);
+			command.CommandType = type;
+			if (transaction != null) command.Transaction = (SqlCeTransaction)transaction;
+			AttachParameters(command, commandParameters);
+
+			return this.ExecuteDataSet(command);
+		}
+
+		#endregion ExecuteDataset
+		#region Helper Methods
+
+		public void Compact(string connectionString)
+		{
+			try
+			{
+				SqlCeEngine engine = new SqlCeEngine(connectionString);
+				engine.Compact(connectionString);
+			}
+			catch (SqlCeException ex)
+			{
+				logger.Error(ex);
+			}
+		}
+		public void CreateDatabase(string connectionString)
+		{
+			new SqlCeEngine(connectionString).CreateDatabase();
+		}
+		public void Upgrade(string connectionString)
+		{
+			new SqlCeEngine(connectionString).Upgrade();
+		}
+		public override bool CheckColumnExists(string tableName, string columnName)
+		{
+			if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");
+			if (String.IsNullOrEmpty(columnName)) throw new ArgumentNullException("columnName");
+			bool result = false;
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "' AND COLUMN_NAME = '" + columnName + "'"))
+			{
+				result = r.Read();
+			}
+			return result;
+		}
+		public override bool CheckTableExists(string tableName)
+		{
+			if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");
+			bool result = false;
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "'"))
+			{
+				result = r.Read();
+			}
+			return result;
+		}
+		public override DbDataAdapter CreateAdapter(IDbCommand command)
+		{
+			return new SqlCeDataAdapter((SqlCeCommand)command);
+		}
+		public override IDbConnection CreateConnection()
+		{
+			return new SqlCeConnection(this.ConnectionString);
+		}
+
+		private static void AttachParameters(SqlCeCommand command, SqlCeParameter[] commandParameters)
+		{
+			if (command == null) throw new ArgumentNullException("command");
+			if (commandParameters != null)
+			{
+				foreach (SqlCeParameter p in commandParameters)
+				{
+					if (p != null)
+					{
+						// Check for derived output value with no value assigned
+						if ((p.Direction == ParameterDirection.InputOutput || p.Direction == ParameterDirection.Input) && (p.Value == null))
+						{
+							p.Value = DBNull.Value;
+						}
+						command.Parameters.Add(p);
+					}
+				}
+			}
+		}
+		private static void PrepareCommand(SqlCeCommand command, SqlCeConnection connection, SqlCeTransaction transaction, string commandText, SqlCeParameter[] commandParameters, out bool mustCloseConnection)
+		{
+			if (command == null) throw new ArgumentNullException("command");
+			if (commandText == null || commandText.Length == 0) throw new ArgumentNullException("commandText");
+
+			if (connection.State != ConnectionState.Open)
+			{
+				mustCloseConnection = true;
+				connection.Open();
+			}
+			else mustCloseConnection = false;
+
+			command.Connection = connection;
+			command.CommandText = commandText;
+			if (transaction != null) command.Transaction = transaction;
+			if (commandParameters != null) AttachParameters(command, commandParameters);
+		}
+		private static SqlCeParameter[] ConvertParameters(ref string commandText, object[] parameterValues)
+		{
+			string[] splits = commandText.Split('?');
+			System.Text.StringBuilder sb = new System.Text.StringBuilder();
+			sb.Append(splits[0].TrimEnd('\''));
+			if ((parameterValues != null) && (parameterValues.Length > 0))
+			{
+				SqlCeParameter[] commandParameters = new SqlCeParameter[parameterValues.Length];
+				for (int i = 0; i < parameterValues.Length; i++)
+				{
+					if (parameterValues[i] is SqlCeParameter) commandParameters[i] = (SqlCeParameter)parameterValues[i];
+					else
+					{
+						string paramName = "@Parameter" + i;
+						sb.Append(paramName);
+						sb.Append(splits[i + 1].TrimStart('\''));
+						commandParameters[i] = new SqlCeParameter();
+						commandParameters[i].ParameterName = paramName;
+						switch (parameterValues[i].GetType().Name)
+						{
+							case "System.Boolean":
+								parameterValues[i] = Convert.ToBoolean(parameterValues[i]) ? 1 : 0;
+								commandParameters[i].SqlDbType = SqlDbType.Bit;
+								break;
+							case "System.DateTime": commandParameters[i].SqlDbType = SqlDbType.DateTime; break;
+							case "System.String": commandParameters[i].SqlDbType = SqlDbType.NVarChar; break;
+						}
+						commandParameters[i].Value = parameterValues[i];
+					}
+				}
+				commandText = sb.ToString();
+				return commandParameters;
+			}
+			return null;
+		}
+		private static void WriteLog(string commandText, SqlCeParameter[] parameters)
+		{
+			#if DEBUG
+			string str = commandText;
+			if (parameters != null)
+			{
+				str += " [";
+				foreach (SqlCeParameter param in parameters)
+				{
+					str += param.ParameterName + "=" + param.Value + ",";
+				}
+				str = str.TrimEnd(',') + "]";
+			}
+
+			Logger.Debug(typeof(SqlCeImpl), str);
+			#endif
+		}
+
+		#endregion
+
+
+
+		public override object ExecuteScalar(CommandType type, string commandText, params object[] parameterValues)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		{
+			throw new NotImplementedException();
+		}
+	}
+}

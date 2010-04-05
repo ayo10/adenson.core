@@ -126,20 +126,6 @@ namespace Adenson.Data.SqlClient
 		{
 			return new SqlConnection(this.ConnectionString);
 		}
-		public override IDbConnection OpenConnection()
-		{
-			if (!this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
-			this.Manager.AllowClose = false;
-			this.Manager.Open();
-			return this.Manager.Connection;
-		}
-		public override void CloseConnection()
-		{
-			if (this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection must be called before CloseConnection.");
-			this.Manager.AllowClose = false;
-			this.Manager.AllowClose = true;
-			this.Manager.Close();
-		}
 		public override void ClearParameterCache()
 		{
 			SqlClientParameterCache.Clear();
@@ -149,6 +135,10 @@ namespace Adenson.Data.SqlClient
 			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
 			SqlClientParameterCache.Clear(spName);
 		}
+		public override bool CheckColumnExists(string tableName, string columnName)
+		{
+			throw new NotImplementedException();
+		}
 		public override bool CheckTableExists(string tableName)
 		{
 			bool result = false;
@@ -157,10 +147,6 @@ namespace Adenson.Data.SqlClient
 				result = reader.Read();
 			}
 			return result;
-		}
-		public override void Dispose()
-		{
-			this.Manager.Dispose();
 		}
 
 		private void AssignParameters(SqlCommand command, string commandText, object[] parameterValues)
