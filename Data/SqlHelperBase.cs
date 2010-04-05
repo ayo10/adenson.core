@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Adenson.Configuration;
 using Adenson.Log;
 
@@ -55,10 +56,12 @@ namespace Adenson.Data
 			get;
 			private set;
 		}
-		public System.IO.TextWriter Log
-		{ 
-			get; 
-			set;
+		/// <summary>
+		/// Gets the current connection object in use (if OpenConnection was invoked)
+		/// </summary>
+		public IDbConnection CurrentConnection
+		{
+			get { return this.Manager.Connection; }
 		}
 
 		internal ConnectionManager Manager
@@ -116,7 +119,6 @@ namespace Adenson.Data
 		{
 			command.Connection = this.Manager.Connection;
 			this.Manager.Open();
-			this.WriteLog(command);
 			using (DbDataAdapter dataAdapter = this.CreateAdapter(command))
 			{
 				DataSet ds = new DataSet();
@@ -143,7 +145,6 @@ namespace Adenson.Data
 		/// <returns>The number of rows affected.</returns>
 		public virtual int ExecuteNonQuery(IDbCommand command)
 		{
-			this.WriteLog(command);
 			try
 			{
 				command.Connection = this.Manager.Connection;
@@ -197,7 +198,6 @@ namespace Adenson.Data
 		/// <returns>The first column of the first row in the resultset.</returns>
 		public virtual object ExecuteScalar(IDbCommand command)
 		{
-			this.WriteLog(command);
 			command.Connection = this.Manager.Connection;
 			this.Manager.Open();
 			object result = command.ExecuteScalar();
@@ -254,7 +254,6 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
-			this.WriteLog(command);
 			command.Connection = this.Manager.Connection;
 			this.Manager.Open();
 			IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
@@ -390,17 +389,9 @@ namespace Adenson.Data
 		/// <returns>The first column of the first row in the resultset.</returns>
 		public abstract object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
 
-		private void WriteLog(IDbCommand command)
-		{
-			if (this.Log != null)
-			{
-				throw new NotImplementedException();
-			}
-		}
-
 		protected static bool IsCrud(string commandText)
 		{
-			throw new NotImplementedException();
+			return new string[] { "create ", "select ", "update ", "delete " }.Any(s => commandText.ToLower().Contains(s));
 		}
 		protected static bool IsNotEmpty(object[] parameterValues)
 		{
