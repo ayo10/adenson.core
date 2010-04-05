@@ -20,6 +20,7 @@ namespace Adenson.Log
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
 		private static string configEmailErrorTo;
+		private static string configEmailErrorFrom = "errors@adenson.com";
 
 		private static string configSource;
 		private static ushort configBatchLogSize = 0;
@@ -33,6 +34,7 @@ namespace Adenson.Log
 		private LogType _logType = LogType.None;
 		private LogSeverity _severity = LogSeverity.None;
 		private string _dateTimeFormat;
+		private string _emailErrorFrom;
 		private string _emailErrorTo;
 		private string _source;
 		#endregion
@@ -63,6 +65,7 @@ namespace Adenson.Log
 
 				if (config.ContainsKey("severity", StringComparison.CurrentCultureIgnoreCase)) configSeverityLevel = (LogSeverity)Enum.Parse(typeof(LogSeverity), config.GetValue("severity"), true);
 				if (config.ContainsKey("emailErrorTo", StringComparison.CurrentCultureIgnoreCase)) configEmailErrorTo = config.GetValue("emailErrorTo");
+				if (config.ContainsKey("emailErrorFrom", StringComparison.CurrentCultureIgnoreCase)) configEmailErrorFrom = config.GetValue("emailErrorFrom");
 				if (config.ContainsKey("batchSize", StringComparison.CurrentCultureIgnoreCase)) configBatchLogSize = Convert.ToUInt16(config.GetValue("batchSize"));
 				if (config.ContainsKey("errorAlertType", StringComparison.CurrentCultureIgnoreCase)) configErrorAlertType = ErrorAlertType.Parse(config.GetValue("errorAlertType"));
 				if (config.ContainsKey("source", StringComparison.CurrentCultureIgnoreCase)) configSource = config.GetValue("source");
@@ -139,6 +142,7 @@ namespace Adenson.Log
 			this.BatchSize = instance.BatchSize;
 			this.Severity = instance.Severity;
 			this.LogType = instance.LogType;
+			this.EmailErrorFrom = instance.EmailErrorFrom;
 			this.EmailErrorTo = instance.EmailErrorTo;
 			this.ErrorAlertType = instance.ErrorAlertType;
 			this.Source = instance.Source;
@@ -187,6 +191,14 @@ namespace Adenson.Log
 			set { _logType = value; }
 		}
 		/// <summary>
+		/// Gets the errors email from (if LogError(Type, Exception, true/false, true) OR its non static version is called)
+		/// </summary>
+		public string EmailErrorFrom
+		{
+			get { return String.IsNullOrEmpty(_emailErrorFrom) ? configEmailErrorFrom : _emailErrorFrom; }
+			set { _emailErrorFrom = value; }
+		}
+		/// <summary>
 		/// Gets the errors email recipient (if LogError(Type, Exception, true/false, true) OR its non static version is called)
 		/// </summary>
 		public string EmailErrorTo
@@ -224,18 +236,6 @@ namespace Adenson.Log
 		{
 			get { return (String.IsNullOrEmpty(this._dateTimeFormat) ? configDateTimeFormat : this._dateTimeFormat); }
 			set { this._dateTimeFormat = value; }
-		}
-
-		internal string RequestPath
-		{
-			get
-			{
-				Assembly assembly = Assembly.GetEntryAssembly();
-				if (assembly == null) assembly = Assembly.GetExecutingAssembly();
-				if (assembly == null) assembly = Assembly.GetCallingAssembly();
-				if (assembly == null) return String.Empty;
-				return Uri.EscapeUriString(assembly.CodeBase);
-			}
 		}
 
 		#endregion
@@ -333,15 +333,12 @@ namespace Adenson.Log
 			if (ex is System.OutOfMemoryException) Thread.CurrentThread.Abort();
 			if (ex is System.Data.Common.DbException && sqlHelper != null) sqlHelper.ClearParameterCache();
 
-			if (phoneHome)
+			if (phoneHome && this.EmailErrorTo != null)
 			{
 				this.Flush();
-				if (this.EmailErrorTo != null)
-				{
-					string body = "System Error:\n\n" + this.RequestPath + "\n\n" + message;
-					string subject = "Application Error: " + System.DateTime.Today.ToLongDateString();
-					Adenson.Net.Mailer.SendAsync("errors@adenson.com", this.EmailErrorTo, subject, body, false);
-				}
+				string body = "System Error:\n\n" + message;
+				string subject = "Application Error: " + System.DateTime.Today.ToLongDateString();
+				Adenson.Net.Mailer.SendAsync(this.EmailErrorFrom, this.EmailErrorTo, subject, body, false);
 			}
 
 			if (this.ErrorAlertType != null) this.ErrorAlertType.Show(entry.Message);
@@ -368,8 +365,7 @@ namespace Adenson.Log
 			entry.Type = this.Type;
 			entry.Message = message;
 			entry.Source = this.Source;
-			entry.Path = this.RequestPath;
-			entry.Date = DateTime.Now.ToString(this.DateTimeFormat);
+			entry.Date = DateTime.Now;
 			entry.LogType = this.LogType;
 			entries.Add(entry);
 
@@ -491,14 +487,24 @@ namespace Adenson.Log
 		/// <returns>String of the exception</returns>
 		public static string ConvertToString(Exception exception)
 		{
-			Exception ex = exception;
-			System.Text.StringBuilder sb = new System.Text.StringBuilder();
-			while (ex != null)
+			return ConvertToString(exception, false);
+		}
+		public static string ConvertToString(Exception exception, bool probeDeep)
+		{
+			System.Text.StringBuilder message = new System.Text.StringBuilder();
+			for (Exception ex = exception; ex != null; ex = exception.InnerException)
 			{
-				sb.Append(String.Format(SR.VarLoggerExceptionMessage, ex.Message, ex.Source, ex.TargetSite, ex.StackTrace));
-				ex = ex.InnerException;
+				if (message.Length != 0)
+				{
+					message.Append(String.Empty.PadRight(20, '-'));
+					message.Append(Environment.NewLine);
+				}
+				message.Append(ex.Message);
+				message.Append(Environment.NewLine);
+				message.Append(ex.StackTrace);
+				if (!probeDeep) break;
 			}
-			return sb.ToString().TrimEnd('\r','\n');
+			return message.ToString();
 		}
 
 		internal static void Flush(LogType logType)
@@ -508,10 +514,11 @@ namespace Adenson.Log
 			{
 				if (entries.Count > 0)
 				{
-					bool dbed = true, filed = true, entried;
+					bool dbed = true;
+					bool filed = true;
 					if ((logType & LogType.DataBase) != LogType.None) dbed = SaveToDataBase();
 					if ((logType & LogType.File) != LogType.None) filed = SaveToFile();
-					if ((logType & LogType.EventLog) != LogType.None) entried = SaveToEntryLog();
+					if ((logType & LogType.EventLog) != LogType.None) SaveToEntryLog();
 					if (dbed && filed) entries.Clear();
 				}
 			}

@@ -78,6 +78,36 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
+		/// Clears any cached stored procedure parameters
+		/// </summary>
+		public virtual void ClearParameterCache()
+		{
+		}
+		/// <summary>
+		/// Clears parameters for the specfied stored procedure;
+		/// </summary>
+		public virtual void ClearParameterCache(string spName)
+		{
+		}
+		/// <summary>
+		/// Closes the connection opened by OpenConnection, then, lets CreateConnection know to always create new connections henceforth.
+		/// </summary>
+		/// <exception cref="InvalidOperationException">if the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
+		public virtual void CloseConnection()
+		{
+			if (this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection must be called before CloseConnection.");
+			this.Manager.AllowClose = false;
+			this.Manager.AllowClose = true;
+			this.Manager.Close();
+		}
+		/// <summary>
+		/// Disposes the object
+		/// </summary>
+		public virtual void Dispose()
+		{
+			this.Manager.Dispose();
+		}
+		/// <summary>
 		/// Executes and returns a new DataSet from specified command
 		/// </summary>
 		/// <param name="command">The command</param>
@@ -94,6 +124,17 @@ namespace Adenson.Data
 				this.Manager.Close();
 				return ds;
 			}
+		}
+		/// <summary>
+		/// Executes the specified command text after applying specified parameter values
+		/// </summary>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination thereof)</param>
+		/// <returns>The number of rows affected.</returns>
+		public virtual int ExecuteNonQuery(string commandText, params object[] parameterValues)
+		{
+			CommandType type = IsCrud(commandText) ? CommandType.Text : CommandType.StoredProcedure;
+			return this.ExecuteNonQuery(type, commandText, parameterValues);
 		}
 		/// <summary>
 		/// Executes the command and returns the number of rows affected.
@@ -118,6 +159,38 @@ namespace Adenson.Data
 			}
 		}
 		/// <summary>
+		/// Executes the command texts in a batched mode with a transaction
+		/// </summary>
+		/// <param name="commandTexts">1 or more command texts</param>
+		/// <returns>the result of each ExecuteNonQuery run on each command text</returns>
+		public virtual int[] ExecuteNonQueryBatched(params string[] commandTexts)
+		{
+			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			List<int> list = new List<int>();
+			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
+			foreach (string commandText in commandTexts)
+			{
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+			}
+
+			try
+			{
+				foreach (string commandText in commandTexts)
+				{
+					list.Add(this.ExecuteNonQuery(CommandType.Text, transaction, commandText));
+				}
+				transaction.Commit();
+			}
+			catch
+			{
+				transaction.Rollback();
+				list.Clear();
+				throw;
+			}
+			this.CloseConnection();
+			return list.ToArray();
+		}
+		/// <summary>
 		/// Executes the command returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
 		/// <param name="command">The command</param>
@@ -130,6 +203,49 @@ namespace Adenson.Data
 			object result = command.ExecuteScalar();
 			this.Manager.Close();
 			return result;
+		}
+		/// <summary>
+		/// Executes the command texts in a batched mode with a transaction
+		/// </summary>
+		/// <param name="commandTexts">1 or more command texts</param>
+		/// <returns>the result of each ExecuteScalar run on each command text</returns>
+		public virtual object[] ExecuteScalarBatched(params string[] commandTexts)
+		{
+			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			List<object> list = new List<object>();
+			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
+			foreach (string commandText in commandTexts)
+			{
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+			}
+
+			try
+			{
+				foreach (string commandText in commandTexts)
+				{
+					list.Add(this.ExecuteScalar(CommandType.Text, transaction, commandText));
+				}
+				transaction.Commit();
+			}
+			catch
+			{
+				transaction.Rollback();
+				list.Clear();
+				throw;
+			}
+			this.CloseConnection();
+			return list.ToArray();
+		}
+		/// <summary>
+		/// Executes the specified command text and builds an System.Data.IDataReader.
+		/// </summary>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>An System.Data.IDataReader object.</returns>
+		public virtual IDataReader ExecuteReader(string commandText, params object[] parameterValues)
+		{
+			CommandType type = IsCrud(commandText) ? CommandType.Text : CommandType.StoredProcedure;
+			return this.ExecuteReader(type, commandText, parameterValues);
 		}
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataReader.
@@ -145,9 +261,46 @@ namespace Adenson.Data
 			return result;
 		}
 		/// <summary>
+		/// Uses CreateConnection() to get a new connection, and until CloseConnection is closed, uses that connection object
+		/// </summary>
+		/// <returns>The IDbConnection connection that will be used until CloseConnection is called.</returns>
+		/// <exception cref="InvalidOperationException">if the method has been called already.</exception>
+		public virtual IDbConnection OpenConnection()
+		{
+			if (!this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
+			this.Manager.AllowClose = false;
+			this.Manager.Open();
+			return this.Manager.Connection;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="command"></param>
+		/// <returns></returns>
+		public abstract DbDataAdapter CreateAdapter(IDbCommand command);
+		/// <summary>
+		/// Creates a new database connection for use by the helper methods
+		/// </summary>
+		/// <returns>New IDbConnection object</returns>
+		public abstract IDbConnection CreateConnection();
+		/// <summary>
+		/// Runs a system check for the existence of specified column in the specified table
+		/// </summary>
+		/// <param name="tableName">the table name</param>
+		/// <param name="columnName">the column name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
+		public abstract bool CheckColumnExists(string tableName, string columnName);
+		/// <summary>
+		/// Runs a system check for the existence of specified table
+		/// </summary>
+		/// <param name="tableName">the table name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
+		public abstract bool CheckTableExists(string tableName);
+		/// <summary>
 		/// Executes and returns a new DataSet from specified stored procedure
 		/// </summary>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>a new DataSet object</returns>
 		public abstract DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues);
@@ -155,7 +308,7 @@ namespace Adenson.Data
 		/// Executes and returns a new DataSet from specified stored procedure using specified transaction
 		/// </summary>
 		/// <param name="transaction">The transaction</param>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>a new DataSet object</returns>
 		public abstract DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
@@ -192,154 +345,50 @@ namespace Adenson.Data
 			return list.ToArray();
 		}
 		/// <summary>
-		/// Executes the stored procedure and returns the number of rows affected.
+		/// Executes the specified command text and returns the number of rows affected.
 		/// </summary>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
 		public abstract int ExecuteNonQuery(CommandType type, string commandText, params object[] parameterValues);
 		/// <summary>
-		/// Executes the stored procedure using specified transaction and returns the number of rows affected.
+		/// Executes the specified command text using specified transaction and returns the number of rows affected.
 		/// </summary>
 		/// <param name="transaction">The transaction</param>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
 		public abstract int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
 		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
+		/// Executes the specified command text and builds an System.Data.IDataReader.
 		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>the result of each ExecuteNonQuery run on each command text</returns>
-		public virtual int[] ExecuteNonQueryBatched(params string[] commandTexts)
-		{
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
-			List<int> list = new List<int>();
-			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
-			foreach (string commandText in commandTexts)
-			{
-				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
-			}
-
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteNonQuery(CommandType.Text, transaction, commandText));
-				}
-				transaction.Commit();
-			}
-			catch
-			{
-				transaction.Rollback();
-				list.Clear();
-				throw;
-			}
-			this.CloseConnection();
-			return list.ToArray();
-		}
-		/// <summary>
-		/// Executes the stored procedure and builds an System.Data.IDataReader.
-		/// </summary>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public abstract IDataReader ExecuteReader(CommandType type, string commandText, params object[] parameterValues);
 		/// <summary>
-		/// Executes the stored procedure using the specified transaction and builds an System.Data.IDataReader.
+		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
 		/// </summary>
 		/// <param name="transaction">The transaction</param>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public abstract IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
 		/// <summary>
-		/// Executes the stored procedure returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		public abstract object ExecuteScalar(CommandType type, string commandText, params object[] parameterValues);
 		/// <summary>
-		/// Executes the stored procedure using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
 		/// <param name="transaction">The transaction</param>
-		/// <param name="commandText">The stored procedure name</param>
+		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		public abstract object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
-		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>the result of each ExecuteScalar run on each command text</returns>
-		public virtual object[] ExecuteScalarBatched(params string[] commandTexts)
-		{
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
-			List<object> list = new List<object>();
-			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
-			foreach (string commandText in commandTexts)
-			{
-				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
-			}
-
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteScalar(CommandType.Text, transaction, commandText));
-				}
-				transaction.Commit();
-			}
-			catch
-			{
-				transaction.Rollback();
-				list.Clear();
-				throw;
-			}
-			this.CloseConnection();
-			return list.ToArray();
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="command"></param>
-		/// <returns></returns>
-		public abstract DbDataAdapter CreateAdapter(IDbCommand command);
-		/// <summary>
-		/// Creates a new database connection for use by the helper methods
-		/// </summary>
-		/// <returns>New IDbConnection object</returns>
-		public abstract IDbConnection CreateConnection();
-		/// <summary>
-		/// Uses CreateConnection() to get a new connection, and until CloseConnection is closed, uses that connection object
-		/// </summary>
-		/// <returns>The IDbConnection connection that will be used until CloseConnection is called.</returns>
-		/// <exception cref="InvalidOperationException">if the method has been called already.</exception>
-		public abstract IDbConnection OpenConnection();
-		/// <summary>
-		/// Closes the connection opened by OpenConnection, then, lets CreateConnection know to always create new connections henceforth.
-		/// </summary>
-		/// <exception cref="InvalidOperationException">if the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
-		public abstract void CloseConnection();
-		/// <summary>
-		/// Clears any cached stored procedure parameters
-		/// </summary>
-		public abstract void ClearParameterCache();
-		/// <summary>
-		/// Clears parameters for the specfied stored procedure;
-		/// </summary>
-		public abstract void ClearParameterCache(string spName);
-		/// <summary>
-		/// Runs a system check for the existence of specified table
-		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public abstract bool CheckTableExists(string tableName);
-		/// <summary>
-		/// Disposes the object
-		/// </summary>
-		public abstract void Dispose();
 
 		private void WriteLog(IDbCommand command)
 		{
@@ -349,12 +398,15 @@ namespace Adenson.Data
 			}
 		}
 
+		protected static bool IsCrud(string commandText)
+		{
+			throw new NotImplementedException();
+		}
 		protected static bool IsNotEmpty(object[] parameterValues)
 		{
 			return (parameterValues != null) && (parameterValues.Length > 0);
 		}
 
 		#endregion
-
 	}
 }
