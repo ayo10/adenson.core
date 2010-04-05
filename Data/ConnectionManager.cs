@@ -3,11 +3,11 @@ using System.Data;
 
 namespace Adenson.Data
 {
-	public class ConnectionManager
+	public sealed class ConnectionManager
 	{
-		#region Properties
+		#region Constructor
 
-		public ConnectionManager(IDbConnection connection)
+		internal ConnectionManager(IDbConnection connection)
 		{
 			this.Connection = connection;
 		}
