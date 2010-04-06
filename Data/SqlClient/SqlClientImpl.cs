@@ -17,9 +17,6 @@ namespace Adenson.Data.SqlClient
 	{
 		#region Constructor
 
-		public SqlClientImpl(string connectionKey) : base(connectionKey)
-		{
-		}
 		public SqlClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}

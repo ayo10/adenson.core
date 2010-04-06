@@ -15,9 +15,6 @@ namespace Adenson.Data.SqlCe
 		#endregion
 		#region Constructor
 
-		public SqlCeImpl(string connectionKey) : base(connectionKey)
-		{
-		}
 		public SqlCeImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -25,25 +22,25 @@ namespace Adenson.Data.SqlCe
 		#endregion
 		#region Methods
 
-		public void Compact(string connectionString)
+		public void Compact()
 		{
 			try
 			{
-				SqlCeEngine engine = new SqlCeEngine(connectionString);
-				engine.Compact(connectionString);
+				SqlCeEngine engine = new SqlCeEngine(this.ConnectionString);//yes, u need this here connection string
+				engine.Compact(this.ConnectionString);
 			}
 			catch (SqlCeException ex)
 			{
 				logger.Error(ex);
 			}
 		}
-		public void CreateDatabase(string connectionString)
+		public void CreateDatabase()
 		{
-			new SqlCeEngine(connectionString).CreateDatabase();
+			new SqlCeEngine(this.ConnectionString).CreateDatabase();
 		}
-		public void Upgrade(string connectionString)
+		public void Upgrade()
 		{
-			new SqlCeEngine(connectionString).Upgrade();
+			new SqlCeEngine(this.ConnectionString).Upgrade();
 		}
 
 		public override bool CheckColumnExists(string tableName, string columnName)

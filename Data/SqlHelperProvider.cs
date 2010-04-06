@@ -15,21 +15,6 @@ namespace Adenson.Data
 	{
 		#region Variables
 		private static Log.Logger logger = new Adenson.Log.Logger(typeof(SqlHelperProvider));
-		private static string assemblyName, typeName;
-		#endregion
-		#region Constructor
-
-		static SqlHelperProvider()
-		{
-			Dictionary<string, string> dict = ConfigSectionHelper.GetDictionary("SqlHelper");
-			if (dict != null)
-			{
-				assemblyName = dict["AssemblyName"];
-				typeName = dict["TypeName"];
-				return;
-			}
-		}
-
 		#endregion
 		#region Methods
 
@@ -50,57 +35,16 @@ namespace Adenson.Data
 			return SqlHelperProvider.Create(ConnectionStrings.Default);
 		}
 		/// <summary>
-		/// Creates a new ISqlHelper instance, information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
-		/// </summary>
-		/// <param name="arguments">Arguments to use to create a new ISqlHelper instance.</param>
-		/// <returns>New ISqlHelper instance if one was created successfully</returns>
-		/// <exception cref="MissingMethodException">No matching constructor was found.</exception>
-		/// <exception cref="TypeLoadException">The type specified in the configuration file was not found in the specified assembly.</exception>
-		/// <exception cref="MethodAccessException">The caller does not have permission to call this constructor.</exception>
-		/// <exception cref="NotSupportedException">The caller cannot provide activation attributes for an object that does not inherit from System.MarshalByRefObject.</exception>
-		/// <exception cref="AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
-		/// <exception cref="BadImageFormatException">The assembly specified in the configuration file is not a valid assembly, could also be as a result of Version 2.0 or later of the common language runtime is currently loaded and assemblyName was compiled with a later version.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The assembly specified in the configuration file was not found.</exception>
-		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
-		public static SqlHelperBase Create(object[] arguments)
-		{
-			try
-			{
-				AppDomain.CurrentDomain.Load(assemblyName);
-				return (SqlHelperBase)AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.CreateInstance, null, arguments, null, null, null);
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-				throw;
-			}
-		}
-		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
 		/// </summary>
 		/// <param name="connectionKey">Connection key that the new instance should use.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
-		/// <exception cref="MissingMethodException">No matching constructor was found.</exception>
-		/// <exception cref="TypeLoadException">The type specified in the configuration file was not found in the specified assembly.</exception>
-		/// <exception cref="MethodAccessException">The caller does not have permission to call this constructor.</exception>
-		/// <exception cref="NotSupportedException">The caller cannot provide activation attributes for an object that does not inherit from System.MarshalByRefObject.</exception>
-		/// <exception cref="AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
-		/// <exception cref="BadImageFormatException">The assembly specified in the configuration file is not a valid assembly, could also be as a result of Version 2.0 or later of the common language runtime is currently loaded and assemblyName was compiled with a later version.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The assembly specified in the configuration file was not found.</exception>
-		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+		/// <exception cref="ArgumentNullException">if 'connectionKey' is null or empty.</exception>
 		public static SqlHelperBase Create(string connectionKey)
 		{
-			if (assemblyName == null && typeName == null || assemblyName == "Adenson.Core" && typeName == "Adenson.Data.SqlClient.SqlClientImpl") return new SqlClient.SqlClientImpl(connectionKey);
-			try
-			{
-				AppDomain.CurrentDomain.Load(assemblyName);
-				return (SqlHelperBase)AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.CreateInstance, null, new object[] { connectionKey }, null, null, null);
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-				throw;
-			}
+			if (String.IsNullOrEmpty(connectionKey)) throw new ArgumentNullException("connectionKey");
+
+			return SqlHelperProvider.Create(ConnectionStrings.Get(connectionKey));
 		}
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
@@ -108,27 +52,47 @@ namespace Adenson.Data
 		/// <param name="connectionKeyOrString">Either a connection string or a connection key.</param>
 		/// <param name="isConnectionString">if the first argumet is a connection string</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
-		/// <exception cref="MissingMethodException">No matching constructor was found.</exception>
-		/// <exception cref="TypeLoadException">The type specified in the configuration file was not found in the specified assembly.</exception>
-		/// <exception cref="MethodAccessException">The caller does not have permission to call this constructor.</exception>
-		/// <exception cref="NotSupportedException">The caller cannot provide activation attributes for an object that does not inherit from System.MarshalByRefObject.</exception>
-		/// <exception cref="AppDomainUnloadedException">The operation is attempted on an unloaded application domain.</exception>
-		/// <exception cref="BadImageFormatException">The assembly specified in the configuration file is not a valid assembly, could also be as a result of Version 2.0 or later of the common language runtime is currently loaded and assemblyName was compiled with a later version.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The assembly specified in the configuration file was not found.</exception>
-		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
+		/// <exception cref="ArgumentNullException">if 'connectionString' is null or its 'ConnectionString' property is null.</exception>
+		/// <exception cref="NotSupportedException">if unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
 		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null) throw new ArgumentNullException("connectionString");
-			if (assemblyName == null && typeName == null || assemblyName == "Adenson.Core" && typeName == "Adenson.Data.SqlClient.SqlClientImpl") return new SqlClient.SqlClientImpl(connectionString);
-			try
+			if (String.IsNullOrEmpty(connectionString.ConnectionString)) throw new ArgumentNullException("connectionString.ConnectionString");
+
+			if (String.IsNullOrEmpty(connectionString.ProviderName))
 			{
-				AppDomain.CurrentDomain.Load(assemblyName);
-				return (SqlHelperBase)AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null, null);
+				string connString = connectionString.ConnectionString;
+				if (connString.IndexOf(".mdf", StringComparison.CurrentCultureIgnoreCase) > -1) connectionString.ProviderName = "System.Data.SqlClient";
+				else if (connString.IndexOf(".sdf", StringComparison.CurrentCultureIgnoreCase) > -1) connectionString.ProviderName = "System.Data.SqlServerCe";
+				else
+				{
+					var splits = connString.Split(';');
+					foreach (string keyval in splits)
+					{
+						var subsplit = keyval.Split('=');
+						if (subsplit.Length > 1)
+						{
+							switch (subsplit[0].ToLower())
+							{
+								case "provider":
+								case "providername":
+									connectionString.ProviderName = subsplit[1];
+									break;
+							}
+						}
+					}
+				}
 			}
-			catch (Exception ex)
+			switch (connectionString.ProviderName)
 			{
-				logger.Error(ex);
-				throw;
+				case "System.Data.Odbc": return new Odbc.OdbcClientImpl(connectionString);
+				case "System.Data.OleDb": return new OleDb.OleDbClientImpl(connectionString);
+				case "System.Data.SqlClient": return new SqlClient.SqlClientImpl(connectionString);
+				case "Microsoft.SqlServerCe.Client":
+				case "System.Data.SqlServerCe":
+				case "System.Data.SqlServerCe.3.5": return new SqlCe.SqlCeImpl(connectionString);
+				case "System.Data.OracleClient": throw new NotSupportedException(connectionString.ProviderName);
+				default: throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
 			}
 		}
 
