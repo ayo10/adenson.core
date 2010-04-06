@@ -15,24 +15,13 @@ namespace Adenson.Data
 	public abstract class SqlHelperBase : IDisposable
 	{
 		#region Variables
+		private static Logger logger = Logger.GetLogger(typeof(SqlHelperBase));
+		private static string[] crudites = new string[] { "alter ", "create ", "select ", "update ", "delete " };
 		private bool mustCloseConnection = true;
 		private ConnectionManager _connection;
-		private static Logger logger = Logger.GetLogger(typeof(SqlHelperBase));
 		#endregion
 		#region Constructors
 
-		/// <summary>
-		/// When implemented, should instantiate a new instance of the sql helper using 
-		/// ConnectionStrings.GetCS(connectionKey) to retrieve the connection string
-		/// </summary>
-		/// <param name="connectionKey">The connection key to use</param>
-		public SqlHelperBase(string connectionKey)
-		{
-			if (String.IsNullOrEmpty(connectionKey)) throw new ArgumentNullException("connectionKey");
-			ConnectionStringSettings connectionString;
-			if (!ConnectionStrings.TryGet(connectionKey, false, out connectionString)) throw new ArgumentNullException("ConnectionString", "Unable to determine connection string");
-			this.ConnectionString = connectionString.ConnectionString;
-		}
 		/// <summary>
 		/// When implemented, should instantiate a new instance of the sql helper using specified connection as a
 		/// connection string if isConnectionString is true, else uses ConnectionStrings.GetCS to retrieve it
@@ -391,7 +380,8 @@ namespace Adenson.Data
 
 		protected static bool IsCrud(string commandText)
 		{
-			return new string[] { "create ", "select ", "update ", "delete " }.Any(s => commandText.ToLower().Contains(s));
+			bool x = crudites.Any(s => commandText.ToLower().Contains(s));
+			return x;
 		}
 		protected static bool IsNotEmpty(object[] parameterValues)
 		{

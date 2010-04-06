@@ -15,9 +15,6 @@ namespace Adenson.Data.OleDb
 	{
 		#region Constructor
 
-		public OleDbClientImpl(string connectionKey) : base(connectionKey)
-		{
-		}
 		public OleDbClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}

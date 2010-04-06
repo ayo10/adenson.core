@@ -15,9 +15,6 @@ namespace Adenson.Data.Odbc
 	{
 		#region Constructor
 
-		public OdbcClientImpl(string connectionKey) : base(connectionKey)
-		{
-		}
 		public OdbcClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
