@@ -401,7 +401,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets a pre initialized (or new) Logger for specified type
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="type">The type</param>
 		/// <returns>Existing, or newly minted logger</returns>
 		public static Logger GetLogger(Type type)
 		{
