@@ -74,7 +74,7 @@ namespace Adenson.Data.SqlClient
 						if (String.Equals(ins, "GO", StringComparison.CurrentCultureIgnoreCase))
 						{
 							if (last != String.Empty) sqls.Add(last.Trim());
-							last = string.Empty;
+							last = String.Empty;
 						}
 						else last += ins + Environment.NewLine;
 					}

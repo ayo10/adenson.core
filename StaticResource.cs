@@ -29,7 +29,7 @@ namespace Adenson
 		static StaticResource()
 		{
 			typesResourcesTable = new Dictionary<string, Dictionary<string, ResourceData>>();
-			string bindir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Replace("file:\\", string.Empty);
+			string bindir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Replace("file:\\", String.Empty);
 			foreach (string file in Directory.GetFiles(bindir, "*.snuiresource"))
 			{
 				XmlDocument doc = new XmlDocument();
@@ -142,7 +142,7 @@ namespace Adenson
 					if (propertyInfo != null) resourceManager = (System.Resources.ResourceManager)propertyInfo.GetValue(type, null);
 				}
 			}
-			if (resourceManager != null) srtypeResourcePreKey = type.FullName.Replace(".", string.Empty);
+			if (resourceManager != null) srtypeResourcePreKey = type.FullName.Replace(".", String.Empty);
 		}
 
 		#endregion
