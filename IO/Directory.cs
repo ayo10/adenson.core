@@ -29,8 +29,7 @@ namespace Adenson.IO
 		/// </summary>
 		/// <param name="path">A string specifying the path on which to create the DirectoryInfo.</param>
 		/// <exception cref="ArgumentNullException">path is null.</exception>
-		/// <exception cref="SecurityException">The caller does not have the required permission.</exception>
-		/// <exception cref="ArgumentException">path contains invalid characters such as ", <, >, or |.</exception>
+		/// <exception cref="ArgumentException">path contains invalid characters such as ", &lt;, &gt;, or |.</exception>
 		/// <exception cref="PathTooLongException">
 		/// The specified path, file name, or both exceed the system-defined maximum 
 		/// length. For example, on Windows-based platforms, paths must be less than
@@ -69,7 +68,6 @@ namespace Adenson.IO
 		/// <summary>
 		/// Gets the parent directory of a specified subdirectory.
 		/// </summary>
-		/// <exception cref="SecurityException">The caller does not have the required permission.</exception>
 		public DirectoryInfo Parent
 		{
 			get { return dir.Parent; }
@@ -77,7 +75,6 @@ namespace Adenson.IO
 		/// <summary>
 		/// Gets the root portion of a path.
 		/// </summary>
-		/// <exception cref="SecurityException">The caller does not have the required permission.</exception>
 		public DirectoryInfo Root
 		{
 			get { return dir.Root; }
@@ -155,7 +152,6 @@ namespace Adenson.IO
 		/// Deletes this System.IO.DirectoryInfo if it is empty.
 		/// </summary>
 		/// <exception cref="IOException">The directory is not empty. -or-The directory is the application's current working directory.</exception>
-		/// <exception cref="SecurityException">The caller does not have the required permission.</exception>
 		/// <exception cref="DirectoryNotFoundException">The directory described by this System.IO.DirectoryInfo object does not exist or could not be found.</exception>
 		public void Delete()
 		{
@@ -166,7 +162,6 @@ namespace Adenson.IO
 		/// </summary>
 		/// <param name="recursive">true to delete this directory, its subdirectories, and all files; otherwise, false</param>
 		/// <exception cref="IOException">The directory is read-only.-or- The directory contains one or more files or subdirectories and recursive is false.-or-The directory is the application's current working directory.</exception>
-		/// <exception cref="SecurityException">The caller does not have the required permission.</exception>
 		public void Delete(bool recursive)
 		{
 			dir.Delete(recursive);

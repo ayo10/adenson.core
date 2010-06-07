@@ -308,9 +308,8 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Searches for an element that matches the conditions defined by the specified predicate, and returns the last occurrence within the entire list.
 		/// <summary>
-		/// <param name="match">The predicate delegate that defines the conditions of the element to search for.
+		/// <param name="match">The predicate delegate that defines the conditions of the element to search for.</param>
 		/// <returns>The last element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type T.</returns>
-		/// <exception name="System.ArgumentNullException">match is null.
 		public T FindLast(Predicate<T> match)
 		{
 			readWriteLock.AcquireReaderLock(-1);
@@ -486,7 +485,7 @@ namespace Adenson.Collections
 			list.Reverse(index, count);
 		}
 		/// <summary>
-		/// Sorts the elements in the entire System.Collections.Generic.List<T> using the default comparer.
+		/// Sorts the elements in the entire System.Collections.Generic.List&lt;T> using the default comparer.
 		/// </summary>
 		public void Sort()
 		{
@@ -495,15 +494,15 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Sorts the elements in the entire list using the specified Comparison.
 		/// </summary>
-		/// <param name="comparison">The System.Comparison<T> to use when comparing elements.</param>
+		/// <param name="comparison">The System.Comparison&lt;T> to use when comparing elements.</param>
 		public void Sort(Comparison<T> comparison)
 		{
 			list.Sort(comparison);
 		}
 		/// <summary>
-		/// Sorts the elements in the entire System.Collections.Generic.List<T> using the specified comparer.
+		/// Sorts the elements in the entire System.Collections.Generic.List&lt;T> using the specified comparer.
 		/// </summary>
-		/// <param name="comparer">The System.Collections.Generic.IComparer<T> implementation to use when comparing elements.</param>
+		/// <param name="comparer">The System.Collections.Generic.IComparer&lt;T> implementation to use when comparing elements.</param>
 		public void Sort(IComparer<T> comparer)
 		{
 			list.Sort(comparer);

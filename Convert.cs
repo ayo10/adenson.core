@@ -220,7 +220,7 @@ namespace Adenson
 		/// equivalent to the specified object.
 		/// </summary>
 		/// <param name="value">An System.Object that implements the System.IConvertible interface.</param>
-		/// <param name="conversionType">A System.Type.</param>
+		/// <param name="destinationType">A System.Type.</param>
 		/// <returns>An object whose System.Type is conversionType and whose value is equivalent to value.-or-null, if value is null and conversionType is not a value type.</returns>
 		public static object ChangeType(object value, Type destinationType)
 		{
