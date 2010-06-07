@@ -1,8 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core(2008)", "Adenson.Core(2008).csproj", "{7246795C-9775-4A3E-958C-678FC7F2784C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.CoreTest", "Tests\VS\Adenson.CoreTest\Adenson.CoreTest.csproj", "{8B00813D-F11B-455E-AE08-673AA9CC053A}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core(2008)", "Adenson.Core.csproj", "{7246795C-9775-4A3E-958C-678FC7F2784C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
