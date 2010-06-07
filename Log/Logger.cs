@@ -120,7 +120,6 @@ namespace Adenson.Log
 		/// Instantiates a new Logger class for specified type
 		/// </summary>
 		/// <param name="type">Type to use to create new instance</param>
-		/// <param name="severity">The severity</param>
 		/// <param name="logType">The log type</param>
 		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>

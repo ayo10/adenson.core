@@ -49,8 +49,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
 		/// </summary>
-		/// <param name="connectionKeyOrString">Either a connection string or a connection key.</param>
-		/// <param name="isConnectionString">if the first argumet is a connection string</param>
+		/// <param name="connectionString">Connection string.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
 		/// <exception cref="ArgumentNullException">if 'connectionString' is null or its 'ConnectionString' property is null.</exception>
 		/// <exception cref="NotSupportedException">if unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
