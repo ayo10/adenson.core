@@ -9,5 +9,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("\x00a9 Adenson.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.6.2.0")]
+[assembly: AssemblyVersion("3.6.3.0")]
 [assembly: AssemblyDelaySign(false)]

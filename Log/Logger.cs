@@ -256,7 +256,7 @@ namespace Adenson.Log
 		public void Info(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Info)) return;
-			this.Write(LogSeverity.Info, arguments == null ? message : String.Format(message, arguments));
+			this.Write(LogSeverity.Info, message, arguments);
 		}
 		/// <summary>
 		/// Logs the value into the log of type debug, converting value to string
@@ -274,7 +274,7 @@ namespace Adenson.Log
 		public void Debug(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Debug)) return;
-			this.Write(LogSeverity.Debug, arguments == null ? message : String.Format(message, arguments));
+			this.Write(LogSeverity.Debug, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors of type Warning converting value to string
@@ -292,7 +292,7 @@ namespace Adenson.Log
 		public void Warn(string message, params object[] arguments)
 		{
 			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Warn)) return;
-			this.Write(LogSeverity.Warn, arguments == null ? message : String.Format(message, arguments));
+			this.Write(LogSeverity.Warn, message, arguments);
 		}
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
@@ -309,7 +309,7 @@ namespace Adenson.Log
 		/// <param name="arguments">Arguments, if any to format message</param>
 		public void Error(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Error, arguments == null ? message : String.Format(message, arguments));
+			this.Write(LogSeverity.Error, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors of type Error
@@ -357,15 +357,22 @@ namespace Adenson.Log
 			this.Flush();
 		}
 
-		internal LogEntry Write(LogSeverity severity, string message)
+		internal LogEntry Write(LogSeverity severity, string message, params object[] arguments)
 		{
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
 			entry.Type = this.Type;
-			entry.Message = message;
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = this.LogType;
+			try
+			{
+				entry.Message = arguments.Length == 0 ? message : String.Format(message, arguments);
+			}
+			catch
+			{
+				entry.Message = message;
+			}
 			entries.Add(entry);
 
 			if (suspendedTypes.Contains(this.Type)) return entry;
