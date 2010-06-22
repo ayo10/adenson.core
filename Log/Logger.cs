@@ -326,7 +326,7 @@ namespace Adenson.Log
 		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
 		public void Error(Exception ex, bool phoneHome)
 		{
-			string message = Logger.ConvertToString(ex);
+			string message = Logger.ConvertToString(ex, true);
 			LogEntry entry = this.Write(LogSeverity.Error, message);
 
 			if (ex is System.OutOfMemoryException) Thread.CurrentThread.Abort();
@@ -614,7 +614,7 @@ namespace Adenson.Log
 			#else
 			try
 			{
-				EventLog.WriteEntry("SnUtilsLogger", ConvertToString(ex), EventLogEntryType.Warning);
+				EventLog.WriteEntry("SnUtilsLogger", ConvertToString(ex, true), EventLogEntryType.Warning);
 			}
 			catch { }
 			#endif
