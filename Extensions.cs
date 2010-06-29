@@ -1,19 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Threading;
 
 namespace Adenson
 {
+	/// <summary>
+	/// Bunch of extensions
+	/// </summary>
 	public static class Extensions
 	{
-		public static bool ContainsKey<T>(this Dictionary<string, T> dick, string key, StringComparison comparism)
+		/// <summary>
+		/// Determines whether the dictionary contains the specified key, using the comparism rule
+		/// </summary>
+		/// <typeparam name="T">The type</typeparam>
+		/// <param name="dictionary">The dictionary to parse</param>
+		/// <param name="key">The key to find</param>
+		/// <param name="comparism">One of the enumeration values that specifies how the strings will be compared.</param>
+		/// <returns>true if the value of the value parameter is the same as this string; otherwise, false.</returns>
+		public static bool ContainsKey<T>(this Dictionary<string, T> dictionary, string key, StringComparison comparism)
 		{
-			return dick.Keys.Any(k => k.Equals(key, comparism));
+			return dictionary.Keys.Any(k => k.Equals(key, comparism));
 		}
-		public static T GetValue<T>(this Dictionary<string, T> dick, string key)
+		/// <summary>
+		/// Gets the element with the specified key, case insensitive
+		/// </summary>
+		/// <typeparam name="T">The type</typeparam>
+		/// <param name="dictionary">The dictionary to parse</param>
+		/// <param name="key">The key to find</param>
+		/// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a System.Collections.Generic.KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
+		public static T GetValue<T>(this Dictionary<string, T> dictionary, string key)
 		{
-			string actualKey = dick.Keys.FirstOrDefault(k => k.Equals(key, StringComparison.CurrentCultureIgnoreCase));
-			return dick[actualKey];
+			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, StringComparison.CurrentCultureIgnoreCase));
+			return dictionary[actualKey];
+		}
+
+		internal static int GetDisableProcessingCount(this Dispatcher dispatcher)
+		{
+			FieldInfo fieldInfo = dispatcher.GetType().GetField("_disableProcessingCount", BindingFlags.Instance | BindingFlags.NonPublic);
+			object obj = fieldInfo.GetValue(dispatcher);
+			return (int)obj;
 		}
 	}
 }

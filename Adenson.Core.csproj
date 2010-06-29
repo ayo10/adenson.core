@@ -45,14 +45,15 @@
       <Name>System.XML</Name>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\CollectionChangingEventArgs.cs" />
-    <Compile Include="Collections\CollectionChangedEventArgs.cs" />
-    <Compile Include="Collections\ICollection.cs" />
-    <Compile Include="Collections\IReadOnlyList.cs" />
-    <Compile Include="Collections\MonitoredCollection.cs" />
+    <Compile Include="Collections\CollectionChangingEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Collections\ReadOnlyList.cs" />
+    <Compile Include="Collections\ReadOnlyObservableCollection.cs" />
     <Compile Include="Collections\Set.cs" />
     <Compile Include="Collections\UnsyncedList.cs">
       <SubType>Code</SubType>
@@ -74,7 +75,6 @@
     <Compile Include="Data\SqlClient\SqlClientImpl.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />
-    <Compile Include="Convert.cs" />
     <Compile Include="Data\SqlClient\SqlClientParameterCache.cs" />
     <Compile Include="Cryptography\DES.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-namespace ListenQuest
+namespace Adenson.Collections
 {
 	/// <summary>
 	/// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.<br/>
@@ -25,10 +25,10 @@ namespace ListenQuest
 		public ObservableCollection(IEnumerable<T> list) : base(list)
 		{
 		}
-		public ObservableCollection(IEnumerable<T> list, System.Collections.IComparer customSort) : base(list)
-		{
-			((ListCollectionView)this.View).CustomSort = customSort;
-		}
+		//public ObservableCollection(IEnumerable<T> list, System.Collections.IComparer customSort) : base(list)
+		//{
+		//    ((ListCollectionView)this.View).CustomSort = customSort;
+		//}
 
 		#endregion
 		#region Properties
@@ -42,10 +42,10 @@ namespace ListenQuest
 				else base[index] = value;
 			}
 		}
-		public CollectionView View
-		{
-			get { return (CollectionView)CollectionViewSource.GetDefaultView(this); }
-		}
+		//public CollectionView View
+		//{
+		//    get { return (CollectionView)CollectionViewSource.GetDefaultView(this); }
+		//}
 		/// <summary>
 		/// Occurs when an item is about to be added, removed, changed, or moved.
 		/// </summary>

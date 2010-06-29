@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace ListenQuest
+namespace Adenson.Collections
 {
 	public sealed class ReadOnlyObservableCollection<T> : ICollection<T>, INotifyCollectionChanged, INotifyPropertyChanged, IList
 	{
@@ -15,7 +15,6 @@ namespace ListenQuest
 
 		public ReadOnlyObservableCollection()
 		{
-			new TimeSpan();
 		}
 		public ReadOnlyObservableCollection(IEnumerable<T> collection)
 		{
