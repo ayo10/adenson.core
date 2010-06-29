@@ -4,7 +4,7 @@ using System.Data.SqlServerCe;
 using System.Globalization;
 using Adenson.Log;
 
-namespace ListenQuest
+namespace Adenson.Data.SqlCe
 {
 	internal sealed class SqlHelper
 	{
@@ -358,7 +358,7 @@ namespace ListenQuest
 						switch (parameterValues[i].GetType().Name)
 						{
 							case "System.Boolean":
-								parameterValues[i] = Convert.ToBoolean(parameterValues[i], CultureInfo.CurrentCulture) ? 1 : 0;
+								parameterValues[i] = System.Convert.ToBoolean(parameterValues[i], CultureInfo.CurrentCulture) ? 1 : 0;
 								commandParameters[i].SqlDbType = SqlDbType.Bit;
 								break;
 							case "System.DateTime": commandParameters[i].SqlDbType = SqlDbType.DateTime; break;

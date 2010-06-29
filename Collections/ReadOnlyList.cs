@@ -8,7 +8,7 @@ namespace Adenson.Collections
 	/// Represents a read only collection
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class ReadOnlyList<T> : IReadOnlyList<T>
+	public class ReadOnlyList<T> : IEnumerable<T>
 	{
 		#region Variables
 		private List<T> _list;
@@ -21,16 +21,6 @@ namespace Adenson.Collections
 		public ReadOnlyList()
 		{
 			_list = new List<T>();
-		}
-		/// <summary>
-		/// Creates a new ReadonlyList using specfied list as the base list
-		/// </summary>
-		/// <param name="list"></param>
-		public ReadOnlyList(IList<T> collection)
-		{
-			List<T> list = collection as List<T>;
-			if (list != null) _list = list;
-			else _list = new List<T>(collection);
 		}
 		/// <summary>
 		/// Instantiates a new readonly collection from specified list
@@ -84,6 +74,15 @@ namespace Adenson.Collections
 			return this.InnerList.Contains(item);
 		}
 		/// <summary>
+		/// Searches for the specified object and returns the zero-based index of the first occurrence within the list.
+		/// </summary>
+		/// <param name="item">The object to locate</param>
+		/// <returns> The zero-based index of the first occurrence of item within the entire list, if found; otherwise, –1.</returns>
+		public int IndexOf(T item)
+		{
+			return this.InnerList.IndexOf(item);
+		}
+		/// <summary>
 		/// Gets the enumertor
 		/// </summary>
 		/// <returns></returns>
@@ -105,26 +104,6 @@ namespace Adenson.Collections
 		public virtual void Sort(IComparer<T> comparer)
 		{
 			this.InnerList.Sort(comparer);
-		}
-		/// <summary>
-		/// Attemts to cast all the items to the specified Type
-		/// </summary>
-		/// <typeparam name="Tc">The type to cast the items to, but the type cannot be a value type</typeparam>
-		/// <returns>The result</returns>
-		public IReadOnlyList<Tc> Cast<Tc>() where Tc : class
-		{
-			ReadOnlyList<Tc> items = new ReadOnlyList<Tc>();
-			foreach (T item in this)
-			{
-				if (item == null) items.InnerList.Add(null);
-				else
-				{
-					Tc tced = item as Tc;
-					if (tced == null) throw new InvalidCastException(String.Format(ExceptionMessages.CastToTypeException, typeof(Tc)));
-					items.InnerList.Add(tced);
-				}
-			}
-			return items;
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
