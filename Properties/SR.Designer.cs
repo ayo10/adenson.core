@@ -61,11 +61,74 @@ namespace Adenson {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to eventlogger.log.
+        /// </summary>
+        internal static string EventLogFile {
+            get {
+                return ResourceManager.GetString("EventLogFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}	{1}	{2}	{3}	{4}.
+        /// </summary>
+        internal static string EventLoggerFileInsert {
+            get {
+                return ResourceManager.GetString("EventLoggerFileInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES (&apos;{0}&apos;, &apos;{1}&apos;, &apos;{2}&apos;, &apos;{3}&apos;, &apos;{4}&apos;).
+        /// </summary>
+        internal static string EventLoggerSqlInsertStatement {
+            get {
+                return ResourceManager.GetString("EventLoggerSqlInsertStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [{0}] {1} [{2}] - {3}.
+        /// </summary>
+        internal static string LoggerConsoleOutput {
+            get {
+                return ResourceManager.GetString("LoggerConsoleOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HH:mm:ss.
         /// </summary>
         internal static string LoggerDateFormat {
             get {
                 return ResourceManager.GetString("LoggerDateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {3}
+        ///
+        ///
+        ///Date: {0}
+        ///Type: {1}
+        ///Path: {2}.
+        /// </summary>
+        internal static string LoggerEventLogMessage {
+            get {
+                return ResourceManager.GetString("LoggerEventLogMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}
+        ///Source: {1}
+        ///Site: {2}
+        ///{3}
+        ///.
+        /// </summary>
+        internal static string LoggerExceptionMessage {
+            get {
+                return ResourceManager.GetString("LoggerExceptionMessage", resourceCulture);
             }
         }
         
@@ -96,69 +159,6 @@ namespace Adenson {
         internal static string MsgMailerWarning {
             get {
                 return ResourceManager.GetString("MsgMailerWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to eventlogger.log.
-        /// </summary>
-        internal static string VarEventLogFile {
-            get {
-                return ResourceManager.GetString("VarEventLogFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}	{1}	{2}	{3}	{4}.
-        /// </summary>
-        internal static string VarEventLoggerFileInsert {
-            get {
-                return ResourceManager.GetString("VarEventLoggerFileInsert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES (&apos;{0}&apos;, &apos;{1}&apos;, &apos;{2}&apos;, &apos;{3}&apos;, &apos;{4}&apos;).
-        /// </summary>
-        internal static string VarEventLoggerSqlInsertStatement {
-            get {
-                return ResourceManager.GetString("VarEventLoggerSqlInsertStatement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [{0}] {1} [{2}] - {3}.
-        /// </summary>
-        internal static string VarLoggerConsoleOutput {
-            get {
-                return ResourceManager.GetString("VarLoggerConsoleOutput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {3}
-        ///
-        ///
-        ///Date: {0}
-        ///Type: {1}
-        ///Path: {2}.
-        /// </summary>
-        internal static string VarLoggerEventLogMessage {
-            get {
-                return ResourceManager.GetString("VarLoggerEventLogMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}
-        ///Source: {1}
-        ///Site: {2}
-        ///{3}
-        ///.
-        /// </summary>
-        internal static string VarLoggerExceptionMessage {
-            get {
-                return ResourceManager.GetString("VarLoggerExceptionMessage", resourceCulture);
             }
         }
     }

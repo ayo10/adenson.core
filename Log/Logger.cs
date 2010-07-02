@@ -78,7 +78,7 @@ namespace Adenson.Log
 				#else
 				configSeverityLevel = LogSeverity.Error;
 				#endif
-				configLogType = LogType.ConsoleProjects;
+				configLogType = LogType.DiagnosticsDebug;
 			}
 
 			if ((configLogType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
@@ -393,11 +393,11 @@ namespace Adenson.Log
 		{
 			if ((entry.LogType & LogType.Console) != LogType.None)
 			{
-				Console.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date, entry.Type.Name, entry.Message));
+				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ms.fff"), entry.Type.Name, entry.Message));
 			}
 			if ((entry.LogType & LogType.DiagnosticsDebug) != LogType.None)
 			{
-				System.Diagnostics.Debug.WriteLine(String.Format(SR.VarLoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date, entry.Type.Name, entry.Message));
+				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ms.fff"), entry.Type.Name, entry.Message));
 			}
 		}
 
@@ -540,7 +540,7 @@ namespace Adenson.Log
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 			foreach (LogEntry row in entries)
 			{
-				sb.AppendLine(String.Format(SR.VarEventLoggerSqlInsertStatement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Path, row.Date));
+				sb.AppendLine(String.Format(SR.EventLoggerSqlInsertStatement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Path, row.Date));
 			}
 			try
 			{
@@ -560,7 +560,7 @@ namespace Adenson.Log
 				System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 				foreach (LogEntry row in entries)
 				{
-					sb.AppendLine(String.Format(SR.VarEventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
+					sb.AppendLine(String.Format(SR.EventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
 				}
 				ActualFileWrite(sb.ToString(), 0);
 				return true;
@@ -581,7 +581,7 @@ namespace Adenson.Log
 					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
 					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
 					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
-					EventLog.WriteEntry(entry.Source, String.Format(SR.VarLoggerEventLogMessage, DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
+					EventLog.WriteEntry(entry.Source, String.Format(SR.LoggerEventLogMessage, DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
 				}
 				return true;
 			}
@@ -621,7 +621,7 @@ namespace Adenson.Log
 		}
 		private static void ActualFileWrite(string str, int numAttempts) 
 		{
-			Logger.ActualFileWrite(SR.VarEventLogFile, str, numAttempts);
+			Logger.ActualFileWrite(SR.EventLogFile, str, numAttempts);
 		}
 		private static void ActualFileWrite(string filePath, string str, int numAttempts)
 		{

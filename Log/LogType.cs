@@ -43,10 +43,10 @@ namespace Adenson.Log
 		/// <summary>
 		/// File | Console | DiagnosticsDebug | EventLog
 		/// </summary>
-		WinFormProjects = File | Console | DiagnosticsDebug | EventLog,
+		WinFormProjects = File | DiagnosticsDebug | EventLog,
 		/// <summary>
 		/// DataBase | File | EventLog | Console | DiagnosticsDebug
 		/// </summary>
-		All = DataBase | File | EventLog | Console | DiagnosticsDebug
+		All = DataBase | File | EventLog | DiagnosticsDebug
 	}
 }
