@@ -112,13 +112,40 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EventLogFile" xml:space="preserve">
+    <value>eventlogger.log</value>
+  </data>
+  <data name="EventLoggerFileInsert" xml:space="preserve">
+    <value>{0}	{1}	{2}	{3}	{4}</value>
+  </data>
+  <data name="EventLoggerSqlInsertStatement" xml:space="preserve">
+    <value>INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')</value>
+  </data>
+  <data name="LoggerConsoleOutput" xml:space="preserve">
+    <value>[{0}] {1} [{2}] - {3}</value>
+  </data>
   <data name="LoggerDateFormat" xml:space="preserve">
     <value>HH:mm:ss</value>
+  </data>
+  <data name="LoggerEventLogMessage" xml:space="preserve">
+    <value>{3}
+
+
+Date: {0}
+Type: {1}
+Path: {2}</value>
+  </data>
+  <data name="LoggerExceptionMessage" xml:space="preserve">
+    <value>{0}
+Source: {1}
+Site: {2}
+{3}
+</value>
   </data>
   <data name="MsgExMinLogBatchSize" xml:space="preserve">
     <value>The minumium value for LogBatchSize is 1.</value>
@@ -138,32 +165,5 @@ Override this behavior by setting System.Net.Mail.SmtpClient server properties i
 &lt;/configuration&gt;
 
 Note, setting that will cause Adenson.Utils.Mailer not to try using the default values.</value>
-  </data>
-  <data name="VarEventLogFile" xml:space="preserve">
-    <value>eventlogger.log</value>
-  </data>
-  <data name="VarEventLoggerFileInsert" xml:space="preserve">
-    <value>{0}	{1}	{2}	{3}	{4}</value>
-  </data>
-  <data name="VarEventLoggerSqlInsertStatement" xml:space="preserve">
-    <value>INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')</value>
-  </data>
-  <data name="VarLoggerConsoleOutput" xml:space="preserve">
-    <value>[{0}] {1} [{2}] - {3}</value>
-  </data>
-  <data name="VarLoggerEventLogMessage" xml:space="preserve">
-    <value>{3}
-
-
-Date: {0}
-Type: {1}
-Path: {2}</value>
-  </data>
-  <data name="VarLoggerExceptionMessage" xml:space="preserve">
-    <value>{0}
-Source: {1}
-Site: {2}
-{3}
-</value>
   </data>
 </root>
