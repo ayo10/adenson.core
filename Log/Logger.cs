@@ -393,11 +393,11 @@ namespace Adenson.Log
 		{
 			if ((entry.LogType & LogType.Console) != LogType.None)
 			{
-				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ms.fff"), entry.Type.Name, entry.Message));
+				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
 			if ((entry.LogType & LogType.DiagnosticsDebug) != LogType.None)
 			{
-				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ms.fff"), entry.Type.Name, entry.Message));
+				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
 		}
 
