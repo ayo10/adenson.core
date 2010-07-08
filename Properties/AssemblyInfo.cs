@@ -9,6 +9,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("\x00a9 Adenson.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.6.4.2")]
+[assembly: AssemblyVersion("3.6.4.3")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: InternalsVisibleTo("ListenQuest.Data")]
