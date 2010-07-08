@@ -84,15 +84,14 @@
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IO\Extensions.cs" />
+    <Compile Include="IO\Util.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\ExceptionMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Include="IO\DebugWriter.cs" />
-    <Compile Include="IO\CreateDirectoryMode.cs" />
-    <Compile Include="IO\Directory.cs" />
     <Compile Include="Log\ErrorAlertType.cs" />
     <Compile Include="Log\LogEntry.cs" />
     <Compile Include="Log\Logger.cs" />
@@ -119,6 +118,7 @@
       <CustomToolNamespace>Adenson</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

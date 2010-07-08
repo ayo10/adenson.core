@@ -41,30 +41,6 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="toEncrypt"></param>
-		/// <returns></returns>
-		public static string Encrypt(string toEncrypt)
-		{
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
-
-			return Encryptor.Base.Encrypt(toEncrypt);
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="toEncrypt"></param>
-		/// <returns></returns>
-		public static string Encrypt(string key, string toEncrypt)
-		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
-			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
-			return encryptors[key].Encrypt(toEncrypt);
-		}
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <param name="toDecrypt"></param>
 		/// <returns></returns>
 		public static string Decrypt(string toDecrypt)
@@ -90,23 +66,37 @@ namespace Adenson.Cryptography
 		/// 
 		/// </summary>
 		/// <param name="toEncrypt"></param>
-		/// <param name="encryptedString"></param>
 		/// <returns></returns>
-		public static bool TryEncrypt(string toEncrypt, out string encryptedString)
+		public static string Encrypt(string toEncrypt)
 		{
 			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
 
-			encryptedString = null;
-			try
-			{
-				encryptedString = Encryptor.Encrypt(toEncrypt);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-			}
-			return false;
+			return Encryptor.Base.Encrypt(toEncrypt);
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="toEncrypt"></param>
+		/// <returns></returns>
+		public static string Encrypt(string key, string toEncrypt)
+		{
+			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
+			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
+			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
+			return encryptors[key].Encrypt(toEncrypt);
+		}
+		/// <summary>
+		/// Gets the MD5 hash of specified bit array
+		/// </summary>
+		/// <param name="buffer">The bit array</param>
+		/// <returns>String representation of the md5 hash of array</returns>
+		public static string GetMD5Hash(byte[] buffer)
+		{
+			if (buffer == null) return null;
+			System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+			string hash = System.Convert.ToBase64String(md5.ComputeHash(buffer)).Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
+			return hash;
 		}
 		/// <summary>
 		/// 
@@ -122,6 +112,28 @@ namespace Adenson.Cryptography
 			try
 			{
 				descryptedString = Encryptor.Decrypt(toDecrypt);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex);
+			}
+			return false;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="toEncrypt"></param>
+		/// <param name="encryptedString"></param>
+		/// <returns></returns>
+		public static bool TryEncrypt(string toEncrypt, out string encryptedString)
+		{
+			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
+
+			encryptedString = null;
+			try
+			{
+				encryptedString = Encryptor.Encrypt(toEncrypt);
 				return true;
 			}
 			catch (Exception ex)

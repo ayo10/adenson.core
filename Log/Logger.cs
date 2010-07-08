@@ -71,15 +71,6 @@ namespace Adenson.Log
 				if (config.ContainsKey("source", StringComparison.CurrentCultureIgnoreCase)) configSource = config.GetValue("source");
 				if (config.ContainsKey("dateTimeFormat", StringComparison.CurrentCultureIgnoreCase)) configDateTimeFormat = config.GetValue<string>("datetimeformat");
 			}
-			else
-			{
-				#if DEBUG
-				configSeverityLevel = LogSeverity.Debug;
-				#else
-				configSeverityLevel = LogSeverity.Error;
-				#endif
-				configLogType = LogType.DiagnosticsDebug;
-			}
 
 			if ((configLogType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(configSource)) configSource = "SnUtilsLogger";
 			if ((configLogType & LogType.DataBase) != 0) sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
