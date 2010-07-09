@@ -35,6 +35,16 @@ namespace Adenson
 			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, StringComparison.CurrentCultureIgnoreCase));
 			return dictionary[actualKey];
 		}
+		/// <summary>
+		/// Converts the specified value to a hex string, using <see cref="BitConverter.ToString()"/>, but without the dashes
+		/// </summary>
+		/// <param name="buffer">The byte array</param>
+		/// <returns></returns>
+		public static string ToHex(this byte[] buffer)
+		{
+			if (buffer == null) return null;
+			return BitConverter.ToString(buffer).Replace("-", String.Empty);
+		}
 
 		internal static int GetDisableProcessingCount(this Dispatcher dispatcher)
 		{
