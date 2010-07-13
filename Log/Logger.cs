@@ -10,7 +10,7 @@ using Adenson.Data;
 namespace Adenson.Log
 {
 	/// <summary>
-	/// Logger of ...., logs
+	/// Logger of .... well, logs
 	/// </summary>
 	public sealed class Logger : IDisposable
 	{
@@ -294,7 +294,7 @@ namespace Adenson.Log
 			this.Error(Convert.ToString(value));
 		}
 		/// <summary>
-		/// Called to log errors of type Error
+		/// Called to log errors
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
@@ -303,7 +303,7 @@ namespace Adenson.Log
 			this.Write(LogSeverity.Error, message, arguments);
 		}
 		/// <summary>
-		/// Called to log errors of type Error
+		/// Called to log errors
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
 		public void Error(Exception ex)
@@ -311,7 +311,7 @@ namespace Adenson.Log
 			this.Error(ex, false);
 		}
 		/// <summary>
-		/// Called to log errors of type Error
+		/// Called to log errors
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
 		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
