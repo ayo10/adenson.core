@@ -70,6 +70,7 @@
     <Compile Include="Configuration\EncryptorCollection.cs" />
     <Compile Include="Configuration\EncryptorElement.cs" />
     <Compile Include="Configuration\EncryptorSection.cs" />
+    <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
     <Compile Include="Data\OleDb\OleDbParameterCache.cs" />
     <Compile Include="Data\OleDb\OleDbClientImpl.cs" />
