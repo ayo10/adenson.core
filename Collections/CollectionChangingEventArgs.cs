@@ -11,18 +11,49 @@ namespace Adenson.Collections
 	{
 		#region Constructors
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="changedItem"></param>
 		public CollectionChangingEventArgs(NotifyCollectionChangedAction action, T changedItem) : base(action, changedItem)
 		{
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="changedItem"></param>
+		/// <param name="index"></param>
 		public CollectionChangingEventArgs(NotifyCollectionChangedAction action, T changedItem, int index) : base(action, changedItem, index)
 		{
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="changedItems"></param>
+		/// <param name="startingIndex"></param>
 		public CollectionChangingEventArgs(NotifyCollectionChangedAction action, IEnumerable<T> changedItems, int startingIndex) : base(action, changedItems.ToList(), startingIndex)
 		{
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="newItem"></param>
+		/// <param name="oldItem"></param>
+		/// <param name="index"></param>
 		public CollectionChangingEventArgs(NotifyCollectionChangedAction action, object newItem, object oldItem, int index) : base(action, newItem, oldItem, index)
 		{
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		/// <param name="changedItem"></param>
+		/// <param name="index"></param>
+		/// <param name="oldIndex"></param>
 		public CollectionChangingEventArgs(NotifyCollectionChangedAction action, object changedItem, int index, int oldIndex) : base(action, changedItem, index, oldIndex)
 		{
 		}

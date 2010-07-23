@@ -486,8 +486,16 @@ namespace Adenson.Log
 		{
 			return ConvertToString(exception, false);
 		}
+		/// <summary>
+		/// Converts the exception to a string
+		/// </summary>
+		/// <param name="exception"></param>
+		/// <param name="probeDeep"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException">if exception is null.</exception>
 		public static string ConvertToString(Exception exception, bool probeDeep)
 		{
+			if (exception == null) throw new ArgumentNullException("exception");
 			System.Text.StringBuilder message = new System.Text.StringBuilder();
 			for (Exception ex = exception; ex != null; ex = exception.InnerException)
 			{

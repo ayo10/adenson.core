@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Adenson.Data
 {
-	public sealed class ConnectionManager
+	internal sealed class ConnectionManager
 	{
 		#region Constructor
 

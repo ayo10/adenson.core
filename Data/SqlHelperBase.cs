@@ -365,6 +365,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
@@ -372,17 +373,28 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="transaction">The transaction</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		public abstract object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="commandText"></param>
+		/// <returns></returns>
 		protected static bool IsCrud(string commandText)
 		{
 			bool x = crudites.Any(s => commandText.ToLower().Contains(s));
 			return x;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="parameterValues"></param>
+		/// <returns></returns>
 		protected static bool IsNotEmpty(object[] parameterValues)
 		{
 			return (parameterValues != null) && (parameterValues.Length > 0);

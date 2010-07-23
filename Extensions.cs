@@ -36,7 +36,7 @@ namespace Adenson
 			return dictionary[actualKey];
 		}
 		/// <summary>
-		/// Converts the specified value to a hex string, using <see cref="BitConverter.ToString()"/>, but without the dashes
+		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
 		/// </summary>
 		/// <param name="buffer">The byte array</param>
 		/// <returns></returns>

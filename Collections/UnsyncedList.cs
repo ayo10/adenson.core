@@ -176,7 +176,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Copies a range of elements from the list to a compatible one-dimensional array, starting at the specified index of the target array.
 		/// </summary>
-		/// <param name="index">The zero-based index in the source System.Collections.Generic.List<T> at which copying begins.</param>
+		/// <param name="index">The zero-based index in the source System.Collections.Generic.List&gt;T&lt; at which copying begins.</param>
 		/// <param name="array">The one-dimensional System.Array that is the destination of the elements.</param>
 		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
 		/// <param name="count">The number of elements to copy.</param>
@@ -214,7 +214,7 @@ namespace Adenson.Collections
 		/// Searches for an element that matches the conditions defined by the specified predicate, and returns the first occurrence within the entire list.
 		/// </summary>
 		/// <param name="match">The predicate delegate that defines the conditions of the element to search for.</param>
-		/// <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type T.
+		/// <returns>The first element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type T.</returns>
 		/// <exception name="System.ArgumentNullException">match is null.</exception>
 		public T Find(Predicate<T> match)
 		{
@@ -307,7 +307,7 @@ namespace Adenson.Collections
 		}
 		/// <summary>
 		/// Searches for an element that matches the conditions defined by the specified predicate, and returns the last occurrence within the entire list.
-		/// <summary>
+		/// </summary>
 		/// <param name="match">The predicate delegate that defines the conditions of the element to search for.</param>
 		/// <returns>The last element that matches the conditions defined by the specified predicate, if found; otherwise, the default value for type T.</returns>
 		public T FindLast(Predicate<T> match)
@@ -508,11 +508,11 @@ namespace Adenson.Collections
 			list.Sort(comparer);
 		}
 		/// <summary>
-		/// Sorts the elements in the entire System.Collections.Generic.List<T> using the specified comparer.
+		/// Sorts the elements in the entire System.Collections.Generic.List&lt;T&gt; using the specified comparer.
 		/// </summary>
 		/// <param name="index">The zero-based starting index of the range to sort.</param>
 		/// <param name="count">The length of the range to sort.</param>
-		/// <param name="comparer">The System.Collections.Generic.IComparer<T> implementation to use when comparing elements, or null to use the default comparer System.Collections.Generic.Comparer<T>.Default.</param>
+		/// <param name="comparer">The System.Collections.Generic.IComparer&gt;T&lt; implementation to use when comparing elements, or null to use the default comparer System.Collections.Generic.Comparer&gt;T&lt;.Default.</param>
 		public void Sort(int index, int count, IComparer<T> comparer)
 		{
 			list.Sort(index, count, comparer);

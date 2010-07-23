@@ -3,6 +3,9 @@ using System.IO;
 
 namespace Adenson.IO
 {
+	/// <summary>
+	/// Bunch of extension methods
+	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>
