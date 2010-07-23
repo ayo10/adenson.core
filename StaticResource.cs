@@ -302,6 +302,7 @@ namespace Adenson
 		/// <summary>
 		/// Gets the value with the specified key
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="key">The key</param>
 		/// <returns>The value</returns>
 		public static object GetValue(Type type, string key)
@@ -311,6 +312,7 @@ namespace Adenson
 		/// <summary>
 		/// Gets the value with the specified key
 		/// </summary>
+		/// <param name="type"></param>
 		/// <param name="key">The key</param>
 		/// <returns>The value</returns>
 		public static T GetValue<T>(Type type, string key)

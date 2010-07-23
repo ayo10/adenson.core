@@ -26,8 +26,15 @@ namespace Adenson.Cryptography
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Encrypts the specified byte array
+		/// </summary>
+		/// <param name="toEncrypt">The byte array to encrypt</param>
+		/// <returns>The encrypted value</returns>
 		public byte[] Encrypt(byte[] toEncrypt)
 		{
+			if (toEncrypt == null) return null;
+
 			ICryptoTransform transform = this.CreateEncryptor();
 			MemoryStream ms = new MemoryStream();
 			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write);
@@ -40,8 +47,15 @@ namespace Adenson.Cryptography
 
 			return ms.GetBuffer();
 		}
+		/// <summary>
+		/// Encrypts the specified string
+		/// </summary>
+		/// <param name="toEncrypt">The string to encrypt</param>
+		/// <returns>The resulting encrypted value, in base64</returns>
 		public string Encrypt(string toEncrypt)
 		{
+			if (toEncrypt == null) return null;
+
 			ICryptoTransform transform = this.CreateEncryptor();
 
 			MemoryStream ms = new MemoryStream();
@@ -54,6 +68,11 @@ namespace Adenson.Cryptography
 			ms.Flush();
 			return Convert.ToBase64String(ms.GetBuffer(), 0, int.Parse(ms.Length.ToString()));
 		}
+		/// <summary>
+		/// The 
+		/// </summary>
+		/// <param name="toDecrypt"></param>
+		/// <returns></returns>
 		public string Decrypt(string toDecrypt)
 		{
 			ICryptoTransform transform = this.CreateDecryptor();
@@ -64,6 +83,11 @@ namespace Adenson.Cryptography
 			StreamReader sr = new StreamReader(cs);
 			return sr.ReadToEnd();
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="toDecrypt"></param>
+		/// <returns></returns>
 		public byte[] Decrypt(byte[] toDecrypt)
 		{
 			ICryptoTransform transform = this.CreateDecryptor();
@@ -75,18 +99,31 @@ namespace Adenson.Cryptography
 			cs.Write(buffer, 0, buffer.Length);
 			return buffer;
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public ICryptoTransform CreateEncryptor()
 		{
 			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", ExceptionMessages.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateEncryptor();
 			return this.Algorithm.CreateEncryptor(rgbKey, rgbIV);
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public ICryptoTransform CreateDecryptor()
 		{
 			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", ExceptionMessages.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateDecryptor();
 			return this.Algorithm.CreateDecryptor(rgbKey, rgbIV);
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="iv"></param>
 		public void SetKeys(byte[] key, byte[] iv)
 		{
 			rgbKey = key;

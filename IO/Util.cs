@@ -79,10 +79,10 @@ namespace Adenson.IO
 			return filePath;
 		}
 		/// <summary>
-		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles"/>
+		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>
 		/// </summary>
-		/// <param name="path">The directory to search.</param>
-		/// <param name="searchPatterns">The search strings to match against the names of files in directory</param>
+		/// <param name="directory">The directory to search.</param>
+		/// <param name="extensions">The list of extensions to match against the names of files in directory</param>
 		/// <returns> A String array containing the names of files in the specified directory that match the specified search pattern. File names include the full path.</returns>
 		/// <exception cref="ArgumentNullException">if directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)

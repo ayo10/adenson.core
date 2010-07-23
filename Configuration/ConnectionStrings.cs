@@ -59,7 +59,8 @@ namespace Adenson.Configuration
 		/// <summary>
 		/// Calls ConnectionStrings.GetCS, catching ArgumentOutOfRangeException that would have been thrown.
 		/// </summary>
-		/// <param name="key">The lookup key for the connection string!</param>
+		/// <param name="key">The lookup key for the connection string</param>
+		/// <param name="connectionSetting">The connection setting if any</param>
 		/// <returns>A connection string</returns>
 		/// <remarks>calls GetCS(key, true)</remarks>
 		public static bool TryGet(string key, out ConnectionStringSettings connectionSetting)
@@ -71,6 +72,7 @@ namespace Adenson.Configuration
 		/// </summary>
 		/// <param name="key">Key to use to do a lookup</param>
 		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true, null otherwise</param>
+		/// <param name="connectionSetting">The connection setting if any</param>
 		/// <returns>A connection string</returns>
 		public static bool TryGet(string key, bool useDefaultIfNull, out ConnectionStringSettings connectionSetting)
 		{

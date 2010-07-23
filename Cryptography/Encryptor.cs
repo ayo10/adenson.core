@@ -22,7 +22,7 @@ namespace Adenson.Cryptography
 			//<Encryptor Type="AES" Key="jzAH8SMGI+x7XfD0PuUp9jGaVWoOQdDK5Cb9qzTbFq8=" Vector="teY2aQzLPW3ThSKxTB31Kw==" KeyFormat="Base64"/>
 			foreach (Configuration.EncryptorElement elem in section.Encryptors)
 			{
-				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrEmpty(elem.TypeName)) throw new InvalidOperationException(ExceptionMessages.CustomEncryptorMissingAttributes);
+				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(ExceptionMessages.CustomEncryptorMissingAttributes);
 				encryptors.Add(elem.Name, elem.GetEncryptor());
 			}
 		}
@@ -45,19 +45,20 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Decrypt(string toDecrypt)
 		{
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt", ExceptionMessages.ArgumentNull);
+			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
 
 			return Encryptor.Base.Decrypt(toDecrypt);
 		}
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <param name="key">The key to look up</param>
 		/// <param name="toDecrypt"></param>
 		/// <returns></returns>
 		public static string Decrypt(string key, string toDecrypt)
 		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
+			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
 
 			return encryptors[key].Decrypt(toDecrypt);
@@ -69,7 +70,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Encrypt(string toEncrypt)
 		{
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
+			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
 
 			return Encryptor.Base.Encrypt(toEncrypt);
 		}
@@ -81,8 +82,8 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Encrypt(string key, string toEncrypt)
 		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key", ExceptionMessages.ArgumentNull);
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
+			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
 			return encryptors[key].Encrypt(toEncrypt);
 		}
@@ -106,7 +107,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static bool TryDecrypt(string toDecrypt, out string descryptedString)
 		{
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt", ExceptionMessages.ArgumentNull);
+			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
 
 			descryptedString = null;
 			try
@@ -128,7 +129,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static bool TryEncrypt(string toEncrypt, out string encryptedString)
 		{
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt", ExceptionMessages.ArgumentNull);
+			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
 
 			encryptedString = null;
 			try

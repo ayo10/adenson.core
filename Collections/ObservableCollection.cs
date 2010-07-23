@@ -33,15 +33,6 @@ namespace Adenson.Collections
 		#endregion
 		#region Properties
 
-		public new T this[int index]
-		{
-			get { return base[index]; }
-			set
-			{
-				if (this.Count == index) base.Add(value);
-				else base[index] = value;
-			}
-		}
 		//public CollectionView View
 		//{
 		//    get { return (CollectionView)CollectionViewSource.GetDefaultView(this); }
@@ -58,14 +49,30 @@ namespace Adenson.Collections
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Adds each item in items to the list
+		/// </summary>
+		/// <param name="items">The items to add.</param>
+		/// <exception cref="ArgumentNullException">If items is null</exception>
 		public void AddRange(IEnumerable<T> items)
 		{
+			if (items == null) throw new ArgumentNullException("items");
 			foreach (T item in items) this.Add(item);
 		}
+		/// <summary>
+		/// Removes each item in items from the list
+		/// </summary>
+		/// <param name="items">The items to remove</param>
 		public void RemoveRange(IEnumerable<T> items)
 		{
+			if (items == null) throw new ArgumentNullException("items");
 			foreach (T item in items) this.Remove(item);
 		}
+		/// <summary>
+		/// Replaces the 
+		/// </summary>
+		/// <param name="existing"></param>
+		/// <param name="replacement"></param>
 		public void Replace(T existing, T replacement)
 		{
 			if (existing == null) throw new ArgumentNullException("existing");
@@ -74,6 +81,10 @@ namespace Adenson.Collections
 			if (index == -1) this.Add(replacement);
 			else this[index] = replacement;
 		}
+		/// <summary>
+		/// Converts the list into a read only list
+		/// </summary>
+		/// <returns></returns>
 		public ReadOnlyObservableCollection<T> AsReadOnly()
 		{
 			if (readOnly == null) readOnly = new ReadOnlyObservableCollection<T>(this);
@@ -89,18 +100,31 @@ namespace Adenson.Collections
 			this.PropertyChanged -= value;
 		}
 
+		/// <summary>
+		/// Removes all items from the collection.
+		/// </summary>
 		protected override void ClearItems()
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Remove, this, 0);
 			this.OnCollectionChanging(e);
 			if (!e.Cancel) base.ClearItems();
 		}
+		/// <summary>
+		/// Inserts an item into the collection at the specified index.
+		/// </summary>
+		/// <param name="index">The zero-based index at which item should be inserted.</param>
+		/// <param name="item">The object to insert.</param>
 		protected override void InsertItem(int index, T item)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Add, item, index);
 			this.OnCollectionChanging(e);
 			if (!e.Cancel) base.InsertItem(index, item);
 		}
+		/// <summary>
+		/// Moves the item at the specified index to a new location in the collection.
+		/// </summary>
+		/// <param name="oldIndex"></param>
+		/// <param name="newIndex"></param>
 		protected override void MoveItem(int oldIndex, int newIndex)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Move, this[oldIndex], newIndex, oldIndex);
