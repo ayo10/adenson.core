@@ -27,7 +27,7 @@ namespace Adenson.Collections
 		/// <exception cref="ArgumentNullException">collection is null.</exception>
 		public Set(IEnumerable<T> collection) : base(collection)
 		{
-			if (collection == null) throw new ArgumentNullException("collection", ExceptionMessages.ArgumentNull);
+			if (collection == null) throw new ArgumentNullException("collection", Exceptions.ArgumentNull);
 			Set<T> set = collection as Set<T>;
 			if (set != null) this.Comparer = set.Comparer;
 		}
@@ -38,7 +38,7 @@ namespace Adenson.Collections
 		/// <exception cref="ArgumentNullException">comparer is null.</exception>
 		public Set(IComparer<T> comparer) : this()
 		{
-			if (comparer == null) throw new ArgumentNullException("comparer", ExceptionMessages.ArgumentNull);
+			if (comparer == null) throw new ArgumentNullException("comparer", Exceptions.ArgumentNull);
 			_comparer = comparer;
 		}
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Adenson.Collections
 		/// <exception cref="ArgumentNullException">collection is null or comparer is null.</exception>
 		public Set(IEnumerable<T> collection, IComparer<T> comparer) : base(collection)
 		{
-			if (comparer == null) throw new ArgumentNullException("comparer", ExceptionMessages.ArgumentNull);
+			if (comparer == null) throw new ArgumentNullException("comparer", Exceptions.ArgumentNull);
 			this.Comparer = comparer;
 		}
 

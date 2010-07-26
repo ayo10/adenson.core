@@ -78,8 +78,8 @@ namespace Adenson.Data.SqlCe
 		}
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (type != CommandType.Text) throw new NotSupportedException(ExceptionMessages.SqlCommandTypeTextNotSupported);
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
 			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
@@ -95,8 +95,8 @@ namespace Adenson.Data.SqlCe
 		}
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (type != CommandType.Text) throw new NotSupportedException(ExceptionMessages.SqlCommandTypeTextNotSupported);
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
 			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
@@ -112,8 +112,8 @@ namespace Adenson.Data.SqlCe
 		}
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (type != CommandType.Text) throw new NotSupportedException(ExceptionMessages.SqlCommandTypeTextNotSupported);
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
 			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);

@@ -145,13 +145,13 @@ namespace Adenson.Net
 		}
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			if (to.Length == 0) throw new ArgumentOutOfRangeException("to", ExceptionMessages.EmailAddressInvalid);
+			if (to.Length == 0) throw new ArgumentOutOfRangeException("to", Exceptions.EmailAddressInvalid);
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);
 			foreach (string str in to)
 			{
-				if (String.IsNullOrEmpty(str)) throw new ArgumentNullException("to", ExceptionMessages.EmailAddressInvalid);
+				if (String.IsNullOrEmpty(str)) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
 				mailMessage.To.Add(str);
 			}
 			mailMessage.Subject = subject;

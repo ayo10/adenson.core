@@ -43,7 +43,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -63,7 +63,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -83,7 +83,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
@@ -111,7 +111,7 @@ namespace Adenson.Data.Odbc
 		}
 		public override void ClearParameterCache(string spName)
 		{
-			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", Exceptions.ArgumentNull);
 			OdbcParameterCache.Clear(spName);
 		}
 		public override bool CheckColumnExists(string tableName, string columnName)
@@ -152,9 +152,9 @@ namespace Adenson.Data.Odbc
 
 		private static OdbcCommand CheckCommand(IDbCommand command)
 		{
-			if (command == null) throw new ArgumentNullException("command", ExceptionMessages.ArgumentNull);
+			if (command == null) throw new ArgumentNullException("command", Exceptions.ArgumentNull);
 			OdbcCommand sqlcommand = command as OdbcCommand;
-			if (command == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Odbc"), "command");
+			if (command == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"), "command");
 			return sqlcommand;
 		}
 		private static OdbcTransaction CheckTransaction(IDbTransaction transaction)
@@ -163,7 +163,7 @@ namespace Adenson.Data.Odbc
 			if (transaction != null)
 			{
 				sqltransaction = transaction as OdbcTransaction;
-				if (sqltransaction == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Odbc"), "command");
+				if (sqltransaction == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"), "command");
 			}
 			return sqltransaction;
 		}
@@ -184,7 +184,7 @@ namespace Adenson.Data.Odbc
 				if (dbparameter != null)
 				{
 					OdbcParameter sqlParameter = obj as OdbcParameter;
-					if (sqlParameter == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Odbc"));
+					if (sqlParameter == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"));
 					list.Add(sqlParameter);
 				}
 				else return false;
@@ -196,8 +196,8 @@ namespace Adenson.Data.Odbc
 		private static OdbcParameter[] GenerateParameters(string commandText, object[] parameterValues)
 		{
 			string[] splits = commandText.Split('@');
-			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(ExceptionMessages.NoCommandParameter);
-			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(ExceptionMessages.ParameterCountMismatch);
+			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(Exceptions.NoCommandParameter);
+			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(Exceptions.ParameterCountMismatch);
 			List<OdbcParameter> list = new List<OdbcParameter>();
 			for (int i = 1; i < splits.Length; i++)
 			{
@@ -205,7 +205,7 @@ namespace Adenson.Data.Odbc
 				OdbcParameter parameter = new OdbcParameter(paramName, parameterValues[i - 1]);
 				list.Add(parameter);
 			}
-			if (list.Count != parameterValues.Length) throw new ArgumentException(ExceptionMessages.CommandTextParse);
+			if (list.Count != parameterValues.Length) throw new ArgumentException(Exceptions.CommandTextParse);
 			return list.ToArray();
 		}
 		private static void AssignParameterValues(OdbcParameter[] commandParameters, object[] parameterValues)

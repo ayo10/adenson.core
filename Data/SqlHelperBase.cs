@@ -160,7 +160,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
 			}
 
 			try
@@ -205,7 +205,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
 			}
 
 			try
@@ -312,7 +312,7 @@ namespace Adenson.Data
 			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
 			foreach (string commandText in commandTexts)
 			{
-				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", ExceptionMessages.ArgumentInListNull);
+				if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
 			}
 
 			try

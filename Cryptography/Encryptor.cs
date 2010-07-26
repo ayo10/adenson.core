@@ -22,7 +22,7 @@ namespace Adenson.Cryptography
 			//<Encryptor Type="AES" Key="jzAH8SMGI+x7XfD0PuUp9jGaVWoOQdDK5Cb9qzTbFq8=" Vector="teY2aQzLPW3ThSKxTB31Kw==" KeyFormat="Base64"/>
 			foreach (Configuration.EncryptorElement elem in section.Encryptors)
 			{
-				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(ExceptionMessages.CustomEncryptorMissingAttributes);
+				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
 				encryptors.Add(elem.Name, elem.GetEncryptor());
 			}
 		}
@@ -59,7 +59,7 @@ namespace Adenson.Cryptography
 		{
 			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
 			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
-			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
+			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
 
 			return encryptors[key].Decrypt(toDecrypt);
 		}
@@ -84,7 +84,7 @@ namespace Adenson.Cryptography
 		{
 			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
 			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
-			if (!encryptors.ContainsKey(key)) throw new ArgumentException(ExceptionMessages.NoEncryptorExists, "key");
+			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
 			return encryptors[key].Encrypt(toEncrypt);
 		}
 		/// <summary>

@@ -28,7 +28,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OleDbTransaction oleDbTransaction = OleDbClientImpl.CheckTransaction(transaction);
 
 			OleDbCommand command = new OleDbCommand(commandText);
@@ -44,7 +44,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OleDbTransaction sqltransaction = OleDbClientImpl.CheckTransaction(transaction);
 
 			OleDbCommand command = new OleDbCommand(commandText);
@@ -64,7 +64,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OleDbTransaction sqltransaction = OleDbClientImpl.CheckTransaction(transaction);
 
 			OleDbCommand command = new OleDbCommand(commandText);
@@ -84,7 +84,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 			OleDbTransaction sqltransaction = OleDbClientImpl.CheckTransaction(transaction);
 
 			OleDbCommand command = new OleDbCommand(commandText);
@@ -112,7 +112,7 @@ namespace Adenson.Data.OleDb
 		}
 		public override void ClearParameterCache(string spName)
 		{
-			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNull);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", Exceptions.ArgumentNull);
 			OleDbParameterCache.Clear(spName);
 		}
 		public override bool CheckColumnExists(string tableName, string columnName)
@@ -153,9 +153,9 @@ namespace Adenson.Data.OleDb
 
 		private static OleDbCommand CheckCommand(IDbCommand command)
 		{
-			if (command == null) throw new ArgumentNullException("command", ExceptionMessages.ArgumentNull);
+			if (command == null) throw new ArgumentNullException("command", Exceptions.ArgumentNull);
 			OleDbCommand sqlcommand = command as OleDbCommand;
-			if (command == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Oledb"), "command");
+			if (command == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Oledb"), "command");
 			return sqlcommand;
 		}
 		private static OleDbTransaction CheckTransaction(IDbTransaction transaction)
@@ -164,7 +164,7 @@ namespace Adenson.Data.OleDb
 			if (transaction != null)
 			{
 				oledbTransaction = transaction as OleDbTransaction;
-				if (oledbTransaction == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Oledb"), "command");
+				if (oledbTransaction == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Oledb"), "command");
 			}
 			return oledbTransaction;
 		}
@@ -185,7 +185,7 @@ namespace Adenson.Data.OleDb
 				if (dbparameter != null)
 				{
 					OleDbParameter sqlParameter = obj as OleDbParameter;
-					if (sqlParameter == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "Oledb"));
+					if (sqlParameter == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Oledb"));
 					list.Add(sqlParameter);
 				}
 				else return false;
@@ -197,8 +197,8 @@ namespace Adenson.Data.OleDb
 		private static OleDbParameter[] GenerateParameters(string commandText, object[] parameterValues)
 		{
 			string[] splits = commandText.Split('@');
-			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(ExceptionMessages.NoCommandParameter);
-			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(ExceptionMessages.ParameterCountMismatch);
+			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(Exceptions.NoCommandParameter);
+			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(Exceptions.ParameterCountMismatch);
 			List<OleDbParameter> list = new List<OleDbParameter>();
 			for (int i = 1; i < splits.Length; i++)
 			{
@@ -206,7 +206,7 @@ namespace Adenson.Data.OleDb
 				OleDbParameter parameter = new OleDbParameter(paramName, parameterValues[i - 1]);
 				list.Add(parameter);
 			}
-			if (list.Count != parameterValues.Length) throw new ArgumentException(ExceptionMessages.CommandTextParse);
+			if (list.Count != parameterValues.Length) throw new ArgumentException(Exceptions.CommandTextParse);
 			return list.ToArray();
 		}
 		private static void AssignParameterValues(OleDbParameter[] commandParameters, object[] parameterValues)

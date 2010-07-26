@@ -129,7 +129,7 @@ namespace Adenson.Data.SqlClient
 		}
 		public override void ClearParameterCache(string spName)
 		{
-			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", Exceptions.ArgumentNullOrEmpty);
 			SqlClientParameterCache.Clear(spName);
 		}
 		public override bool CheckColumnExists(string tableName, string columnName)
@@ -170,13 +170,13 @@ namespace Adenson.Data.SqlClient
 
 		private static void CheckArgument(string argument, string paramName)
 		{
-			if (String.IsNullOrEmpty(argument)) throw new ArgumentNullException(paramName, ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(argument)) throw new ArgumentNullException(paramName, Exceptions.ArgumentNullOrEmpty);
 		}
 		private static SqlCommand CheckCommand(IDbCommand command)
 		{
-			if (command == null) throw new ArgumentNullException("command", ExceptionMessages.ArgumentNull);
+			if (command == null) throw new ArgumentNullException("command", Exceptions.ArgumentNull);
 			SqlCommand sqlcommand = command as SqlCommand;
-			if (command == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "SqlClient"), "command");
+			if (command == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "SqlClient"), "command");
 			return sqlcommand;
 		}
 		private static SqlTransaction CheckTransaction(IDbTransaction transaction)
@@ -185,7 +185,7 @@ namespace Adenson.Data.SqlClient
 			if (transaction != null)
 			{
 				sqltransaction = transaction as SqlTransaction;
-				if (sqltransaction == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "SqlClient"), "command");
+				if (sqltransaction == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "SqlClient"), "command");
 			}
 			return sqltransaction;
 		}
@@ -206,7 +206,7 @@ namespace Adenson.Data.SqlClient
 				if (dbparameter != null)
 				{
 					SqlParameter sqlParameter = obj as SqlParameter;
-					if (sqlParameter == null) throw new ArgumentException(String.Format(ExceptionMessages.SqlImplWrongType, "SqlClient"), "command");
+					if (sqlParameter == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "SqlClient"), "command");
 					list.Add(sqlParameter);
 				}
 				else return false;
@@ -222,8 +222,8 @@ namespace Adenson.Data.SqlClient
 			//update table set col1 = @col1, col2 = @col2
 			//select * from table where col1 = @col1
 			string[] splits = commandText.Split('@');
-			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(ExceptionMessages.NoCommandParameter);
-			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(ExceptionMessages.ParameterCountMismatch);
+			if (splits.Length == 1 && parameterValues.Length > 0) throw new ArgumentException(Exceptions.NoCommandParameter);
+			if (splits.Length - 1 != parameterValues.Length) throw new ArgumentException(Exceptions.ParameterCountMismatch);
 			List<SqlParameter> list = new List<SqlParameter>();
 			for (int i = 1; i < splits.Length; i++)
 			{
@@ -231,7 +231,7 @@ namespace Adenson.Data.SqlClient
 				SqlParameter parameter = new SqlParameter(paramName, parameterValues[i - 1]);
 				list.Add(parameter);
 			}
-			if (list.Count != parameterValues.Length) throw new ArgumentException(ExceptionMessages.CommandTextParse);
+			if (list.Count != parameterValues.Length) throw new ArgumentException(Exceptions.CommandTextParse);
 			return list.ToArray();
 		}
 		private static void AssignParameterValues(SqlParameter[] commandParameters, object[] parameterValues)

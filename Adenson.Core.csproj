@@ -57,6 +57,8 @@
     <Compile Include="Collections\CollectionChangingEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Hashtable.cs" />
+    <Compile Include="Collections\HashtableChangedEventArgs.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Collections\ReadOnlyList.cs" />
     <Compile Include="Collections\ReadOnlyObservableCollection.cs" />
@@ -95,10 +97,10 @@
     <Compile Include="IO\Extensions.cs" />
     <Compile Include="IO\Util.cs" />
     <Compile Include="MethodInvoker.cs" />
-    <Compile Include="Properties\ExceptionMessages.Designer.cs">
+    <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ExceptionMessages.resx</DependentUpon>
+      <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
     <Compile Include="Log\ErrorAlertType.cs" />
     <Compile Include="Log\LogEntry.cs" />
@@ -116,9 +118,9 @@
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\ExceptionMessages.resx">
+    <EmbeddedResource Include="Properties\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Adenson</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\SR.resx">

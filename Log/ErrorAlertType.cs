@@ -74,7 +74,7 @@ namespace Adenson.Log
 		/// <returns></returns>
 		public static ErrorAlertType Parse(string alertTypeAsStr)
 		{
-			if (String.IsNullOrEmpty(alertTypeAsStr)) throw new ArgumentNullException("alertTypeAsStr", ExceptionMessages.ArgumentNullOrEmpty);
+			if (String.IsNullOrEmpty(alertTypeAsStr)) throw new ArgumentNullException("alertTypeAsStr", Exceptions.ArgumentNullOrEmpty);
 			string[] splits = alertTypeAsStr.Split(',');
 			if (splits.Length < 2) throw new ArgumentOutOfRangeException("alertTypeAsStr", "The format of the error alert type must be in the form '[Assembly Full Name], [Type Full Name], [Static Show Method Name]'");
 			

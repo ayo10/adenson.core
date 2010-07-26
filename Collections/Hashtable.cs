@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace Adenson.ListenQuest
+namespace Adenson.Collections
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="Tkey"></typeparam>
+	/// <typeparam name="Tvalue"></typeparam>
 	public class Hashtable<Tkey, Tvalue> : IDictionary<Tkey, Tvalue>
 	{
 		#region Variables
@@ -39,7 +44,7 @@ namespace Adenson.ListenQuest
 					if ((object)value != (object)originalValue)
 					{
 						dick[key] = value;
-						this.OnDictionaryChanged(new DictionaryChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Replace, key));
+						this.OnDictionaryChanged(new HashtableChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Replace, key));
 					}
 				}
 				else dick.Add(key, value);
@@ -62,7 +67,7 @@ namespace Adenson.ListenQuest
 			get;
 			internal set;
 		}
-		public event EventHandler<DictionaryChangedEventArgs<Tkey>> DictionaryChanged;
+		public event EventHandler<HashtableChangedEventArgs<Tkey>> DictionaryChanged;
 
 		#endregion
 		#region Methods
@@ -71,13 +76,13 @@ namespace Adenson.ListenQuest
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Add(key, value);
-			this.OnDictionaryChanged(new DictionaryChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Add, key));
+			this.OnDictionaryChanged(new HashtableChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Add, key));
 		}
 		public virtual void Clear()
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Clear();
-			this.OnDictionaryChanged(new DictionaryChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Reset));
+			this.OnDictionaryChanged(new HashtableChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Reset));
 		}
 		public bool ContainsKey(Tkey key)
 		{
@@ -95,14 +100,14 @@ namespace Adenson.ListenQuest
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			bool result = dick.Remove(key);
-			if (result) this.OnDictionaryChanged(new DictionaryChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Remove, key));
+			if (result) this.OnDictionaryChanged(new HashtableChangedEventArgs<Tkey>(NotifyCollectionChangedAction.Remove, key));
 			return result;
 		}
 		public bool TryGetValue(Tkey key, out Tvalue value)
 		{
 			return dick.TryGetValue(key, out value);
 		}
-		protected void OnDictionaryChanged(DictionaryChangedEventArgs<Tkey> e)
+		protected void OnDictionaryChanged(HashtableChangedEventArgs<Tkey> e)
 		{
 			if (this.DictionaryChanged != null) this.DictionaryChanged(this, e);
 		}
@@ -135,18 +140,5 @@ namespace Adenson.ListenQuest
 		}
 
 		#endregion
-	}
-	public class DictionaryChangedEventArgs<Tkey> : EventArgs
-	{
-		public readonly NotifyCollectionChangedAction Action;
-		public readonly Tkey Key;
-		public DictionaryChangedEventArgs(NotifyCollectionChangedAction action)
-		{
-			this.Action = action;
-		}
-		public DictionaryChangedEventArgs(NotifyCollectionChangedAction action, Tkey key) : this(action)
-		{
-			this.Key = key;
-		}
 	}
 }

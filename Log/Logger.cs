@@ -83,7 +83,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public Logger(Type type)
 		{
-			if (type == null) throw new ArgumentNullException(ExceptionMessages.ArgumentNull);
+			if (type == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
 			_type = type;
 		}
 		/// <summary>	
@@ -103,7 +103,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public Logger(Type type, LogType logType) : this(type)
 		{
-			if (type == null) throw new ArgumentNullException(ExceptionMessages.ArgumentNull);
+			if (type == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
 			_type = type;
 			_logType = logType;
 		}
@@ -117,7 +117,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if source is null and logType includes EventLog</exception>
 		public Logger(Type type, LogType logType, string source) : this(type)
 		{
-			if ((logType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", ExceptionMessages.EventLogTypeWithSourceNull);
+			if ((logType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
 			_logType = logType;
 			_source = source;
 		}
@@ -128,7 +128,7 @@ namespace Adenson.Log
 		/// <param name="instance"></param>
 		public Logger(Type type, Logger instance) : this(type)
 		{
-			if (instance == null) throw new ArgumentNullException("instance", ExceptionMessages.ArgumentNull);
+			if (instance == null) throw new ArgumentNullException("instance", Exceptions.ArgumentNull);
 			this.BatchSize = instance.BatchSize;
 			this.Severity = instance.Severity;
 			this.LogType = instance.LogType;
