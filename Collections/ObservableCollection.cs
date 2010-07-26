@@ -25,18 +25,10 @@ namespace Adenson.Collections
 		public ObservableCollection(IEnumerable<T> list) : base(list)
 		{
 		}
-		//public ObservableCollection(IEnumerable<T> list, System.Collections.IComparer customSort) : base(list)
-		//{
-		//    ((ListCollectionView)this.View).CustomSort = customSort;
-		//}
 
 		#endregion
 		#region Properties
 
-		//public CollectionView View
-		//{
-		//    get { return (CollectionView)CollectionViewSource.GetDefaultView(this); }
-		//}
 		/// <summary>
 		/// Occurs when an item is about to be added, removed, changed, or moved.
 		/// </summary>
@@ -131,18 +123,31 @@ namespace Adenson.Collections
 			this.OnCollectionChanging(e);
 			if (!e.Cancel) base.MoveItem(oldIndex, newIndex);
 		}
+		/// <summary>
+		/// Removes the item at the specified index of the collection.
+		/// </summary>
+		/// <param name="index"></param>
 		protected override void RemoveItem(int index)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Remove, this[index], index);
 			this.OnCollectionChanging(e);
 			if (!e.Cancel) base.RemoveItem(index);
 		}
+		/// <summary>
+		/// Replaces the element at the specified index.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="item"></param>
 		protected override void SetItem(int index, T item)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Replace, item, this[index], index);
 			this.OnCollectionChanging(e);
 			if (!e.Cancel) base.SetItem(index, item);
 		}
+		/// <summary>
+		/// Raises the CollectionChanged event with the provided arguments.
+		/// </summary>
+		/// <param name="e"></param>
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			if (this.CollectionChanged == null) return;

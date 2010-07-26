@@ -55,7 +55,7 @@ namespace Adenson.Configuration
 			if (obj == null) return null;
 
 			IDictionary dictionary = obj as IDictionary;
-			if (dictionary == null) throw new ArgumentException(ExceptionMessages.SectionNotDictionarySection);
+			if (dictionary == null) throw new ArgumentException(Exceptions.SectionNotDictionarySection);
 
 			Dictionary<string, string> result = new Dictionary<string, string>();
 

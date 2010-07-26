@@ -105,7 +105,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public ICryptoTransform CreateEncryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", ExceptionMessages.AlgorithmNull);
+			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", Exceptions.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateEncryptor();
 			return this.Algorithm.CreateEncryptor(rgbKey, rgbIV);
 		}
@@ -115,7 +115,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public ICryptoTransform CreateDecryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", ExceptionMessages.AlgorithmNull);
+			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", Exceptions.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateDecryptor();
 			return this.Algorithm.CreateDecryptor(rgbKey, rgbIV);
 		}
