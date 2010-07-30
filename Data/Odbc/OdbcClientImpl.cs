@@ -142,7 +142,7 @@ namespace Adenson.Data.Odbc
 					}
 					else
 					{
-						if (commandText.IndexOf("{0}") > 0) command.CommandText = string.Format(commandText, parameterValues);
+						if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
 						else commandParameters = OdbcClientImpl.GenerateParameters(commandText, parameterValues);
 					}
 				}

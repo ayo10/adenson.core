@@ -356,13 +356,23 @@ namespace Adenson.Log
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = this.LogType;
-			try
+			if (arguments.Length == 0) entry.Message = message;
+			else
 			{
-				entry.Message = arguments.Length == 0 ? message : String.Format(message, arguments);
-			}
-			catch
-			{
-				entry.Message = message;
+				try
+				{
+					entry.Message = String.Format(message, arguments);
+				}
+				catch (FormatException)
+				{
+					var str = message;
+					for (int i = 0; i < arguments.Length; i++) str = str.Replace("{" + i + "}", (arguments[i] == null ? "null" : Convert.ToString(arguments[i])));
+					entry.Message = str;
+				}
+				catch
+				{
+					entry.Message = message;
+				}
 			}
 			entries.Add(entry);
 
