@@ -194,17 +194,17 @@ namespace Adenson
 			return Convert.ToInt64(this.GetValue(key));
 		}
 		/// <summary>
-		/// Calls string.Format(GetString(type, key), formatArguments). If a <see cref="System.FormatException"/> is thrown,
+		/// Calls String.Format(GetString(type, key), formatArguments). If a <see cref="System.FormatException"/> is thrown,
 		/// it then calls GetString(type, key) 
 		/// </summary>
 		/// <param name="key">The key to use to find value</param>
-		/// <param name="arguments">The format arguments to pass to string.Format</param>
+		/// <param name="arguments">The format arguments to pass to String.Format</param>
 		/// <returns>A copy of format in which the format items have been replaced by the System.String equivalent of the corresponding instances of System.Object in args.</returns>
 		public virtual string GetString(string key, params object[] arguments)
 		{
 			string result = (string)this.GetValue(key);
 			if (arguments == null || arguments.Length == 0) return result;
-			return string.Format(result, arguments);
+			return String.Format(result, arguments);
 		}
 		/// <summary>
 		/// Gets the value with the specified key

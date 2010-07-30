@@ -143,7 +143,7 @@ namespace Adenson.Data.OleDb
 					}
 					else
 					{
-						if (commandText.IndexOf("{0}") > 0) command.CommandText = string.Format(commandText, parameterValues);
+						if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
 						else commandParameters = OleDbClientImpl.GenerateParameters(commandText, parameterValues);
 					}
 				}
