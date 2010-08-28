@@ -66,6 +66,7 @@
     <Compile Include="Collections\UnsyncedList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFailedEventArgs.cs" />
     <Compile Include="Configuration\ConfigSectionHelper.cs" />
     <Compile Include="Configuration\ConnectionStrings.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Configuration\EncryptorElement.cs" />
     <Compile Include="Configuration\EncryptorSection.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
+    <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
     <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
     <Compile Include="Data\OleDb\OleDbParameterCache.cs" />
@@ -96,13 +98,13 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IO\Extensions.cs" />
     <Compile Include="IO\Util.cs" />
+    <Compile Include="Log\Settings.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="Log\ErrorAlertType.cs" />
     <Compile Include="Log\LogEntry.cs" />
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\LogSeverity.cs" />

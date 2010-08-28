@@ -19,7 +19,7 @@ namespace Adenson.Configuration
 		public object Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
 			var xml = new XmlDocument();
-			xml.LoadXml(section.InnerXml);
+			xml.LoadXml(section.OuterXml);
 			return xml;
 		}
 	}
