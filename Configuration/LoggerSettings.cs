@@ -11,7 +11,11 @@ namespace Adenson.Configuration
 
 		public LoggerSettings()
 		{
+			#if DEBUG
+			this.Severity = LogSeverity.Debug;
+			#else
 			this.Severity = LogSeverity.Error;
+			#endif
 			this.Type = LogType.None;
 			this.Source = "Logger";
 			this.DateTimeFormat = "HH:mm:ss:fff";
