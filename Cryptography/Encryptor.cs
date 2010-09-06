@@ -19,11 +19,13 @@ namespace Adenson.Cryptography
 		static Encryptor()
 		{
 			EncryptorSection section = (EncryptorSection)ConfigSectionHelper.GetSection("Encryptors");
-			//<Encryptor Type="AES" Key="jzAH8SMGI+x7XfD0PuUp9jGaVWoOQdDK5Cb9qzTbFq8=" Vector="teY2aQzLPW3ThSKxTB31Kw==" KeyFormat="Base64"/>
-			foreach (Configuration.EncryptorElement elem in section.Encryptors)
+			if (section != null)
 			{
-				if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
-				encryptors.Add(elem.Name, elem.GetEncryptor());
+				foreach (EncryptorElement elem in section.Encryptors)
+				{
+					if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
+					encryptors.Add(elem.Name, elem.GetEncryptor());
+				}
 			}
 		}
 
