@@ -116,47 +116,47 @@ namespace Adenson.Collections
 		}
 		void ICollection<T>.Clear()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		bool ICollection<T>.IsReadOnly
 		{
-			get { throw new NotImplementedException(); }
+			get { throw new NotSupportedException(); }
 		}
 		bool ICollection<T>.Remove(T item)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		int IList.Add(object value)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		void IList.Clear()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		bool IList.Contains(object value)
 		{
-			throw new NotImplementedException();
+			return this.Contains((T)value);
 		}
 		int IList.IndexOf(object value)
 		{
-			throw new NotImplementedException();
+			return this.BackingList.IndexOf((T)value);
 		}
 		void IList.Insert(int index, object value)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		void IList.Remove(object value)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		void IList.RemoveAt(int index)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 		void ICollection.CopyTo(Array array, int index)
 		{
-			throw new NotImplementedException();
+			this.BackingList.CopyTo((T[])array, index);
 		}
 
 		#endregion
