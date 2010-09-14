@@ -31,22 +31,22 @@ namespace Adenson.Log
 		/// <summary>
 		/// Spits logs via System.Diagnostics.Debug.WriteLine
 		/// </summary>
-		DiagnosticsDebug = 16,
+		Debug = 16,
 		/// <summary>
 		/// Console | DiagnosticsDebug
 		/// </summary>
-		ConsoleProjects = Console | DiagnosticsDebug,
+		ConsoleProjects = Console | Debug,
 		/// <summary>
 		/// DataBase | DiagnosticsDebug
 		/// </summary>
-		WebProjects = DataBase | DiagnosticsDebug,
+		WebProjects = DataBase | Debug,
 		/// <summary>
 		/// File | Console | DiagnosticsDebug | EventLog
 		/// </summary>
-		WinFormProjects = File | DiagnosticsDebug | EventLog,
+		WinFormProjects = File | Debug | EventLog,
 		/// <summary>
 		/// DataBase | File | EventLog | Console | DiagnosticsDebug
 		/// </summary>
-		All = DataBase | File | EventLog | DiagnosticsDebug
+		All = DataBase | File | EventLog | Debug
 	}
 }

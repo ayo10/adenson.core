@@ -13,6 +13,7 @@ namespace Adenson.Configuration
 		{
 			#if DEBUG
 			this.Severity = LogSeverity.Debug;
+			this.Type = LogType.Debug;
 			#else
 			this.Severity = LogSeverity.Error;
 			#endif

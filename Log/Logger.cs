@@ -339,7 +339,7 @@ namespace Adenson.Log
 			{
 				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
-			if ((entry.LogType & LogType.DiagnosticsDebug) != LogType.None)
+			if ((entry.LogType & LogType.Debug) != LogType.None)
 			{
 				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
