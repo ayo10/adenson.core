@@ -62,6 +62,29 @@ namespace Adenson.IO
 		/// <param name="buffer"></param>
 		/// <param name="overwrite"></param>
 		/// <returns></returns>
+		public static string CreateFile(string filePath, byte[] buffer, bool overwrite)
+		{
+			if (String.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
+			if (buffer == null) return null;
+			if (buffer.Length == 0) return null;
+
+			if (!File.Exists(filePath) || overwrite)
+			{
+				var directory = Path.GetDirectoryName(filePath);
+				if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+				FileStream stream = File.Create(filePath);
+				stream.Write(buffer, 0, buffer.Length);
+				stream.Close();
+			}
+			return filePath;
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="directory"></param>
+		/// <param name="buffer"></param>
+		/// <param name="overwrite"></param>
+		/// <returns></returns>
 		public static string CreateMD5HashedFile(string directory, byte[] buffer, bool overwrite)
 		{
 			if (String.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
@@ -69,14 +92,7 @@ namespace Adenson.IO
 			if (buffer.Length == 0) return null;
 
 			string filePath = Path.Combine(directory, Encryptor.GetMD5Hash(buffer));
-			if (!File.Exists(filePath) || overwrite)
-			{
-				if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-				FileStream stream = File.Create(filePath);
-				stream.Write(buffer, 0, buffer.Length);
-				stream.Close();
-			}
-			return filePath;
+			return Util.CreateFile(filePath, buffer, overwrite);
 		}
 		/// <summary>
 		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>
