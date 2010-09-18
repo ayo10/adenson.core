@@ -16,10 +16,7 @@ namespace Adenson.IO
 		public static byte[] ToBytes(this Stream stream)
 		{
 			if (stream == null) return null;
-			stream.Seek(0, SeekOrigin.Begin);
-			byte[] buffer = new byte[stream.Length];
-			stream.Read(buffer, 0, (int)stream.Length);
-			return buffer;
+			return Util.ReadStream(stream);
 		}
 	}
 }

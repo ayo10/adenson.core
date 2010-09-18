@@ -254,27 +254,10 @@ namespace Adenson.Log
 		/// <param name="ex">The Exception object to log</param>
 		public void Error(Exception ex)
 		{
-			this.Error(ex, false);
-		}
-		/// <summary>
-		/// Called to log errors
-		/// </summary>
-		/// <param name="ex">The Exception object to log</param>
-		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
-		public void Error(Exception ex, bool phoneHome)
-		{
 			string message = Logger.ConvertToString(ex, true);
 			LogEntry entry = this.Write(LogSeverity.Error, message);
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
-
-			if (phoneHome && this.EmailErrorTo != null)
-			{
-				this.Flush();
-				string body = "System Error:\n\n" + message;
-				string subject = "Application Error: " + DateTime.Today.ToLongDateString();
-				Adenson.Net.Mailer.SendAsync(this.EmailErrorFrom, this.EmailErrorTo, subject, body, false);
-			}
 		}
 		/// <summary>
 		/// Forces writing out of what is in the log
@@ -421,16 +404,6 @@ namespace Adenson.Log
 			Logger.GetLogger(type).Error(ex);
 		}
 		/// <summary>
-		/// Instantiates a Logger object, then calls LogError
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="ex">The Exception object to log</param>
-		/// <param name="phoneHome">If to send an email to Logger.EmailErrorTo</param>
-		public static void Error(Type type, Exception ex, bool phoneHome)
-		{
-			Logger.GetLogger(type).Error(ex, phoneHome);
-		}
-		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
 		/// </summary>
 		/// <param name="exception">The Exception object to log</param>
@@ -458,6 +431,8 @@ namespace Adenson.Log
 					message.Append(String.Empty.PadRight(20, '-'));
 					message.Append(Environment.NewLine);
 				}
+				message.Append(ex.GetType());
+				message.Append(": ");
 				message.Append(ex.Message);
 				message.Append(Environment.NewLine);
 				message.Append(ex.StackTrace);
