@@ -13,6 +13,7 @@ namespace Adenson.IO
 	public static class Util
 	{
 		#region Variables
+		private static Logger logger = Logger.GetLogger(typeof(Util));
 		public readonly static Dictionary<char, char> FileInvalidCharsReplacements;
 		#endregion
 		#region Constructor
@@ -159,21 +160,7 @@ namespace Adenson.IO
 		{
 			if (String.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
 			if (!File.Exists(filePath)) throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
-			try
-			{
-				Stream stream = File.Open(filePath, FileMode.Open);
-				MemoryStream ms = new MemoryStream();
-				byte[] buffer = new byte[1024];
-				int len;
-				while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
-				stream.Close();
-				return ms.ToBytes();
-			}
-			catch (Exception ex)
-			{
-				Logger.Error(typeof(Util), ex);
-			}
-			return null;
+			return Util.ReadStream(File.Open(filePath, FileMode.Open)); 
 		}
 		/// <summary>
 		/// Creates a byte array, by reading the response stream of the specified url 
@@ -192,11 +179,42 @@ namespace Adenson.IO
 				byte[] buffer = new byte[1024];
 				int len;
 				while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
-				return ms.ToBytes();
+				return ms.ToArray();
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(typeof(Util), ex);
+				logger.Error(ex);
+			}
+			return null;
+		}
+		/// <summary>
+		/// Creates a byte array, by reading the specified stream
+		/// </summary>
+		/// <param name="stream">The stream</param>
+		/// <returns>byte array, or null if resulting stream is null</returns>
+		/// <exception cref="ArgumentNullException">if stream is null</exception>
+		/// <exception cref="NotSupportedException">if stream does not support reading</exception>
+		public static byte[] ReadStream(Stream stream)
+		{
+			if (stream == null) throw new ArgumentNullException("stream");
+
+			try
+			{
+				MemoryStream ms = stream as MemoryStream;
+				if (ms == null)
+				{
+					ms = new MemoryStream();
+					stream.Seek(0, SeekOrigin.Begin);
+					byte[] buffer = new byte[1024];
+					int len;
+					while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
+					stream.Close();
+				}
+				return ms.ToArray();
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex);
 			}
 			return null;
 		}
