@@ -13,15 +13,15 @@ namespace Adenson.Log
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Spits logs into a database
+		/// Logs into a database
 		/// </summary>
 		DataBase = 1,
 		/// <summary>
-		/// Spits logs into a physical file
+		/// Logs into a physical file
 		/// </summary>
 		File = 2,
 		/// <summary>
-		/// Spits logs into Windows Event Log
+		/// Logs into Windows Event Log
 		/// </summary>
 		EventLog = 4,
 		/// <summary>
@@ -29,21 +29,9 @@ namespace Adenson.Log
 		/// </summary>
 		Console = 8,
 		/// <summary>
-		/// Spits logs via System.Diagnostics.Debug.WriteLine
+		/// Logs via System.Diagnostics.Debug.WriteLine
 		/// </summary>
 		Debug = 16,
-		/// <summary>
-		/// Console | DiagnosticsDebug
-		/// </summary>
-		ConsoleProjects = Console | Debug,
-		/// <summary>
-		/// DataBase | DiagnosticsDebug
-		/// </summary>
-		WebProjects = DataBase | Debug,
-		/// <summary>
-		/// File | Console | DiagnosticsDebug | EventLog
-		/// </summary>
-		WinFormProjects = File | Debug | EventLog,
 		/// <summary>
 		/// DataBase | File | EventLog | Console | DiagnosticsDebug
 		/// </summary>

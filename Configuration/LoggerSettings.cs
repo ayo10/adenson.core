@@ -7,20 +7,23 @@ namespace Adenson.Configuration
 	[XmlType(TypeName = "loggerSettings")]
 	public sealed class LoggerSettings
 	{
+		#region Variables
+		private LogType? _type;
+		#endregion
 		#region Constructor
 
 		public LoggerSettings()
 		{
 			#if DEBUG
 			this.Severity = LogSeverity.Debug;
-			this.Type = LogType.Debug;
 			#else
 			this.Severity = LogSeverity.Error;
 			#endif
-			this.Type = LogType.None;
+			this.Type = "Debug";
 			this.Source = "Logger";
 			this.DateTimeFormat = "HH:mm:ss:fff";
 			this.Email = new EmailInfo { From = "errors@adenson.com" };
+			this.FileName = SR.EventLogFile;
 		}
 
 		#endregion
@@ -30,7 +33,7 @@ namespace Adenson.Configuration
 		public LogSeverity Severity { get; set; }
 
 		[XmlAttribute(AttributeName = "type")]
-		public LogType Type { get; set; }
+		public string Type { get; set; }
 
 		[XmlAttribute(AttributeName = "batchSize")]
 		public ushort BatchSize { get; set; }
@@ -41,8 +44,40 @@ namespace Adenson.Configuration
 		[XmlAttribute(AttributeName = "dateTimeFormat")]
 		public string DateTimeFormat { get; set; }
 
+		[XmlAttribute(AttributeName = "fileName")]
+		public string FileName { get; set; }
+
 		[XmlElement(ElementName = "email")]
 		public EmailInfo Email { get; set; }
+
+		public LogType TypeActual
+		{
+			get
+			{
+				if (_type == null)
+				{
+					int result = 0;
+					try
+					{
+						if (!Int32.TryParse(this.Type, out result))
+						{
+							var splits = this.Type.Split(',', '|');
+							foreach (var str in splits)
+							{
+								LogType t = (LogType)Enum.Parse(typeof(LogType), str.Trim());
+								result += (int)t;
+							}
+						}
+					}
+					catch
+					{
+						result = (int)LogType.Debug;
+					}
+					_type = (LogType)result;
+				}
+				return _type.Value;
+			}
+		}
 
 		#endregion
 		#region Inner Classes
