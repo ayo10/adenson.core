@@ -19,7 +19,7 @@ namespace Adenson.Net
 	public static class Mailer
 	{
 		#region Variables
-		private static Logger logger = new Logger(typeof(Mailer), LogType.ConsoleProjects);
+		private static Logger logger = Logger.GetLogger(typeof(Mailer));
 		#endregion
 		#region Methods
 

@@ -4,6 +4,9 @@ using System.Security.Cryptography;
 
 namespace Adenson.Cryptography
 {
+	/// <summary>
+	/// Base class for built in encryptors
+	/// </summary>
 	public abstract class BaseEncryptor
 	{
 		#region Variables
@@ -12,7 +15,17 @@ namespace Adenson.Cryptography
 		#endregion
 		#region Constructor
 
-		public BaseEncryptor() { }
+		/// <summary>
+		/// 
+		/// </summary>
+		public BaseEncryptor()
+		{
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="key"></param>
+		/// <param name="iv"></param>
 		internal BaseEncryptor(byte[] key, byte[] iv)
 		{
 			this.SetKeys(key, iv);

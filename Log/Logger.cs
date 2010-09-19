@@ -20,7 +20,8 @@ namespace Adenson.Log
 		private static List<LogEntry> entries = new List<LogEntry>();
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private Type _type;
+		private static string baseConfigLogFolder;
+		private Type _classType;
 		private ushort _batchLogSize;
 		private LogType _logType = LogType.None;
 		private LogSeverity _severity = LogSeverity.None;
@@ -34,43 +35,41 @@ namespace Adenson.Log
 		/// <summary>	
 		/// Creates a new instance of Logger from type
 		/// </summary>
-		/// <param name="type">Type to use to create new instance</param>
+		/// <param name="classType">Type to use to create new instance</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type type)
+		public Logger(Type classType)
 		{
-			if (type == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
-			_type = type;
+			if (classType == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
+			_classType = classType;
 		}
 		/// <summary>	
 		/// Creates a new instance of Logger from type
 		/// </summary>
-		/// <param name="type">Type to use to create new instance</param>
+		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type type, string source) : this(type, LogType.None, source)
+		public Logger(Type classType, string source) : this(classType, LogType.None, source)
 		{
 		}
 		/// <summary>
 		/// Instantiates a new Logger class for specified type
 		/// </summary>
-		/// <param name="type">Type to use to create new instance</param>
+		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="logType">The log type</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type type, LogType logType) : this(type)
+		public Logger(Type classType, LogType logType) : this(classType)
 		{
-			if (type == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
-			_type = type;
 			_logType = logType;
 		}
 		/// <summary>
 		/// Instantiates a new Logger class for specified type
 		/// </summary>
-		/// <param name="type">Type to use to create new instance</param>
+		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="logType">The log type</param>
 		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		/// <exception cref="ArgumentNullException">if source is null and logType includes EventLog</exception>
-		public Logger(Type type, LogType logType, string source) : this(type)
+		public Logger(Type classType, LogType logType, string source) : this(classType)
 		{
 			if ((logType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
 			_logType = logType;
@@ -79,14 +78,14 @@ namespace Adenson.Log
 		/// <summary>
 		/// Instantiates a new Logger class for specified type
 		/// </summary>
-		/// <param name="type">Type to use to create new instance</param>
+		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="instance"></param>
-		public Logger(Type type, Logger instance) : this(type)
+		public Logger(Type classType, Logger instance) : this(classType)
 		{
 			if (instance == null) throw new ArgumentNullException("instance", Exceptions.ArgumentNull);
 			this.BatchSize = instance.BatchSize;
 			this.Severity = instance.Severity;
-			this.LogType = instance.LogType;
+			this.Type = instance.Type;
 			this.EmailErrorFrom = instance.EmailErrorFrom;
 			this.EmailErrorTo = instance.EmailErrorTo;
 			this.Source = instance.Source;
@@ -96,10 +95,10 @@ namespace Adenson.Log
 		/// </summary>
 		~Logger()
 		{
-			Logger.Flush(this.LogType);
+			Logger.Flush(this.Type);
 			lock (staticLoggers)
 			{
-				if (staticLoggers.ContainsKey(this.Type)) staticLoggers.Remove(this.Type);
+				if (staticLoggers.ContainsKey(this.ClassType)) staticLoggers.Remove(this.ClassType);
 			}
 		}
 
@@ -129,9 +128,9 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the logging type
 		/// </summary>
-		public LogType LogType
+		public LogType Type
 		{
-			get { return _logType == LogType.None ? Config.LogSettings.Type : _logType; }
+			get { return _logType == LogType.None ? Config.LogSettings.TypeActual : _logType; }
 			set { _logType = value; }
 		}
 		/// <summary>
@@ -153,9 +152,9 @@ namespace Adenson.Log
 		/// <summary>
 		/// The type form which this instance is forged from
 		/// </summary>
-		public Type Type
+		public Type ClassType
 		{
-			get { return _type; }
+			get { return _classType; }
 		}
 		/// <summary>
 		/// Gets the string tht will be used as source for Window's Event Log
@@ -254,7 +253,7 @@ namespace Adenson.Log
 		/// <param name="ex">The Exception object to log</param>
 		public void Error(Exception ex)
 		{
-			string message = Logger.ConvertToString(ex, true);
+			string message = Logger.ConvertToString(ex);
 			LogEntry entry = this.Write(LogSeverity.Error, message);
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
@@ -264,7 +263,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Flush()
 		{
-			Flush(this.LogType);
+			Flush(this.Type);
 		}
 		/// <summary>
 		/// Flushes the logger, then disposes of its internal cache
@@ -278,10 +277,10 @@ namespace Adenson.Log
 		{
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
-			entry.Type = this.Type;
+			entry.Type = this.ClassType;
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
-			entry.LogType = this.LogType;
+			entry.LogType = this.Type;
 			if (arguments.Length == 0) entry.Message = message;
 			else
 			{
@@ -302,13 +301,13 @@ namespace Adenson.Log
 			}
 			entries.Add(entry);
 
-			if (suspendedTypes.Contains(this.Type)) return entry;
+			if (suspendedTypes.Contains(this.ClassType)) return entry;
 
 			this.OutWriteLine(entry);
 
 			try
 			{
-				if (entries.Count >= this.BatchSize) Logger.Flush(this.LogType);
+				if (entries.Count >= this.BatchSize) Logger.Flush(this.Type);
 			}
 			catch
 			{
@@ -410,17 +409,6 @@ namespace Adenson.Log
 		/// <returns>String of the exception</returns>
 		public static string ConvertToString(Exception exception)
 		{
-			return ConvertToString(exception, false);
-		}
-		/// <summary>
-		/// Converts the exception to a string
-		/// </summary>
-		/// <param name="exception"></param>
-		/// <param name="probeDeep"></param>
-		/// <returns></returns>
-		/// <exception cref="ArgumentNullException">if exception is null.</exception>
-		public static string ConvertToString(Exception exception, bool probeDeep)
-		{
 			if (exception == null) throw new ArgumentNullException("exception");
 			System.Text.StringBuilder message = new System.Text.StringBuilder();
 			Exception ex = exception;
@@ -433,28 +421,24 @@ namespace Adenson.Log
 				}
 				message.Append(ex.GetType());
 				message.Append(": ");
-				message.Append(ex.Message);
-				message.Append(Environment.NewLine);
-				message.Append(ex.StackTrace);
-				if (!probeDeep) break;
-				else ex = ex.InnerException;
+				message.AppendLine(ex.Message);
+				message.AppendLine(ex.StackTrace);
+				ex = ex.InnerException;
 			}
 			return message.ToString();
 		}
 
 		internal static void Flush(LogType logType)
 		{
-			Monitor.Enter(entries);
 			try
 			{
+				Monitor.Enter(entries);
 				if (entries.Count > 0)
 				{
-					bool dbed = true;
-					bool filed = true;
-					if ((logType & LogType.DataBase) != LogType.None) dbed = SaveToDataBase();
-					if ((logType & LogType.File) != LogType.None) filed = SaveToFile();
-					if ((logType & LogType.EventLog) != LogType.None) SaveToEntryLog();
-					if (dbed && filed) entries.Clear();
+					if ((logType & LogType.DataBase) != LogType.None) Logger.SaveToDatabase();
+					if ((logType & LogType.File) != LogType.None) Logger.SaveToFile();
+					if ((logType & LogType.EventLog) != LogType.None) Logger.SaveToEntryLog();
+					entries.Clear();
 				}
 			}
 			finally
@@ -462,7 +446,7 @@ namespace Adenson.Log
 				Monitor.Exit(entries);
 			}
 		}
-		internal static bool SaveToDataBase()
+		internal static bool SaveToDatabase()
 		{
 			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
 			if (sqlHelper == null) return false;
@@ -485,14 +469,12 @@ namespace Adenson.Log
 		}
 		internal static bool SaveToFile()
 		{
+			if (String.IsNullOrWhiteSpace(Config.LogSettings.FileName)) return false;
 			try
 			{
 				System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
-				foreach (LogEntry row in entries)
-				{
-					sb.AppendLine(String.Format(SR.EventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
-				}
-				ActualFileWrite(sb.ToString(), 0);
+				foreach (LogEntry row in entries) sb.AppendLine(String.Format(SR.EventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
+				ActualFileWrite(Config.LogSettings.FileName, sb.ToString(), 0);
 				return true;
 			}
 			catch (Exception ex)
@@ -538,22 +520,29 @@ namespace Adenson.Log
 		private static void LogInternalError(Exception ex)
 		{
 			#if DEBUG
-			System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
 			#else
 			try
 			{
-				EventLog.WriteEntry("SnUtilsLogger", ConvertToString(ex, true), EventLogEntryType.Warning);
+				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex, true), EventLogEntryType.Warning);
 			}
 			catch { }
 			#endif
 		}
-		private static void ActualFileWrite(string str, int numAttempts) 
-		{
-			Logger.ActualFileWrite(SR.EventLogFile, str, numAttempts);
-		}
 		private static void ActualFileWrite(string filePath, string str, int numAttempts)
 		{
 			bool failed = false;
+			if (!filePath.Contains(":\\\\") && !filePath.Contains("://"))//i.e, no root
+			{
+				if (baseConfigLogFolder == null)
+				{
+					var assembly = Assembly.GetExecutingAssembly();
+					Uri url = new Uri(assembly.CodeBase);
+					baseConfigLogFolder = Path.GetDirectoryName(url.LocalPath);
+					if (System.Web.HttpContext.Current == null || assembly.Location.Contains("Temporary ASP.NET Files")) baseConfigLogFolder = Directory.GetParent(baseConfigLogFolder).FullName;//directory before this step would probably be pointing to the bin folder of a ASP.NET app, which we dont want to write too, unless we like asp.net restarting itself!
+				}
+				filePath = Path.Combine(baseConfigLogFolder, filePath.Replace("/", "\\"));
+			}
 			FileInfo traceFile = new FileInfo(filePath);
 			try
 			{
@@ -587,11 +576,18 @@ namespace Adenson.Log
 					writer = new StreamWriter(stream);
 					writer.Write(str);
 				}
+				catch (UnauthorizedAccessException ex)
+				{
+					numAttempts = 3;//prevent retries
+					failed = true;
+					Logger.LogInternalError(ex);
+				}
 				catch (Exception ex)
 				{
 					failed = true;
 					Logger.LogInternalError(ex);
 				}
+				
 				finally
 				{
 					if (writer != null) writer.Close();
