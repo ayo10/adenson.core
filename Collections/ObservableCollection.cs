@@ -19,9 +19,17 @@ namespace Adenson.Collections
 		#endregion
 		#region Constructor
 
+		/// <summary>
+		/// Initializes a new instance of the collection class.
+		/// </summary>
 		public ObservableCollection() : base()
 		{
 		}
+		/// <summary>
+		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
+		/// </summary>
+		/// <param name="list">The collection from which the elements are copied.</param>
+		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
 		public ObservableCollection(IEnumerable<T> list) : base(list)
 		{
 		}

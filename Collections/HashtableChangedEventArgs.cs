@@ -1,19 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace Adenson.Collections
 {
-	public class HashtableChangedEventArgs<Tkey> : EventArgs
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="Tk"></typeparam>
+	public class HashtableChangedEventArgs<Tk> : EventArgs
 	{
+		/// <summary>
+		/// The action that took place
+		/// </summary>
 		public readonly NotifyCollectionChangedAction Action;
-		public readonly Tkey Key;
-		public HashtableChangedEventArgs(NotifyCollectionChangedAction action)
+		/// <summary>
+		/// The key
+		/// </summary>
+		public readonly Tk Key;
+
+		/// <summary>
+		/// Instantiates a new event
+		/// </summary>
+		/// <param name="action">The action</param>
+		/// <param name="key">The key that changed</param>
+		public HashtableChangedEventArgs(NotifyCollectionChangedAction action, Tk key)
 		{
 			this.Action = action;
-		}
-		public HashtableChangedEventArgs(NotifyCollectionChangedAction action, Tkey key) : this(action)
-		{
 			this.Key = key;
 		}
 	}

@@ -24,7 +24,7 @@ namespace Adenson
 			return dictionary.Keys.Any(k => k.Equals(key, comparism));
 		}
 		/// <summary>
-		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array. <see cref="String.Format"/>
+		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array. <see cref="String.Format(String, object)"/>
 		/// </summary>
 		/// <param name="format">A composite format string.</param>
 		/// <param name="args">An object array that contains zero or more objects to format.</param>

@@ -17,8 +17,13 @@ namespace Adenson.Log
 		/// </summary>
 		DataBase = 1,
 		/// <summary>
-		/// Logs into a physical file
+		/// Logs into a physical file.
 		/// </summary>
+		/// <remarks>
+		/// <para>Files are written to the directory that contains the executing assembly, except for ASP.NET projects, which are written in the directory above the bin folder.</para>
+		/// <para>The user application is running under should have file create, read and write access to the specified location stated above</para>
+		/// <para>If <see cref="Adenson.Configuration.LoggerSettings.FileName"/> is prepended with a directory name, the directory should exit before hand</para>
+		/// </remarks>
 		File = 2,
 		/// <summary>
 		/// Logs into Windows Event Log
