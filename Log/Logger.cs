@@ -20,7 +20,7 @@ namespace Adenson.Log
 		private static List<LogEntry> entries = new List<LogEntry>();
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private static string baseConfigLogFolder;
+		private static string lastFileError;
 		private Type _classType;
 		private ushort _batchLogSize;
 		private LogType _logType = LogType.None;
@@ -303,7 +303,7 @@ namespace Adenson.Log
 
 			if (suspendedTypes.Contains(this.ClassType)) return entry;
 
-			this.OutWriteLine(entry);
+			Logger.OutWriteLine(entry);
 
 			try
 			{
@@ -313,18 +313,6 @@ namespace Adenson.Log
 			{
 			}
 			return entry;
-		}
-
-		private void OutWriteLine(LogEntry entry)
-		{
-			if ((entry.LogType & LogType.Console) != LogType.None)
-			{
-				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
-			}
-			if ((entry.LogType & LogType.Debug) != LogType.None)
-			{
-				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
-			}
 		}
 
 		#endregion
@@ -517,31 +505,32 @@ namespace Adenson.Log
 			}
 		}
 
-		private static void LogInternalError(Exception ex)
-		{
-			#if DEBUG
-			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
-			#else
-			try
-			{
-				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex, true), EventLogEntryType.Warning);
-			}
-			catch { }
-			#endif
-		}
 		private static void ActualFileWrite(string filePath, string str, int numAttempts)
 		{
 			bool failed = false;
+			string folder = null;
 			if (!filePath.Contains(":\\\\") && !filePath.Contains("://"))//i.e, no root
 			{
-				if (baseConfigLogFolder == null)
+				var context = System.Web.HttpContext.Current;
+				if (context != null)
+				{
+					filePath = context.Server.MapPath(filePath);
+					folder = Directory.GetParent(filePath).FullName;
+				}
+				else
 				{
 					var assembly = Assembly.GetExecutingAssembly();
 					Uri url = new Uri(assembly.CodeBase);
-					baseConfigLogFolder = Path.GetDirectoryName(url.LocalPath);
-					if (System.Web.HttpContext.Current == null || assembly.Location.Contains("Temporary ASP.NET Files")) baseConfigLogFolder = Directory.GetParent(baseConfigLogFolder).FullName;//directory before this step would probably be pointing to the bin folder of a ASP.NET app, which we dont want to write too, unless we like asp.net restarting itself!
+					folder = Path.GetDirectoryName(url.LocalPath);
 				}
-				filePath = Path.Combine(baseConfigLogFolder, filePath.Replace("/", "\\"));
+				filePath = Path.Combine(folder, filePath.Replace("/", "\\"));
+			}
+			if (!Directory.Exists(folder))
+			{
+				#if DEBUG
+				System.Diagnostics.Debug.WriteLine(String.Format("Folder {0} does not exist, file logging will not happen", folder));
+				#endif
+				return;
 			}
 			FileInfo traceFile = new FileInfo(filePath);
 			try
@@ -600,6 +589,29 @@ namespace Adenson.Log
 				numAttempts++;
 				Thread.Sleep(1000);
 				ActualFileWrite(filePath, str, numAttempts);
+			}
+		}
+		private static void LogInternalError(Exception ex)
+		{
+			#if DEBUG
+			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
+			#else
+			try
+			{
+				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex), EventLogEntryType.Warning);
+			}
+			catch { }
+			#endif
+		}
+		private static void OutWriteLine(LogEntry entry)
+		{
+			if ((entry.LogType & LogType.Console) != LogType.None)
+			{
+				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
+			}
+			if ((entry.LogType & LogType.Debug) != LogType.None)
+			{
+				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
 		}
 

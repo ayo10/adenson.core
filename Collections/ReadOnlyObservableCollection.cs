@@ -6,6 +6,10 @@ using System.ComponentModel;
 
 namespace Adenson.Collections
 {
+	/// <summary>
+	/// A read only but observable collection
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public sealed class ReadOnlyObservableCollection<T> : ICollection<T>, INotifyCollectionChanged, INotifyPropertyChanged, IList
 	{
 		#region Variables
@@ -13,16 +17,14 @@ namespace Adenson.Collections
 		#endregion
 		#region Constructors
 
-		public ReadOnlyObservableCollection()
-		{
-		}
+		/// <summary>
+		/// Instantiates a new read only from specified collection
+		/// </summary>
+		/// <param name="collection"></param>
 		public ReadOnlyObservableCollection(IEnumerable<T> collection)
 		{
-			this.BackingList = new ObservableCollection<T>(collection);
-		}
-		internal ReadOnlyObservableCollection(ObservableCollection<T> collection)
-		{
-			this.BackingList = collection;
+			var list = collection as ObservableCollection<T>;
+			this.BackingList = list == null ? new ObservableCollection<T>(collection) : list;
 		}
 
 		#endregion

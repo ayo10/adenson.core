@@ -5,7 +5,11 @@ using System.Xml.Serialization;
 
 namespace Adenson.Configuration
 {
-	public static class Config
+	/// <summary>
+	/// Config values for use within the assembly
+	/// 
+	/// </summary>
+	internal static class Config
 	{
 		private static readonly object dummy = new object();
 		private static LoggerSettings _logSettings;
