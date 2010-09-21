@@ -20,18 +20,63 @@ namespace Adenson.Log
 		private static List<LogEntry> entries = new List<LogEntry>();
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private static string lastFileError;
+		private static string outFileName;
 		private Type _classType;
 		private ushort _batchLogSize;
 		private LogType _logType = LogType.None;
 		private LogSeverity _severity = LogSeverity.None;
 		private string _dateTimeFormat;
-		private string _emailErrorFrom;
-		private string _emailErrorTo;
 		private string _source;
 		#endregion
 		#region Constructors
 
+		static Logger()
+		{
+			string filePath = Config.LogSettings.FileName;
+			string folder = null;
+			if (!filePath.Contains(":\\\\") && !filePath.Contains("://"))//i.e, no root
+			{
+				var context = System.Web.HttpContext.Current;
+				if (context != null) filePath = context.Server.MapPath(filePath);
+				else//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
+				{
+					var assembly = Assembly.GetExecutingAssembly();
+					Uri url = new Uri(assembly.CodeBase);
+					folder = Path.GetDirectoryName(url.LocalPath);
+					if (assembly.Location.Contains("Temporary ASP.NET Files")) folder = folder.Replace("\\bin", String.Empty);//need a better way of determining this is a ASP.NET assembly, there has to be one
+					filePath = Path.Combine(folder, filePath.Replace("/", "\\"));
+				}
+			}
+			if (!Directory.Exists(folder))
+			{
+				#if DEBUG
+				System.Diagnostics.Debug.WriteLine(String.Format("Folder {0} does not exist, file logging will not happen", folder));
+				#endif
+				return;
+			}
+
+			FileInfo traceFile = new FileInfo(filePath);
+			try
+			{
+				string fileName = Path.GetFileNameWithoutExtension(traceFile.Name);
+				string extension = traceFile.Extension;
+				if (traceFile.Exists)
+				{
+					if (traceFile.LastWriteTime.Date < DateTime.Now.AddDays(-1))
+					{
+						string postPend = traceFile.LastWriteTime.ToString("yyyyMMdd");
+						string traceFileName = String.Concat(fileName, postPend, extension);
+						FileInfo[] fs = traceFile.Directory.GetFiles("*" + traceFileName);
+						if (fs.Length > 0) traceFileName = String.Concat(fileName, postPend, fs.Length, extension);
+						traceFile.MoveTo(traceFileName);
+					}
+				}
+				outFileName = traceFile.FullName;
+			}
+			catch (Exception)
+			{
+			}	
+		}
 		/// <summary>	
 		/// Creates a new instance of Logger from type
 		/// </summary>
@@ -86,8 +131,6 @@ namespace Adenson.Log
 			this.BatchSize = instance.BatchSize;
 			this.Severity = instance.Severity;
 			this.Type = instance.Type;
-			this.EmailErrorFrom = instance.EmailErrorFrom;
-			this.EmailErrorTo = instance.EmailErrorTo;
 			this.Source = instance.Source;
 		}
 		/// <summary>
@@ -132,22 +175,6 @@ namespace Adenson.Log
 		{
 			get { return _logType == LogType.None ? Config.LogSettings.TypeActual : _logType; }
 			set { _logType = value; }
-		}
-		/// <summary>
-		/// Gets the errors email from (if LogError(Type, Exception, true/false, true) OR its non static version is called)
-		/// </summary>
-		public string EmailErrorFrom
-		{
-			get { return String.IsNullOrEmpty(_emailErrorFrom) ? Config.LogSettings.Email.From : _emailErrorFrom; }
-			set { _emailErrorFrom = value; }
-		}
-		/// <summary>
-		/// Gets the errors email recipient (if LogError(Type, Exception, true/false, true) OR its non static version is called)
-		/// </summary>
-		public string EmailErrorTo
-		{
-			get { return String.IsNullOrEmpty(_emailErrorTo) ? Config.LogSettings.Email.To : _emailErrorTo; }
-			set { _emailErrorTo = value; }
 		}
 		/// <summary>
 		/// The type form which this instance is forged from
@@ -263,7 +290,10 @@ namespace Adenson.Log
 		/// </summary>
 		public void Flush()
 		{
-			Flush(this.Type);
+			//new System.Threading.Thread(new ThreadStart(delegate()
+			//{
+			Logger.Flush(this.Type);
+			//})).Start();
 		}
 		/// <summary>
 		/// Flushes the logger, then disposes of its internal cache
@@ -307,7 +337,7 @@ namespace Adenson.Log
 
 			try
 			{
-				if (entries.Count >= this.BatchSize) Logger.Flush(this.Type);
+				if (entries.Count >= this.BatchSize) this.Flush();
 			}
 			catch
 			{
@@ -462,7 +492,7 @@ namespace Adenson.Log
 			{
 				System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 				foreach (LogEntry row in entries) sb.AppendLine(String.Format(SR.EventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
-				ActualFileWrite(Config.LogSettings.FileName, sb.ToString(), 0);
+				ActualFileWrite(sb.ToString(), 0);
 				return true;
 			}
 			catch (Exception ex)
@@ -505,91 +535,43 @@ namespace Adenson.Log
 			}
 		}
 
-		private static void ActualFileWrite(string filePath, string str, int numAttempts)
+		private static void ActualFileWrite(string str, int numAttempts)
 		{
+			if (String.IsNullOrEmpty(outFileName)) return;
 			bool failed = false;
-			string folder = null;
-			if (!filePath.Contains(":\\\\") && !filePath.Contains("://"))//i.e, no root
-			{
-				var context = System.Web.HttpContext.Current;
-				if (context != null)
-				{
-					filePath = context.Server.MapPath(filePath);
-					folder = Directory.GetParent(filePath).FullName;
-				}
-				else
-				{
-					var assembly = Assembly.GetExecutingAssembly();
-					Uri url = new Uri(assembly.CodeBase);
-					folder = Path.GetDirectoryName(url.LocalPath);
-				}
-				filePath = Path.Combine(folder, filePath.Replace("/", "\\"));
-			}
-			if (!Directory.Exists(folder))
-			{
-				#if DEBUG
-				System.Diagnostics.Debug.WriteLine(String.Format("Folder {0} does not exist, file logging will not happen", folder));
-				#endif
-				return;
-			}
-			FileInfo traceFile = new FileInfo(filePath);
+
+			FileInfo traceFile = new FileInfo(outFileName);
+			TextWriter writer = null;
+			Stream stream = null;
 			try
 			{
-				string fileName = Path.GetFileNameWithoutExtension(traceFile.Name);
-				string extension = traceFile.Extension;
-				if (traceFile.Exists)
-				{
-					if (traceFile.LastWriteTime.Date < DateTime.Now.AddDays(-1))
-					{
-						string postPend = traceFile.LastWriteTime.ToString("yyyyMMdd");
-						string traceFileName = String.Concat(fileName, postPend, extension);
-						FileInfo[] fs = traceFile.Directory.GetFiles("*" + traceFileName);
-						if (fs.Length > 0) traceFileName = String.Concat(fileName, postPend, fs.Length, extension);
-						traceFile.MoveTo(traceFileName);
-					}
-				}
+				stream = traceFile.Open(FileMode.Append, FileAccess.Write);
+				writer = new StreamWriter(stream);
+				writer.Write(str);
+			}
+			catch (UnauthorizedAccessException ex)
+			{
+				numAttempts = 3;//prevent retries
+				failed = true;
+				Logger.LogInternalError(ex);
 			}
 			catch (Exception ex)
 			{
 				failed = true;
-				System.Diagnostics.Debug.WriteLine(ex);
+				Logger.LogInternalError(ex);
+			}
+			finally
+			{
+				if (writer != null) writer.Close();
+				if (stream != null) stream.Close();
 			}
 
-			if (!failed)
-			{
-				TextWriter writer = null;
-				Stream stream = null;
-				try
-				{
-					stream = traceFile.Open(FileMode.Append, FileAccess.Write);
-					writer = new StreamWriter(stream);
-					writer.Write(str);
-				}
-				catch (UnauthorizedAccessException ex)
-				{
-					numAttempts = 3;//prevent retries
-					failed = true;
-					Logger.LogInternalError(ex);
-				}
-				catch (Exception ex)
-				{
-					failed = true;
-					Logger.LogInternalError(ex);
-				}
-				
-				finally
-				{
-					if (writer != null) writer.Close();
-					if (stream != null) stream.Close();
-				}
-			}
-
-			if (failed && numAttempts < 3)
-			{
-				numAttempts++;
-				Thread.Sleep(1000);
-				ActualFileWrite(filePath, str, numAttempts);
-			}
+			//if (failed && numAttempts < 3)
+			//{
+			//    numAttempts++;
+			//    Thread.Sleep(1000);
+			//    ActualFileWrite(str, numAttempts);
+			//}
 		}
 		private static void LogInternalError(Exception ex)
 		{

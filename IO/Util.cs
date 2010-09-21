@@ -179,7 +179,9 @@ namespace Adenson.IO
 				byte[] buffer = new byte[1024];
 				int len;
 				while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
-				return ms.ToArray();
+				var result = ms.ToArray();
+				ms.Dispose();
+				return result;
 			}
 			catch (Exception ex)
 			{
@@ -201,16 +203,20 @@ namespace Adenson.IO
 			try
 			{
 				MemoryStream ms = stream as MemoryStream;
+				bool ours = false;
 				if (ms == null)
 				{
 					ms = new MemoryStream();
+					ours = true;
 					stream.Seek(0, SeekOrigin.Begin);
 					byte[] buffer = new byte[1024];
 					int len;
 					while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
 					stream.Close();
 				}
-				return ms.ToArray();
+				var result = ms.ToArray();
+				if (ours) ms.Dispose();
+				return result;
 			}
 			catch (Exception ex)
 			{

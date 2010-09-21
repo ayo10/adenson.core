@@ -99,7 +99,6 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IO\Extensions.cs" />
     <Compile Include="IO\Util.cs" />
-    <Compile Include="Log\Settings.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>

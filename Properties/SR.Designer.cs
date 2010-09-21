@@ -144,7 +144,6 @@ namespace Adenson {
         /// <summary>
         ///   Looks up a localized string similar to Attempt to send using &apos;localhost&apos;, &apos;mail.Adenson.com&apos; and &apos;mail.Adenson.net&apos; all failed (in that specified order). 
         ///Override this behavior by setting System.Net.Mail.SmtpClient server properties in the configuration file settings, for example, an example configuration:
-        ///
         ///&lt;configuration&gt;
         ///  &lt;system.net&gt;
         ///    &lt;mailSettings&gt;
