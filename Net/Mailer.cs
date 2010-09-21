@@ -9,12 +9,7 @@ using Adenson.Data;
 namespace Adenson.Net
 {
 	/// <summary>
-	/// Simplified mailer class that will attempt to send mail 
-	/// 1) If the configuration value "configuration/system.net/mail" exists, uses that
-	/// 2) ElseIf ConfigurationManager.AppSettings["SmtpServer"], use that as the host
-	/// 3) If 2 fails, use "localhost" as host
-	/// 4) If 3 fails, use "mail.adenson.com"
-	/// 5) If 4 fails, use "mail.adenson.net"
+	/// Simplified mailer class that will attempt to send mail
 	/// </summary>
 	public static class Mailer
 	{
@@ -30,7 +25,7 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(MailMessage message)
 		{
-			return Mailer.InternalSend(message, false);
+			return Mailer.Send(null, message, false);
 		}
 		/// <summary>
 		/// Sends an email using MailMessage object
@@ -52,6 +47,8 @@ namespace Adenson.Net
 		public static bool Send(string smtpHost, MailMessage message, bool sendAsync)
 		{
 			SmtpClient smtp = new SmtpClient(smtpHost);
+			if (String.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
+			else smtp = new SmtpClient(smtpHost);
 			try
 			{
 				logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
@@ -99,7 +96,7 @@ namespace Adenson.Net
 		/// <param name="message">MailMessage Object to use</param>
 		public static bool SendAsync(MailMessage message)
 		{
-			return Mailer.InternalSend(message, true);
+			return Mailer.Send(null, message, true);
 		}
 		/// <summary>
 		/// Sends email asynchronously, using passed variables
@@ -126,23 +123,6 @@ namespace Adenson.Net
 			Mailer.SendAsync(ComposeMailMessage(from, to, subject, message, isHtml));
 		}
 
-		private static bool InternalSend(MailMessage message, bool sendAsyc)
-		{
-			bool result = Mailer.Send(null, message, sendAsyc);
-			if (!result)
-			{
-				string host = ConfigurationManager.AppSettings["SmtpServer"];
-				if (!String.IsNullOrEmpty(host)) result = Mailer.Send(host, message);
-				if (!result) result = Mailer.Send("localhost", message, sendAsyc);
-				if (!result) result = Mailer.Send("mail.adenson.com", message, sendAsyc);
-				if (!result) result = Mailer.Send("mail.adenson.net", message, sendAsyc);
-				if (!result) result = Mailer.Send("ns1.adenson.net", message, sendAsyc);
-
-				if (!result) logger.Error(SR.MsgMailerWarning);
-			}
-
-			return result;
-		}
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			if (to.Length == 0) throw new ArgumentOutOfRangeException("to", Exceptions.EmailAddressInvalid);

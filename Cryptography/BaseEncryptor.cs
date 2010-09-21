@@ -54,11 +54,12 @@ namespace Adenson.Cryptography
 			BinaryWriter sw = new BinaryWriter(cs);
 			sw.Write(toEncrypt);
 			sw.Flush();
+			cs.Dispose();
 
-			cs.FlushFinalBlock();
+			var result = ms.GetBuffer();
+			ms.Dispose();
 			ms.Flush();
-
-			return ms.GetBuffer();
+			return result;
 		}
 		/// <summary>
 		/// Encrypts the specified string
@@ -76,10 +77,12 @@ namespace Adenson.Cryptography
 			StreamWriter sw = new StreamWriter(cs);
 			sw.Write(toEncrypt);
 			sw.Flush();
+			cs.Dispose();
 
-			cs.FlushFinalBlock();
+			var result = ms.GetBuffer();
+			ms.Dispose();
 			ms.Flush();
-			return Convert.ToBase64String(ms.GetBuffer(), 0, int.Parse(ms.Length.ToString()));
+			return Convert.ToBase64String(result, 0, result.Length);
 		}
 		/// <summary>
 		/// The 
@@ -94,7 +97,9 @@ namespace Adenson.Cryptography
 			MemoryStream ms = new MemoryStream(buffer);
 			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Read);
 			StreamReader sr = new StreamReader(cs);
-			return sr.ReadToEnd();
+			var result = sr.ReadToEnd();
+			sr.Dispose();
+			return result;
 		}
 		/// <summary>
 		/// 
@@ -110,6 +115,7 @@ namespace Adenson.Cryptography
 
 			byte[] buffer = new byte[cs.Length];
 			cs.Write(buffer, 0, buffer.Length);
+			cs.Dispose();
 			return buffer;
 		}
 		/// <summary>
