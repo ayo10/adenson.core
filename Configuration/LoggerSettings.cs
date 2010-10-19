@@ -36,7 +36,7 @@ namespace Adenson.Configuration
 		public string Type { get; set; }
 
 		[XmlAttribute(AttributeName = "batchSize")]
-		public ushort BatchSize { get; set; }
+		public short BatchSize { get; set; }
 
 		[XmlAttribute(AttributeName = "source")]
 		public string Source { get; set; }
