@@ -91,15 +91,6 @@ namespace Adenson.Collections
 			return readOnly;
 		}
 
-		internal void AddPropertyChangedEvent(PropertyChangedEventHandler value)
-		{
-			this.PropertyChanged += value;
-		}
-		internal void RemovePropertyChangedEvent(PropertyChangedEventHandler value)
-		{
-			this.PropertyChanged -= value;
-		}
-
 		/// <summary>
 		/// Removes all items from the collection.
 		/// </summary>
@@ -175,6 +166,15 @@ namespace Adenson.Collections
 					else handler(this, e);
 				}
 			}
+		}
+
+		internal void AddPropertyChangedEvent(PropertyChangedEventHandler value)
+		{
+			this.PropertyChanged += value;
+		}
+		internal void RemovePropertyChangedEvent(PropertyChangedEventHandler value)
+		{
+			this.PropertyChanged -= value;
 		}
 
 		private void OnCollectionChanging(CollectionChangingEventArgs<T> e)

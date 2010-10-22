@@ -1,0 +1,10 @@
+﻿<Dictionary>
+	<Words>
+		<Unrecognized>
+			<Word>adenson</Word>
+		</Unrecognized>
+		<Deprecated>
+			<Term PreferredAlternate="LogOn">login</Term>
+		</Deprecated>
+	</Words>
+</Dictionary>

@@ -10,7 +10,7 @@ namespace Adenson.Collections
 	/// A read only but observable collection
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public sealed class ReadOnlyObservableCollection<T> : ICollection<T>, INotifyCollectionChanged, INotifyPropertyChanged, IList
+	public sealed class ReadOnlyObservableCollection<T> : IEnumerable<T>, INotifyPropertyChanged
 	{
 		#region Variables
 		private ObservableCollection<T> BackingList = new ObservableCollection<T>();
@@ -30,58 +30,58 @@ namespace Adenson.Collections
 		#endregion
 		#region Properties
 
+		/// <summary>
+		/// Gets the element at the specified index.
+		/// </summary>
+		/// <param name="index">The zero-based index of the element to get.</param>
+		/// <returns>The element at the specified index.</returns>
 		public T this[int index]
 		{
 			get { return this.BackingList[index]; }
 		}
+		/// <summary>
+		/// Gets the number of elements actually contained in the list
+		/// </summary>
 		public int Count
 		{
 			get { return this.BackingList.Count; }
 		}
-		public event NotifyCollectionChangedEventHandler CollectionChanged
-		{
-			add { this.BackingList.CollectionChanged += value; }
-			remove { this.BackingList.CollectionChanged -= value; }
-		}
+		/// <summary>
+		/// Occurs when a property value changes.
+		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged
 		{
 			add { this.BackingList.AddPropertyChangedEvent(value); }
 			remove { this.BackingList.RemovePropertyChangedEvent(value); }
 		}
 
-		object IList.this[int index]
-		{
-			get { return this[index]; }
-			set { throw new NotSupportedException(); }
-		}
-		bool ICollection.IsSynchronized
-		{
-			get { throw new NotSupportedException(); }
-		}
-		object ICollection.SyncRoot
-		{
-			get { return ((ICollection)this.BackingList).SyncRoot; }
-		}
-		bool IList.IsFixedSize
-		{
-			get { throw new NotSupportedException(); }
-		}
-		bool IList.IsReadOnly
-		{
-			get { throw new NotSupportedException(); }
-		}
-
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Determines whether an element is in the list
+		/// </summary>
+		/// <param name="item">The object to locate</param>
+		/// <returns>true if item is found in the list otherwise, false.</returns>
 		public bool Contains(T item)
 		{
 			return this.BackingList.Contains(item);
 		}
+		/// <summary>
+		/// Copies the entire list to a compatible one-dimensional System.Array, starting at the specified index of the target array.
+		/// </summary>
+		/// <param name="array">The one-dimensional System.Array that is the destination of the elements</param>
+		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+		/// <exception cref="ArgumentNullException">array is null</exception>
+		/// <exception cref="ArgumentOutOfRangeException">index is less than zero</exception>
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			this.BackingList.CopyTo(array, arrayIndex);
 		}
+		/// <summary>
+		/// Returns an enumerator that iterates through the list.
+		/// </summary>
+		/// <returns>An enumerator for the list</returns>
 		public IEnumerator<T> GetEnumerator()
 		{
 			return this.BackingList.GetEnumerator();
@@ -111,54 +111,6 @@ namespace Adenson.Collections
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return this.GetEnumerator();
-		}
-		void ICollection<T>.Add(T item)
-		{
-			throw new NotImplementedException();
-		}
-		void ICollection<T>.Clear()
-		{
-			throw new NotSupportedException();
-		}
-		bool ICollection<T>.IsReadOnly
-		{
-			get { throw new NotSupportedException(); }
-		}
-		bool ICollection<T>.Remove(T item)
-		{
-			throw new NotSupportedException();
-		}
-		int IList.Add(object value)
-		{
-			throw new NotSupportedException();
-		}
-		void IList.Clear()
-		{
-			throw new NotSupportedException();
-		}
-		bool IList.Contains(object value)
-		{
-			return this.Contains((T)value);
-		}
-		int IList.IndexOf(object value)
-		{
-			return this.BackingList.IndexOf((T)value);
-		}
-		void IList.Insert(int index, object value)
-		{
-			throw new NotSupportedException();
-		}
-		void IList.Remove(object value)
-		{
-			throw new NotSupportedException();
-		}
-		void IList.RemoveAt(int index)
-		{
-			throw new NotSupportedException();
-		}
-		void ICollection.CopyTo(Array array, int index)
-		{
-			this.BackingList.CopyTo((T[])array, index);
 		}
 
 		#endregion

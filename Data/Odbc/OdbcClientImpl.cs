@@ -15,6 +15,10 @@ namespace Adenson.Data.Odbc
 	{
 		#region Constructor
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OdbcClientImpl"/> class.
+		/// </summary>
+		/// <param name="connectionString"></param>
 		public OdbcClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -22,10 +26,25 @@ namespace Adenson.Data.Odbc
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Executes and returns a new DataSet from specified stored procedure
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>a new DataSet object</returns>
 		public override DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteDataSet(type, null, commandText, parameterValues);
 		}
+		/// <summary>
+		/// Executes and returns a new DataSet from specified stored procedure using specified transaction
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="transaction">The transaction</param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>a new DataSet object</returns>
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
@@ -37,10 +56,25 @@ namespace Adenson.Data.Odbc
 
 			return this.ExecuteDataSet(command);
 		}
+		/// <summary>
+		/// Executes the specified command text and returns the number of rows affected.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>The number of rows affected.</returns>
 		public override int ExecuteNonQuery(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteNonQuery(type, null, commandText, parameterValues);
 		}
+		/// <summary>
+		/// Executes the specified command text using specified transaction and returns the number of rows affected.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="transaction">The transaction</param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>The number of rows affected.</returns>
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
@@ -49,7 +83,7 @@ namespace Adenson.Data.Odbc
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
 			if (sqltransaction != null) command.Transaction = sqltransaction;
-			if (OdbcClientImpl.IsNotEmpty(parameterValues))
+			if (!parameterValues.IsEmpty())
 			{
 				OdbcParameter[] commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
 				AssignParameterValues(commandParameters, parameterValues);
@@ -57,10 +91,25 @@ namespace Adenson.Data.Odbc
 			}
 			return this.ExecuteNonQuery(command);
 		}
+		/// <summary>
+		/// Executes the specified command text and builds an System.Data.IDataReader.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>An System.Data.IDataReader object.</returns>
 		public override IDataReader ExecuteReader(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteReader(type, null, commandText, parameterValues);
 		}
+		/// <summary>
+		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="transaction">The transaction</param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>An System.Data.IDataReader object.</returns>
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
@@ -69,7 +118,7 @@ namespace Adenson.Data.Odbc
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
 			if (sqltransaction != null) command.Transaction = sqltransaction;
-			if (OdbcClientImpl.IsNotEmpty(parameterValues))
+			if (!parameterValues.IsEmpty())
 			{
 				OdbcParameter[] commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
 				AssignParameterValues(commandParameters, parameterValues);
@@ -77,10 +126,29 @@ namespace Adenson.Data.Odbc
 			}
 			return this.ExecuteReader(command);
 		}
+		/// <summary>
+		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>
+		/// The first column of the first row in the resultset.
+		/// </returns>
 		public override object ExecuteScalar(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteScalar(type, null, commandText, parameterValues);
 		}
+		/// <summary>
+		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="transaction">The transaction</param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>
+		/// The first column of the first row in the resultset.
+		/// </returns>
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
@@ -89,7 +157,7 @@ namespace Adenson.Data.Odbc
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
 			if (sqltransaction != null) command.Transaction = sqltransaction;
-			if (OdbcClientImpl.IsNotEmpty(parameterValues))
+			if (!parameterValues.IsEmpty())
 			{
 				OdbcParameter[] commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
 				AssignParameterValues(commandParameters, parameterValues);
@@ -97,57 +165,61 @@ namespace Adenson.Data.Odbc
 			}
 			return this.ExecuteScalar(command);
 		}
+		/// <summary>
+		/// Creates a new DbDataAdapter object for use by the helper methods.
+		/// </summary>
+		/// <param name="command">The command to use to construct the adapter</param>
+		/// <returns>New DbDataAdapter adapter</returns>
 		public override DbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new OdbcDataAdapter((OdbcCommand)command);
 		}
+		/// <summary>
+		/// Creates a new database connection for use by the helper methods
+		/// </summary>
+		/// <returns>New IDbConnection object</returns>
 		public override IDbConnection CreateConnection()
 		{
 			return new OdbcConnection(this.ConnectionString);
 		}
-		public override void ClearParameterCache()
-		{
-			OdbcParameterCache.Clear();
-		}
-		public override void ClearParameterCache(string spName)
-		{
-			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", Exceptions.ArgumentNull);
-			OdbcParameterCache.Clear(spName);
-		}
+		/// <summary>
+		/// Runs a query to see if the specified column exists or not. (This method is not supported)
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="columnName"></param>
+		/// <returns></returns>
 		public override bool CheckColumnExists(string tableName, string columnName)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
+		/// <summary>
+		/// Runs a query to see if specified table exists or not. (This method is not supported)
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <returns></returns>
 		public override bool CheckTableExists(string tableName)
 		{
-			bool result = false;
-			using (IDataReader reader = this.ExecuteReader(CommandType.Text, "select * from dbo.sysobjects where id = object_id(N'{0}') and OBJECTPROPERTY(id, N'IsUserTable') = 1", tableName))
-			{
-				result = reader.Read();
-			}
-			return result;
+			throw new NotSupportedException();
 		}
 
 		private void AssignParameters(OdbcCommand command, string commandText, object[] parameterValues)
 		{
-			if (SqlHelperBase.IsNotEmpty(parameterValues))
+			if (parameterValues.IsEmpty()) return;
+			OdbcParameter[] commandParameters;
+			if (!OdbcClientImpl.CheckParameters(parameterValues, out commandParameters))
 			{
-				OdbcParameter[] commandParameters;
-				if (!OdbcClientImpl.CheckParameters(parameterValues, out commandParameters))
+				if (command.CommandType == CommandType.StoredProcedure)
 				{
-					if (command.CommandType == CommandType.StoredProcedure)
-					{
-						commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
-						OdbcClientImpl.AssignParameterValues(commandParameters, parameterValues);
-					}
-					else
-					{
-						if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
-						else commandParameters = OdbcClientImpl.GenerateParameters(commandText, parameterValues);
-					}
+					commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
+					OdbcClientImpl.AssignParameterValues(commandParameters, parameterValues);
 				}
-				if (commandParameters != null) command.Parameters.AddRange(commandParameters);
+				else
+				{
+					if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
+					else commandParameters = OdbcClientImpl.GenerateParameters(commandText, parameterValues);
+				}
 			}
+			if (commandParameters != null) command.Parameters.AddRange(commandParameters);
 		}
 
 		private static OdbcCommand CheckCommand(IDbCommand command)

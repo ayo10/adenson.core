@@ -23,8 +23,8 @@ namespace Adenson.Log
 		private static string OutFileName;
 		private Type _classType;
 		private short _batchLogSize;
-		private LogType _logType = LogType.None;
-		private LogSeverity _severity = LogSeverity.None;
+		private LogType? _logType;
+		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
 		#endregion
@@ -139,7 +139,7 @@ namespace Adenson.Log
 		/// </summary>
 		public LogSeverity Severity
 		{
-			get { return _severity == LogSeverity.None ? Config.LogSettings.Severity : _severity; }
+			get { return _severity == null ? Config.LogSettings.SeverityActual : _severity.Value; }
 			set { _severity = value; }
 		}
 		/// <summary>
@@ -147,7 +147,7 @@ namespace Adenson.Log
 		/// </summary>
 		public LogType Type
 		{
-			get { return _logType == LogType.None ? Config.LogSettings.TypeActual : _logType; }
+			get { return _logType == null ? Config.LogSettings.TypeActual : _logType.Value; }
 			set { _logType = value; }
 		}
 		/// <summary>
