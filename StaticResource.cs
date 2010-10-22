@@ -20,7 +20,6 @@ namespace Adenson
 	{
 		#region Variables
 		private static Dictionary<string, Dictionary<string, ResourceData>> typesResourcesTable;
-		private Type _type;
 		private System.Resources.ResourceManager resourceManager;
 		private string srtypeResourcePreKey;
 		#endregion
@@ -148,10 +147,13 @@ namespace Adenson
 		#endregion
 		#region Properties
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public Type Type
 		{
-			get { return _type; }
-			private set { _type = value; }
+			get;
+			private set;
 		}
 
 		#endregion

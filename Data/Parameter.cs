@@ -17,6 +17,11 @@ namespace Adenson.Data
 		#endregion
 		#region Constructor
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Parameter"/> struct.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
 		public Parameter(string name, object value)
 		{
 			_key = name;

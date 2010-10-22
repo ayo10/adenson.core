@@ -8,6 +8,9 @@ using Adenson.Log;
 
 namespace Adenson.Data.SqlCe
 {
+	/// <summary>
+	/// The SqlHelper class for SQL Server connections
+	/// </summary>
 	public sealed class SqlCeImpl : SqlHelperBase
 	{
 		#region Variables

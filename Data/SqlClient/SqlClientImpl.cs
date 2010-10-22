@@ -123,15 +123,6 @@ namespace Adenson.Data.SqlClient
 		{
 			return new SqlConnection(this.ConnectionString);
 		}
-		public override void ClearParameterCache()
-		{
-			SqlClientParameterCache.Clear();
-		}
-		public override void ClearParameterCache(string spName)
-		{
-			if (String.IsNullOrEmpty(spName)) throw new ArgumentNullException("spName", Exceptions.ArgumentNullOrEmpty);
-			SqlClientParameterCache.Clear(spName);
-		}
 		public override bool CheckColumnExists(string tableName, string columnName)
 		{
 			throw new NotImplementedException();
@@ -148,7 +139,7 @@ namespace Adenson.Data.SqlClient
 
 		private void AssignParameters(SqlCommand command, string commandText, object[] parameterValues)
 		{
-			if (SqlHelperBase.IsNotEmpty(parameterValues))
+			if (!parameterValues.IsEmpty())
 			{
 				SqlParameter[] commandParameters;
 				if (!SqlClientImpl.CheckParameters(parameterValues, out commandParameters))

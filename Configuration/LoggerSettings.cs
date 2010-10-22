@@ -9,16 +9,13 @@ namespace Adenson.Configuration
 	{
 		#region Variables
 		private LogType? _type;
+		private LogSeverity? _severity;
 		#endregion
 		#region Constructor
 
 		public LoggerSettings()
 		{
-			#if DEBUG
-			this.Severity = LogSeverity.Debug;
-			#else
-			this.Severity = LogSeverity.Error;
-			#endif
+			this.Severity = "Error";
 			this.Type = "Debug";
 			this.Source = "Logger";
 			this.DateTimeFormat = "HH:mm:ss:fff";
@@ -30,7 +27,7 @@ namespace Adenson.Configuration
 		#region Properties
 
 		[XmlAttribute(AttributeName = "severity")]
-		public LogSeverity Severity { get; set; }
+		public string Severity { get; set; }
 
 		[XmlAttribute(AttributeName = "type")]
 		public string Type { get; set; }
@@ -76,6 +73,24 @@ namespace Adenson.Configuration
 					_type = (LogType)result;
 				}
 				return _type.Value;
+			}
+		}
+		public LogSeverity SeverityActual
+		{
+			get
+			{
+				if (_severity == null)
+				{
+					try
+					{
+						_severity = (LogSeverity)Enum.Parse(typeof(LogSeverity), this.Severity);
+					}
+					catch
+					{
+						_severity = LogSeverity.Error;
+					}
+				}
+				return _severity.Value;
 			}
 		}
 

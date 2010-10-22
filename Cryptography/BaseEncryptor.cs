@@ -34,6 +34,9 @@ namespace Adenson.Cryptography
 		#endregion
 		#region Properties
 
+		/// <summary>
+		/// Gets the algorithm the encryptor is based on
+		/// </summary>
 		public abstract SymmetricAlgorithm Algorithm { get; }
 
 		#endregion

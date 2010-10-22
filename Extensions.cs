@@ -46,6 +46,15 @@ namespace Adenson
 			return dictionary[actualKey];
 		}
 		/// <summary>
+		/// Checks to see if the specified value is empty or null
+		/// </summary>
+		/// <param name="values">The array to check</param>
+		/// <returns>true if values is null or empty, false otherwise</returns>
+		public static bool IsEmpty(this object[] values)
+		{
+			return (values == null) || (values.Length == 0);
+		}
+		/// <summary>
 		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
 		/// </summary>
 		/// <param name="buffer">The byte array</param>

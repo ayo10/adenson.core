@@ -70,18 +70,6 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
-		/// Clears any cached stored procedure parameters
-		/// </summary>
-		public virtual void ClearParameterCache()
-		{
-		}
-		/// <summary>
-		/// Clears parameters for the specfied stored procedure;
-		/// </summary>
-		public virtual void ClearParameterCache(string spName)
-		{
-		}
-		/// <summary>
 		/// Closes the connection opened by OpenConnection, then, lets CreateConnection know to always create new connections henceforth.
 		/// </summary>
 		/// <exception cref="InvalidOperationException">if the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
@@ -262,10 +250,10 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// 
+		/// Creates a new DbDataAdapter object for use by the helper methods.
 		/// </summary>
-		/// <param name="command"></param>
-		/// <returns></returns>
+		/// <param name="command">The command to use to construct the adapter</param>
+		/// <returns>New DbDataAdapter adapter</returns>
 		public abstract DbDataAdapter CreateAdapter(IDbCommand command);
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
@@ -381,23 +369,14 @@ namespace Adenson.Data
 		public abstract object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues);
 
 		/// <summary>
-		/// 
+		/// Gets if the specified command text is a CRUD command
 		/// </summary>
-		/// <param name="commandText"></param>
+		/// <param name="commandText">The text to check</param>
 		/// <returns></returns>
 		protected static bool IsCrud(string commandText)
 		{
 			bool x = crudites.Any(s => commandText.ToLower().Contains(s));
 			return x;
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="parameterValues"></param>
-		/// <returns></returns>
-		protected static bool IsNotEmpty(object[] parameterValues)
-		{
-			return (parameterValues != null) && (parameterValues.Length > 0);
 		}
 
 		#endregion
