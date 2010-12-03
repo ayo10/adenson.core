@@ -14,17 +14,7 @@ namespace Adenson.IO
 	{
 		#region Variables
 		private static Logger logger = Logger.GetLogger(typeof(Util));
-		public readonly static Dictionary<char, char> FileInvalidCharsReplacements;
-		#endregion
-		#region Constructor
-
-		static Util()
-		{
-			FileInvalidCharsReplacements = new Dictionary<char, char>();
-			FileInvalidCharsReplacements.Add(':', '-');
-			FileInvalidCharsReplacements.Add('/', ',');
-		}
-
+		private readonly static Dictionary<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
 		#endregion
 		#region Methods
 
@@ -59,7 +49,7 @@ namespace Adenson.IO
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="directory"></param>
+		/// <param name="filePath"></param>
 		/// <param name="buffer"></param>
 		/// <param name="overwrite"></param>
 		/// <returns></returns>
@@ -134,15 +124,15 @@ namespace Adenson.IO
 		{
 			if (String.IsNullOrWhiteSpace(path)) throw new ArgumentNullException("path");
 
-			if (invalidFileNameChars == null) invalidFileNameChars = Util.FileInvalidCharsReplacements.Keys.ToArray();
-			else invalidFileNameChars = invalidFileNameChars.Union(Util.FileInvalidCharsReplacements.Keys).ToArray();
+			if (invalidFileNameChars == null) invalidFileNameChars = Util.fileInvalidCharsReplacements.Keys.ToArray();
+			else invalidFileNameChars = invalidFileNameChars.Union(Util.fileInvalidCharsReplacements.Keys).ToArray();
 			IEnumerable<char> intersect = path.ToCharArray().Intersect(invalidFileNameChars);
 			if (intersect.Count() > 0)
 			{
 				string result = path;
 				foreach (char c in intersect)
 				{
-					char r = Util.FileInvalidCharsReplacements[c];
+					char r = Util.fileInvalidCharsReplacements[c];
 					result = result.Replace(c.ToString(), r == char.MinValue ? "" : r.ToString());
 				}
 				return result;
@@ -230,6 +220,17 @@ namespace Adenson.IO
 
 		[System.Runtime.InteropServices.DllImport("msvcrt.dll", SetLastError = true)]
 		static extern int _mkdir(string path);
+
+		#endregion
+		#region Helper Methods
+
+		private static Dictionary<char, char> GetFileInvalidCharsReplacements()
+		{
+			var result = new Dictionary<char, char>();
+			result.Add(':', '-');
+			result.Add('/', ',');
+			return result;
+		}
 
 		#endregion
 	}
