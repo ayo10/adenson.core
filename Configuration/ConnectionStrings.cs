@@ -53,7 +53,7 @@ namespace Adenson.Configuration
 			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
 			if (result == null && useDefaultIfNull) result = ConnectionStrings.Default;
-			if (result == null) throw new ArgumentOutOfRangeException(key, String.Format("No connection String Found either for {0} or {1}", key, ConnectionStrings.DefaultKey));
+			if (result == null) throw new ConfigurationErrorsException(String.Format(Exceptions.ConnectionStringWithKeyArgNotFound, key, ConnectionStrings.DefaultKey));
 			return result;
 		}
 		/// <summary>

@@ -147,8 +147,8 @@
   <data name="ConfigurationFileNotFound" xml:space="preserve">
     <value>File {0} does not exist at the application startup folder.</value>
   </data>
-  <data name="ConnectionStringNotFound" xml:space="preserve">
-    <value>No connection string with specified key '{0}' could be found. Check to make sure you have '{1}' or '{2}' in your application startup folder and it contains the specified key. Alternatively, check to make sure you have a connection string section in your configuration file with the specified key. In case you are still using ConnectionStrings.xml, sorry, you will have to rename it to one of the two file names mentioned previously.</value>
+  <data name="ConnectionStringWithKeyArgNotFound" xml:space="preserve">
+    <value>No connection string with specified key '{0}' could be found. Check to make sure you have a connection string section in your configuration file with the specified key.</value>
   </data>
   <data name="CustomEncryptorMissingAttributes" xml:space="preserve">
     <value>Custom Encryptors need atleast a 'TypeName' attribute, and maybe 'AssemblyName' attribute.</value>
@@ -194,5 +194,8 @@
   </data>
   <data name="SqlImplWrongType" xml:space="preserve">
     <value>This is a {0} implementation, what are you doing passing in a non {0} object.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>

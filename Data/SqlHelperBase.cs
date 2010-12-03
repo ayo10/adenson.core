@@ -276,6 +276,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes and returns a new DataSet from specified stored procedure
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>a new DataSet object</returns>
@@ -283,6 +284,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes and returns a new DataSet from specified stored procedure using specified transaction
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="transaction">The transaction</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
@@ -323,6 +325,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and returns the number of rows affected.
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
@@ -330,6 +333,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text using specified transaction and returns the number of rows affected.
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="transaction">The transaction</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
@@ -338,6 +342,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and builds an System.Data.IDataReader.
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
@@ -345,6 +350,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
 		/// </summary>
+		/// <param name="type">The command type</param>
 		/// <param name="transaction">The transaction</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>

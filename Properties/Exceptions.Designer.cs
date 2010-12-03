@@ -151,11 +151,11 @@ namespace Adenson {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No connection string with specified key &apos;{0}&apos; could be found. Check to make sure you have &apos;{1}&apos; or &apos;{2}&apos; in your application startup folder and it contains the specified key. Alternatively, check to make sure you have a connection string section in your configuration file with the specified key. In case you are still using ConnectionStrings.xml, sorry, you will have to rename it to one of the two file names mentioned previously..
+        ///   Looks up a localized string similar to No connection string with specified key &apos;{0}&apos; could be found. Check to make sure you have a connection string section in your configuration file with the specified key..
         /// </summary>
-        internal static string ConnectionStringNotFound {
+        internal static string ConnectionStringWithKeyArgNotFound {
             get {
-                return ResourceManager.GetString("ConnectionStringNotFound", resourceCulture);
+                return ResourceManager.GetString("ConnectionStringWithKeyArgNotFound", resourceCulture);
             }
         }
         
@@ -291,6 +291,15 @@ namespace Adenson {
         internal static string SqlImplWrongType {
             get {
                 return ResourceManager.GetString("SqlImplWrongType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }

@@ -296,10 +296,13 @@ namespace Adenson
 		/// </summary>
 		/// <param name="type">The type from which a fullname will be derived, then, used as a Type key</param>
 		/// <param name="key">The key to use to find value</param>
+		/// <param name="arguments"></param>
 		/// <returns>The value if found, null otherwise</returns>
 		public static string GetString(Type type, string key, params object[] arguments)
 		{
-			return new StaticResource(type).GetString(key);
+			var result = new StaticResource(type).GetString(key);
+			if (arguments != null && arguments.Length > 0) result = string.Format(result, arguments);
+			return result;
 		}
 		/// <summary>
 		/// Gets the value with the specified key

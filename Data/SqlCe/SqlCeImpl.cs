@@ -46,6 +46,12 @@ namespace Adenson.Data.SqlCe
 			new SqlCeEngine(this.ConnectionString).Upgrade();
 		}
 
+		/// <summary>
+		/// Runs a query to determine if the specified column exists in the specified table
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <param name="columnName"></param>
+		/// <returns></returns>
 		public override bool CheckColumnExists(string tableName, string columnName)
 		{
 			if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");
@@ -57,6 +63,11 @@ namespace Adenson.Data.SqlCe
 			}
 			return result;
 		}
+		/// <summary>
+		/// Runs a query to determine if the specified table exists
+		/// </summary>
+		/// <param name="tableName"></param>
+		/// <returns></returns>
 		public override bool CheckTableExists(string tableName)
 		{
 			if (String.IsNullOrEmpty(tableName)) throw new ArgumentNullException("tableName");

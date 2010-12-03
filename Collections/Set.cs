@@ -45,6 +45,7 @@ namespace Adenson.Collections
 		/// Initializes a new instance that contains elements copied from the specified collection
 		/// </summary>
 		/// <param name="collection">The collection whose elements are copied to the new list.</param>
+		/// <param name="comparer"></param>
 		/// <exception cref="ArgumentNullException">collection is null or comparer is null.</exception>
 		public Set(IEnumerable<T> collection, IComparer<T> comparer) : base(collection)
 		{
