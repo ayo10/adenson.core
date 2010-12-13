@@ -168,15 +168,6 @@ namespace Adenson.Collections
 			}
 		}
 
-		internal void AddPropertyChangedEvent(PropertyChangedEventHandler value)
-		{
-			this.PropertyChanged += value;
-		}
-		internal void RemovePropertyChangedEvent(PropertyChangedEventHandler value)
-		{
-			this.PropertyChanged -= value;
-		}
-
 		private void OnCollectionChanging(CollectionChangingEventArgs<T> e)
 		{
 			if (this.CollectionChanging == null) return;

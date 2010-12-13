@@ -10,7 +10,7 @@ namespace Adenson.Collections
 	/// A read only but observable collection
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public sealed class ReadOnlyObservableCollection<T> : IEnumerable<T>, INotifyPropertyChanged
+	public sealed class ReadOnlyObservableCollection<T> : IEnumerable<T>, INotifyCollectionChanged
 	{
 		#region Variables
 		private ObservableCollection<T> BackingList = new ObservableCollection<T>();
@@ -47,12 +47,12 @@ namespace Adenson.Collections
 			get { return this.BackingList.Count; }
 		}
 		/// <summary>
-		/// Occurs when a property value changes.
+		/// Occurs when an item is added, removed, changed, moved, or the entire list is refreshed.
 		/// </summary>
-		public event PropertyChangedEventHandler PropertyChanged
+		public event NotifyCollectionChangedEventHandler CollectionChanged
 		{
-			add { this.BackingList.AddPropertyChangedEvent(value); }
-			remove { this.BackingList.RemovePropertyChangedEvent(value); }
+			add { this.BackingList.CollectionChanged += value; }
+			remove { this.BackingList.CollectionChanged -= value; }
 		}
 
 		#endregion
@@ -85,27 +85,6 @@ namespace Adenson.Collections
 		public IEnumerator<T> GetEnumerator()
 		{
 			return this.BackingList.GetEnumerator();
-		}
-
-		internal void Add(T item)
-		{
-			this.BackingList.Add(item);
-		}
-		internal void AddRange(IEnumerable<T> items)
-		{
-			foreach (T item in items) this.Add(item);
-		}
-		internal void Clear()
-		{
-			this.BackingList.Clear();
-		}
-		internal bool Remove(T item)
-		{
-			return this.BackingList.Remove(item);
-		}
-		internal void RemoveRange(IEnumerable<T> items)
-		{
-			foreach (T item in items) this.Remove(item);
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
