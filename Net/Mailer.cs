@@ -3,6 +3,7 @@ using System.Data;
 using System.Net.Mail;
 using System.Configuration;
 using System.Xml;
+using System.Linq;
 using Adenson.Log;
 using Adenson.Data;
 
@@ -125,15 +126,12 @@ namespace Adenson.Net
 
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			if (to.Length == 0) throw new ArgumentOutOfRangeException("to", Exceptions.EmailAddressInvalid);
+			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
+			if (to.Any(s => String.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);
-			foreach (string str in to)
-			{
-				if (String.IsNullOrEmpty(str)) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
-				mailMessage.To.Add(str);
-			}
+			foreach (string str in to) mailMessage.To.Add(str);
 			mailMessage.Subject = subject;
 			mailMessage.Body = message;
 			mailMessage.IsBodyHtml = isHtml;
