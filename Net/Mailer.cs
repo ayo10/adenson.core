@@ -20,13 +20,13 @@ namespace Adenson.Net
 		#region Methods
 
 		/// <summary>
-		/// Sends an email using MailMessage object
+		/// Sends an email using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="message">MailMessage Object to use</param>
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(MailMessage message)
 		{
-			return Mailer.Send(null, message, false);
+			return Mailer.Send(null, message, true);
 		}
 		/// <summary>
 		/// Sends an email using MailMessage object
@@ -36,37 +36,11 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(string smtpHost, MailMessage message)
 		{
-			return Send(smtpHost, message, false);
+			if (String.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			return Mailer.Send(smtpHost, message, false);
 		}
 		/// <summary>
-		/// Sends an email using MailMessage object
-		/// </summary>
-		/// <param name="smtpHost">The smtp host address to use</param>
-		/// <param name="message">MailMessage Object to use</param>
-		/// <param name="sendAsync">If to call SmtpClient.Send or SmtpClient.SendAsync</param>
-		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
-		public static bool Send(string smtpHost, MailMessage message, bool sendAsync)
-		{
-			SmtpClient smtp = new SmtpClient(smtpHost);
-			if (String.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
-			else smtp = new SmtpClient(smtpHost);
-			try
-			{
-				logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
-				if (sendAsync) smtp.SendAsync(message, null);
-				else smtp.Send(message);
-				logger.Debug("Send Success");
-				return true;
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-				logger.Debug("Failed sending mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
-				return false;
-			}
-		}
-		/// <summary>
-		/// Sends an email using passed variables
+		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="from">The from field</param>
 		/// <param name="to">The to field</param>
@@ -76,10 +50,10 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(string from, string to, string subject, string message, bool isHtml)
 		{
-			return Send(from, new string[] { to }, subject, message, isHtml);
+			return Mailer.Send(null, Mailer.ComposeMailMessage(from, new string[] { to }, subject, message, isHtml), false);
 		}
 		/// <summary>
-		/// Sends an email using passed variables
+		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="from">The from field</param>
 		/// <param name="to">The to fields</param>
@@ -89,18 +63,55 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			return Mailer.Send(ComposeMailMessage(from, to, subject, message, isHtml));
+			return Mailer.Send(null, Mailer.ComposeMailMessage(from, to, subject, message, isHtml), false);
 		}
 		/// <summary>
-		/// Sends email asynchronously, using MailMessage object
+		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
+		/// </summary>
+		/// <param name="from">The from field</param>
+		/// <param name="to">The to field</param>
+		/// <param name="subject">The email subject</param>
+		/// <param name="message">The email body</param>
+		/// <param name="isHtml">If email body is in HTML format, or not.</param>
+		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
+		public static bool Send(string smtpHost, string from, string to, string subject, string message, bool isHtml)
+		{
+			return Mailer.Send(smtpHost, Mailer.ComposeMailMessage(from, new string[] { to }, subject, message, isHtml), false);
+		}
+		/// <summary>
+		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
+		/// </summary>
+		/// <param name="from">The from field</param>
+		/// <param name="to">The to fields</param>
+		/// <param name="subject">The email subject</param>
+		/// <param name="message">The email body</param>
+		/// <param name="isHtml">If email body is in HTML format, or not.</param>
+		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
+		public static bool Send(string smtpHost, string from, string[] to, string subject, string message, bool isHtml)
+		{
+			return Mailer.Send(smtpHost, Mailer.ComposeMailMessage(from, to, subject, message, isHtml), false);
+		}
+		/// <summary>
+		/// Sends email asynchronously, using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="message">MailMessage Object to use</param>
-		public static bool SendAsync(MailMessage message)
+		public static void SendAsync(MailMessage message)
 		{
-			return Mailer.Send(null, message, true);
+			Mailer.Send(null, message, true);
 		}
 		/// <summary>
-		/// Sends email asynchronously, using passed variables
+		/// Sends an email asynchronously using MailMessage object
+		/// </summary>
+		/// <param name="smtpHost">The smtp host address to use</param>
+		/// <param name="message">MailMessage Object to use</param>
+		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
+		public static void SendAsync(string smtpHost, MailMessage message)
+		{
+			if (String.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			Mailer.Send(smtpHost, message, true);
+		}
+		/// <summary>
+		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="from">The from field</param>
 		/// <param name="to">The to field</param>
@@ -109,10 +120,10 @@ namespace Adenson.Net
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		public static void SendAsync(string from, string to, string subject, string message, bool isHtml)
 		{
-			SendAsync(from, new string[] { to }, subject, message, isHtml);
+			Mailer.Send(null, Mailer.ComposeMailMessage(from, new string[] { to }, subject, message, isHtml), true);
 		}
 		/// <summary>
-		/// Sends email asynchronously, using passed variables
+		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="from">The from field</param>
 		/// <param name="to">The to fields</param>
@@ -121,7 +132,33 @@ namespace Adenson.Net
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		public static void SendAsync(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			Mailer.SendAsync(ComposeMailMessage(from, to, subject, message, isHtml));
+			Mailer.Send(null, Mailer.ComposeMailMessage(from, to, subject, message, isHtml), true);
+		}
+		/// <summary>
+		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
+		/// </summary>
+		/// <param name="smtpHost">The smtp host address to use</param>
+		/// <param name="from">The from field</param>
+		/// <param name="to">The to field</param>
+		/// <param name="subject">The email subject</param>
+		/// <param name="message">The email body</param>
+		/// <param name="isHtml">If email body is in HTML format, or not.</param>
+		public static void SendAsync(string smtpHost, string from, string to, string subject, string message, bool isHtml)
+		{
+			Mailer.Send(smtpHost, Mailer.ComposeMailMessage(from, new string[] { to }, subject, message, isHtml), true);
+		}
+		/// <summary>
+		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
+		/// </summary>
+		/// <param name="smtpHost">The smtp host address to use</param>
+		/// <param name="from">The from field</param>
+		/// <param name="to">The to fields</param>
+		/// <param name="subject">The email subject</param>
+		/// <param name="message">The email body</param>
+		/// <param name="isHtml">If email body is in HTML format, or not.</param>
+		public static void SendAsync(string smtpHost, string from, string[] to, string subject, string message, bool isHtml)
+		{
+			Mailer.Send(smtpHost, Mailer.ComposeMailMessage(from, to, subject, message, isHtml), true);
 		}
 
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
@@ -137,6 +174,29 @@ namespace Adenson.Net
 			mailMessage.IsBodyHtml = isHtml;
 
 			return mailMessage;
+		}
+		private static bool Send(string smtpHost, MailMessage message, bool sendAsync)
+		{
+			if (message == null) throw new ArgumentNullException("message");
+
+			SmtpClient smtp = null;
+			if (String.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
+			else smtp = new SmtpClient(smtpHost);
+
+			try
+			{
+				logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
+				if (sendAsync) smtp.SendAsync(message, null);
+				else smtp.Send(message);
+				logger.Debug("Send Success");
+				return true;
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex);
+				logger.Debug("Failed sending mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
+				return false;
+			}
 		}
 
 		#endregion
