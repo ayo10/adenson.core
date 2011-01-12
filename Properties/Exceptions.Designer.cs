@@ -268,6 +268,15 @@ namespace Adenson {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Registry Key &quot;{0}&quot; could not be found..
+        /// </summary>
+        internal static string RegistryKeyArgNotFound {
+            get {
+                return ResourceManager.GetString("RegistryKeyArgNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The section is not of DictionarySectionHandler..
         /// </summary>
         internal static string SectionNotDictionarySection {
@@ -295,11 +304,20 @@ namespace Adenson {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; could not be loaded..
         /// </summary>
-        internal static string String1 {
+        internal static string TypeArgCouldNotBeLoaded {
             get {
-                return ResourceManager.GetString("String1", resourceCulture);
+                return ResourceManager.GetString("TypeArgCouldNotBeLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type expected must be &apos;{0}&apos;..
+        /// </summary>
+        internal static string TypeExpectedMustBeArg {
+            get {
+                return ResourceManager.GetString("TypeExpectedMustBeArg", resourceCulture);
             }
         }
     }
