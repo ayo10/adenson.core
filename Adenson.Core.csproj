@@ -76,6 +76,8 @@
     <Compile Include="Configuration\EncryptorSection.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
+    <Compile Include="Configuration\RegistrySettingsProvider.cs" />
+    <Compile Include="Configuration\SettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
     <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
     <Compile Include="Data\OleDb\OleDbParameterCache.cs" />

@@ -33,7 +33,8 @@ namespace Adenson.Configuration
 		{
 			try
 			{
-				return new Version(name);
+				var version = new Version(name);
+				return new Version(version.Major, version.Minor);
 			}
 			catch (ArgumentException)
 			{
@@ -58,21 +59,22 @@ namespace Adenson.Configuration
 			if (string.IsNullOrEmpty(str))
 			{
 				string path = isRoaming ? ConfigurationManagerInternalFactory.Instance.ExeRoamingConfigDirectory : ConfigurationManagerInternalFactory.Instance.ExeLocalConfigDirectory;
-				Version version = this.CreateVersion(ConfigurationManagerInternalFactory.Instance.ExeProductVersion);
+				var applicationDataPath = Environment.GetFolderPath(isRoaming ? Environment.SpecialFolder.ApplicationData : Environment.SpecialFolder.LocalApplicationData);
+				path = Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName);
+				Version exeProductVersion = this.CreateVersion(ConfigurationManagerInternalFactory.Instance.ExeProductVersion);
+				path = Path.Combine(path, exeProductVersion.ToString());
 				Version version2 = null;
 				DirectoryInfo info = null;
 				string str3 = null;
-				if (version == null)
-				{
-					return null;
-				}
+				if (exeProductVersion == null) return null;
+
 				DirectoryInfo parent = Directory.GetParent(path);
 				if (parent.Exists)
 				{
 					foreach (DirectoryInfo info3 in parent.GetDirectories())
 					{
 						Version version3 = this.CreateVersion(info3.Name);
-						if ((version3 != null) && (version3 < version))
+						if ((version3 != null) && (version3 < exeProductVersion))
 						{
 							if (version2 == null)
 							{
@@ -220,7 +222,7 @@ namespace Adenson.Configuration
 		}
 		private static bool IsRoamingSetting(SettingsProperty setting)
 		{
-			bool flag = !LocalFileSettingsProvider.IsClickOnceDeployed(AppDomain.CurrentDomain);
+			bool flag = !IsClickOnceDeployed(AppDomain.CurrentDomain);
 			bool flag2 = false;
 			if (flag)
 			{

@@ -186,6 +186,9 @@
   <data name="ReadOnlyInstance" xml:space="preserve">
     <value>This instance is read only.</value>
   </data>
+  <data name="RegistryKeyArgNotFound" xml:space="preserve">
+    <value>Registry Key "{0}" could not be found.</value>
+  </data>
   <data name="SectionNotDictionarySection" xml:space="preserve">
     <value>The section is not of DictionarySectionHandler.</value>
   </data>
@@ -195,7 +198,10 @@
   <data name="SqlImplWrongType" xml:space="preserve">
     <value>This is a {0} implementation, what are you doing passing in a non {0} object.</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
+  <data name="TypeArgCouldNotBeLoaded" xml:space="preserve">
+    <value>Type '{0}' could not be loaded.</value>
+  </data>
+  <data name="TypeExpectedMustBeArg" xml:space="preserve">
+    <value>Type expected must be '{0}'.</value>
   </data>
 </root>
