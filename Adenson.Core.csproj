@@ -67,6 +67,7 @@
     <Compile Include="Collections\UnsyncedList.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
     <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigFailedEventArgs.cs" />
     <Compile Include="Configuration\ConfigSectionHelper.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
-    <Compile Include="Configuration\SettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
     <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
     <Compile Include="Data\OleDb\OleDbParameterCache.cs" />

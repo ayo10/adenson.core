@@ -3,12 +3,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Win32;
 
 namespace Adenson.Configuration
 {
-	public sealed class RegistrySettingsProvider : SettingsProvider, IApplicationSettingsProvider
+	public sealed class RegistrySettingsProvider : ApplicationSettingsProvider, IApplicationSettingsProvider
 	{
 		#region Variables
 		private string previousVersionKeyName;
@@ -37,15 +36,15 @@ namespace Adenson.Configuration
 		#endregion
 		#region Methods
 
-		public SettingsPropertyValue GetPreviousVersion(SettingsContext context, SettingsProperty property)
+		public override SettingsPropertyValue GetPreviousVersion(SettingsContext context, SettingsProperty property)
 		{
 			throw new NotImplementedException();
 		}
-		public void Reset(SettingsContext context)
+		public override void Reset(SettingsContext context)
 		{
 			throw new NotImplementedException();
 		}
-		public void Upgrade(SettingsContext context, SettingsPropertyCollection properties)
+		public override void Upgrade(SettingsContext context, SettingsPropertyCollection properties)
 		{
 			SettingsPropertyValueCollection spvc = this.GetPreviousSettings(context, properties);
 			if (spvc.Count > 0) this.SetPropertyValues(context, spvc);
