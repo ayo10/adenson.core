@@ -461,7 +461,7 @@ namespace Adenson.Log
 		}
 		internal static bool SaveToFile()
 		{
-			if (String.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
+			if (Util.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
 
 			try
 			{

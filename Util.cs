@@ -15,7 +15,7 @@ namespace Adenson
 		/// <returns></returns>
 		public static object CreateInstance(string typeString)
 		{
-			if (String.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
+			if (Util.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
 			Type type = Util.GetType(typeString);
 			if (type == null) throw new TypeLoadException(String.Format(Exceptions.TypeArgCouldNotBeLoaded, typeString));
 			return Activator.CreateInstance(type);
@@ -28,7 +28,7 @@ namespace Adenson
 		/// <returns></returns>
 		public static T CreateInstance<T>(string typeString)
 		{
-			if (String.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
+			if (Util.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
 			return (T)Util.CreateInstance(typeString);
 		}
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Adenson
 		/// <returns>The type with the specified name.</returns>
 		public static Type GetType(string typeString)
 		{
-			if (String.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
+			if (Util.IsNullOrWhiteSpace(typeString)) throw new ArgumentNullException("typeString");
 
 			Type type = Type.GetType(typeString, false, true);
 			if (type == null)
@@ -91,7 +91,7 @@ namespace Adenson
 		/// <returns>true if conversion happened correctly, false otherwise</returns>
 		public static bool TryConvert(string value, out object result)
 		{
-			if (String.IsNullOrWhiteSpace(value)) throw new ArgumentNullException("value");
+			if (Util.IsNullOrWhiteSpace(value)) throw new ArgumentNullException("value");
 			string[] splits = value.Split(',');
 			if (splits.Length != 2) throw new ArgumentException(String.Format(Exceptions.TypeExpectedMustBeArg, "[Type Full Name], Value"));
 			Type type = Util.GetType(splits[1]);
@@ -153,6 +153,20 @@ namespace Adenson
 			{
 				return false;
 			}
+		}
+		/// <summary>
+		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.
+		/// </summary>
+		/// <remarks>For .NET 4, simply calls String.IsNullOrWhiteSpace</remarks>
+		/// <param name="value">The string to test.</param>
+		/// <returns>true if the value parameter is null or System.String.Empty, or if value consists exclusively of white-space characters.</returns>
+		public static bool IsNullOrWhiteSpace(string value)
+		{
+			#if NET35
+			return String.IsNullOrEmpty(value == null ? null : value.Trim());
+			#else
+			return String.IsNullOrWhiteSpace(value);
+			#endif
 		}
 	}
 }

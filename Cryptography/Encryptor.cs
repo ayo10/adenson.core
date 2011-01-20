@@ -23,7 +23,7 @@ namespace Adenson.Cryptography
 			{
 				foreach (EncryptorElement elem in section.Encryptors)
 				{
-					if (elem.EncryptorType == EncryptorType.Custom && String.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
+					if (elem.EncryptorType == EncryptorType.Custom && Util.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
 					encryptors.Add(elem.Name, elem.GetEncryptor());
 				}
 			}
@@ -59,7 +59,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Decrypt(string key, string toDecrypt)
 		{
-			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
+			if (Util.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
 			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
 
@@ -84,7 +84,7 @@ namespace Adenson.Cryptography
 		/// <returns></returns>
 		public static string Encrypt(string key, string toEncrypt)
 		{
-			if (String.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
+			if (Util.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
 			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
 			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
 			return encryptors[key].Encrypt(toEncrypt);

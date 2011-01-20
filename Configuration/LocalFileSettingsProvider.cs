@@ -178,10 +178,14 @@ namespace Adenson.Configuration
 			if (oldChild != null) element.RemoveChild(oldChild);
 			return element;
 		}
-		private System.Configuration.Configuration GetConfiguration(SettingsContext context, bool create = false)
+		private System.Configuration.Configuration GetConfiguration(SettingsContext context)
+		{
+			return this.GetConfiguration(context, false);
+		}
+		private System.Configuration.Configuration GetConfiguration(SettingsContext context, bool create)
 		{
 			var applicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			string configFilePath =  Path.Combine(Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName));
+			string configFilePath = Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName);
 			if (!this.IgnoreVersion) configFilePath = Path.Combine(configFilePath, (this.Version.Major + "." + this.Version.Minor));
 			ExeConfigurationFileMap filemap = new ExeConfigurationFileMap();
 			filemap.ExeConfigFilename = Path.Combine(configFilePath, "user.config");
