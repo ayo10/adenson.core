@@ -36,7 +36,7 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(string smtpHost, MailMessage message)
 		{
-			if (String.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (Util.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
 			return Mailer.Send(smtpHost, message, false);
 		}
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static void SendAsync(string smtpHost, MailMessage message)
 		{
-			if (String.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (Util.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
 			Mailer.Send(smtpHost, message, true);
 		}
 		/// <summary>
@@ -164,7 +164,7 @@ namespace Adenson.Net
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
-			if (to.Any(s => String.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
+			if (to.Any(s => Util.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);
@@ -180,7 +180,7 @@ namespace Adenson.Net
 			if (message == null) throw new ArgumentNullException("message");
 
 			SmtpClient smtp = null;
-			if (String.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
+			if (Util.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
 			else smtp = new SmtpClient(smtpHost);
 
 			try

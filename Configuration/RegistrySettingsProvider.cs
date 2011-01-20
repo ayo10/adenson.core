@@ -138,7 +138,7 @@ namespace Adenson.Configuration
 				else if (names.Length > 0) previousVersionKeyName = names[names.Length - 1];
 				if (previousVersionKeyName == this.SettingKey) previousVersionKeyName = null;
 
-				if (!String.IsNullOrWhiteSpace(previousVersionKeyName))
+				if (!Util.IsNullOrWhiteSpace(previousVersionKeyName))
 				{
 					RegistrySettingsProvider rsp = new RegistrySettingsProvider();
 					rsp.Version = new Version(previousVersionKeyName);

@@ -10,6 +10,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("\x00a9 Adenson.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.8.5.*")]
+[assembly: AssemblyVersion("3.8.6.*")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]

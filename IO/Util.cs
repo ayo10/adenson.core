@@ -55,7 +55,7 @@ namespace Adenson.IO
 		/// <returns></returns>
 		public static string CreateFile(string filePath, byte[] buffer, bool overwrite)
 		{
-			if (String.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
+			if (Adenson.Util.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
 			if (buffer == null) return null;
 			if (buffer.Length == 0) return null;
 
@@ -78,7 +78,7 @@ namespace Adenson.IO
 		/// <returns></returns>
 		public static string CreateMD5HashedFile(string directory, byte[] buffer, bool overwrite)
 		{
-			if (String.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
+			if (Adenson.Util.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
 			if (buffer == null) return null;
 			if (buffer.Length == 0) return null;
 
@@ -94,7 +94,7 @@ namespace Adenson.IO
 		/// <exception cref="ArgumentNullException">if directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
 		{
-			if (String.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
+			if (Adenson.Util.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
 			List<string> filesToProcess = new List<string>();
 			foreach (string ext in extensions)
 			{
@@ -110,8 +110,17 @@ namespace Adenson.IO
 		/// <exception cref="ArgumentNullException">if fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
 		{
-			if (String.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException("fullPath");
+			if (Adenson.Util.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException("fullPath");
 			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath);//Prob a directory
+		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
+		public static string FixFilePath(string path)
+		{
+			return Util.FixFilePath(path, null);
 		}
 		/// <summary>
 		/// Fixes path by removing characters that are invalid
@@ -120,9 +129,9 @@ namespace Adenson.IO
 		/// <param name="invalidFileNameChars"></param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentNullException">if path is null or empty or is just white space</exception>
-		public static string FixFilePath(string path, char[] invalidFileNameChars = null)
+		public static string FixFilePath(string path, char[] invalidFileNameChars)
 		{
-			if (String.IsNullOrWhiteSpace(path)) throw new ArgumentNullException("path");
+			if (Adenson.Util.IsNullOrWhiteSpace(path)) throw new ArgumentNullException("path");
 
 			if (invalidFileNameChars == null) invalidFileNameChars = Util.fileInvalidCharsReplacements.Keys.ToArray();
 			else invalidFileNameChars = invalidFileNameChars.Union(Util.fileInvalidCharsReplacements.Keys).ToArray();
@@ -148,7 +157,7 @@ namespace Adenson.IO
 		/// <exception cref="FileNotFoundException">if the specified filePath does not exist</exception>
 		public static byte[] ReadStream(string filePath)
 		{
-			if (String.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
+			if (Adenson.Util.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
 			if (!File.Exists(filePath)) throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
 			return Util.ReadStream(File.Open(filePath, FileMode.Open)); 
 		}
