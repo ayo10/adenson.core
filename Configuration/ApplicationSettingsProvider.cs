@@ -73,6 +73,15 @@ namespace Adenson.Configuration
 		/// <param name="properties">A SettingsPropertyCollection containing the settings property group whose values are to be retrieved.</param>
 		public abstract void Upgrade(SettingsContext context, SettingsPropertyCollection properties);
 
+		protected static string GetSectionName(SettingsContext context)
+		{
+			string groupName = (string)context["GroupName"];
+			string settingsKey = (string)context["SettingsKey"];
+			string name = groupName;
+			if (!String.IsNullOrEmpty(settingsKey)) name = String.Format("{0}.{1}", new object[] { name, settingsKey });
+			return System.Xml.XmlConvert.EncodeLocalName(name);
+		}
+
 		#endregion
 	}
 }

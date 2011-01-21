@@ -41,34 +41,14 @@
  </Rules>
  <FxCopReport Version="10.0">
   <Namespaces>
-   <Namespace Name="Adenson.Collections">
-    <Messages>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
-      <Issue Name="Namespace">
-       <Item>Adenson</Item>
-       <Item>Adenson.Collections</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
-   <Namespace Name="Adenson.Configuration">
-    <Messages>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
-      <Issue Name="Namespace">
-       <Item>Adenson</Item>
-       <Item>Adenson.Configuration</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
    <Namespace Name="Adenson.Cryptography">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Cryptography</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Cryptography</Item>
@@ -78,12 +58,12 @@
    </Namespace>
    <Namespace Name="Adenson.Data">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Data</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Data</Item>
@@ -93,12 +73,12 @@
    </Namespace>
    <Namespace Name="Adenson.Data.Odbc">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Data.Odbc</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Data.Odbc</Item>
@@ -108,19 +88,19 @@
    </Namespace>
    <Namespace Name="Adenson.Data.OleDb">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Data.OleDb</Item>
       </Issue>
      </Message>
-     <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+     <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Db</Item>
        <Item>Adenson.Data.OleDb</Item>
        <Item>DB</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Data.OleDb</Item>
@@ -130,19 +110,19 @@
    </Namespace>
    <Namespace Name="Adenson.Data.SqlCe">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Data.SqlCe</Item>
       </Issue>
      </Message>
-     <Message Id="Ce" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+     <Message Id="Ce" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Ce</Item>
        <Item>Adenson.Data.SqlCe</Item>
        <Item>CE</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Data.SqlCe</Item>
@@ -152,12 +132,12 @@
    </Namespace>
    <Namespace Name="Adenson.Data.SqlClient">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Data.SqlClient</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Data.SqlClient</Item>
@@ -167,12 +147,12 @@
    </Namespace>
    <Namespace Name="Adenson.IO">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.IO</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.IO</Item>
@@ -182,12 +162,12 @@
    </Namespace>
    <Namespace Name="Adenson.Log">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Log</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Log</Item>
@@ -197,12 +177,12 @@
    </Namespace>
    <Namespace Name="Adenson.Net">
     <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2010-10-19 17:12:16Z">
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2011-01-20 21:56:56Z">
       <Issue>
        <Item>Adenson.Net</Item>
       </Issue>
      </Message>
-     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+     <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 21:56:56Z">
       <Issue Name="Namespace">
        <Item>Adenson</Item>
        <Item>Adenson.Net</Item>
@@ -216,18 +196,13 @@
     <Modules>
      <Module Name="adenson.core.dll">
       <Messages>
-       <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+       <Message Id="Adenson" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
         <Issue Name="Assembly">
          <Item>Adenson</Item>
          <Item>'Adenson.Core.dll'</Item>
         </Issue>
        </Message>
-       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2010-10-19 17:12:16Z">
-        <Issue Name="NoAttribute" Level="CriticalError">
-         <Item>'Adenson.Core.dll'</Item>
-        </Issue>
-       </Message>
-       <Message TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824" Created="2010-10-19 17:12:16Z">
+       <Message TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824" Created="2011-01-20 22:04:56Z">
         <Issue>
          <Item>'Adenson.Core.dll'</Item>
         </Issue>
@@ -240,7 +215,7 @@
           <Members>
            <Member Name="#ContainsKey`1(System.Collections.Generic.Dictionary`2&lt;System.String,!!0&gt;,System.String,System.StringComparison)">
             <Messages>
-             <Message Id="comparism" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+             <Message Id="comparism" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
               <Issue Name="MemberParameter">
                <Item>'Extensions.ContainsKey&lt;T&gt;(this Dictionary&lt;string, T&gt;, string, StringComparison)'</Item>
                <Item>comparism</Item>
@@ -251,9 +226,22 @@
            </Member>
            <Member Name="#Format(System.String,System.Object[])">
             <Messages>
-             <Message Id="0#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2010-10-19 17:12:16Z">
+             <Message Id="0#" TypeName="ParameterNamesShouldNotMatchMemberNames" Category="Microsoft.Naming" CheckId="CA1719" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'format'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ResourceData">
+          <Members>
+           <Member Name="#MimeType">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-01-20 22:04:56Z">
+              <Issue>
+               <Item>'ResourceData.MimeType'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -264,32 +252,22 @@
           <Members>
            <Member Name="#.cctor()">
             <Messages>
-             <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
+             <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2011-01-20 22:04:56Z" FixCategory="NonBreaking">
               <Issue Name="NoAllowedExceptions" Level="Error">
                <Item>'StaticResource.StaticResource()'</Item>
                <Item>'InvalidOperationException'</Item>
               </Issue>
              </Message>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'StaticResource'</Item>
               </Issue>
              </Message>
             </Messages>
            </Member>
-           <Member Name="#GetString(System.Type,System.String,System.Object[])">
-            <Messages>
-             <Message Id="arguments" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2010-10-19 17:12:16Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'arguments'</Item>
-               <Item>'StaticResource.GetString(Type, string, params object[])'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#Type">
             <Messages>
-             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2011-01-20 22:04:56Z">
               <Issue Name="BaseType">
                <Item>'StaticResource.Type'</Item>
                <Item>'object.GetType()'</Item>
@@ -301,13 +279,13 @@
          </Type>
          <Type Name="Util">
           <Messages>
-           <Message Id="Util" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Util" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Util</Item>
              <Item>'Util'</Item>
             </Issue>
            </Message>
-           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2011-01-20 22:04:56Z">
             <Issue Name="System">
              <Item>'Util'</Item>
              <Item>System.Web.Util</Item>
@@ -315,9 +293,31 @@
            </Message>
           </Messages>
           <Members>
+           <Member Name="#CreateInstance(System.String)">
+            <Messages>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'Util.CreateInstance(string)'</Item>
+               <Item>String</Item>
+               <Item>'typeString'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateInstance`1(System.String)">
+            <Messages>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'Util.CreateInstance&lt;T&gt;(string)'</Item>
+               <Item>String</Item>
+               <Item>'typeString'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#GetBytes(System.String)">
             <Messages>
-             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2010-10-19 17:12:16Z">
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
               <Issue Name="LanguageIndependentMemberParameter">
                <Item>'Util.GetBytes(string)'</Item>
                <Item>String</Item>
@@ -326,358 +326,48 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#GetType(System.String)">
+            <Messages>
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
+              <Issue Name="LanguageIndependentMemberParameter">
+               <Item>'Util.GetType(string)'</Item>
+               <Item>String</Item>
+               <Item>'typeString'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TryConvert(System.Object,System.Type,System.Object&amp;)">
+            <Messages>
+             <Message TypeName="UseGenericsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1007" Created="2011-01-20 22:04:56Z">
+              <Issue>
+               <Item>'Util.TryConvert(object, Type, out object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#TryConvert(System.String,System.Object&amp;)">
+            <Messages>
+             <Message TypeName="UseGenericsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1007" Created="2011-01-20 22:04:56Z">
+              <Issue>
+               <Item>'Util.TryConvert(string, out object)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#TryGetBytes(System.String,System.Byte[]&amp;)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util.TryGetBytes(string, out byte[])'</Item>
                <Item>'object'</Item>
               </Issue>
              </Message>
-             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2010-10-19 17:12:16Z">
+             <Message Id="string" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
               <Issue Name="LanguageIndependentMemberParameter">
                <Item>'Util.TryGetBytes(string, out byte[])'</Item>
                <Item>String</Item>
                <Item>'hexString'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="Adenson.Collections">
-        <Types>
-         <Type Name="Hashtable`2">
-          <Messages>
-           <Message Id="Tk" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>Tk</Item>
-             <Item>'Tk'</Item>
-             <Item>TK</Item>
-            </Issue>
-           </Message>
-           <Message Id="Tv" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>Tv</Item>
-             <Item>'Tv'</Item>
-             <Item>TV</Item>
-            </Issue>
-           </Message>
-           <Message Id="Tk" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>Tk</Item>
-             <Item>'Tk'</Item>
-            </Issue>
-           </Message>
-           <Message Id="T" TypeName="IdentifiersShouldHaveCorrectPrefix" Category="Microsoft.Naming" CheckId="CA1715" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>'Tk'</Item>
-            </Issue>
-            <Issue Name="TypeTypeParameter">
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>'Tv'</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-10-21 17:15:19Z">
-            <Issue>
-             <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-             <Item>Dictionary</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;System.Collections.Generic.KeyValuePair`2&lt;!0,!1&gt;&gt;.Contains(System.Collections.Generic.KeyValuePair`2&lt;!0,!1&gt;)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-               <Item>'ICollection&lt;KeyValuePair&lt;Tk, Tv&gt;&gt;.Contains(KeyValuePair&lt;Tk, Tv&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#System.Collections.Generic.ICollection`1&lt;System.Collections.Generic.KeyValuePair`2&lt;!0,!1&gt;&gt;.CopyTo(System.Collections.Generic.KeyValuePair`2&lt;!0,!1&gt;[],System.Int32)">
-            <Messages>
-             <Message TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Hashtable&lt;Tk, Tv&gt;'</Item>
-               <Item>'ICollection&lt;KeyValuePair&lt;Tk, Tv&gt;&gt;.CopyTo(KeyValuePair&lt;Tk, Tv&gt;[], int)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="HashtableChangedEventArgs`1">
-          <Messages>
-           <Message Id="Tk" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'HashtableChangedEventArgs&lt;Tk&gt;'</Item>
-             <Item>Tk</Item>
-             <Item>'Tk'</Item>
-             <Item>TK</Item>
-            </Issue>
-           </Message>
-           <Message Id="Tk" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'HashtableChangedEventArgs&lt;Tk&gt;'</Item>
-             <Item>Tk</Item>
-             <Item>'Tk'</Item>
-            </Issue>
-           </Message>
-           <Message Id="T" TypeName="IdentifiersShouldHaveCorrectPrefix" Category="Microsoft.Naming" CheckId="CA1715" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-            <Issue Name="TypeTypeParameter">
-             <Item>'HashtableChangedEventArgs&lt;Tk&gt;'</Item>
-             <Item>'Tk'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#Action">
-            <Messages>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'HashtableChangedEventArgs&lt;Tk&gt;.Action'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Key">
-            <Messages>
-             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'HashtableChangedEventArgs&lt;Tk&gt;.Key'</Item>
-               <Item>'Tk'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'HashtableChangedEventArgs&lt;Tk&gt;.Key'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ReadOnlyList`1">
-          <Messages>
-           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'ReadOnlyList&lt;T&gt;'</Item>
-             <Item>Collection</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#InnerList">
-            <Messages>
-             <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'List&lt;T&gt;'</Item>
-               <Item>'ReadOnlyList&lt;T&gt;.InnerList'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="Set`1">
-          <Messages>
-           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'Set&lt;T&gt;'</Item>
-             <Item>Collection</Item>
-            </Issue>
-           </Message>
-           <Message Id="Set" TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716" Created="2010-10-19 17:12:16Z">
-            <Issue Name="Type">
-             <Item>'Set&lt;T&gt;'</Item>
-             <Item>Set</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#Diff(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Diff(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Diff(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IComparer`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Diff(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, IComparer&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Intersect(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Intersect(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Intersect(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IComparer`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Intersect(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, IComparer&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_BitwiseAnd(Adenson.Collections.Set`1&lt;!0&gt;,Adenson.Collections.Set`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>BitwiseAnd</Item>
-               <Item>'Set&lt;T&gt;.operator &amp;(Set&lt;T&gt;, Set&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_BitwiseOr(Adenson.Collections.Set`1&lt;!0&gt;,Adenson.Collections.Set`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>BitwiseOr</Item>
-               <Item>'Set&lt;T&gt;.operator |(Set&lt;T&gt;, Set&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_ExclusiveOr(Adenson.Collections.Set`1&lt;!0&gt;,Adenson.Collections.Set`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>Xor</Item>
-               <Item>'Set&lt;T&gt;.operator ^(Set&lt;T&gt;, Set&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#op_Subtraction(Adenson.Collections.Set`1&lt;!0&gt;,Adenson.Collections.Set`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>Subtract</Item>
-               <Item>'Set&lt;T&gt;.operator -(Set&lt;T&gt;, Set&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;'</Item>
-               <Item>'Set&lt;T&gt;.operator -(Set&lt;T&gt;, Set&lt;T&gt;)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Union(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Union(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#Union(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IComparer`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.Union(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, IComparer&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#XOr(System.Collections.Generic.IEnumerable`1&lt;!0&gt;)">
-            <Messages>
-             <Message Id="XOr" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-10-19 17:12:16Z">
-              <Issue Name="MemberShouldBeDiscreteTerm">
-               <Item>XOr</Item>
-               <Item>'Set&lt;T&gt;.XOr(IEnumerable&lt;T&gt;)'</Item>
-               <Item>Xor</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#XOr(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;)">
-            <Messages>
-             <Message Id="XOr" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-10-19 17:12:16Z">
-              <Issue Name="MemberShouldBeDiscreteTerm">
-               <Item>XOr</Item>
-               <Item>'Set&lt;T&gt;.XOr(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;)'</Item>
-               <Item>Xor</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.XOr(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#XOr(System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IEnumerable`1&lt;!0&gt;,System.Collections.Generic.IComparer`1&lt;!0&gt;)">
-            <Messages>
-             <Message Id="XOr" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-10-19 17:12:16Z">
-              <Issue Name="MemberShouldBeDiscreteTerm">
-               <Item>XOr</Item>
-               <Item>'Set&lt;T&gt;.XOr(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, IComparer&lt;T&gt;)'</Item>
-               <Item>Xor</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Set&lt;T&gt;.XOr(IEnumerable&lt;T&gt;, IEnumerable&lt;T&gt;, IComparer&lt;T&gt;)'</Item>
-               <Item>'Set&lt;T&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="UnsyncedList`1">
-          <Messages>
-           <Message Id="Unsynced" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
-            <Issue Name="Type">
-             <Item>Unsynced</Item>
-             <Item>'UnsyncedList&lt;T&gt;'</Item>
-            </Issue>
-           </Message>
-           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'UnsyncedList&lt;T&gt;'</Item>
-             <Item>Collection</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#FindAll(System.Predicate`1&lt;!0&gt;)">
-            <Messages>
-             <Message TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'List&lt;T&gt;'</Item>
-               <Item>'UnsyncedList&lt;T&gt;.FindAll(Predicate&lt;T&gt;)'</Item>
               </Issue>
              </Message>
             </Messages>
@@ -688,16 +378,15 @@
        </Namespace>
        <Namespace Name="Adenson.Configuration">
         <Types>
-         <Type Name="Config">
+         <Type Name="RegistrySettingsProvider">
           <Members>
-           <Member Name="#LogSettings">
+           <Member Name="#SettingKey">
             <Accessors>
-             <Accessor Name="#get_LogSettings()">
+             <Accessor Name="#set_SettingKey(System.String)">
               <Messages>
-               <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+               <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
                 <Issue>
-                 <Item>'Config.LogSettings.get()'</Item>
-                 <Item>'object'</Item>
+                 <Item>'RegistrySettingsProvider.SettingKey.set(string)'</Item>
                 </Issue>
                </Message>
               </Messages>
@@ -705,113 +394,6 @@
             </Accessors>
            </Member>
           </Members>
-         </Type>
-         <Type Name="ConfigFailedEventArgs">
-          <Members>
-           <Member Name="#Exception">
-            <Messages>
-             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'ConfigFailedEventArgs.Exception'</Item>
-               <Item>'Exception'</Item>
-              </Issue>
-             </Message>
-             <Message TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'ConfigFailedEventArgs.Exception'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="ConnectionStrings">
-          <Members>
-           <Member Name="#TryGet(System.String,System.Boolean,System.Configuration.ConnectionStringSettings&amp;)">
-            <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'ConnectionStrings.TryGet(string, bool, out ConnectionStringSettings)'</Item>
-               <Item>'object'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="EncryptorElement">
-          <Members>
-           <Member Name="#Split(System.String)">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'EncryptorElement.Split(string)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="LocalFileSettingsProvider">
-          <Messages>
-           <Message TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'LocalFileSettingsProvider'</Item>
-             <Item>'LocalFileSettingsProvider', 'SettingsProvider', 'ProviderBase'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-         </Type>
-         <Type Name="LoggerSettings">
-          <Members>
-           <Member Name="#SeverityActual">
-            <Accessors>
-             <Accessor Name="#get_SeverityActual()">
-              <Messages>
-               <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-21 17:15:19Z">
-                <Issue>
-                 <Item>'LoggerSettings.SeverityActual.get()'</Item>
-                 <Item>'object'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-           <Member Name="#Type">
-            <Messages>
-             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2010-10-21 17:15:19Z">
-              <Issue Name="BaseType">
-               <Item>'LoggerSettings.Type'</Item>
-               <Item>'object.GetType()'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#TypeActual">
-            <Accessors>
-             <Accessor Name="#get_TypeActual()">
-              <Messages>
-               <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
-                <Issue>
-                 <Item>'LoggerSettings.TypeActual.get()'</Item>
-                 <Item>'object'</Item>
-                </Issue>
-               </Message>
-              </Messages>
-             </Accessor>
-            </Accessors>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="LoggerSettings+EmailInfo">
-          <Messages>
-           <Message TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034" Created="2010-10-21 17:15:19Z">
-            <Issue>
-             <Item>'LoggerSettings.EmailInfo'</Item>
-            </Issue>
-           </Message>
-          </Messages>
          </Type>
         </Types>
        </Namespace>
@@ -819,12 +401,7 @@
         <Types>
          <Type Name="BaseEncryptor">
           <Messages>
-           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'BaseEncryptor'</Item>
-            </Issue>
-           </Message>
-           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Encryptor</Item>
              <Item>'BaseEncryptor'</Item>
@@ -834,13 +411,13 @@
           <Members>
            <Member Name="#CreateDecryptor()">
             <Messages>
-             <Message Id="Decryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+             <Message Id="Decryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Decryptor</Item>
                <Item>'BaseEncryptor.CreateDecryptor()'</Item>
               </Issue>
              </Message>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'BaseEncryptor.CreateDecryptor()'</Item>
                <Item>this.Algorithm</Item>
@@ -852,13 +429,13 @@
            </Member>
            <Member Name="#CreateEncryptor()">
             <Messages>
-             <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+             <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Encryptor</Item>
                <Item>'BaseEncryptor.CreateEncryptor()'</Item>
               </Issue>
              </Message>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'BaseEncryptor.CreateEncryptor()'</Item>
                <Item>this.Algorithm</Item>
@@ -872,7 +449,7 @@
          </Type>
          <Type Name="Encryptor">
           <Messages>
-           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Encryptor</Item>
              <Item>'Encryptor'</Item>
@@ -882,13 +459,13 @@
           <Members>
            <Member Name="#.cctor()">
             <Messages>
-             <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
+             <Message TypeName="DoNotRaiseExceptionsInUnexpectedLocations" Category="Microsoft.Design" CheckId="CA1065" Created="2011-01-20 22:04:56Z" FixCategory="NonBreaking">
               <Issue Name="NoAllowedExceptions" Level="Error">
                <Item>'Encryptor.Encryptor()'</Item>
                <Item>'InvalidOperationException'</Item>
               </Issue>
              </Message>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Encryptor'</Item>
               </Issue>
@@ -897,13 +474,13 @@
            </Member>
            <Member Name="#TryDecrypt(System.String,System.String&amp;)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Encryptor.TryDecrypt(string, out string)'</Item>
                <Item>'Exception'</Item>
               </Issue>
              </Message>
-             <Message Id="descrypted" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+             <Message Id="descrypted" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
               <Issue Name="MemberParameter">
                <Item>'Encryptor.TryDecrypt(string, out string)'</Item>
                <Item>descrypted</Item>
@@ -914,7 +491,7 @@
            </Member>
            <Member Name="#TryEncrypt(System.String,System.String&amp;)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Encryptor.TryEncrypt(string, out string)'</Item>
                <Item>'Exception'</Item>
@@ -926,18 +503,18 @@
          </Type>
          <Type Name="EncryptorType">
           <Messages>
-           <Message TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028" Created="2011-01-20 22:04:56Z">
             <Issue Name="NotInt32">
              <Item>'EncryptorType'</Item>
              <Item>'byte'</Item>
             </Issue>
            </Message>
-           <Message TypeName="EnumsShouldHaveZeroValue" Category="Microsoft.Design" CheckId="CA1008" Created="2010-10-19 17:12:16Z" FixCategory="NonBreaking">
+           <Message TypeName="EnumsShouldHaveZeroValue" Category="Microsoft.Design" CheckId="CA1008" Created="2011-01-20 22:04:56Z" FixCategory="NonBreaking">
             <Issue Name="NotFlagsNoZeroValue">
              <Item>'EncryptorType'</Item>
             </Issue>
            </Message>
-           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Encryptor" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Encryptor</Item>
              <Item>'EncryptorType'</Item>
@@ -947,7 +524,7 @@
           <Members>
            <Member Name="#AES">
             <Messages>
-             <Message Id="AES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="AES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>AES</Item>
                <Item>'EncryptorType.AES'</Item>
@@ -958,7 +535,7 @@
            </Member>
            <Member Name="#DES">
             <Messages>
-             <Message Id="DES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="DES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>DES</Item>
                <Item>'EncryptorType.DES'</Item>
@@ -969,7 +546,7 @@
            </Member>
            <Member Name="#TripleDES">
             <Messages>
-             <Message Id="DES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="DES" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>DES</Item>
                <Item>'EncryptorType.TripleDES'</Item>
@@ -982,7 +559,7 @@
          </Type>
          <Type Name="KeyFormat">
           <Messages>
-           <Message TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="EnumStorageShouldBeInt32" Category="Microsoft.Design" CheckId="CA1028" Created="2011-01-20 22:04:56Z">
             <Issue Name="NotInt32">
              <Item>'KeyFormat'</Item>
              <Item>'byte'</Item>
@@ -996,7 +573,7 @@
         <Types>
          <Type Name="Parameter">
           <Messages>
-           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="OverrideEqualsAndOperatorEqualsOnValueTypes" Category="Microsoft.Performance" CheckId="CA1815" Created="2011-01-20 22:04:56Z">
             <Issue Name="op_Equality">
              <Item>'Parameter'</Item>
             </Issue>
@@ -1005,7 +582,7 @@
           <Members>
            <Member Name="#Equals(System.Object)">
             <Messages>
-             <Message TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Parameter'</Item>
               </Issue>
@@ -1014,14 +591,14 @@
            </Member>
            <Member Name="#op_Implicit(Adenson.Data.Parameter):System.Data.SqlClient.SqlParameter">
             <Messages>
-             <Message Id="param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+             <Message Id="param" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
               <Issue Name="MemberParameter">
                <Item>'Parameter.implicit operator SqlParameter(Parameter)'</Item>
                <Item>param</Item>
                <Item>'param'</Item>
               </Issue>
              </Message>
-             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225" Created="2011-01-20 22:04:56Z">
               <Issue Name="Multiple">
                <Item>ToXXX</Item>
                <Item>FromXXX</Item>
@@ -1033,17 +610,10 @@
           </Members>
          </Type>
          <Type Name="SqlHelperBase">
-          <Messages>
-           <Message TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012" Created="2010-10-19 17:12:16Z">
-            <Issue>
-             <Item>'SqlHelperBase'</Item>
-            </Issue>
-           </Message>
-          </Messages>
           <Members>
            <Member Name="#.ctor(System.Configuration.ConnectionStringSettings)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'SqlHelperBase.SqlHelperBase(ConnectionStringSettings)'</Item>
                <Item>connectionString.ConnectionString</Item>
@@ -1055,13 +625,13 @@
            </Member>
            <Member Name="#Dispose()">
             <Messages>
-             <Message TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816" Created="2011-01-20 22:04:56Z">
               <Issue Name="NotCalled">
                <Item>'SqlHelperBase.Dispose()'</Item>
                <Item>'GC.SuppressFinalize(object)'</Item>
               </Issue>
              </Message>
-             <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063" Created="2011-01-20 22:04:56Z">
               <Issue Name="DisposeImplementation">
                <Item>'SqlHelperBase.Dispose()'</Item>
               </Issue>
@@ -1077,7 +647,7 @@
           <Members>
            <Member Name="#Create(System.Configuration.ConnectionStringSettings)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'SqlHelperProvider.Create(ConnectionStringSettings)'</Item>
                <Item>connectionString.ConnectionString</Item>
@@ -1089,7 +659,7 @@
            </Member>
            <Member Name="#logger">
             <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'SqlHelperProvider.logger'</Item>
               </Issue>
@@ -1104,13 +674,13 @@
         <Types>
          <Type Name="OdbcClientImpl">
           <Messages>
-           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Impl</Item>
              <Item>'OdbcClientImpl'</Item>
             </Issue>
            </Message>
-           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2011-01-20 22:04:56Z">
             <Issue Name="TypeNoAlternate">
              <Item>'OdbcClientImpl'</Item>
              <Item>Impl</Item>
@@ -1120,7 +690,7 @@
           <Members>
            <Member Name="#CheckCommand(System.Data.IDbCommand)">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'OdbcClientImpl.CheckCommand(IDbCommand)'</Item>
               </Issue>
@@ -1129,7 +699,7 @@
            </Member>
            <Member Name="#CheckTransaction(System.Data.IDbTransaction)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'OdbcClientImpl.CheckTransaction(IDbTransaction)'</Item>
                <Item>command</Item>
@@ -1145,7 +715,7 @@
           <Members>
            <Member Name="#GetSpParameterSet(System.String,System.String)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'OdbcParameterCache.GetSpParameterSet(string, string)'</Item>
@@ -1156,7 +726,7 @@
            </Member>
            <Member Name="#GetSpParameterSet(System.String,System.String,System.Boolean)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'OdbcParameterCache.GetSpParameterSet(string, string, bool)'</Item>
@@ -1173,20 +743,20 @@
         <Types>
          <Type Name="OleDbClientImpl">
           <Messages>
-           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Db</Item>
              <Item>'OleDbClientImpl'</Item>
              <Item>DB</Item>
             </Issue>
            </Message>
-           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Impl</Item>
              <Item>'OleDbClientImpl'</Item>
             </Issue>
            </Message>
-           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2011-01-20 22:04:56Z">
             <Issue Name="TypeNoAlternate">
              <Item>'OleDbClientImpl'</Item>
              <Item>Impl</Item>
@@ -1196,7 +766,7 @@
           <Members>
            <Member Name="#CheckCommand(System.Data.IDbCommand)">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'OleDbClientImpl.CheckCommand(IDbCommand)'</Item>
               </Issue>
@@ -1205,7 +775,7 @@
            </Member>
            <Member Name="#CheckTransaction(System.Data.IDbTransaction)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'OleDbClientImpl.CheckTransaction(IDbTransaction)'</Item>
                <Item>command</Item>
@@ -1219,7 +789,7 @@
          </Type>
          <Type Name="OleDbParameterCache">
           <Messages>
-           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+           <Message Id="Db" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Db</Item>
              <Item>'OleDbParameterCache'</Item>
@@ -1230,7 +800,7 @@
           <Members>
            <Member Name="#GetSpParameterSet(System.String,System.String)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'OleDbParameterCache.GetSpParameterSet(string, string)'</Item>
@@ -1241,7 +811,7 @@
            </Member>
            <Member Name="#GetSpParameterSet(System.String,System.String,System.Boolean)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'OleDbParameterCache.GetSpParameterSet(string, string, bool)'</Item>
@@ -1258,20 +828,20 @@
         <Types>
          <Type Name="SqlCeImpl">
           <Messages>
-           <Message Id="Ce" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+           <Message Id="Ce" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Ce</Item>
              <Item>'SqlCeImpl'</Item>
              <Item>CE</Item>
             </Issue>
            </Message>
-           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Impl</Item>
              <Item>'SqlCeImpl'</Item>
             </Issue>
            </Message>
-           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2011-01-20 22:04:56Z">
             <Issue Name="TypeNoAlternate">
              <Item>'SqlCeImpl'</Item>
              <Item>Impl</Item>
@@ -1285,13 +855,13 @@
         <Types>
          <Type Name="SqlClientImpl">
           <Messages>
-           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Impl" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Impl</Item>
              <Item>'SqlClientImpl'</Item>
             </Issue>
            </Message>
-           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711" Created="2011-01-20 22:04:56Z">
             <Issue Name="TypeNoAlternate">
              <Item>'SqlClientImpl'</Item>
              <Item>Impl</Item>
@@ -1301,7 +871,7 @@
           <Members>
            <Member Name="#CheckCommand(System.Data.IDbCommand)">
             <Messages>
-             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'SqlClientImpl.CheckCommand(IDbCommand)'</Item>
               </Issue>
@@ -1310,7 +880,7 @@
            </Member>
            <Member Name="#CheckParameters(System.Object[],System.Data.SqlClient.SqlParameter[]&amp;)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'SqlClientImpl.CheckParameters(object[], out SqlParameter[])'</Item>
                <Item>command</Item>
@@ -1322,7 +892,7 @@
            </Member>
            <Member Name="#CheckTransaction(System.Data.IDbTransaction)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectParameterName">
                <Item>'SqlClientImpl.CheckTransaction(IDbTransaction)'</Item>
                <Item>command</Item>
@@ -1334,7 +904,7 @@
            </Member>
            <Member Name="#ExecuteNonQueryBatched(System.String[])">
             <Messages>
-             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="TestForEmptyStringsUsingStringLength" Category="Microsoft.Performance" CheckId="CA1820" Created="2011-01-20 22:04:56Z">
               <Issue Name="IsNullOrEmpty">
                <Item>'string.operator !=(string, string)'</Item>
                <Item>'SqlClientImpl.ExecuteNonQueryBatched(params string[])'</Item>
@@ -1352,7 +922,7 @@
           <Members>
            <Member Name="#GetSpParameterSet(System.String,System.String)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'SqlClientParameterCache.GetSpParameterSet(string, string)'</Item>
@@ -1363,7 +933,7 @@
            </Member>
            <Member Name="#GetSpParameterSet(System.String,System.String,System.Boolean)">
             <Messages>
-             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2010-10-19 17:12:16Z">
+             <Message Id="Sp" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2011-01-20 22:04:56Z">
               <Issue Name="Member">
                <Item>Sp</Item>
                <Item>'SqlClientParameterCache.GetSpParameterSet(string, string, bool)'</Item>
@@ -1380,13 +950,13 @@
         <Types>
          <Type Name="Util">
           <Messages>
-           <Message Id="Util" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2010-10-19 17:12:16Z">
+           <Message Id="Util" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2011-01-20 22:04:56Z">
             <Issue Name="Type">
              <Item>Util</Item>
              <Item>'Util'</Item>
             </Issue>
            </Message>
-           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724" Created="2011-01-20 22:04:56Z">
             <Issue Name="System">
              <Item>'Util'</Item>
              <Item>System.Web.Util</Item>
@@ -1394,18 +964,9 @@
            </Message>
           </Messages>
           <Members>
-           <Member Name="#.cctor()">
-            <Messages>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Util'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#_mkdir(System.String)">
             <Messages>
-             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util._mkdir(string)'</Item>
               </Issue>
@@ -1414,13 +975,13 @@
            </Member>
            <Member Name="#CreateDirectory(System.String)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util.CreateDirectory(string)'</Item>
                <Item>'object'</Item>
               </Issue>
              </Message>
-             <Message Id="Adenson.IO.Util._mkdir(System.String)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2010-10-19 17:12:16Z">
+             <Message Id="Adenson.IO.Util._mkdir(System.String)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2011-01-20 22:04:56Z">
               <Issue Name="HResultOrErrorCode">
                <Item>'Util.CreateDirectory(string)'</Item>
                <Item>'Util._mkdir(string)'</Item>
@@ -1428,24 +989,9 @@
              </Message>
             </Messages>
            </Member>
-           <Member Name="#FileInvalidCharsReplacements">
-            <Messages>
-             <Message TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Util.FileInvalidCharsReplacements'</Item>
-               <Item>'Dictionary&lt;char, char&gt;'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
            <Member Name="#FixFilePath(System.String,System.Char[])">
             <Messages>
-             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2010-10-19 17:12:16Z">
-              <Issue>
-               <Item>'Util.FixFilePath(string, char[])'</Item>
-              </Issue>
-             </Message>
-             <Message Id="chars" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2010-10-19 17:12:16Z">
+             <Message Id="chars" TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720" Created="2011-01-20 22:04:56Z">
               <Issue Name="LanguageIndependentMemberParameter">
                <Item>'Util.FixFilePath(string, char[])'</Item>
                <Item>Chars</Item>
@@ -1456,7 +1002,7 @@
            </Member>
            <Member Name="#ReadStream(System.IO.Stream)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util.ReadStream(Stream)'</Item>
                <Item>'Exception'</Item>
@@ -1466,7 +1012,7 @@
            </Member>
            <Member Name="#ReadStream(System.String)">
             <Messages>
-             <Message TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util.ReadStream(string)'</Item>
                <Item>'filePath'</Item>
@@ -1477,7 +1023,7 @@
            </Member>
            <Member Name="#ReadStream(System.Uri)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Util.ReadStream(Uri)'</Item>
                <Item>'Exception'</Item>
@@ -1495,7 +1041,7 @@
           <Members>
            <Member Name="#Type">
             <Messages>
-             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2011-01-20 22:04:56Z">
               <Issue Name="BaseType">
                <Item>'LogEntry.Type'</Item>
                <Item>'object.GetType()'</Item>
@@ -1509,7 +1055,7 @@
           <Members>
            <Member Name="#.cctor()">
             <Messages>
-             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InitializeReferenceTypeStaticFieldsInline" Category="Microsoft.Performance" CheckId="CA1810" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger'</Item>
               </Issue>
@@ -1520,7 +1066,7 @@
             <Accessors>
              <Accessor Name="#set_BatchSize(System.Int16)">
               <Messages>
-               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+               <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
                 <Issue Name="IncorrectMessage">
                  <Item>'Logger.BatchSize.set(short)'</Item>
                  <Item>value</Item>
@@ -1534,7 +1080,7 @@
            </Member>
            <Member Name="#Dispose()">
             <Messages>
-             <Message TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="CallGCSuppressFinalizeCorrectly" Category="Microsoft.Usage" CheckId="CA1816" Created="2011-01-20 22:04:56Z">
               <Issue Name="NotCalledWithFinalizer">
                <Item>'Logger.Dispose()'</Item>
                <Item>'GC.SuppressFinalize(object)'</Item>
@@ -1544,7 +1090,7 @@
            </Member>
            <Member Name="#Error(System.Exception)">
             <Messages>
-             <Message Id="entry" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2010-10-19 17:12:16Z">
+             <Message Id="entry" TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger.Error(Exception)'</Item>
                <Item>'entry'</Item>
@@ -1555,7 +1101,7 @@
            </Member>
            <Member Name="#GetLogger(System.Type)">
             <Messages>
-             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2011-01-20 22:04:56Z">
               <Issue Name="IncorrectMessage">
                <Item>'Logger.GetLogger(Type)'</Item>
                <Item>type</Item>
@@ -1565,9 +1111,18 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#ResumeLogging(System.Type[])">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
+              <Issue>
+               <Item>'Logger.ResumeLogging(params Type[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#SaveToDatabase()">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger.SaveToDatabase()'</Item>
                <Item>'Exception'</Item>
@@ -1577,7 +1132,7 @@
            </Member>
            <Member Name="#SaveToEntryLog()">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger.SaveToEntryLog()'</Item>
                <Item>'Exception'</Item>
@@ -1587,7 +1142,7 @@
            </Member>
            <Member Name="#SaveToFile()">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger.SaveToFile()'</Item>
                <Item>'Exception'</Item>
@@ -1599,9 +1154,18 @@
              </Message>
             </Messages>
            </Member>
+           <Member Name="#SuspendLogging(System.Type[])">
+            <Messages>
+             <Message TypeName="AvoidUncalledPrivateCode" Category="Microsoft.Performance" CheckId="CA1811" Created="2011-01-20 22:04:56Z">
+              <Issue>
+               <Item>'Logger.SuspendLogging(params Type[])'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
            <Member Name="#Type">
             <Messages>
-             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2011-01-20 22:04:56Z">
               <Issue Name="BaseType">
                <Item>'Logger.Type'</Item>
                <Item>'object.GetType()'</Item>
@@ -1611,7 +1175,7 @@
            </Member>
            <Member Name="#Write(Adenson.Log.LogSeverity,System.String,System.Object[])">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Logger.Write(LogSeverity, string, params object[])'</Item>
                <Item>'object'</Item>
@@ -1627,7 +1191,7 @@
          </Type>
          <Type Name="LogSeverity">
           <Messages>
-           <Message TypeName="MarkEnumsWithFlags" Category="Microsoft.Design" CheckId="CA1027" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="MarkEnumsWithFlags" Category="Microsoft.Design" CheckId="CA1027" Created="2011-01-20 22:04:56Z">
             <Issue>
              <Item>'LogSeverity'</Item>
             </Issue>
@@ -1636,7 +1200,7 @@
          </Type>
          <Type Name="LogType">
           <Messages>
-           <Message TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714" Created="2010-10-19 17:12:16Z">
+           <Message TypeName="FlagsEnumsShouldHavePluralNames" Category="Microsoft.Naming" CheckId="CA1714" Created="2011-01-20 22:04:56Z">
             <Issue>
              <Item>'LogType'</Item>
             </Issue>
@@ -1645,7 +1209,7 @@
           <Members>
            <Member Name="#DataBase">
             <Messages>
-             <Message Id="DataBase" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2010-10-19 17:12:16Z">
+             <Message Id="DataBase" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2011-01-20 22:04:56Z">
               <Issue Name="MemberShouldBeDiscreteTerm">
                <Item>DataBase</Item>
                <Item>'LogType.DataBase'</Item>
@@ -1664,7 +1228,7 @@
           <Members>
            <Member Name="#Send(System.String,System.Net.Mail.MailMessage,System.Boolean)">
             <Messages>
-             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2010-10-19 17:12:16Z">
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2011-01-20 22:04:56Z">
               <Issue>
                <Item>'Mailer.Send(string, MailMessage, bool)'</Item>
                <Item>'Exception'</Item>
@@ -1682,9 +1246,6 @@
    </Target>
   </Targets>
   <Rules>
-   <Rule TypeName="AbstractTypesShouldNotHaveConstructors" Category="Microsoft.Design" CheckId="CA1012">
-    <Resolution Name="Default">Change the accessibility of all public constructors in {0} to protected.</Resolution>
-   </Rule>
    <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
     <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
    </Rule>
@@ -1698,29 +1259,11 @@
     <Resolution Name="NotCalled">Change {0} to call {1}. This will prevent derived types that introduce a finalizer from needing to re-implement 'IDisposable' to call it.</Resolution>
     <Resolution Name="NotCalledWithFinalizer">Change {0} to call {1}. This will prevent unnecessary finalization of the object once it has been disposed and it has fallen out of scope.</Resolution>
    </Rule>
-   <Rule TypeName="ComVisibleTypeBaseTypesShouldBeComVisible" Category="Microsoft.Interoperability" CheckId="CA1405">
-    <Resolution Name="Default">{0} is marked ComVisible(true) but has the following ComVisible(false) types in its object hierarchy: {1}</Resolution>
-   </Rule>
    <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
     <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
    </Rule>
-   <Rule TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026">
-    <Resolution Name="Default">Replace method {0} with an overload that supplies all default arguments.</Resolution>
-   </Rule>
    <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
     <Resolution Name="Default">Modify {0} to catch a more specific exception than {1} or rethrow the exception.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotDeclareReadOnlyMutableReferenceTypes" Category="Microsoft.Security" CheckId="CA2104">
-    <Resolution Name="Default">Remove the read-only designation from {0} or change the field to one that is an immutable reference type. If the reference type {1} is, in fact, immutable, exclude this message.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotDeclareStaticMembersOnGenericTypes" Category="Microsoft.Design" CheckId="CA1000">
-    <Resolution Name="Default">Remove {0} from {1} or make it an instance member.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotDeclareVisibleInstanceFields" Category="Microsoft.Design" CheckId="CA1051">
-    <Resolution Name="Default">Because field {0} is visible outside of its declaring type, change its accessibility to private and add a property, with the same accessibility as the field has currently, to provide access to it.</Resolution>
-   </Rule>
-   <Rule TypeName="DoNotExposeGenericLists" Category="Microsoft.Design" CheckId="CA1002">
-    <Resolution Name="Default">Change {0} in {1} to use Collection&lt;T&gt;, ReadOnlyCollection&lt;T&gt; or KeyedCollection&lt;K,V&gt;</Resolution>
    </Rule>
    <Rule TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806">
     <Resolution Name="HResultOrErrorCode">{0} calls {1} but does not use the HRESULT or error code that the method returns. This could lead to unexpected behavior in error conditions or low-resource situations. Use the result in a conditional statement, assign the result to a variable, or pass it as an argument to another method.</Resolution>
@@ -1741,7 +1284,6 @@
     <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
     <Resolution Name="Namespace">Correct the casing of '{0}' in namespace name '{1}' by changing it to '{2}'.</Resolution>
     <Resolution Name="Type">Correct the casing of '{0}' in type name {1} by changing it to '{2}'.</Resolution>
-    <Resolution Name="TypeTypeParameter">On type {0}, correct the casing of '{1}' in generic type parameter name {2} by changing it to '{3}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
     <Resolution Name="Assembly">Correct the spelling of '{0}' in assembly name {1}.</Resolution>
@@ -1749,22 +1291,12 @@
     <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
     <Resolution Name="Namespace">Correct the spelling of '{0}' in namespace name '{1}'.</Resolution>
     <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
-    <Resolution Name="TypeTypeParameter">On type {0}, correct the spelling of '{1}' in generic type parameter name {2}.</Resolution>
-   </Rule>
-   <Rule TypeName="IdentifiersShouldHaveCorrectPrefix" Category="Microsoft.Naming" CheckId="CA1715">
-    <Resolution Name="TypeTypeParameter">On type {0}, prefix generic type parameter name {1} with 'T'.</Resolution>
-   </Rule>
-   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
-    <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldNotContainTypeNames" Category="Microsoft.Naming" CheckId="CA1720">
     <Resolution Name="LanguageIndependentMemberParameter">In member {0}, consider replacing the data type identifier '{1}' in parameter name {2} with a more generic term, such as 'value'.</Resolution>
    </Rule>
    <Rule TypeName="IdentifiersShouldNotHaveIncorrectSuffix" Category="Microsoft.Naming" CheckId="CA1711">
     <Resolution Name="TypeNoAlternate">Rename type name {0} so that it does not end in '{1}'.</Resolution>
-   </Rule>
-   <Rule TypeName="IdentifiersShouldNotMatchKeywords" Category="Microsoft.Naming" CheckId="CA1716">
-    <Resolution Name="Type">Rename type {0} so that it no longer conflicts with the reserved language keyword '{1}'. Using a reserved keyword as the name of a type makes it harder for consumers in other languages to use the type.</Resolution>
    </Rule>
    <Rule TypeName="ImplementIDisposableCorrectly" Category="Microsoft.Design" CheckId="CA1063">
     <Resolution Name="DisposeImplementation">Modify {0} so that it calls Dispose(true), then calls GC.SuppressFinalize on the current object instance ('this' or 'Me' in Visual Basic), and then returns.</Resolution>
@@ -1777,33 +1309,17 @@
     <Resolution Name="IncorrectMessage">Method {0} passes parameter name '{1}' as the {2} argument to a {3} constructor. Replace this argument with a descriptive message and pass the parameter name in the correct position.</Resolution>
     <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
    </Rule>
-   <Rule TypeName="InterfaceMethodsShouldBeCallableByChildTypes" Category="Microsoft.Design" CheckId="CA1033">
-    <Resolution Name="Default">Make {0} sealed (a breaking change if this class has previously shipped), implement the method non-explicitly, or implement a new method that exposes the functionality of {1} and is visible to derived classes.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
-    <Resolution Name="NoAttribute">Because {0} exposes externally visible types, mark it with ComVisible(false) at the assembly level and then mark all types within the assembly that should be exposed to COM clients with ComVisible(true).</Resolution>
-   </Rule>
    <Rule TypeName="MarkAssembliesWithNeutralResourcesLanguage" Category="Microsoft.Performance" CheckId="CA1824">
     <Resolution Name="Default">Because assembly {0} contains a ResX-based resource file, mark it with the NeutralResourcesLanguage attribute, specifying the language of the resources within the assembly. This could improve lookup performance the first time a resource is retrieved.</Resolution>
    </Rule>
    <Rule TypeName="MarkEnumsWithFlags" Category="Microsoft.Design" CheckId="CA1027">
     <Resolution Name="Default">The constituent members of {0} appear to represent flags that can be combined rather than discrete values. If this is correct, mark the enumeration with FlagsAttribute.</Resolution>
    </Rule>
-   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
-    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
-   </Rule>
    <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
     <Resolution Name="Default">Because it is a P/Invoke method, {0} should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Resolution>
    </Rule>
-   <Rule TypeName="NestedTypesShouldNotBeVisible" Category="Microsoft.Design" CheckId="CA1034">
-    <Resolution Name="Default">Do not nest type {0}. Alternatively, change its accessibility so that it is not externally visible.</Resolution>
-   </Rule>
    <Rule TypeName="OperatorOverloadsHaveNamedAlternates" Category="Microsoft.Usage" CheckId="CA2225">
-    <Resolution Name="Default">Provide a method named '{0}' as a friendly alternate for operator {1}.</Resolution>
     <Resolution Name="Multiple">Provide a method named '{0}' or '{1}' as an alternate for operator {2}.</Resolution>
-   </Rule>
-   <Rule TypeName="OverloadOperatorEqualsOnOverloadingAddAndSubtract" Category="Microsoft.Design" CheckId="CA1013">
-    <Resolution Name="Default">Consider adding an overload of the equality operator for {0} that takes the same parameters as {1}.</Resolution>
    </Rule>
    <Rule TypeName="OverloadOperatorEqualsOnOverridingValueTypeEquals" Category="Microsoft.Usage" CheckId="CA2231">
     <Resolution Name="Default">Because {0} is a value type that overrides ValueType.Equals, it should also overload the equality and inequality operators (== and !=).</Resolution>
@@ -1820,9 +1336,6 @@
    <Rule TypeName="RemoveUnusedLocals" Category="Microsoft.Performance" CheckId="CA1804">
     <Resolution Name="Default">{0} declares a variable, {1}, of type {2}, which is never used or is only assigned to. Use this variable or remove it.</Resolution>
    </Rule>
-   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
-    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
-   </Rule>
    <Rule TypeName="StringUriOverloadsCallSystemUriOverloads" Category="Microsoft.Design" CheckId="CA1057">
     <Resolution Name="Default">Refactor {0} so that it builds a System.Uri object from {1}, and then calls {2}.</Resolution>
    </Rule>
@@ -1831,6 +1344,9 @@
    </Rule>
    <Rule TypeName="TypeNamesShouldNotMatchNamespaces" Category="Microsoft.Naming" CheckId="CA1724">
     <Resolution Name="System">The type name {0} conflicts in whole or in part with the namespace name '{1}' defined in the .NET Framework. Rename the type to eliminate the conflict.</Resolution>
+   </Rule>
+   <Rule TypeName="UseGenericsWhereAppropriate" Category="Microsoft.Design" CheckId="CA1007">
+    <Resolution Name="Default">Consider using generics instead of a reference to System.Object in {0}.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

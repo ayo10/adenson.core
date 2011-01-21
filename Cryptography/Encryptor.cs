@@ -23,8 +23,8 @@ namespace Adenson.Cryptography
 			{
 				foreach (EncryptorElement elem in section.Encryptors)
 				{
-					if (elem.EncryptorType == EncryptorType.Custom && Util.IsNullOrWhiteSpace(elem.TypeName)) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
-					encryptors.Add(elem.Name, elem.GetEncryptor());
+					if (elem.EncryptorType == EncryptorType.Custom && (Util.IsNullOrWhiteSpace(elem.AssemblyName) || Util.IsNullOrWhiteSpace(elem.TypeName))) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
+					encryptors.Add(elem.Name, elem.CreateEncryptor());
 				}
 			}
 		}

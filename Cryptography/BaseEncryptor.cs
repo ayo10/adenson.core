@@ -16,17 +16,17 @@ namespace Adenson.Cryptography
 		#region Constructor
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the encryptor
 		/// </summary>
-		public BaseEncryptor()
+		protected BaseEncryptor()
 		{
 		}
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the encryptor with the specified System.Security.Cryptography.SymmetricAlgorithm.Key property and initialization vector (System.Security.Cryptography.SymmetricAlgorithm.IV).
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="iv"></param>
-		internal BaseEncryptor(byte[] key, byte[] iv)
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		protected BaseEncryptor(byte[] key, byte[] iv)
 		{
 			this.SetKeys(key, iv);
 		}
@@ -37,7 +37,10 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Gets the algorithm the encryptor is based on
 		/// </summary>
-		public abstract SymmetricAlgorithm Algorithm { get; }
+		public abstract SymmetricAlgorithm Algorithm 
+		{ 
+			get;
+		}
 
 		#endregion
 		#region Methods

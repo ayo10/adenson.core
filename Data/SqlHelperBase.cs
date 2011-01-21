@@ -26,8 +26,8 @@ namespace Adenson.Data
 		/// When implemented, should instantiate a new instance of the sql helper using specified connection as a
 		/// connection string if isConnectionString is true, else uses ConnectionStrings.GetCS to retrieve it
 		/// </summary>
-		/// <param name="connectionString"></param>
-		public SqlHelperBase(ConnectionStringSettings connectionString)
+		/// <param name="connectionString">The connection string settings object to use</param>
+		protected SqlHelperBase(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null) throw new ArgumentNullException("connectionString");
 			if (String.IsNullOrEmpty(connectionString.ConnectionString)) throw new ArgumentNullException("connectionString.ConnectionString");
