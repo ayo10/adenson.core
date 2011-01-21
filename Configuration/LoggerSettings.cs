@@ -19,7 +19,7 @@ namespace Adenson.Configuration
 			this.Type = "Debug";
 			this.Source = "Logger";
 			this.DateTimeFormat = "HH:mm:ss:fff";
-			this.Email = new EmailInfo { From = "errors@adenson.com" };
+			this.EmailInfo = new LoggerSettingEmailInfo { From = "errors@adenson.com" };
 			this.FileName = SR.EventLogFile;
 		}
 
@@ -27,27 +27,55 @@ namespace Adenson.Configuration
 		#region Properties
 
 		[XmlAttribute(AttributeName = "severity")]
-		public string Severity { get; set; }
+		public string Severity
+		{
+			get;
+			set;
+		}
 
 		[XmlAttribute(AttributeName = "type")]
-		public string Type { get; set; }
+		public string Type
+		{
+			get;
+			set;
+		}
 
 		[XmlAttribute(AttributeName = "batchSize")]
-		public short BatchSize { get; set; }
+		public short BatchSize
+		{
+			get;
+			set;
+		}
 
 		[XmlAttribute(AttributeName = "source")]
-		public string Source { get; set; }
+		public string Source
+		{
+			get;
+			set;
+		}
 
 		[XmlAttribute(AttributeName = "dateTimeFormat")]
-		public string DateTimeFormat { get; set; }
+		public string DateTimeFormat
+		{
+			get;
+			set;
+		}
 
 		[XmlAttribute(AttributeName = "fileName")]
-		public string FileName { get; set; }
+		public string FileName
+		{
+			get;
+			set;
+		}
 
 		[XmlElement(ElementName = "email")]
-		public EmailInfo Email { get; set; }
+		public LoggerSettingEmailInfo EmailInfo
+		{
+			get;
+			set;
+		}
 
-		public LogType TypeActual
+		internal LogType TypeActual
 		{
 			get
 			{
@@ -75,7 +103,7 @@ namespace Adenson.Configuration
 				return _type.Value;
 			}
 		}
-		public LogSeverity SeverityActual
+		internal LogSeverity SeverityActual
 		{
 			get
 			{
@@ -92,17 +120,6 @@ namespace Adenson.Configuration
 				}
 				return _severity.Value;
 			}
-		}
-
-		#endregion
-		#region Inner Classes
-
-		public sealed class EmailInfo
-		{
-			[XmlAttribute(AttributeName = "from")]
-			public string From { get; set; }
-			[XmlAttribute(AttributeName = "to")]
-			public string To { get; set; }
 		}
 
 		#endregion

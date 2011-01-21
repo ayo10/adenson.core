@@ -58,8 +58,7 @@ namespace Adenson.Configuration
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
 			var config = this.GetConfiguration(context);
-			var sectionName = this.GetSectionName(context);
-			ClientSettingsSection appSettings = config.GetSection("applicationSettings/" + sectionName) as ClientSettingsSection;
+			var sectionName = LocalFileSettingsProvider.GetSectionName(context);
 			ClientSettingsSection userSettings = config.GetSection("userSettings/" + sectionName) as ClientSettingsSection;
 			SettingsPropertyValueCollection settingValues = new SettingsPropertyValueCollection();
 			foreach (SettingsProperty property in collection)
@@ -91,10 +90,10 @@ namespace Adenson.Configuration
 		/// </summary>
 		/// <param name="name">The friendly name of the provider.</param>
 		/// <param name="values">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
-		public override void Initialize(string name, NameValueCollection values)
+		public override void Initialize(string name, NameValueCollection config)
 		{
 			if (String.IsNullOrEmpty(name)) name = "LocalFileSettingsProvider";
-			base.Initialize(name, values);
+			base.Initialize(name, config);
 		}
 		/// <summary>
 		///  Resets the application settings associated with the specified application to their default values.
@@ -112,7 +111,7 @@ namespace Adenson.Configuration
 		public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
 		{
 			var config = this.GetConfiguration(context, true);
-			var sectionName = this.GetSectionName(context);
+			var sectionName = LocalFileSettingsProvider.GetSectionName(context);
 			ClientSettingsSection userSettings = config.GetSection("userSettings/" + sectionName) as ClientSettingsSection;
 			foreach (SettingsPropertyValue value in collection)
 			{
@@ -152,7 +151,30 @@ namespace Adenson.Configuration
 			throw new NotImplementedException();
 		}
 
-		private XmlNode ConvertToXmlElement(SettingsProperty setting, SettingsPropertyValue value)
+		private System.Configuration.Configuration GetConfiguration(SettingsContext context)
+		{
+			return this.GetConfiguration(context, false);
+		}
+		private System.Configuration.Configuration GetConfiguration(SettingsContext context, bool create)
+		{
+			var applicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			string configFilePath = Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName);
+			if (!this.IgnoreVersion) configFilePath = Path.Combine(configFilePath, (this.Version.Major + "." + this.Version.Minor));
+			ExeConfigurationFileMap filemap = new ExeConfigurationFileMap();
+			filemap.ExeConfigFilename = Path.Combine(configFilePath, "user.config");
+
+			if (create && !File.Exists(filemap.ExeConfigFilename))
+			{
+				if (!Directory.Exists(configFilePath)) Directory.CreateDirectory(configFilePath);
+				var sectionName = LocalFileSettingsProvider.GetSectionName(context);
+				File.WriteAllText(filemap.ExeConfigFilename, String.Format(LocalFileSettingsProvider.ConfigContent, sectionName, sectionName, typeof(UserSettingsGroup).AssemblyQualifiedName, typeof(ClientSettingsSection).AssemblyQualifiedName));
+			}
+
+			var config = ConfigurationManager.OpenMappedExeConfiguration(filemap, System.Configuration.ConfigurationUserLevel.None);
+			if (create) config.Save();
+			return config;
+		}
+		private static XmlNode ConvertToXmlElement(SettingsProperty setting, SettingsPropertyValue value)
 		{
 			XmlDocument doc = new XmlDocument();
 			XmlElement element = doc.CreateElement("value");
@@ -177,63 +199,6 @@ namespace Adenson.Configuration
 			}
 			if (oldChild != null) element.RemoveChild(oldChild);
 			return element;
-		}
-		private System.Configuration.Configuration GetConfiguration(SettingsContext context)
-		{
-			return this.GetConfiguration(context, false);
-		}
-		private System.Configuration.Configuration GetConfiguration(SettingsContext context, bool create)
-		{
-			var applicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			string configFilePath = Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName);
-			if (!this.IgnoreVersion) configFilePath = Path.Combine(configFilePath, (this.Version.Major + "." + this.Version.Minor));
-			ExeConfigurationFileMap filemap = new ExeConfigurationFileMap();
-			filemap.ExeConfigFilename = Path.Combine(configFilePath, "user.config");
-
-			if (create && !File.Exists(filemap.ExeConfigFilename))
-			{
-				if (!Directory.Exists(configFilePath)) Directory.CreateDirectory(configFilePath);
-				File.WriteAllText(filemap.ExeConfigFilename, String.Format(LocalFileSettingsProvider.ConfigContent, this.GetSectionName(context), this.GetSectionName(context), typeof(UserSettingsGroup).AssemblyQualifiedName, typeof(ClientSettingsSection).AssemblyQualifiedName));
-			}
-
-			var config = ConfigurationManager.OpenMappedExeConfiguration(filemap, System.Configuration.ConfigurationUserLevel.None);
-			if (create) config.Save();
-			return config;
-		}
-		private string GetSectionName(SettingsContext context)
-		{
-			string groupName = (string)context["GroupName"];
-			string settingsKey = (string)context["SettingsKey"];
-			string name = groupName;
-			if (!String.IsNullOrEmpty(settingsKey)) name = String.Format("{0}.{1}", new object[] { name, settingsKey });
-			return XmlConvert.EncodeLocalName(name);
-		}
-
-		#endregion
-		#region Inner Classes
-
-		/// <summary>
-		/// LocalFileSettingsProvider that does not use versioning in the config file name. Does not support upgrade either.
-		/// </summary>
-		public sealed class NoVersionProvider : LocalFileSettingsProvider
-		{
-			/// <summary>
-			/// Initializes a new provider
-			/// </summary>
-			public NoVersionProvider()
-			{
-				this.IgnoreVersion = true;
-			}
-			/// <summary>
-			/// With IgnoreVersion set to false, there is no unique lookup path, thus, nothing can be done
-			/// </summary>
-			/// <param name="context">A SettingsContext describing the current application usage.</param>
-			/// <param name="properties">A SettingsPropertyCollection containing the settings property group whose values are to be retrieved.</param>
-			/// <exception cref="NotSupportedException">NoVersionProvider does not support upgrade</exception>
-			public override void Upgrade(SettingsContext context, SettingsPropertyCollection properties)
-			{
-				throw new NotSupportedException();
-			}
 		}
 
 		#endregion

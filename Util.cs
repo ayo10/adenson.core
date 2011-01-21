@@ -84,7 +84,7 @@ namespace Adenson
 			return type;
 		}
 		/// <summary>
-		/// Trys to convert the specified value
+		/// Tries to convert the specified value
 		/// </summary>
 		/// <param name="value">the value to convert, must be in the form {[Type Full Name], Value}</param>
 		/// <param name="result">the output of the result</param>
@@ -99,7 +99,7 @@ namespace Adenson
 			return Util.TryConvert(splits[0], type, out result);
 		}
 		/// <summary>
-		/// Trys to convert the specified value
+		/// Tries to convert the specified value
 		/// </summary>
 		/// <param name="value">the value to convert</param>
 		/// <param name="type">The type of the object we need to convert</param>

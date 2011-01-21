@@ -4,7 +4,7 @@ using Adenson.Cryptography;
 
 namespace Adenson.Configuration
 {
-	internal sealed class EncryptorElement : ConfigurationElement
+	public sealed class EncryptorElement : ConfigurationElement
 	{
 		#region Variables
 		private static readonly byte[] DefaultKey = new byte[] { 143, 48, 7, 241, 35, 6, 35, 236, 123, 93, 240, 244, 62, 229, 41, 246, 49, 154, 85, 106, 14, 65, 208, 202, 228, 38, 253, 171, 52, 219, 22, 175 };
@@ -61,26 +61,26 @@ namespace Adenson.Configuration
 			set { this["AssemblyName"] = value; }
 		}
 
-		public byte[] KeyInBytes
+		internal byte[] KeyInBytes
 		{
 			get
 			{
 				if (String.IsNullOrEmpty(this.Key)) return EncryptorElement.DefaultKey;
 				switch (this.KeyFormat)
 				{
-					case KeyFormat.CommaDelimitedBytes: return this.Split(this.Key);
+					case KeyFormat.CommaDelimitedBytes: return EncryptorElement.Split(this.Key);
 					default: return Convert.FromBase64String(this.Key);
 				}
 			}
 		}
-		public byte[] VectorInBytes
+		internal byte[] VectorInBytes
 		{
 			get
 			{
 				if (String.IsNullOrEmpty(this.Vector)) return EncryptorElement.DefaultIV;
 				switch (this.KeyFormat)
 				{
-					case KeyFormat.CommaDelimitedBytes: return this.Split(this.Vector);
+					case KeyFormat.CommaDelimitedBytes: return EncryptorElement.Split(this.Vector);
 					default: return Convert.FromBase64String(this.Vector);
 				}
 			}
@@ -89,7 +89,7 @@ namespace Adenson.Configuration
 		#endregion
 		#region Methods
 
-		public BaseEncryptor GetEncryptor()
+		internal BaseEncryptor CreateEncryptor()
 		{
 			BaseEncryptor encryptor = null;
 			switch (this.EncryptorType)
@@ -111,7 +111,7 @@ namespace Adenson.Configuration
 			}
 			return encryptor;
 		}
-		private byte[] Split(string value)
+		private static byte[] Split(string value)
 		{
 			string[] arr1 = value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 			byte[] buffer = new byte[arr1.Length];

@@ -45,10 +45,6 @@ namespace Adenson.Configuration
 
 			return result;
 		}
-		internal static Dictionary<string, string> GetDictionary(string section)
-		{
-			return Convert(ConfigSectionHelper.GetSection(section));
-		}
 		private static Dictionary<string, string> Convert(object obj)
 		{
 			if (obj == null) return null;

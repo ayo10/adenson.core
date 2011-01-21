@@ -28,7 +28,10 @@ namespace Adenson.Configuration
 						{
 							_logSettings = (LoggerSettings)serializer.Deserialize(new XmlNodeReader(section));
 						}
-						catch
+						catch (InvalidOperationException)
+						{
+						}
+						catch (InvalidCastException)
 						{
 						}
 						if (_logSettings == null) _logSettings = new LoggerSettings();

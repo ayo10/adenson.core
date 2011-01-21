@@ -7,13 +7,13 @@ namespace Adenson.Collections
 	/// <summary>
 	/// Behaves like hashtable of old, adds change events
 	/// </summary>
-	/// <typeparam name="Tk">The type of keys in the dictionary.</typeparam>
-	/// <typeparam name="Tv">The type of values in the dictionary.</typeparam>
-	public class Hashtable<Tk, Tv> : IDictionary<Tk, Tv>
+	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+	public class Hashtable<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		#region Variables
-		private Dictionary<Tk, Tv> dick;
-		private event EventHandler<HashtableChangedEventArgs<Tk>> _dictionaryChanged;
+		private Dictionary<TKey, TValue> dick;
+		private event EventHandler<HashtableChangedEventArgs<TKey>> _dictionaryChanged;
 		#endregion
 		#region Constructors
 
@@ -22,7 +22,7 @@ namespace Adenson.Collections
 		/// </summary>
 		public Hashtable()
 		{
-			dick = new Dictionary<Tk, Tv>();
+			dick = new Dictionary<TKey, TValue>();
 		}
 		/// <summary>
 		/// Instantiates a new hashtable with specified capacity
@@ -30,7 +30,7 @@ namespace Adenson.Collections
 		/// <param name="capacity"></param>
 		public Hashtable(int capacity)
 		{
-			dick = new Dictionary<Tk, Tv>(capacity);
+			dick = new Dictionary<TKey, TValue>(capacity);
 		}
 
 		#endregion
@@ -41,23 +41,23 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public Tv this[Tk key]
+		public TValue this[TKey key]
 		{
 			get
 			{
 				if (dick.ContainsKey(key)) return dick[key];
-				return default(Tv);
+				return default(TValue);
 			}
 			set
 			{
 				if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 				if (dick.ContainsKey(key))
 				{
-					Tv originalValue = dick[key];
+					TValue originalValue = dick[key];
 					if ((object)value != (object)originalValue)
 					{
 						dick[key] = value;
-						this.OnDictionaryChanged(new HashtableChangedEventArgs<Tk>(NotifyCollectionChangedAction.Replace, key));
+						this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Replace, key));
 					}
 				}
 				else dick.Add(key, value);
@@ -73,14 +73,14 @@ namespace Adenson.Collections
 		/// <summary>
 		/// 
 		/// </summary>
-		public ICollection<Tk> Keys
+		public ICollection<TKey> Keys
 		{
 			get { return dick.Keys; }
 		}
 		/// <summary>
 		/// 
 		/// </summary>
-		public ICollection<Tv> Values
+		public ICollection<TValue> Values
 		{
 			get { return dick.Values; }
 		}
@@ -95,7 +95,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Occurs when a value in the dictionary has changed
 		/// </summary>
-		public event EventHandler<HashtableChangedEventArgs<Tk>> DictionaryChanged
+		public event EventHandler<HashtableChangedEventArgs<TKey>> DictionaryChanged
 		{
 			add { _dictionaryChanged += value; }
 			remove { _dictionaryChanged -= value; }
@@ -109,11 +109,11 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The object to use as the key of the element to add.</param>
 		/// <param name="value">The object to use as the value</param>
-		public virtual void Add(Tk key, Tv value)
+		public virtual void Add(TKey key, TValue value)
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Add(key, value);
-			this.OnDictionaryChanged(new HashtableChangedEventArgs<Tk>(NotifyCollectionChangedAction.Add, key));
+			this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Add, key));
 		}
 		/// <summary>
 		/// Removes all items
@@ -122,14 +122,14 @@ namespace Adenson.Collections
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Clear();
-			this.OnDictionaryChanged(new HashtableChangedEventArgs<Tk>(NotifyCollectionChangedAction.Reset, default(Tk)));
+			this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Reset, default(TKey)));
 		}
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public bool ContainsKey(Tk key)
+		public bool ContainsKey(TKey key)
 		{
 			return dick.ContainsKey(key);
 		}
@@ -138,7 +138,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public bool ContainsValue(Tv value)
+		public bool ContainsValue(TValue value)
 		{
 			return dick.ContainsValue(value);
 		}
@@ -146,7 +146,7 @@ namespace Adenson.Collections
 		/// Returns an enumerator that iterates through the dictionary
 		/// </summary>
 		/// <returns></returns>
-		public IEnumerator<KeyValuePair<Tk, Tv>> GetEnumerator()
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
 			return dick.GetEnumerator();
 		}
@@ -155,11 +155,11 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public bool Remove(Tk key)
+		public bool Remove(TKey key)
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			bool result = dick.Remove(key);
-			if (result) this.OnDictionaryChanged(new HashtableChangedEventArgs<Tk>(NotifyCollectionChangedAction.Remove, key));
+			if (result) this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Remove, key));
 			return result;
 		}
 		/// <summary>
@@ -168,7 +168,7 @@ namespace Adenson.Collections
 		/// <param name="key"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public bool TryGetValue(Tk key, out Tv value)
+		public bool TryGetValue(TKey key, out TValue value)
 		{
 			return dick.TryGetValue(key, out value);
 		}
@@ -176,7 +176,7 @@ namespace Adenson.Collections
 		/// 
 		/// </summary>
 		/// <param name="e"></param>
-		protected void OnDictionaryChanged(HashtableChangedEventArgs<Tk> e)
+		protected void OnDictionaryChanged(HashtableChangedEventArgs<TKey> e)
 		{
 			if (_dictionaryChanged != null) _dictionaryChanged(this, e);
 		}
@@ -185,25 +185,25 @@ namespace Adenson.Collections
 		{
 			return dick.GetEnumerator();
 		}
-		void ICollection<KeyValuePair<Tk, Tv>>.Add(KeyValuePair<Tk, Tv> item)
+		void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
 		{
 			this.Add(item.Key, item.Value);
 		}
-		void ICollection<KeyValuePair<Tk, Tv>>.Clear()
+		void ICollection<KeyValuePair<TKey, TValue>>.Clear()
 		{
 			this.Clear();
 		}
-		bool ICollection<KeyValuePair<Tk, Tv>>.Contains(KeyValuePair<Tk, Tv> item)
+		bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
 		{
 			if (!this.ContainsKey(item.Key)) return false;
 			if (!this.ContainsValue(item.Value)) return false;
 			return Object.Equals(this[item.Key], item.Value);
 		}
-		void ICollection<KeyValuePair<Tk, Tv>>.CopyTo(KeyValuePair<Tk, Tv>[] array, int arrayIndex)
+		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
 			throw new NotSupportedException();
 		}
-		bool ICollection<KeyValuePair<Tk, Tv>>.Remove(KeyValuePair<Tk, Tv> item)
+		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
 		{
 			return this.Remove(item.Key);
 		}

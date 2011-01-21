@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Adenson.Core")]
 [assembly: AssemblyDescription("A collection of different utilities such as sql, mail, configuration/connection string reading, logging, etc, etc")]
@@ -13,3 +13,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("3.8.6.*")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]
+[assembly: ComVisible(false)]
