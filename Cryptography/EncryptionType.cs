@@ -5,16 +5,16 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Types of entryptors
 	/// </summary>
-	public enum EncryptorType : byte
+	public enum EncryptorType : int
 	{
 		/// <summary>
-		/// Also known as Rijndael
+		/// None has been specified
+		/// </summary>
+		None = 0,
+		/// <summary>
+		/// Also known as AES
 		/// </summary>
 		Rijndael = 1,
-		/// <summary>
-		/// Also known as Rijndael
-		/// </summary>
-		AES = 1,
 		/// <summary>
 		/// TripleDes
 		/// </summary>

@@ -58,6 +58,7 @@
     <Compile Include="Collections\CollectionChangingEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Enumerable.cs" />
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\HashtableChangedEventArgs.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
@@ -70,24 +71,22 @@
     <Compile Include="Configuration\EncryptorCollection.cs" />
     <Compile Include="Configuration\EncryptorElement.cs" />
     <Compile Include="Configuration\EncryptorSection.cs" />
-    <Compile Include="Configuration\LocalFileSettingsNoVersionProvider.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\LoggerSettingEmailInfo.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
-    <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
-    <Compile Include="Data\OleDb\OleDbParameterCache.cs" />
-    <Compile Include="Data\OleDb\OleDbClientImpl.cs" />
+    <Compile Include="Data\OdbcParameterCache.cs" />
+    <Compile Include="Data\OdbcSqlHelper.cs" />
+    <Compile Include="Data\OleDbParameterCache.cs" />
     <Compile Include="Data\ConnectionManager.cs" />
-    <Compile Include="Data\Odbc\OdbcClientImpl.cs" />
+    <Compile Include="Data\OleDbSqlHelper.cs" />
     <Compile Include="Data\Parameter.cs" />
-    <Compile Include="Data\SqlCe\SqlCeImpl.cs" />
-    <Compile Include="Data\SqlCe\SqlHelper.cs" />
-    <Compile Include="Data\SqlClient\SqlClientImpl.cs" />
+    <Compile Include="Data\SqlCeHelper.cs" />
+    <Compile Include="Data\SqlClientHelper.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />
-    <Compile Include="Data\SqlClient\SqlClientParameterCache.cs" />
+    <Compile Include="Data\SqlClientParameterCache.cs" />
     <Compile Include="Cryptography\DES.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Cryptography\Encryptor.cs" />
@@ -96,8 +95,6 @@
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IO\Extensions.cs" />
-    <Compile Include="IO\Util.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -116,7 +113,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
-    <Compile Include="StaticResource.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +133,7 @@
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

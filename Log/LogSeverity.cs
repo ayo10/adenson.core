@@ -14,18 +14,18 @@ namespace Adenson.Log
 		/// <summary>
 		/// Only messages called with Info, Debug and Error are logged (in this case, all messages)
 		/// </summary>
-		Info = 2,
+		Info = 1,
 		/// <summary>
 		/// Only messages called with Debug, Warning and Error are logged
 		/// </summary>
-		Debug = 4,
+		Debug = 2,
 		/// <summary>
 		/// Only messages called with Warning and Error are logged
 		/// </summary>
-		Warn = 8,
+		Warn = 3,
 		/// <summary>
 		/// Only messages called with Error are logged
 		/// </summary>
-		Error = 16
+		Error = 4
 	}
 }

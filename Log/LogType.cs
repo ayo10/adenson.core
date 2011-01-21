@@ -6,7 +6,7 @@ namespace Adenson.Log
 	/// Enumeration of log types
 	/// </summary>
 	[Flags]
-	public enum LogType
+	public enum LogTypes
 	{
 		/// <summary>
 		/// No logs
@@ -15,7 +15,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Logs into a database
 		/// </summary>
-		DataBase = 1,
+		Database = 1,
 		/// <summary>
 		/// Logs into a physical file.
 		/// </summary>
@@ -40,6 +40,6 @@ namespace Adenson.Log
 		/// <summary>
 		/// DataBase | File | EventLog | Console | DiagnosticsDebug
 		/// </summary>
-		All = DataBase | File | EventLog | Debug
+		All = Database | File | EventLog | Debug
 	}
 }

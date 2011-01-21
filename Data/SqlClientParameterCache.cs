@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Adenson.Data.SqlClient
+namespace Adenson.Data
 {
 	/// <summary>
 	/// SqlHelperParameterCache provides functions to leverage a static cache of procedure parameters, and the

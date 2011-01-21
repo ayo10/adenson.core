@@ -12,7 +12,7 @@ namespace Adenson.Configuration
 		{
 			EncryptorElement element = new EncryptorElement();
 			element.Name = "Default";
-			element.EncryptorType = EncryptorType.AES;
+			element.EncryptorType = EncryptorType.Rijndael;
 			element.LockItem = true; //to prevent removal using <remove name="Default" in the application configuration
 
 			this.BaseAdd(element);

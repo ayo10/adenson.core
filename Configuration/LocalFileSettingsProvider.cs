@@ -19,6 +19,17 @@ namespace Adenson.Configuration
 	/// </summary>
 	public class LocalFileSettingsProvider : ApplicationSettingsProvider
 	{
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new provider
+		/// </summary>
+		public LocalFileSettingsProvider()
+		{
+			this.IgnoreVersion = true;
+		}
+
+		#endregion
 		#region Properties
 
 		/// <summary>

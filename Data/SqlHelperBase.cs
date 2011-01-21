@@ -30,7 +30,6 @@ namespace Adenson.Data
 		protected SqlHelperBase(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null) throw new ArgumentNullException("connectionString");
-			if (String.IsNullOrEmpty(connectionString.ConnectionString)) throw new ArgumentNullException("connectionString.ConnectionString");
 			this.ConnectionString = connectionString.ConnectionString;
 		}
 		
@@ -83,9 +82,10 @@ namespace Adenson.Data
 		/// <summary>
 		/// Disposes the object
 		/// </summary>
-		public virtual void Dispose()
+		public void Dispose()
 		{
 			this.Manager.Dispose();
+			GC.SuppressFinalize(this);
 		}
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command

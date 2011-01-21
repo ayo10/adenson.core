@@ -84,12 +84,12 @@ namespace Adenson.Data
 			}
 			switch (connectionString.ProviderName)
 			{
-				case "System.Data.Odbc": return new Odbc.OdbcClientImpl(connectionString);
-				case "System.Data.OleDb": return new OleDb.OleDbClientImpl(connectionString);
-				case "System.Data.SqlClient": return new SqlClient.SqlClientImpl(connectionString);
+				case "System.Data.Odbc": return new OdbcSqlHelper(connectionString);
+				case "System.Data.OleDb": return new OleDbSqlHelper(connectionString);
+				case "System.Data.SqlClient": return new SqlClientHelper(connectionString);
 				case "Microsoft.SqlServerCe.Client":
 				case "System.Data.SqlServerCe":
-				case "System.Data.SqlServerCe.3.5": return new SqlCe.SqlCeImpl(connectionString);
+				case "System.Data.SqlServerCe.3.5": return new SqlCeHelper(connectionString);
 				case "System.Data.OracleClient": throw new NotSupportedException(connectionString.ProviderName);
 				default: throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
 			}

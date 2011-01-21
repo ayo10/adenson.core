@@ -6,19 +6,19 @@ using System.Data.SqlServerCe;
 using System.Linq;
 using Adenson.Log;
 
-namespace Adenson.Data.SqlCe
+namespace Adenson.Data
 {
 	/// <summary>
 	/// The SqlHelper class for SQL Server connections
 	/// </summary>
-	public sealed class SqlCeImpl : SqlHelperBase
+	public sealed class SqlCeHelper : SqlHelperBase
 	{
 		#region Variables
-		private static Logger logger = new Logger(typeof(SqlCeImpl));
+		private static Logger logger = new Logger(typeof(SqlCeHelper));
 		#endregion
 		#region Constructor
 
-		public SqlCeImpl(ConnectionStringSettings connectionString) : base(connectionString)
+		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
 
@@ -95,11 +95,11 @@ namespace Adenson.Data.SqlCe
 			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
-			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
+			SqlCeParameter[] commandParameters = SqlCeHelper.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = (SqlCeTransaction)transaction;
-			SqlCeImpl.AttachParameters(command, commandParameters);
+			SqlCeHelper.AttachParameters(command, commandParameters);
 
 			return this.ExecuteDataSet(command);
 		}
@@ -112,7 +112,7 @@ namespace Adenson.Data.SqlCe
 			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
-			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
+			SqlCeParameter[] commandParameters = SqlCeHelper.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = (SqlCeTransaction)transaction;
@@ -129,7 +129,7 @@ namespace Adenson.Data.SqlCe
 			if (type != CommandType.Text) throw new NotSupportedException(Exceptions.SqlCommandTypeTextNotSupported);
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
 
-			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
+			SqlCeParameter[] commandParameters = SqlCeHelper.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = (SqlCeTransaction)transaction;
@@ -143,7 +143,7 @@ namespace Adenson.Data.SqlCe
 		}
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			SqlCeParameter[] commandParameters = SqlCeImpl.ConvertParameters(ref commandText, parameterValues);
+			SqlCeParameter[] commandParameters = SqlCeHelper.ConvertParameters(ref commandText, parameterValues);
 			SqlCeCommand command = new SqlCeCommand(commandText);
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = (SqlCeTransaction)transaction;
@@ -212,7 +212,7 @@ namespace Adenson.Data.SqlCe
 				str = str.TrimEnd(',') + "]";
 			}
 
-			Logger.Debug(typeof(SqlCeImpl), str);
+			Logger.Debug(typeof(SqlCeHelper), str);
 			#endif
 		}
 

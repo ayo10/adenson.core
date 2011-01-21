@@ -7,17 +7,17 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 
-namespace Adenson.Data.SqlClient
+namespace Adenson.Data
 {
 	/// <summary>
 	/// The SqlHelper class is intended to encapsulate high performance, scalable best practices for
 	/// common uses of SqlClient
 	/// </summary>
-	public sealed class SqlClientImpl : SqlHelperBase
+	public sealed class SqlClientHelper : SqlHelperBase
 	{
 		#region Constructor
 
-		public SqlClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
+		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
 
@@ -30,8 +30,8 @@ namespace Adenson.Data.SqlClient
 		}
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			SqlClientImpl.CheckArgument(commandText, "commandText");
-			SqlTransaction sqltransaction = SqlClientImpl.CheckTransaction(transaction);
+			SqlClientHelper.CheckArgument(commandText, "commandText");
+			SqlTransaction sqltransaction = SqlClientHelper.CheckTransaction(transaction);
 
 			SqlCommand command = new SqlCommand(commandText);
 			command.CommandType = type;
@@ -46,8 +46,8 @@ namespace Adenson.Data.SqlClient
 		}
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			SqlClientImpl.CheckArgument(commandText, "commandText");
-			SqlTransaction sqltransaction = SqlClientImpl.CheckTransaction(transaction);
+			SqlClientHelper.CheckArgument(commandText, "commandText");
+			SqlTransaction sqltransaction = SqlClientHelper.CheckTransaction(transaction);
 
 			SqlCommand command = new SqlCommand(commandText);
 			command.CommandType = type;
@@ -89,8 +89,8 @@ namespace Adenson.Data.SqlClient
 		}
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			SqlClientImpl.CheckArgument(commandText, "commandText");
-			SqlTransaction sqltransaction = SqlClientImpl.CheckTransaction(transaction);
+			SqlClientHelper.CheckArgument(commandText, "commandText");
+			SqlTransaction sqltransaction = SqlClientHelper.CheckTransaction(transaction);
 
 			SqlCommand command = new SqlCommand(commandText);
 			command.CommandType = type;
@@ -105,8 +105,8 @@ namespace Adenson.Data.SqlClient
 		}
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			SqlClientImpl.CheckArgument(commandText, "commandText");
-			SqlTransaction sqltransaction = SqlClientImpl.CheckTransaction(transaction);
+			SqlClientHelper.CheckArgument(commandText, "commandText");
+			SqlTransaction sqltransaction = SqlClientHelper.CheckTransaction(transaction);
 
 			SqlCommand command = new SqlCommand(commandText);
 			command.CommandType = type;
@@ -142,17 +142,17 @@ namespace Adenson.Data.SqlClient
 			if (!parameterValues.IsEmpty())
 			{
 				SqlParameter[] commandParameters;
-				if (!SqlClientImpl.CheckParameters(parameterValues, out commandParameters))
+				if (!SqlClientHelper.CheckParameters(parameterValues, out commandParameters))
 				{
 					if (command.CommandType == CommandType.StoredProcedure)
 					{
 						commandParameters = SqlClientParameterCache.GetSpParameterSet((SqlConnection)this.Manager.Connection, commandText);
-						SqlClientImpl.AssignParameterValues(commandParameters, parameterValues);
+						SqlClientHelper.AssignParameterValues(commandParameters, parameterValues);
 					}
 					else
 					{
 						if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
-						else commandParameters = SqlClientImpl.GenerateParameters(commandText, parameterValues);
+						else commandParameters = SqlClientHelper.GenerateParameters(commandText, parameterValues);
 					}
 				}
 				if (commandParameters != null) command.Parameters.AddRange(commandParameters);

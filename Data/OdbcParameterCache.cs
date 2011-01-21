@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Data.Odbc;
 
-namespace Adenson.Data.Odbc
+namespace Adenson.Data
 {
 	/// <summary>
 	/// OdbcHelperParameterCache provides functions to leverage a static cache of procedure parameters, and the

@@ -20,7 +20,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the type
 		/// </summary>
-		internal LogType LogType
+		internal LogTypes LogType
 		{
 			get;
 			set;

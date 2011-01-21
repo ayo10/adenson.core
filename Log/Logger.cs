@@ -23,7 +23,7 @@ namespace Adenson.Log
 		private static string OutFileName;
 		private Type _classType;
 		private short _batchLogSize;
-		private LogType? _logType;
+		private LogTypes? _logType;
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
@@ -67,7 +67,7 @@ namespace Adenson.Log
 		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type classType, string source) : this(classType, LogType.None, source)
+		public Logger(Type classType, string source) : this(classType, LogTypes.None, source)
 		{
 		}
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Adenson.Log
 		/// <param name="classType">Type to use to create new instance</param>
 		/// <param name="logType">The log type</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type classType, LogType logType) : this(classType)
+		public Logger(Type classType, LogTypes logType) : this(classType)
 		{
 			_logType = logType;
 		}
@@ -88,9 +88,9 @@ namespace Adenson.Log
 		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		/// <exception cref="ArgumentNullException">if source is null and logType includes EventLog</exception>
-		public Logger(Type classType, LogType logType, string source) : this(classType)
+		public Logger(Type classType, LogTypes logType, string source) : this(classType)
 		{
-			if ((logType & LogType.EventLog) != LogType.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
+			if ((logType & LogTypes.EventLog) != LogTypes.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
 			_logType = logType;
 			_source = source;
 		}
@@ -130,7 +130,7 @@ namespace Adenson.Log
 			get { return _batchLogSize == 0 ? Config.LogSettings.BatchSize : _batchLogSize; }
 			set
 			{
-				if (value < 1) throw new ArgumentException("value", SR.MsgExMinLogBatchSize);
+				if (value < 1) throw new ArgumentException(SR.MsgExMinLogBatchSize, "value");
 				_batchLogSize = value; 
 			}
 		}
@@ -145,7 +145,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the logging type
 		/// </summary>
-		public LogType Type
+		public LogTypes Type
 		{
 			get { return _logType == null ? Config.LogSettings.TypeActual : _logType.Value; }
 			set { _logType = value; }
@@ -255,7 +255,7 @@ namespace Adenson.Log
 		public void Error(Exception ex)
 		{
 			string message = Logger.ConvertToString(ex);
-			LogEntry entry = this.Write(LogSeverity.Error, message);
+			this.Write(LogSeverity.Error, message);
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
 		}
@@ -329,7 +329,7 @@ namespace Adenson.Log
 		/// <returns>Existing, or newly minted logger</returns>
 		public static Logger GetLogger(Type type)
 		{
-			if (type == null) throw new ArgumentException("type");
+			if (type == null) throw new ArgumentNullException("type");
 			lock (staticLoggers)
 			{
 				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
@@ -420,16 +420,16 @@ namespace Adenson.Log
 			return message.ToString();
 		}
 
-		internal static void Flush(LogType logType)
+		internal static void Flush(LogTypes logType)
 		{
 			try
 			{
 				Monitor.Enter(entries);
 				if (entries.Count > 0)
 				{
-					if ((logType & LogType.DataBase) != LogType.None) Logger.SaveToDatabase();
-					if ((logType & LogType.File) != LogType.None) Logger.SaveToFile();
-					if ((logType & LogType.EventLog) != LogType.None) Logger.SaveToEntryLog();
+					if ((logType & LogTypes.Database) != LogTypes.None) Logger.SaveToDatabase();
+					if ((logType & LogTypes.File) != LogTypes.None) Logger.SaveToFile();
+					if ((logType & LogTypes.EventLog) != LogTypes.None) Logger.SaveToEntryLog();
 					entries.Clear();
 				}
 			}
@@ -525,20 +525,6 @@ namespace Adenson.Log
 			}
 			return false;
 		}
-		internal static void ResumeLogging(params Type[] types)
-		{
-			foreach (Type type in types)
-			{
-				if (suspendedTypes.Contains(type)) suspendedTypes.Remove(type);
-			}
-		}
-		internal static void SuspendLogging(params Type[] types)
-		{
-			foreach (Type type in types)
-			{
-				if (!suspendedTypes.Contains(type)) suspendedTypes.Add(type);
-			}
-		}
 
 		private static void LogInternalError(Exception ex)
 		{
@@ -554,11 +540,11 @@ namespace Adenson.Log
 		}
 		private static void OutWriteLine(LogEntry entry)
 		{
-			if ((entry.LogType & LogType.Console) != LogType.None)
+			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
 				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
-			if ((entry.LogType & LogType.Debug) != LogType.None)
+			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
 			{
 				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
 			}
