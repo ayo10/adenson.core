@@ -5,21 +5,21 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 
-namespace Adenson.Data.Odbc
+namespace Adenson.Data
 {
 	/// <summary>
 	/// The OdbcHelper class is intended to encapsulate high performance, scalable best practices for
 	/// common uses of OdbcClient
 	/// </summary>
-	public sealed class OdbcClientImpl : SqlHelperBase
+	public sealed class OdbcSqlHelper : SqlHelperBase
 	{
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OdbcClientImpl"/> class.
+		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString"></param>
-		public OdbcClientImpl(ConnectionStringSettings connectionString) : base(connectionString)
+		public OdbcSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Adenson.Data.Odbc
 		/// <returns>a new DataSet object</returns>
 		public override DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
+			OdbcTransaction sqltransaction = OdbcSqlHelper.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
@@ -78,7 +78,7 @@ namespace Adenson.Data.Odbc
 		public override int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
-			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
+			OdbcTransaction sqltransaction = OdbcSqlHelper.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
@@ -113,7 +113,7 @@ namespace Adenson.Data.Odbc
 		public override IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
-			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
+			OdbcTransaction sqltransaction = OdbcSqlHelper.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
@@ -152,7 +152,7 @@ namespace Adenson.Data.Odbc
 		public override object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (String.IsNullOrEmpty(commandText)) throw new ArgumentNullException("commandText", Exceptions.ArgumentNull);
-			OdbcTransaction sqltransaction = OdbcClientImpl.CheckTransaction(transaction);
+			OdbcTransaction sqltransaction = OdbcSqlHelper.CheckTransaction(transaction);
 
 			OdbcCommand command = new OdbcCommand(commandText);
 			command.CommandType = type;
@@ -206,36 +206,29 @@ namespace Adenson.Data.Odbc
 		{
 			if (parameterValues.IsEmpty()) return;
 			OdbcParameter[] commandParameters;
-			if (!OdbcClientImpl.CheckParameters(parameterValues, out commandParameters))
+			if (!OdbcSqlHelper.CheckParameters(parameterValues, out commandParameters))
 			{
 				if (command.CommandType == CommandType.StoredProcedure)
 				{
 					commandParameters = OdbcParameterCache.GetSpParameterSet((OdbcConnection)this.Manager.Connection, commandText);
-					OdbcClientImpl.AssignParameterValues(commandParameters, parameterValues);
+					OdbcSqlHelper.AssignParameterValues(commandParameters, parameterValues);
 				}
 				else
 				{
 					if (commandText.IndexOf("{0}") > 0) command.CommandText = String.Format(commandText, parameterValues);
-					else commandParameters = OdbcClientImpl.GenerateParameters(commandText, parameterValues);
+					else commandParameters = OdbcSqlHelper.GenerateParameters(commandText, parameterValues);
 				}
 			}
 			if (commandParameters != null) command.Parameters.AddRange(commandParameters);
 		}
 
-		private static OdbcCommand CheckCommand(IDbCommand command)
-		{
-			if (command == null) throw new ArgumentNullException("command", Exceptions.ArgumentNull);
-			OdbcCommand sqlcommand = command as OdbcCommand;
-			if (command == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"), "command");
-			return sqlcommand;
-		}
 		private static OdbcTransaction CheckTransaction(IDbTransaction transaction)
 		{
 			OdbcTransaction sqltransaction = null;
 			if (transaction != null)
 			{
 				sqltransaction = transaction as OdbcTransaction;
-				if (sqltransaction == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"), "command");
+				if (sqltransaction == null) throw new ArgumentException(String.Format(Exceptions.SqlImplWrongType, "Odbc"), "sqltransaction");
 			}
 			return sqltransaction;
 		}

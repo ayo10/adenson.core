@@ -8,13 +8,20 @@ namespace Adenson.Collections
 	/// Represents a read only list
 	/// </summary>
 	/// <typeparam name="T">The type of items in the list</typeparam>
-	public sealed class ReadOnlyList<T> : IEnumerable<T>
+	public class ReadOnlyList<T> : IEnumerable<T>
 	{
 		#region Variables
 		private List<T> _list;
 		#endregion
 		#region Constructors
 
+		/// <summary>
+		/// Instantiates a new list
+		/// </summary>
+		public ReadOnlyList()
+		{
+			_list = new List<T>();
+		}
 		/// <summary>
 		/// Instantiates a new readonly collection from specified list
 		/// </summary>

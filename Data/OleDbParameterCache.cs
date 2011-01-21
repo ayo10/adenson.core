@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Data.OleDb;
 
-namespace Adenson.Data.OleDb
+namespace Adenson.Data
 {
 	/// <summary>
 	/// OleDbHelperParameterCache provides functions to leverage a static cache of procedure parameters, and the

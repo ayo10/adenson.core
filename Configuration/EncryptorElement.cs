@@ -22,7 +22,7 @@ namespace Adenson.Configuration
 		[ConfigurationProperty("Type")]
 		public EncryptorType EncryptorType
 		{
-			get { return this["Type"] == null ? EncryptorType.AES : (EncryptorType)this["Type"]; }
+			get { return this["Type"] == null ? EncryptorType.Rijndael : (EncryptorType)this["Type"]; }
 			set { this["Type"] = value; }
 		}
 
@@ -94,7 +94,7 @@ namespace Adenson.Configuration
 			BaseEncryptor encryptor = null;
 			switch (this.EncryptorType)
 			{
-				case EncryptorType.AES: encryptor = new Rijndael(this.KeyInBytes, this.VectorInBytes); break;
+				case EncryptorType.Rijndael: encryptor = new Rijndael(this.KeyInBytes, this.VectorInBytes); break;
 				case EncryptorType.DES: encryptor = new DES(this.KeyInBytes, this.VectorInBytes); break;
 				case EncryptorType.TripleDES: encryptor = new TripleDES(this.KeyInBytes, this.VectorInBytes); break;
 				case EncryptorType.Custom:

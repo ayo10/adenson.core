@@ -8,7 +8,7 @@ namespace Adenson.Configuration
 	public sealed class LoggerSettings
 	{
 		#region Variables
-		private LogType? _type;
+		private LogTypes? _type;
 		private LogSeverity? _severity;
 		#endregion
 		#region Constructor
@@ -75,7 +75,7 @@ namespace Adenson.Configuration
 			set;
 		}
 
-		internal LogType TypeActual
+		internal LogTypes TypeActual
 		{
 			get
 			{
@@ -89,16 +89,16 @@ namespace Adenson.Configuration
 							var splits = this.Type.Split(',', '|');
 							foreach (var str in splits)
 							{
-								LogType t = (LogType)Enum.Parse(typeof(LogType), str.Trim());
+								LogTypes t = (LogTypes)Enum.Parse(typeof(LogTypes), str.Trim());
 								result += (int)t;
 							}
 						}
 					}
 					catch
 					{
-						result = (int)LogType.Debug;
+						result = (int)LogTypes.Debug;
 					}
-					_type = (LogType)result;
+					_type = (LogTypes)result;
 				}
 				return _type.Value;
 			}

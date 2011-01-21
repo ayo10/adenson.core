@@ -5,7 +5,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Types of crypto keys
 	/// </summary>
-	public enum KeyFormat : byte
+	public enum KeyFormat : int
 	{
 		/// <summary>
 		/// Key is stored in base 64

@@ -4,7 +4,7 @@ using System.Data.SqlServerCe;
 using System.Globalization;
 using Adenson.Log;
 
-namespace Adenson.Data.SqlCe
+namespace Adenson.Data
 {
 	internal sealed class SqlHelper
 	{
