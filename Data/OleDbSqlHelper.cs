@@ -54,7 +54,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
-		/// <returns>New <see cref="OdbcCommand"/> object</returns>
+		/// <returns>New <see cref="OleDbCommand"/> object</returns>
 		public override DbCommand CreateCommand()
 		{
 			return new OleDbCommand();
@@ -70,8 +70,6 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
 		/// <returns>New <see cref="OleDbParameter"/> object</returns>
 		public override DbParameter CreateParameter()
 		{

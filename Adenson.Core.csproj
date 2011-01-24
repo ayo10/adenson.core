@@ -87,7 +87,6 @@
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtil.cs" />
-    <Compile Include="Mailer.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -105,6 +104,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
+    <Compile Include="SmtpUtil.cs" />
     <Compile Include="StringUtil.cs" />
     <Compile Include="TypeUtil.cs" />
   </ItemGroup>
@@ -127,7 +127,6 @@
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

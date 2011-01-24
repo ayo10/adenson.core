@@ -28,7 +28,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToFile()")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#Write(Adenson.Log.LogSeverity,System.String,System.Object[])")]
 
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Mailer.#Send(System.String,System.Net.Mail.MailMessage,System.Boolean)")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.SmtpUtil.#TrySend(System.String,System.Net.Mail.MailMessage,System.Boolean)")]
 
 [assembly: SuppressMessage("Microsoft.Naming", "CA1719:ParameterNamesShouldNotMatchMemberNames", Scope = "member", Target = "Adenson.StringUtil.#Format(System.String,System.Object[])")]
 

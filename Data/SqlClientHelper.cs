@@ -79,8 +79,6 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
 		/// <returns>New <see cref="SqlParameter"/> object</returns>
 		public override DbParameter CreateParameter()
 		{

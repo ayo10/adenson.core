@@ -73,6 +73,11 @@ namespace Adenson.Configuration
 		/// <param name="properties">A SettingsPropertyCollection containing the settings property group whose values are to be retrieved.</param>
 		public abstract void Upgrade(SettingsContext context, SettingsPropertyCollection properties);
 
+		/// <summary>
+		/// Gets the section name from the context
+		/// </summary>
+		/// <param name="context">The context</param>
+		/// <returns>found section name</returns>
 		protected static string GetSectionName(SettingsContext context)
 		{
 			string groupName = (string)context["GroupName"];
