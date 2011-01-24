@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using Adenson.Configuration;
+using Adenson.Configuration.Internal;
 using Adenson.Data;
 
 namespace Adenson.Log
@@ -21,7 +22,7 @@ namespace Adenson.Log
 		private static string OutFileName = GetOutFileName();
 		private Type _classType;
 		private short _batchLogSize;
-		private LogTypes? _logType;
+		private LogTypes? _logTypes;
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
@@ -55,7 +56,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public Logger(Type classType, LogTypes logType) : this(classType)
 		{
-			_logType = logType;
+			_logTypes = logType;
 		}
 		/// <summary>
 		/// Instantiates a new Logger class for specified type
@@ -68,7 +69,7 @@ namespace Adenson.Log
 		public Logger(Type classType, LogTypes logType, string source) : this(classType)
 		{
 			if ((logType & LogTypes.EventLog) != LogTypes.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
-			_logType = logType;
+			_logTypes = logType;
 			_source = source;
 		}
 		/// <summary>
@@ -76,7 +77,7 @@ namespace Adenson.Log
 		/// </summary>
 		~Logger()
 		{
-			Logger.Flush(this.Type);
+			Logger.Flush(this.Types);
 			lock (staticLoggers)
 			{
 				if (staticLoggers.ContainsKey(this.ClassType)) staticLoggers.Remove(this.ClassType);
@@ -87,7 +88,7 @@ namespace Adenson.Log
 		#region Properties
 
 		/// <summary>
-		/// Gets the number of logs thats kept in memory before they are dumped into the database, defaults to 10
+		/// Gets the number of logs thats kept in memory before they are dumped into the database, defaults to 0 (flush imediately)
 		/// </summary>
 		public short BatchSize
 		{
@@ -103,16 +104,16 @@ namespace Adenson.Log
 		/// </summary>
 		public LogSeverity Severity
 		{
-			get { return _severity == null ? Config.LogSettings.SeverityActual : _severity.Value; }
+			get { return _severity == null ? Config.LogSettings.Severity : _severity.Value; }
 			set { _severity = value; }
 		}
 		/// <summary>
 		/// Gets the logging type
 		/// </summary>
-		public LogTypes Type
+		public LogTypes Types
 		{
-			get { return _logType == null ? Config.LogSettings.TypeActual : _logType.Value; }
-			set { _logType = value; }
+			get { return _logTypes == null ? Config.LogSettings.Types : _logTypes.Value; }
+			set { _logTypes = value; }
 		}
 		/// <summary>
 		/// The type form which this instance is forged from
@@ -230,7 +231,7 @@ namespace Adenson.Log
 		{
 			//new System.Threading.Thread(new ThreadStart(delegate()
 			//{
-			Logger.Flush(this.Type);
+			Logger.Flush(this.Types);
 			//})).Start();
 		}
 
@@ -241,7 +242,7 @@ namespace Adenson.Log
 			entry.Type = this.ClassType;
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
-			entry.LogType = this.Type;
+			entry.LogType = this.Types;
 			if (arguments.Length == 0) entry.Message = message;
 			else
 			{
@@ -404,7 +405,7 @@ namespace Adenson.Log
 			var statement = Config.LogSettings.DatabaseInfo.CreateInsertStatement();
 			foreach (LogEntry row in entries)
 			{
-				sb.AppendLine(StringUtil.Format(statement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Path, row.Date));
+				sb.AppendLine(StringUtil.Format(statement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Date));
 			}
 			try
 			{
@@ -440,7 +441,7 @@ namespace Adenson.Log
 			TextWriter writer = null;
 			Stream stream = null;
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
-			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}	{4}", row.Date, row.Severity, row.Type, row.Message, row.Path));
+			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}", row.Date, row.Severity, row.Type, row.Message));
 			FileInfo traceFile = new FileInfo(Logger.OutFileName);
 			try
 			{
@@ -473,7 +474,7 @@ namespace Adenson.Log
 					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
 					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
 					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
-					EventLog.WriteEntry(entry.Source, StringUtil.Format("{3}\n\n\nDate: {0}\nType: {1}\nPath: {2}", DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
+					EventLog.WriteEntry(entry.Source, StringUtil.Format("Date: {0}\nType: {1}\n\n{2}", DateTime.Now, entry.Type, entry.Message), eventLogEntryType);
 				}
 				return true;
 			}
@@ -501,13 +502,21 @@ namespace Adenson.Log
 			var format = "[{0}] {1} [{2}] - {3}";
 			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
 			var severity = entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture);
+			var message = StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message);
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
-				Console.WriteLine(StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message));
+				Console.WriteLine(message);
 			}
 			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
 			{
-				System.Diagnostics.Debug.WriteLine(StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message));
+				System.Diagnostics.Debug.WriteLine(message);
+			}
+			if ((entry.LogType & LogTypes.Email) != LogTypes.None)
+			{
+				if (!Config.LogSettings.EmailInfo.IsEmpty())
+				{
+					SmtpUtil.TrySend(Config.LogSettings.EmailInfo.From, Config.LogSettings.EmailInfo.To, Config.LogSettings.EmailInfo.Subject, message, false);
+				}
 			}
 		}
 		private static string GetOutFileName()

@@ -77,10 +77,10 @@ namespace Adenson
 		public static bool TryConvert<T>(object value, out T result)
 		{
 			object output;
-			var b = TypeUtil.TryConvert(value, typeof(T), out output);
-			if (b) result = (T)output;
+			var converted = TypeUtil.TryConvert(value, typeof(T), out output);
+			if (converted) result = (T)output;
 			else result = default(T);
-			return b;
+			return converted;
 		}
 		/// <summary>
 		/// Tries to convert the specified value
@@ -89,31 +89,55 @@ namespace Adenson
 		/// <param name="type">The type of the object we need to convert</param>
 		/// <param name="result">the output of the result</param>
 		/// <returns>true if conversion happened correctly, false otherwise</returns>
-		public static bool TryConvert(object value, Type type, out object result)
+		public static bool TryConvert(object value, Type type, out object output)
 		{
-			TypeConverter typeConverter = TypeDescriptor.GetConverter(type);
-
-			if ((value == null && typeConverter == null) || !typeConverter.IsValid(value))
+			var result = false;
+			if (value == null) output = null;
+			else if (value != null && type == value.GetType())
 			{
-				result = null;
-				return false;
+				output = value;
+				result = true;
 			}
-
-			if (value != null && type == value.GetType())
-			{
-				result = value;
-				return true;
-			}
-
-			result = null;
-			if (type == typeof(Boolean)) result = Convert.ToBoolean(value, CultureInfo.InvariantCulture);
-			else if (type == typeof(int)) result = Convert.ToInt32(value, CultureInfo.InvariantCulture);
 			else
 			{
-				if (typeConverter != null && value != null && typeConverter.CanConvertFrom(value.GetType())) result = typeConverter.ConvertFrom(value);
+				output = null;
+				TypeConverter typeConverter = TypeDescriptor.GetConverter(type);
+				if (typeConverter != null && typeConverter.CanConvertFrom(value.GetType()))
+				{
+					if (typeConverter.IsValid(value))
+					{
+						output = typeConverter.ConvertFrom(value);
+						result = true;
+					}
+					else
+					{
+						var enumConverter = typeConverter as EnumConverter;
+						var valueAsString = value as string;
+						if (enumConverter != null && valueAsString != null)
+						{
+							var splits = valueAsString.Split(',', '|');
+							var intValue = 0;
+							var successful = true;
+							foreach (var str in splits)
+							{
+								object newOutput;
+								if (TryConvert(str.Trim(), type, out newOutput)) intValue += (int)newOutput;
+								else
+								{
+									successful = false;
+									break;
+								}
+							}
+							if (successful)
+							{
+								output = Enum.Parse(type, intValue.ToString(CultureInfo.InvariantCulture));
+								result = true;
+							}
+						}
+					}
+				}
 			}
-			if (result == null) return false;
-			return true;
+			return result;
 		}
 
 		#endregion

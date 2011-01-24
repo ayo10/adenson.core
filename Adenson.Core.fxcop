@@ -19,7 +19,6 @@
   <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
   <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
   <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
-  <TargetFrameworkVersion>0.0</TargetFrameworkVersion>
  </ProjectOptions>
  <Targets>
   <Target Name="$(ProjectDir)/bin/Debug/Adenson.Core.dll" Analyze="True" AnalyzeAllChildren="True" />
