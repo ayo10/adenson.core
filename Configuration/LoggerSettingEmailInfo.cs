@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Adenson.Configuration
 {
-	public sealed class LoggerSettingEmailInfo
+	internal sealed class LoggerSettingEmailInfo
 	{
 		[XmlAttribute(AttributeName = "from")]
 		public string From

@@ -16,9 +16,9 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class.
+		/// Initializes a new instance of the helper class.
 		/// </summary>
-		/// <param name="connectionString"></param>
+		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
 		public OdbcSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -54,8 +54,6 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
 		/// <returns>New <see cref="OdbcParameter"/> object</returns>
 		public override DbParameter CreateParameter()
 		{

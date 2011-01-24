@@ -5,7 +5,7 @@ using Adenson.Log;
 namespace Adenson.Configuration
 {
 	[XmlType(TypeName = "loggerSettings")]
-	public sealed class LoggerSettings
+	internal sealed class LoggerSettings
 	{
 		#region Variables
 		private LogTypes? _type;

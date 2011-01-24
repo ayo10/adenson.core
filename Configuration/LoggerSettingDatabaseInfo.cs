@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Adenson.Configuration
 {
-	public sealed class LoggerSettingDatabaseInfo
+	internal sealed class LoggerSettingDatabaseInfo
 	{
 		#region Constructor
 

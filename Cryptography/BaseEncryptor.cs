@@ -13,7 +13,7 @@ namespace Adenson.Cryptography
 		private byte[] rgbKey = new byte[] { 143, 48, 7, 241, 35, 6, 35, 236, 123, 93, 240, 244, 62, 229, 41, 246, 49, 154, 85, 106, 14, 65, 208, 202, 228, 38, 253, 171, 52, 219, 22, 175 };
 		private byte[] rgbIV = new byte[] { 181, 230, 54, 105, 12, 203, 61, 109, 211, 133, 34, 177, 76, 29, 245, 43 };
 		#endregion
-		#region Constructor
+		#region Constructors
 
 		/// <summary>
 		/// Initializes a new instance of the encryptor
@@ -22,7 +22,7 @@ namespace Adenson.Cryptography
 		{
 		}
 		/// <summary>
-		/// Initializes a new instance of the encryptor with the specified System.Security.Cryptography.SymmetricAlgorithm.Key property and initialization vector (System.Security.Cryptography.SymmetricAlgorithm.IV).
+		/// Initializes a new instance of the encryptor with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>

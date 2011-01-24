@@ -180,7 +180,6 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
-		/// <exception cref="InvalidCastException">if transaction is not  of type <see cref="OdbcTransaction"/></exception>
 		public virtual int ExecuteNonQuery(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteNonQuery(this.CreateCommand(type, transaction, commandText, parameterValues));
@@ -268,7 +267,6 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
-		/// <exception cref="InvalidCastException">if transaction is not  of type <see cref="OdbcTransaction"/></exception>
 		public virtual IDataReader ExecuteReader(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteReader(this.CreateCommand(type, transaction, commandText, parameterValues));
@@ -360,7 +358,6 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
-		/// <exception cref="InvalidCastException">if transaction is not  of type <see cref="OdbcTransaction"/></exception>
 		public virtual object ExecuteScalar(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteScalar(this.CreateCommand(type, transaction, commandText, parameterValues));
@@ -451,6 +448,10 @@ namespace Adenson.Data
 			}
 			return command;
 		}
+		/// <summary>
+		/// Disposes the helper class
+		/// </summary>
+		/// <param name="disposing"></param>
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_connection != null) _connection.Dispose();

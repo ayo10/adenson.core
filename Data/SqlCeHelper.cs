@@ -17,6 +17,10 @@ namespace Adenson.Data
 		#endregion
 		#region Constructor
 
+		/// <summary>
+		/// Initializes a new instance of the helper class.
+		/// </summary>
+		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
 		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -24,6 +28,9 @@ namespace Adenson.Data
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Reclaims wasted space in the SQL Server Compact database by creating a new database file from the existing file. This method is also used to change the collating order, encryption, or password settings of the database.
+		/// </summary>
 		public void Compact()
 		{
 			try
@@ -36,10 +43,16 @@ namespace Adenson.Data
 				logger.Error(ex);
 			}
 		}
+		/// <summary>
+		/// Creates a new database.
+		/// </summary>
 		public void CreateDatabase()
 		{
 			new SqlCeEngine(this.ConnectionString).CreateDatabase();
 		}
+		/// <summary>
+		/// Upgrades a SQL Server Compact database from version 3.1 to 3.5. After the upgrade, the database will be encrypted if the source database was encrypted. If it was not, the upgraded database will be unencrypted.
+		/// </summary>
 		public void Upgrade()
 		{
 			new SqlCeEngine(this.ConnectionString).Upgrade();
@@ -81,7 +94,7 @@ namespace Adenson.Data
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
-		/// <returns>New <see cref="SqlDataAdapter"/> object</returns>
+		/// <returns>New <see cref="SqlCeDataAdapter"/> object</returns>
 		public override DbDataAdapter CreateAdapter(DbCommand command)
 		{
 			return new SqlCeDataAdapter((SqlCeCommand)command);
@@ -105,8 +118,6 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
 		/// <returns>New <see cref="SqlCeParameter"/> object</returns>
 		public override DbParameter CreateParameter()
 		{

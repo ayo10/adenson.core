@@ -9,10 +9,10 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Adenson</RootNamespace>
+    <AssemblyName>Adenson.Core</AssemblyName>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyName>Adenson.Core</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,38 +60,25 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\Hashtable.cs" />
-    <Compile Include="Collections\HashtableChangedEventArgs.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
-    <Compile Include="Collections\ReadOnlyList.cs" />
-    <Compile Include="Collections\ReadOnlyObservableCollection.cs" />
-    <Compile Include="Collections\Set.cs" />
-    <Compile Include="Collections\UnsyncedList.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
     <Compile Include="Configuration\Config.cs" />
-    <Compile Include="Configuration\ConfigFailedEventArgs.cs" />
     <Compile Include="Configuration\ConfigSectionHelper.cs" />
     <Compile Include="Configuration\ConnectionStrings.cs" />
-    <Compile Include="Configuration\EncryptorCollection.cs" />
-    <Compile Include="Configuration\EncryptorElement.cs" />
-    <Compile Include="Configuration\EncryptorSection.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
+    <Compile Include="Configuration\LoggerSettingDatabaseInfo.cs" />
+    <Compile Include="Configuration\LoggerSettingEmailInfo.cs" />
     <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
-    <Compile Include="Data\Odbc\OdbcParameterCache.cs" />
-    <Compile Include="Data\OleDb\OleDbParameterCache.cs" />
-    <Compile Include="Data\OleDb\OleDbClientImpl.cs" />
+    <Compile Include="Data\OdbcSqlHelper.cs" />
     <Compile Include="Data\ConnectionManager.cs" />
-    <Compile Include="Data\Odbc\OdbcClientImpl.cs" />
+    <Compile Include="Data\OleDbSqlHelper.cs" />
     <Compile Include="Data\Parameter.cs" />
-    <Compile Include="Data\SqlCe\SqlCeImpl.cs" />
-    <Compile Include="Data\SqlCe\SqlHelper.cs" />
-    <Compile Include="Data\SqlClient\SqlClientImpl.cs" />
+    <Compile Include="Data\SqlCeHelper.cs" />
+    <Compile Include="Data\SqlClientHelper.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />
-    <Compile Include="Data\SqlClient\SqlClientParameterCache.cs" />
     <Compile Include="Cryptography\DES.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Cryptography\Encryptor.cs" />
@@ -100,8 +87,7 @@
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IO\Extensions.cs" />
-    <Compile Include="IO\Util.cs" />
+    <Compile Include="FileUtil.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -112,15 +98,16 @@
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\LogSeverity.cs" />
     <Compile Include="Log\LogType.cs" />
-    <Compile Include="Net\Mailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Properties\SR.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SR.resx</DependentUpon>
     </Compile>
-    <Compile Include="StaticResource.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="SmtpUtil.cs" />
+    <Compile Include="StringUtil.cs" />
+    <Compile Include="TypeUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Exceptions.resx">
@@ -132,6 +119,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SR.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Adenson</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -22,7 +22,7 @@ namespace Adenson.Configuration
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new provider
+		/// Initializes the application settings provider
 		/// </summary>
 		public LocalFileSettingsProvider()
 		{
@@ -103,7 +103,7 @@ namespace Adenson.Configuration
 		/// Initializes the provider, setting 
 		/// </summary>
 		/// <param name="name">The friendly name of the provider.</param>
-		/// <param name="values">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
+		/// <param name="config">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
 		public override void Initialize(string name, NameValueCollection config)
 		{
 			if (String.IsNullOrEmpty(name)) name = "LocalFileSettingsProvider";
