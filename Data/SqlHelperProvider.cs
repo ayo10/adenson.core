@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Reflection;
+using System.Globalization;
 using Adenson.Configuration;
 
 namespace Adenson.Data
@@ -13,9 +12,6 @@ namespace Adenson.Data
 	/// </summary>
 	public static class SqlHelperProvider
 	{
-		#region Variables
-		private static Log.Logger logger = new Adenson.Log.Logger(typeof(SqlHelperProvider));
-		#endregion
 		#region Methods
 
 		/// <summary>
@@ -56,7 +52,6 @@ namespace Adenson.Data
 		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null) throw new ArgumentNullException("connectionString");
-			if (String.IsNullOrEmpty(connectionString.ConnectionString)) throw new ArgumentNullException("connectionString.ConnectionString");
 
 			if (String.IsNullOrEmpty(connectionString.ProviderName))
 			{
@@ -71,13 +66,8 @@ namespace Adenson.Data
 						var subsplit = keyval.Split('=');
 						if (subsplit.Length > 1)
 						{
-							switch (subsplit[0].ToLower())
-							{
-								case "provider":
-								case "providername":
-									connectionString.ProviderName = subsplit[1];
-									break;
-							}
+							var split0 = subsplit[0];
+							if (split0.Equals("provider", StringComparison.CurrentCultureIgnoreCase) || split0.Equals("providername", StringComparison.CurrentCultureIgnoreCase)) connectionString.ProviderName = subsplit[1];
 						}
 					}
 				}

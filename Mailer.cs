@@ -1,13 +1,9 @@
 using System;
-using System.Data;
-using System.Net.Mail;
-using System.Configuration;
-using System.Xml;
 using System.Linq;
+using System.Net.Mail;
 using Adenson.Log;
-using Adenson.Data;
 
-namespace Adenson.Net
+namespace Adenson
 {
 	/// <summary>
 	/// Simplified mailer class that will attempt to send mail
@@ -36,7 +32,7 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static bool Send(string smtpHost, MailMessage message)
 		{
-			if (Util.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
 			return Mailer.Send(smtpHost, message, false);
 		}
 		/// <summary>
@@ -107,7 +103,7 @@ namespace Adenson.Net
 		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		public static void SendAsync(string smtpHost, MailMessage message)
 		{
-			if (Util.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
 			Mailer.Send(smtpHost, message, true);
 		}
 		/// <summary>
@@ -164,7 +160,7 @@ namespace Adenson.Net
 		private static MailMessage ComposeMailMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
-			if (to.Any(s => Util.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
+			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);
@@ -180,7 +176,7 @@ namespace Adenson.Net
 			if (message == null) throw new ArgumentNullException("message");
 
 			SmtpClient smtp = null;
-			if (Util.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
 			else smtp = new SmtpClient(smtpHost);
 
 			try

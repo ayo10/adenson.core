@@ -1,26 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using Adenson.Configuration;
 using Adenson.Data;
-using System.Configuration;
-using System.Xml.Serialization;
 
 namespace Adenson.Log
 {
 	/// <summary>
 	/// Logger of .... well, logs
 	/// </summary>
-	public sealed class Logger : IDisposable
+	public sealed class Logger
 	{
 		#region Variables
 		private static List<LogEntry> entries = new List<LogEntry>();
 		private static List<Type> suspendedTypes = new List<Type>();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private static string OutFileName;
+		private static string OutFileName = GetOutFileName();
 		private Type _classType;
 		private short _batchLogSize;
 		private LogTypes? _logType;
@@ -30,27 +28,6 @@ namespace Adenson.Log
 		#endregion
 		#region Constructors
 
-		static Logger()
-		{
-			string filePath = Config.LogSettings.FileName;
-			string folder = null;
-			if (!Path.IsPathRooted(filePath))
-			{
-				var context = System.Web.HttpContext.Current;//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
-				if (context != null) filePath = context.Server.MapPath(filePath);
-				else filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
-				folder = Path.GetDirectoryName(filePath);
-			}
-			if (!Directory.Exists(folder))
-			{
-				#if DEBUG
-				System.Diagnostics.Debug.WriteLine(String.Format("Folder {0} does not exist, file logging will not happen", folder));
-				#endif
-				return;
-			}
-
-			OutFileName = filePath;
-		}
 		/// <summary>	
 		/// Creates a new instance of Logger from type
 		/// </summary>
@@ -58,7 +35,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public Logger(Type classType)
 		{
-			if (classType == null) throw new ArgumentNullException(Exceptions.ArgumentNull);
+			if (classType == null) throw new ArgumentNullException("classType");
 			_classType = classType;
 		}
 		/// <summary>	
@@ -93,19 +70,6 @@ namespace Adenson.Log
 			if ((logType & LogTypes.EventLog) != LogTypes.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
 			_logType = logType;
 			_source = source;
-		}
-		/// <summary>
-		/// Instantiates a new Logger class for specified type
-		/// </summary>
-		/// <param name="classType">Type to use to create new instance</param>
-		/// <param name="instance"></param>
-		public Logger(Type classType, Logger instance) : this(classType)
-		{
-			if (instance == null) throw new ArgumentNullException("instance", Exceptions.ArgumentNull);
-			this.BatchSize = instance.BatchSize;
-			this.Severity = instance.Severity;
-			this.Type = instance.Type;
-			this.Source = instance.Source;
 		}
 		/// <summary>
 		/// Clean up when logger is destroyed
@@ -163,7 +127,7 @@ namespace Adenson.Log
 		public string Source
 		{
 			get { return String.IsNullOrEmpty(_source) ? Config.LogSettings.Source : _source; }
-			internal set { _source = value; }
+			set { _source = value; }
 		}
 		/// <summary>
 		/// Gets the string tht will be used as source for Window's Event Log
@@ -183,7 +147,7 @@ namespace Adenson.Log
 		/// <param name="value">The value</param>
 		public void Info(object value)
 		{
-			this.Info(Convert.ToString(value));
+			this.Info(StringUtil.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Info
@@ -192,7 +156,7 @@ namespace Adenson.Log
 		/// <param name="arguments">Arguments, if any to format message</param>
 		public void Info(string message, params object[] arguments)
 		{
-			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Info)) return;
+			if ((int)this.Severity > (int)LogSeverity.Info) return;
 			this.Write(LogSeverity.Info, message, arguments);
 		}
 		/// <summary>
@@ -201,7 +165,7 @@ namespace Adenson.Log
 		/// <param name="value">The value</param>
 		public void Debug(object value)
 		{
-			this.Debug(Convert.ToString(value));
+			this.Debug(StringUtil.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Debug
@@ -210,7 +174,7 @@ namespace Adenson.Log
 		/// <param name="arguments">Arguments, if any to format message</param>
 		public void Debug(string message, params object[] arguments)
 		{
-			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Debug)) return;
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
 			this.Write(LogSeverity.Debug, message, arguments);
 		}
 		/// <summary>
@@ -219,7 +183,7 @@ namespace Adenson.Log
 		/// <param name="value">The value</param>
 		public void Warn(object value)
 		{
-			this.Warn(Convert.ToString(value));
+			this.Warn(StringUtil.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors of type Warning
@@ -228,7 +192,7 @@ namespace Adenson.Log
 		/// <param name="arguments">Arguments, if any to format message</param>
 		public void Warn(string message, params object[] arguments)
 		{
-			if (Convert.ToInt32(this.Severity) > Convert.ToInt32(LogSeverity.Warn)) return;
+			if ((int)this.Severity > (int)LogSeverity.Warn) return;
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
 		/// <summary>
@@ -237,7 +201,7 @@ namespace Adenson.Log
 		/// <param name="value">The value</param>
 		public void Error(object value)
 		{
-			this.Error(Convert.ToString(value));
+			this.Error(StringUtil.ToString(value));
 		}
 		/// <summary>
 		/// Called to log errors
@@ -269,13 +233,6 @@ namespace Adenson.Log
 			Logger.Flush(this.Type);
 			//})).Start();
 		}
-		/// <summary>
-		/// Flushes the logger, then disposes of its internal cache
-		/// </summary>
-		public void Dispose()
-		{
-			this.Flush();
-		}
 
 		internal LogEntry Write(LogSeverity severity, string message, params object[] arguments)
 		{
@@ -290,12 +247,12 @@ namespace Adenson.Log
 			{
 				try
 				{
-					entry.Message = String.Format(message, arguments);
+					entry.Message = StringUtil.Format(message, arguments);
 				}
 				catch (FormatException)
 				{
 					var str = message;
-					for (int i = 0; i < arguments.Length; i++) str = str.Replace("{" + i + "}", (arguments[i] == null ? "null" : Convert.ToString(arguments[i])));
+					for (int i = 0; i < arguments.Length; i++) str = str.Replace("{" + i + "}", (arguments[i] == null ? "null" : StringUtil.ToString(arguments[i])));
 					entry.Message = str;
 				}
 				catch
@@ -444,9 +401,10 @@ namespace Adenson.Log
 			if (sqlHelper == null) return false;
 
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
+			var statement = Config.LogSettings.DatabaseInfo.CreateInsertStatement();
 			foreach (LogEntry row in entries)
 			{
-				sb.AppendLine(String.Format(SR.EventLoggerSqlInsertStatement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Path, row.Date));
+				sb.AppendLine(StringUtil.Format(statement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Path, row.Date));
 			}
 			try
 			{
@@ -461,7 +419,7 @@ namespace Adenson.Log
 		}
 		internal static bool SaveToFile()
 		{
-			if (Util.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
+			if (StringUtil.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
 
 			try
 			{
@@ -470,7 +428,7 @@ namespace Adenson.Log
 				{
 					string fileName = Path.GetFileNameWithoutExtension(Logger.OutFileName);
 					string extension = Path.GetExtension(Logger.OutFileName);
-					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd"), extension);
+					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.InvariantCulture), extension);
 					string oldNewFilePath = Path.Combine(Path.GetDirectoryName(Logger.OutFileName), oldNewFileName);
 					if (!File.Exists(oldNewFilePath)) File.Move(Logger.OutFileName, oldNewFilePath);
 				}
@@ -482,7 +440,7 @@ namespace Adenson.Log
 			TextWriter writer = null;
 			Stream stream = null;
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
-			foreach (LogEntry row in entries) sb.AppendLine(String.Format(SR.EventLoggerFileInsert, row.Date, row.Severity, row.Type, row.Message, row.Path));
+			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}	{4}", row.Date, row.Severity, row.Type, row.Message, row.Path));
 			FileInfo traceFile = new FileInfo(Logger.OutFileName);
 			try
 			{
@@ -515,7 +473,7 @@ namespace Adenson.Log
 					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
 					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
 					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
-					EventLog.WriteEntry(entry.Source, String.Format(SR.LoggerEventLogMessage, DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
+					EventLog.WriteEntry(entry.Source, StringUtil.Format("{3}\n\n\nDate: {0}\nType: {1}\nPath: {2}", DateTime.Now, entry.Type, entry.Path, entry.Message), eventLogEntryType);
 				}
 				return true;
 			}
@@ -540,14 +498,38 @@ namespace Adenson.Log
 		}
 		private static void OutWriteLine(LogEntry entry)
 		{
+			var format = "[{0}] {1} [{2}] - {3}";
+			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
+			var severity = entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture);
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
-				Console.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
+				Console.WriteLine(StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message));
 			}
 			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
 			{
-				System.Diagnostics.Debug.WriteLine(String.Format(SR.LoggerConsoleOutput, entry.Severity.ToString().ToUpper(), entry.Date.ToString("H:mm:ss.fff"), entry.Type.Name, entry.Message));
+				System.Diagnostics.Debug.WriteLine(StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message));
 			}
+		}
+		private static string GetOutFileName()
+		{
+			string filePath = Config.LogSettings.FileName;
+			string folder = null;
+			if (!Path.IsPathRooted(filePath))
+			{
+				var context = System.Web.HttpContext.Current;//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
+				if (context != null) filePath = context.Server.MapPath(filePath);
+				else filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
+				folder = Path.GetDirectoryName(filePath);
+			}
+			if (!Directory.Exists(folder))
+			{
+				#if DEBUG
+				System.Diagnostics.Debug.WriteLine(StringUtil.Format("Folder {0} does not exist, file logging will not happen", folder));
+				#endif
+				return null;
+			}
+
+			return filePath;
 		}
 
 		#endregion

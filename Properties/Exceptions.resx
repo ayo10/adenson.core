@@ -120,38 +120,11 @@
   <data name="AlgorithmNull" xml:space="preserve">
     <value>The Algorithm property is used for encryption and decryption, and cannot be null.</value>
   </data>
-  <data name="AllowNullsFalseNulls" xml:space="preserve">
-    <value>AllowNulls is set to false, so, collection should not have null values in it.</value>
-  </data>
   <data name="ArgumentInListNull" xml:space="preserve">
     <value>None of the argument in the list can be null.</value>
   </data>
-  <data name="ArgumentNull" xml:space="preserve">
-    <value>Argument cannot be null.</value>
-  </data>
-  <data name="ArgumentNullOrEmpty" xml:space="preserve">
-    <value>Argument cannot be null nor empty.</value>
-  </data>
-  <data name="CastToTypeException" xml:space="preserve">
-    <value>Item cannot be cast to "{0}".</value>
-  </data>
-  <data name="ChangeTypeConfused" xml:space="preserve">
-    <value>Confused ChangeType is, converting {0} to {1} not does it.</value>
-  </data>
-  <data name="CollectionsNoNullValues" xml:space="preserve">
-    <value>The collection does not allow null values.</value>
-  </data>
-  <data name="CommandTextParse" xml:space="preserve">
-    <value>Unable to parse the command text to automatically generate parameters, pass in appropriate command parameter objects instead.</value>
-  </data>
-  <data name="ConfigurationFileNotFound" xml:space="preserve">
-    <value>File {0} does not exist at the application startup folder.</value>
-  </data>
   <data name="ConnectionStringWithKeyArgNotFound" xml:space="preserve">
     <value>No connection string with specified key '{0}' could be found. Check to make sure you have a connection string section in your configuration file with the specified key.</value>
-  </data>
-  <data name="CustomEncryptorMissingAttributes" xml:space="preserve">
-    <value>Custom Encryptors need atleast a 'TypeName' attribute, and maybe 'AssemblyName' attribute.</value>
   </data>
   <data name="EmailAddressInvalid" xml:space="preserve">
     <value>To email address cannot be null or empty.</value>
@@ -159,49 +132,16 @@
   <data name="EventLogTypeWithSourceNull" xml:space="preserve">
     <value>Source cannot be null or empty if LogType contains LogType.EventLog.</value>
   </data>
-  <data name="KeyDuplicates" xml:space="preserve">
-    <value>Key duplicates not allowed.</value>
-  </data>
-  <data name="LoggerNoConnString" xml:space="preserve">
-    <value>Could not find a connection string to use to spit out events to database.</value>
-  </data>
-  <data name="LoggerSimpleKeyValueConfigSetCyclic" xml:space="preserve">
-    <value>Sorry, mister developer, cyclic depedency, logger depends on SimpleKeyValueConfigSet.</value>
-  </data>
-  <data name="MailNoTemplateForId" xml:space="preserve">
-    <value>Could not find matching templates for the specified template id.</value>
-  </data>
-  <data name="MailTemplateFailed" xml:space="preserve">
-    <value>Error creating email from template.</value>
-  </data>
-  <data name="NoCommandParameter" xml:space="preserve">
-    <value>There are no parameter values in the command text.</value>
-  </data>
   <data name="NoEncryptorExists" xml:space="preserve">
     <value>No encryptor with that key exists.</value>
-  </data>
-  <data name="ParameterCountMismatch" xml:space="preserve">
-    <value>The number of parameters and the number of parameter values are not the same.</value>
   </data>
   <data name="ReadOnlyInstance" xml:space="preserve">
     <value>This instance is read only.</value>
   </data>
-  <data name="RegistryKeyArgNotFound" xml:space="preserve">
-    <value>Registry Key "{0}" could not be found.</value>
-  </data>
   <data name="SectionNotDictionarySection" xml:space="preserve">
     <value>The section is not of DictionarySectionHandler.</value>
   </data>
-  <data name="SqlCommandTypeTextNotSupported" xml:space="preserve">
-    <value>Only command type 'Text' is supported.</value>
-  </data>
-  <data name="SqlImplWrongType" xml:space="preserve">
-    <value>This is a {0} implementation, what are you doing passing in a non {0} object.</value>
-  </data>
   <data name="TypeArgCouldNotBeLoaded" xml:space="preserve">
     <value>Type '{0}' could not be loaded.</value>
-  </data>
-  <data name="TypeExpectedMustBeArg" xml:space="preserve">
-    <value>Type expected must be '{0}'.</value>
   </data>
 </root>

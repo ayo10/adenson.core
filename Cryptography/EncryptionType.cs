@@ -8,7 +8,7 @@ namespace Adenson.Cryptography
 	public enum EncryptorType : int
 	{
 		/// <summary>
-		/// None has been specified
+		/// None specified
 		/// </summary>
 		None = 0,
 		/// <summary>
@@ -22,10 +22,6 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Just Des
 		/// </summary>
-		DES = 3,
-		/// <summary>
-		/// Custom Entryptor
-		/// </summary>
-		Custom = 4
+		DES = 3
 	}
 }

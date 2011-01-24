@@ -63,7 +63,7 @@ namespace Adenson
 		public static byte[] ToBytes(this Stream stream)
 		{
 			if (stream == null) return null;
-			return Util.ReadStream(stream);
+			return FileUtil.ReadStream(stream);
 		}
 
 		internal static int GetDisableProcessingCount(this Dispatcher dispatcher)

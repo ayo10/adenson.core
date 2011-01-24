@@ -53,39 +53,8 @@ namespace Adenson.Configuration
 			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
 			if (result == null && useDefaultIfNull) result = ConnectionStrings.Default;
-			if (result == null) throw new ConfigurationErrorsException(String.Format(Exceptions.ConnectionStringWithKeyArgNotFound, key, ConnectionStrings.DefaultKey));
+			if (result == null) throw new ConfigurationErrorsException(StringUtil.Format(Exceptions.ConnectionStringWithKeyArgNotFound, key, ConnectionStrings.DefaultKey));
 			return result;
-		}
-		/// <summary>
-		/// Calls ConnectionStrings.GetCS, catching ArgumentOutOfRangeException that would have been thrown.
-		/// </summary>
-		/// <param name="key">The lookup key for the connection string</param>
-		/// <param name="connectionSetting">The connection setting if any</param>
-		/// <returns>A connection string</returns>
-		/// <remarks>calls GetCS(key, true)</remarks>
-		public static bool TryGet(string key, out ConnectionStringSettings connectionSetting)
-		{
-			return ConnectionStrings.TryGet(key, false, out connectionSetting);
-		}
-		/// <summary>
-		/// Calls ConnectionStrings.GetCS, catching ArgumentOutOfRangeException that would have been thrown.
-		/// </summary>
-		/// <param name="key">Key to use to do a lookup</param>
-		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true, null otherwise</param>
-		/// <param name="connectionSetting">The connection setting if any</param>
-		/// <returns>A connection string</returns>
-		public static bool TryGet(string key, bool useDefaultIfNull, out ConnectionStringSettings connectionSetting)
-		{
-			try
-			{
-				connectionSetting = ConnectionStrings.Get(key, useDefaultIfNull);
-				return true;
-			}
-			catch
-			{
-			}
-			connectionSetting = null;
-			return false;
 		}
 
 		private static ConnectionStringSettings GetValue(string key)

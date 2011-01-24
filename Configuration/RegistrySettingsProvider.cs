@@ -7,10 +7,12 @@ using Microsoft.Win32;
 
 namespace Adenson.Configuration
 {
-	public sealed class RegistrySettingsProvider : ApplicationSettingsProvider, IApplicationSettingsProvider
+	public sealed class RegistrySettingsProvider : ApplicationSettingsProvider
 	{
 		#region Variables
 		private string previousVersionKeyName;
+		private string _settingKey;
+		private string _applicationKey;
 		#endregion
 		#region Properties
 
@@ -23,14 +25,21 @@ namespace Adenson.Configuration
 			set;
 		}
 
-		private string SettingKey
-		{
-			get;
-			set;
-		}
 		private string ApplicationKey
 		{
-			get { return String.Format("Software\\{0}\\{1}", this.CompanyName, this.ProductName); }
+			get
+			{
+				if (_applicationKey == null) _applicationKey = StringUtil.Format("Software\\{0}\\{1}", this.CompanyName, this.ProductName);
+				return _applicationKey;
+			}
+		}
+		private string SettingKey
+		{
+			get
+			{
+				if (_settingKey == null) _settingKey = StringUtil.Format("{0}.{1}", this.Version.Major, this.Version.Minor);
+				return _settingKey;
+			}
 		}
 
 		#endregion
@@ -46,7 +55,7 @@ namespace Adenson.Configuration
 		}
 		public override void Upgrade(SettingsContext context, SettingsPropertyCollection properties)
 		{
-			SettingsPropertyValueCollection spvc = this.GetPreviousSettings(context, properties);
+			SettingsPropertyValueCollection spvc = this.GetPreviousSettings(properties);
 			if (spvc.Count > 0) this.SetPropertyValues(context, spvc);
 		}
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
@@ -66,7 +75,7 @@ namespace Adenson.Configuration
 				bool isApplicationScoped = setting.Property.Attributes.Values.OfType<ApplicationScopedSettingAttribute>().Count() > 0;
 				if (isApplicationScoped) throw new InvalidOperationException();
 
-				RegistryKey settingKey = this.GetSettingRegistryKey(false, true);
+				RegistryKey settingKey = this.GetSettingRegistryKey(true);
 
 				#region Default Value Setting
 				RegistryValueKind registryKind = RegistryValueKind.String;
@@ -100,9 +109,10 @@ namespace Adenson.Configuration
 		private SettingsPropertyValue GetSettingsValue(SettingsProperty setting)
 		{
 			bool isApplicationScoped = setting.Attributes.Values.OfType<ApplicationScopedSettingAttribute>().Count() > 0;
+			if (isApplicationScoped) throw new InvalidOperationException();
 
 			bool tryConvert = true;
-			RegistryKey settingRegistryKey = this.GetSettingRegistryKey(isApplicationScoped, false);
+			RegistryKey settingRegistryKey = this.GetSettingRegistryKey(false);
 			object registryValue = settingRegistryKey == null ? null : settingRegistryKey.GetValue(setting.Name);
 
 			if (registryValue == null) registryValue = setting.DefaultValue;
@@ -110,7 +120,7 @@ namespace Adenson.Configuration
 			SettingsPropertyValue settingValue = new SettingsPropertyValue(setting) { IsDirty = false };
 
 			object result;
-			if (tryConvert) Util.TryConvert(registryValue, setting.PropertyType, out result);
+			if (tryConvert) TypeUtil.TryConvert(registryValue, setting.PropertyType, out result);
 			else result = registryValue;
 			if (result != null)
 			{
@@ -125,7 +135,7 @@ namespace Adenson.Configuration
 
 			return settingValue;
 		}
-		private SettingsPropertyValueCollection GetPreviousSettings(SettingsContext context, SettingsPropertyCollection properties)
+		private SettingsPropertyValueCollection GetPreviousSettings(SettingsPropertyCollection properties)
 		{
 			SettingsPropertyValueCollection previousSettings = null;
 			RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(this.ApplicationKey);
@@ -138,7 +148,7 @@ namespace Adenson.Configuration
 				else if (names.Length > 0) previousVersionKeyName = names[names.Length - 1];
 				if (previousVersionKeyName == this.SettingKey) previousVersionKeyName = null;
 
-				if (!Util.IsNullOrWhiteSpace(previousVersionKeyName))
+				if (!StringUtil.IsNullOrWhiteSpace(previousVersionKeyName))
 				{
 					RegistrySettingsProvider rsp = new RegistrySettingsProvider();
 					rsp.Version = new Version(previousVersionKeyName);
@@ -152,7 +162,7 @@ namespace Adenson.Configuration
 
 			return previousSettings;
 		}
-		private RegistryKey GetSettingRegistryKey(bool isApplicationScoped, bool createIfNotExist)
+		private RegistryKey GetSettingRegistryKey(bool createIfNotExist)
 		{
 			RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(this.ApplicationKey, createIfNotExist);
 			RegistryKey result = null;

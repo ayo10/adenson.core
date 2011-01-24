@@ -32,19 +32,6 @@ namespace Adenson.Configuration
 			return Convert(ConfigSectionHelper.GetSection(group, name));
 		}
 
-		internal static object GetSection(string section)
-		{
-			object result = ConfigSectionHelper.GetSection("adenson", section); //the new way
-			if (result == null && section == "logger") result = ConfigSectionHelper.GetSection("adenson.log", section);
-			if (result == null && section == "sqlhelper") result = ConfigSectionHelper.GetSection("adenson.data", section);
-			if (result == null && section == "directoryinfo")
-			{
-				result = GetSection("adenson.io", section);
-				if (result == null) GetSection("adenson.utils", "ioutils");
-			}
-
-			return result;
-		}
 		private static Dictionary<string, string> Convert(object obj)
 		{
 			if (obj == null) return null;

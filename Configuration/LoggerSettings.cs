@@ -20,7 +20,7 @@ namespace Adenson.Configuration
 			this.Source = "Logger";
 			this.DateTimeFormat = "HH:mm:ss:fff";
 			this.EmailInfo = new LoggerSettingEmailInfo { From = "errors@adenson.com" };
-			this.FileName = SR.EventLogFile;
+			this.FileName = "eventlogger.log";
 		}
 
 		#endregion
@@ -63,6 +63,13 @@ namespace Adenson.Configuration
 
 		[XmlAttribute(AttributeName = "fileName")]
 		public string FileName
+		{
+			get;
+			set;
+		}
+
+		[XmlElement(ElementName = "database")]
+		public LoggerSettingDatabaseInfo DatabaseInfo
 		{
 			get;
 			set;
