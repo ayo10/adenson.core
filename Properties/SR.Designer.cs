@@ -61,103 +61,11 @@ namespace Adenson {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to eventlogger.log.
-        /// </summary>
-        internal static string EventLogFile {
-            get {
-                return ResourceManager.GetString("EventLogFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}	{1}	{2}	{3}	{4}.
-        /// </summary>
-        internal static string EventLoggerFileInsert {
-            get {
-                return ResourceManager.GetString("EventLoggerFileInsert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES (&apos;{0}&apos;, &apos;{1}&apos;, &apos;{2}&apos;, &apos;{3}&apos;, &apos;{4}&apos;).
-        /// </summary>
-        internal static string EventLoggerSqlInsertStatement {
-            get {
-                return ResourceManager.GetString("EventLoggerSqlInsertStatement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [{0}] {1} [{2}] - {3}.
-        /// </summary>
-        internal static string LoggerConsoleOutput {
-            get {
-                return ResourceManager.GetString("LoggerConsoleOutput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to HH:mm:ss.
-        /// </summary>
-        internal static string LoggerDateFormat {
-            get {
-                return ResourceManager.GetString("LoggerDateFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {3}
-        ///
-        ///
-        ///Date: {0}
-        ///Type: {1}
-        ///Path: {2}.
-        /// </summary>
-        internal static string LoggerEventLogMessage {
-            get {
-                return ResourceManager.GetString("LoggerEventLogMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}
-        ///Source: {1}
-        ///Site: {2}
-        ///{3}
-        ///.
-        /// </summary>
-        internal static string LoggerExceptionMessage {
-            get {
-                return ResourceManager.GetString("LoggerExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The minumium value for LogBatchSize is 1..
+        ///   Looks up a localized string similar to The minimum value for &apos;LogBatchSize&apos; is 1..
         /// </summary>
         internal static string MsgExMinLogBatchSize {
             get {
                 return ResourceManager.GetString("MsgExMinLogBatchSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attempt to send using &apos;localhost&apos;, &apos;mail.Adenson.com&apos; and &apos;mail.Adenson.net&apos; all failed (in that specified order). 
-        ///Override this behavior by setting System.Net.Mail.SmtpClient server properties in the configuration file settings, for example, an example configuration:
-        ///&lt;configuration&gt;
-        ///  &lt;system.net&gt;
-        ///    &lt;mailSettings&gt;
-        ///      &lt;smtp deliveryMethod=&quot;network&quot;&gt;
-        ///        &lt;network host=&quot;localhost&quot; port=&quot;25&quot; defaultCredentials=&quot;true&quot; /&gt;
-        ///      &lt;/smtp&gt;
-        ///    &lt;/mailSettings&gt;
-        ///  &lt;/system.net&gt;
-        ///&lt;/configuration&gt;
-        ///        /// [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string MsgMailerWarning {
-            get {
-                return ResourceManager.GetString("MsgMailerWarning", resourceCulture);
             }
         }
     }

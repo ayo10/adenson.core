@@ -10,8 +10,8 @@ namespace Adenson.Cryptography
 	public abstract class BaseEncryptor
 	{
 		#region Variables
-		private byte[] rgbKey;
-		private byte[] rgbIV;
+		private byte[] rgbKey = new byte[] { 143, 48, 7, 241, 35, 6, 35, 236, 123, 93, 240, 244, 62, 229, 41, 246, 49, 154, 85, 106, 14, 65, 208, 202, 228, 38, 253, 171, 52, 219, 22, 175 };
+		private byte[] rgbIV = new byte[] { 181, 230, 54, 105, 12, 203, 61, 109, 211, 133, 34, 177, 76, 29, 245, 43 };
 		#endregion
 		#region Constructor
 
@@ -26,7 +26,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		protected BaseEncryptor(byte[] key, byte[] iv)
+		protected BaseEncryptor(byte[] key, byte[] iv) : this()
 		{
 			this.SetKeys(key, iv);
 		}
@@ -37,7 +37,7 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Gets the algorithm the encryptor is based on
 		/// </summary>
-		public abstract SymmetricAlgorithm Algorithm 
+		public abstract SymmetricAlgorithm Algorithm
 		{ 
 			get;
 		}
@@ -91,10 +91,10 @@ namespace Adenson.Cryptography
 			return Convert.ToBase64String(result, 0, result.Length);
 		}
 		/// <summary>
-		/// The 
+		/// Decrypts specified encrypted string
 		/// </summary>
-		/// <param name="toDecrypt"></param>
-		/// <returns></returns>
+		/// <param name="toDecrypt">The string to decrypt</param>
+		/// <returns>Decrypted file</returns>
 		public string Decrypt(string toDecrypt)
 		{
 			ICryptoTransform transform = this.CreateDecryptor();
@@ -108,10 +108,10 @@ namespace Adenson.Cryptography
 			return result;
 		}
 		/// <summary>
-		/// 
+		/// Decrypts specified encrypted byte array
 		/// </summary>
-		/// <param name="toDecrypt"></param>
-		/// <returns></returns>
+		/// <param name="toDecrypt">The byte array to decrypt</param>
+		/// <returns>Decrypted byte array</returns>
 		public byte[] Decrypt(byte[] toDecrypt)
 		{
 			ICryptoTransform transform = this.CreateDecryptor();
@@ -125,30 +125,32 @@ namespace Adenson.Cryptography
 			return buffer;
 		}
 		/// <summary>
-		/// 
+		/// Creates a symmetric enryptor object with the configured algorithm key and initialization vector.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A symmetric encryptor object.</returns>
+		/// <exception cref="ArgumentException">If the <see cref="Algorithm"/> property is null</exception>
 		public ICryptoTransform CreateEncryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", Exceptions.AlgorithmNull);
+			if (this.Algorithm == null) throw new ArgumentException(Exceptions.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateEncryptor();
 			return this.Algorithm.CreateEncryptor(rgbKey, rgbIV);
 		}
 		/// <summary>
-		/// 
+		/// Creates a symmetric decryptor object with the configured algorithm key and initialization vector.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A symmetric decryptor object.</returns>
+		/// <exception cref="ArgumentException">If the <see cref="Algorithm"/> property is null</exception>
 		public ICryptoTransform CreateDecryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentNullException("this.Algorithm", Exceptions.AlgorithmNull);
+			if (this.Algorithm == null) throw new ArgumentException(Exceptions.AlgorithmNull);
 			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateDecryptor();
 			return this.Algorithm.CreateDecryptor(rgbKey, rgbIV);
 		}
 		/// <summary>
-		/// 
+		/// Sets the algorithm key and initialization vector to use in the encryptor
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="iv"></param>
+		/// <param name="key">The algorithm key</param>
+		/// <param name="iv">The initialization vector</param>
 		public void SetKeys(byte[] key, byte[] iv)
 		{
 			rgbKey = key;

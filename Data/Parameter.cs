@@ -8,7 +8,7 @@ namespace Adenson.Data
 	/// <summary>
 	/// Represents simple a key/value pair that can be automagically turned into a IDbDataParameter 
 	/// </summary>
-	public struct Parameter : IEquatable<Parameter>
+	public sealed class Parameter : IEquatable<Parameter>
 	{
 		#region Variables
 		private string _key;
@@ -78,6 +78,7 @@ namespace Adenson.Data
 		/// <returns>true, or false, i dont know</returns>
 		public bool Equals(Parameter other)
 		{
+			if (Object.ReferenceEquals(this, other)) return true;
 			return other.Name == this.Name && other.Value == this.Value;
 		}
 		/// <summary>
@@ -87,7 +88,8 @@ namespace Adenson.Data
 		/// <returns>true, or false, i dont know</returns>
 		public override bool Equals(object obj)
 		{
-			if (obj is Parameter) return this.Equals((Parameter)obj);
+			var other = obj as Parameter;
+			if (other != null) return this.Equals(other);
 			return base.Equals(obj);
 		}
 		/// <summary>
@@ -97,42 +99,6 @@ namespace Adenson.Data
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
-		}
-		/// <summary>
-		/// Converts this instance to specified type instance by using reflection to instantiate
-		/// </summary>
-		/// <typeparam name="T">The type</typeparam>
-		/// <returns>The result of the instantiation</returns>
-		public T Convert<T>() where T : IDataParameter
-		{
-			if (this.IsEmpty) return default(T);
-			Type type = typeof(T);
-			T parameter = (T)type.Assembly.CreateInstance(type.FullName, true, BindingFlags.CreateInstance, null, new object[] { this.Name, this.Value }, null, null);
-			return parameter;
-		}
-
-		/// <summary>
-		/// This is just a lazy way of doing new Parameter(){set properties here}
-		/// </summary>
-		/// <param name="key">The key</param>
-		/// <param name="value">The value</param>
-		/// <returns>A Parameter object</returns>
-		public static Parameter New(string key, object value)
-		{
-			Parameter sp = new Parameter();
-			sp.Name = key;
-			sp.Value = value;
-			return sp;
-		}
-		/// <summary>
-		/// Implicitly converts this instance into a SqlParameter, cheating, yeah I know
-		/// </summary>
-		/// <param name="param">The parameter to convert</param>
-		/// <returns>A SqlParameter object</returns>
-		public static implicit operator SqlParameter(Parameter param)
-		{
-			if (param.IsEmpty) return null;
-			return new SqlParameter(param.Name, param.Value);
 		}
 
 		#endregion

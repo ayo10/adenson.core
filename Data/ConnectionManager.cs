@@ -1,13 +1,14 @@
 using System;
 using System.Data;
+using System.Data.Common;
 
 namespace Adenson.Data
 {
-	internal sealed class ConnectionManager
+	internal sealed class ConnectionManager : IDisposable
 	{
 		#region Constructor
 
-		internal ConnectionManager(IDbConnection connection)
+		internal ConnectionManager(DbConnection connection)
 		{
 			this.Connection = connection;
 		}
@@ -15,7 +16,7 @@ namespace Adenson.Data
 		#endregion
 		#region Properties
 
-		public IDbConnection Connection
+		public DbConnection Connection
 		{
 			get;
 			private set;
@@ -42,6 +43,7 @@ namespace Adenson.Data
 		{
 			if (this.Connection != null) this.Connection.Dispose();
 		}
+		//private void Dispose(bool disposing)
 
 		#endregion
 	}

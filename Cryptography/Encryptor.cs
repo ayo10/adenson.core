@@ -10,84 +10,63 @@ namespace Adenson.Cryptography
 	/// </summary>
 	public static class Encryptor
 	{
-		#region Variables
-		private static Logger logger = new Logger(typeof(Encryptor));
-		private static Dictionary<string, BaseEncryptor> encryptors = new Dictionary<string,BaseEncryptor>();
-		#endregion
-		#region Constructor
-
-		static Encryptor()
-		{
-			EncryptorSection section = (EncryptorSection)ConfigSectionHelper.GetSection("Encryptors");
-			if (section != null)
-			{
-				foreach (EncryptorElement elem in section.Encryptors)
-				{
-					if (elem.EncryptorType == EncryptorType.Custom && (Util.IsNullOrWhiteSpace(elem.AssemblyName) || Util.IsNullOrWhiteSpace(elem.TypeName))) throw new InvalidOperationException(Exceptions.CustomEncryptorMissingAttributes);
-					encryptors.Add(elem.Name, elem.CreateEncryptor());
-				}
-			}
-		}
-
-		#endregion
-		#region Properties
-
-		internal static BaseEncryptor Base
-		{
-			get { return encryptors["Default"]; }
-		}
-
-		#endregion
 		#region Methods
 
 		/// <summary>
-		/// 
+		/// Decrypts the specified string using Rijndael (AES)
 		/// </summary>
-		/// <param name="toDecrypt"></param>
-		/// <returns></returns>
+		/// <param name="toDecrypt">The string to decrypt</param>
+		/// <returns>Decrypted string</returns>
 		public static string Decrypt(string toDecrypt)
 		{
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
-
-			return Encryptor.Base.Decrypt(toDecrypt);
+			return Encryptor.Decrypt(EncryptorType.Rijndael, toDecrypt);
 		}
 		/// <summary>
-		/// 
+		/// Decrypts the specified string using specified type
 		/// </summary>
-		/// <param name="key">The key to look up</param>
-		/// <param name="toDecrypt"></param>
-		/// <returns></returns>
-		public static string Decrypt(string key, string toDecrypt)
+		/// <param name="type">The type</param>
+		/// <param name="toDecrypt">The string to decrypt</param>
+		/// <returns>Decrypted string</returns>
+		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
+		public static string Decrypt(EncryptorType type, string toDecrypt)
 		{
-			if (Util.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
-			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
+			if (type == EncryptorType.None) throw new ArgumentNullException("type");
 
-			return encryptors[key].Decrypt(toDecrypt);
+			switch (type)
+			{
+				case EncryptorType.DES: return new DES().Decrypt(toDecrypt);
+				case EncryptorType.Rijndael: return new Rijndael().Decrypt(toDecrypt);
+				case EncryptorType.TripleDES: return new TripleDES().Decrypt(toDecrypt);
+			}
+			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
 		}
 		/// <summary>
-		/// 
+		/// Encrypts the specified string using Rijndael (AES)
 		/// </summary>
-		/// <param name="toEncrypt"></param>
-		/// <returns></returns>
+		/// <param name="toEncrypt">The string to encrypt</param>
+		/// <returns>Encrypted string</returns>
 		public static string Encrypt(string toEncrypt)
 		{
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
-
-			return Encryptor.Base.Encrypt(toEncrypt);
+			return Encryptor.Encrypt(EncryptorType.Rijndael, toEncrypt);
 		}
 		/// <summary>
-		/// 
+		/// Encrypts the specified string using specified type
 		/// </summary>
-		/// <param name="key"></param>
+		/// <param name="type">The type</param>
 		/// <param name="toEncrypt"></param>
-		/// <returns></returns>
-		public static string Encrypt(string key, string toEncrypt)
+		/// <returns>Encrypted string</returns>
+		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
+		public static string Encrypt(EncryptorType type, string toEncrypt)
 		{
-			if (Util.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
-			if (!encryptors.ContainsKey(key)) throw new ArgumentException(Exceptions.NoEncryptorExists, "key");
-			return encryptors[key].Encrypt(toEncrypt);
+			if (type == EncryptorType.None) throw new ArgumentNullException("type");
+
+			switch (type)
+			{
+				case EncryptorType.DES: return new DES().Encrypt(toEncrypt);
+				case EncryptorType.Rijndael: return new Rijndael().Encrypt(toEncrypt);
+				case EncryptorType.TripleDES: return new TripleDES().Encrypt(toEncrypt);
+			}
+			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
 		}
 		/// <summary>
 		/// Gets the MD5 hash of specified bit array
@@ -100,50 +79,6 @@ namespace Adenson.Cryptography
 			System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
 			string hash = System.Convert.ToBase64String(md5.ComputeHash(buffer)).Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
 			return hash;
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="toDecrypt"></param>
-		/// <param name="descryptedString"></param>
-		/// <returns></returns>
-		public static bool TryDecrypt(string toDecrypt, out string descryptedString)
-		{
-			if (toDecrypt == null) throw new ArgumentNullException("toDecrypt");
-
-			descryptedString = null;
-			try
-			{
-				descryptedString = Encryptor.Decrypt(toDecrypt);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-			}
-			return false;
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="toEncrypt"></param>
-		/// <param name="encryptedString"></param>
-		/// <returns></returns>
-		public static bool TryEncrypt(string toEncrypt, out string encryptedString)
-		{
-			if (toEncrypt == null) throw new ArgumentNullException("toEncrypt");
-
-			encryptedString = null;
-			try
-			{
-				encryptedString = Encryptor.Encrypt(toEncrypt);
-				return true;
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-			}
-			return false;
 		}
 
 		#endregion

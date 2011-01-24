@@ -1,7 +1,13 @@
 ﻿<Dictionary>
 	<Words>
+		<Recognized>
+			<Word>Adenson</Word>
+			<Word>Decryptor</Word>
+			<Word>Encryptor</Word>
+			<Word>Util</Word>
+		</Recognized>
 		<Unrecognized>
-			<Word>adenson</Word>
+			<Word>DES</Word>
 		</Unrecognized>
 		<Deprecated>
 			<Term PreferredAlternate="LogOn">login</Term>

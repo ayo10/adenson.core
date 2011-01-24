@@ -117,53 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EventLogFile" xml:space="preserve">
-    <value>eventlogger.log</value>
-  </data>
-  <data name="EventLoggerFileInsert" xml:space="preserve">
-    <value>{0}	{1}	{2}	{3}	{4}</value>
-  </data>
-  <data name="EventLoggerSqlInsertStatement" xml:space="preserve">
-    <value>INSERT INTO [dbo].[EVENT_LOG] (severity, category, error_text, url, created_date) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')</value>
-  </data>
-  <data name="LoggerConsoleOutput" xml:space="preserve">
-    <value>[{0}] {1} [{2}] - {3}</value>
-  </data>
-  <data name="LoggerDateFormat" xml:space="preserve">
-    <value>HH:mm:ss</value>
-  </data>
-  <data name="LoggerEventLogMessage" xml:space="preserve">
-    <value>{3}
-
-
-Date: {0}
-Type: {1}
-Path: {2}</value>
-  </data>
-  <data name="LoggerExceptionMessage" xml:space="preserve">
-    <value>{0}
-Source: {1}
-Site: {2}
-{3}
-</value>
-  </data>
   <data name="MsgExMinLogBatchSize" xml:space="preserve">
-    <value>The minumium value for LogBatchSize is 1.</value>
-  </data>
-  <data name="MsgMailerWarning" xml:space="preserve">
-    <value>Attempt to send using 'localhost', 'mail.Adenson.com' and 'mail.Adenson.net' all failed (in that specified order). 
-Override this behavior by setting System.Net.Mail.SmtpClient server properties in the configuration file settings, for example, an example configuration:
-
-&lt;configuration&gt;
-  &lt;system.net&gt;
-    &lt;mailSettings&gt;
-      &lt;smtp deliveryMethod="network"&gt;
-        &lt;network host="localhost" port="25" defaultCredentials="true" /&gt;
-      &lt;/smtp&gt;
-    &lt;/mailSettings&gt;
-  &lt;/system.net&gt;
-&lt;/configuration&gt;
-
-Note, setting that will cause Adenson.Utils.Mailer not to try using the default values.</value>
+    <value>The minimum value for 'LogBatchSize' is 1.</value>
   </data>
 </root>

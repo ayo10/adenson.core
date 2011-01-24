@@ -13,7 +13,6 @@ namespace Adenson.Collections
 	{
 		#region Variables
 		private Dictionary<TKey, TValue> dick;
-		private event EventHandler<HashtableChangedEventArgs<TKey>> _dictionaryChanged;
 		#endregion
 		#region Constructors
 
@@ -51,15 +50,7 @@ namespace Adenson.Collections
 			set
 			{
 				if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
-				if (dick.ContainsKey(key))
-				{
-					TValue originalValue = dick[key];
-					if ((object)value != (object)originalValue)
-					{
-						dick[key] = value;
-						this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Replace, key));
-					}
-				}
+				if (dick.ContainsKey(key)) dick[key] = value;
 				else dick.Add(key, value);
 			}
 		}
@@ -92,14 +83,6 @@ namespace Adenson.Collections
 			get;
 			internal set;
 		}
-		/// <summary>
-		/// Occurs when a value in the dictionary has changed
-		/// </summary>
-		public event EventHandler<HashtableChangedEventArgs<TKey>> DictionaryChanged
-		{
-			add { _dictionaryChanged += value; }
-			remove { _dictionaryChanged -= value; }
-		}
 
 		#endregion
 		#region Methods
@@ -113,7 +96,6 @@ namespace Adenson.Collections
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Add(key, value);
-			this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Add, key));
 		}
 		/// <summary>
 		/// Removes all items
@@ -122,7 +104,6 @@ namespace Adenson.Collections
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Clear();
-			this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Reset, default(TKey)));
 		}
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
@@ -159,7 +140,6 @@ namespace Adenson.Collections
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			bool result = dick.Remove(key);
-			if (result) this.OnDictionaryChanged(new HashtableChangedEventArgs<TKey>(NotifyCollectionChangedAction.Remove, key));
 			return result;
 		}
 		/// <summary>
@@ -171,14 +151,6 @@ namespace Adenson.Collections
 		public bool TryGetValue(TKey key, out TValue value)
 		{
 			return dick.TryGetValue(key, out value);
-		}
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected void OnDictionaryChanged(HashtableChangedEventArgs<TKey> e)
-		{
-			if (_dictionaryChanged != null) _dictionaryChanged(this, e);
 		}
 		
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

@@ -78,7 +78,7 @@ namespace Adenson.Configuration
 			string groupName = (string)context["GroupName"];
 			string settingsKey = (string)context["SettingsKey"];
 			string name = groupName;
-			if (!String.IsNullOrEmpty(settingsKey)) name = String.Format("{0}.{1}", new object[] { name, settingsKey });
+			if (!String.IsNullOrEmpty(settingsKey)) name = StringUtil.Format("{0}.{1}", new object[] { name, settingsKey });
 			return System.Xml.XmlConvert.EncodeLocalName(name);
 		}
 

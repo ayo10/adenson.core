@@ -3,8 +3,11 @@ using System.Security.Cryptography;
 
 namespace Adenson.Cryptography
 {
-	internal sealed class TripleDES : BaseEncryptor
+	public sealed class TripleDES : BaseEncryptor
 	{
+		public TripleDES() : base()
+		{
+		}
 		public TripleDES(byte[] key, byte[] iv) : base(key, iv)
 		{
 		}

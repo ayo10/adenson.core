@@ -41,6 +41,9 @@ namespace Adenson.Configuration
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets if to ignore version or not
+		/// </summary>
 		protected bool IgnoreVersion
 		{
 			get;
@@ -178,7 +181,7 @@ namespace Adenson.Configuration
 			{
 				if (!Directory.Exists(configFilePath)) Directory.CreateDirectory(configFilePath);
 				var sectionName = LocalFileSettingsProvider.GetSectionName(context);
-				File.WriteAllText(filemap.ExeConfigFilename, String.Format(LocalFileSettingsProvider.ConfigContent, sectionName, sectionName, typeof(UserSettingsGroup).AssemblyQualifiedName, typeof(ClientSettingsSection).AssemblyQualifiedName));
+				File.WriteAllText(filemap.ExeConfigFilename, StringUtil.Format(LocalFileSettingsProvider.ConfigContent, sectionName, sectionName, typeof(UserSettingsGroup).AssemblyQualifiedName, typeof(ClientSettingsSection).AssemblyQualifiedName));
 			}
 
 			var config = ConfigurationManager.OpenMappedExeConfiguration(filemap, System.Configuration.ConfigurationUserLevel.None);
