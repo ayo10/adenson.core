@@ -1,57 +1,48 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 
-namespace Adenson.Configuration
+namespace Adenson.Configuration.Internal
 {
-	internal sealed class LoggerSettingDatabaseInfo
+	internal sealed class LoggerSettingDatabaseInfo : XmlSettingsBase
 	{
 		#region Constructor
 
-		public LoggerSettingDatabaseInfo()
+		public LoggerSettingDatabaseInfo() : this(null)
 		{
-			this.TableName = "EventLog";
-			this.SeverityColumn = "Severity";
-			this.DateColumn = "Date";
-			this.TypeColumn = "Type";
-			this.MessageColumn = "Message";
-			this.PathColumn = "Path";
+		}
+		public LoggerSettingDatabaseInfo(XElement element) : base(element)
+		{
+			this.TableName = this.GetValue("TableName", "EventLog");
+			this.SeverityColumn = this.GetValue("SeverityColumn", "Severity");
+			this.DateColumn = this.GetValue("DateColumn", "Date");
+			this.TypeColumn = this.GetValue("TypeColumn", "Type");
+			this.MessageColumn = this.GetValue("MessageColumn", "Message");
 		}
 
 		#endregion
 		#region Properties
 
-		[XmlAttribute(AttributeName = "tableName")]
 		public string TableName
 		{
 			get;
 			set;
 		}
-		[XmlAttribute(AttributeName = "severityColumn")]
 		public string SeverityColumn
 		{
 			get;
 			set;
 		}
-		[XmlAttribute(AttributeName = "dateColumn")]
 		public string DateColumn
 		{
 			get;
 			set;
 		}
-		[XmlAttribute(AttributeName = "messageColumn")]
 		public string MessageColumn
 		{
 			get;
 			set;
 		}
-		[XmlAttribute(AttributeName = "typeColumn")]
 		public string TypeColumn
-		{
-			get;
-			set;
-		}
-		[XmlAttribute(AttributeName = "pathColumn")]
-		public string PathColumn
 		{
 			get;
 			set;
@@ -62,7 +53,7 @@ namespace Adenson.Configuration
 
 		public string CreateInsertStatement()
 		{
-			return String.Concat(StringUtil.Format("INSERT INTO [dbo].[EVENT_LOG] ({0}, {1}, {2}, {3}, {4}) ", this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.PathColumn, this.DateColumn), "VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')");
+			return String.Concat(StringUtil.Format("INSERT INTO {4} ({0}, {1}, {2}, {3}) ", this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn, this.TableName), "VALUES ('{0}', '{1}', '{2}', '{3}')");
 		}
 
 		#endregion

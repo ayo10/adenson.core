@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Configuration;
 using System.Xml;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 
-namespace Adenson.Configuration
+namespace Adenson.Configuration.Internal
 {
 	/// <summary>
 	/// Config values for use within the assembly
-	/// 
 	/// </summary>
 	internal static class Config
 	{
-		private static readonly object dummy = new object();
 		private static LoggerSettings _logSettings;
 		
 		public static LoggerSettings LogSettings
@@ -20,22 +18,8 @@ namespace Adenson.Configuration
 			{
 				if (_logSettings == null)
 				{
-					lock (dummy)
-					{
-						var section = (XmlDocument)ConfigurationManager.GetSection("adenson/loggerSettings");
-						var serializer = new XmlSerializer(typeof(LoggerSettings));
-						try
-						{
-							_logSettings = (LoggerSettings)serializer.Deserialize(new XmlNodeReader(section));
-						}
-						catch (InvalidOperationException)
-						{
-						}
-						catch (InvalidCastException)
-						{
-						}
-						if (_logSettings == null) _logSettings = new LoggerSettings();
-					}
+					var section = (XmlDocument)ConfigurationManager.GetSection("adenson/loggerSettings");
+					_logSettings = new LoggerSettings((section != null) ? XDocument.Parse(section.InnerXml).Root : null);
 				}
 				return _logSettings;
 			}

@@ -6,9 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Adenson.Collections.Hashtable`2.#System.Collections.Generic.ICollection`1<System.Collections.Generic.KeyValuePair`2<!0,!1>>.Contains(System.Collections.Generic.KeyValuePair`2<!0,!1>)", Justification = "Not supported")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Adenson.Collections.Hashtable`2.#System.Collections.Generic.ICollection`1<System.Collections.Generic.KeyValuePair`2<!0,!1>>.CopyTo(System.Collections.Generic.KeyValuePair`2<!0,!1>[],System.Int32)", Justification = "Not supported")]
 
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.LoggerSettings.#get_SeverityActual()")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.LoggerSettings.#get_TypeActual()")]
-[assembly: SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Scope = "member", Target = "Adenson.Configuration.LoggerSettings.#Type")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.Internal.LoggerSettings.#get_SeverityActual()")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.Internal.LoggerSettings.#get_TypeActual()")]
+[assembly: SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Scope = "member", Target = "Adenson.Configuration.Internal.LoggerSettings.#Type")]
 
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "type", Target = "Adenson.Cryptography.DES")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope = "member", Target = "Adenson.Cryptography.EncryptorType.#DES")]

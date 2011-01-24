@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Threading;
+using System.Xml.Linq;
 
 namespace Adenson
 {
@@ -25,6 +27,20 @@ namespace Adenson
 			return dictionary.Keys.Any(k => k.Equals(key, comparison));
 		}
 		/// <summary>
+		/// Gets the first (in document order) child element with the specified <see cref="XName"/>.
+		/// </summary>
+		/// <param name="source">The <see cref="XElement"/> to look into</param>
+		/// <param name="name">The <see cref="XName"/> to match.</param>
+		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
+		/// <returns>A <see cref="XElement"/> that matches the specified<see cref="XName"/>, or null.</returns>
+		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		public static XElement Element(this XContainer source, XName name, StringComparison comparisonType)
+		{
+			if (source == null) throw new ArgumentNullException("source");
+			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
+			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType));
+		}
+		/// <summary>
 		/// Gets the element with the specified key, case insensitive
 		/// </summary>
 		/// <typeparam name="T">The type</typeparam>
@@ -37,13 +53,40 @@ namespace Adenson
 			return dictionary[actualKey];
 		}
 		/// <summary>
+		/// Gets if the specified element has the specified sub element with specified key
+		/// </summary>
+		/// <param name="source">The element to look into</param>
+		/// <param name="name">The key to look for</param>
+		/// <returns>True if an element with specified key is found, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		public static bool HasElement(this XContainer source, XName name)
+		{
+			if (source == null) throw new ArgumentNullException("source");
+			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
+			return source.HasElement(name, StringComparison.CurrentCulture);
+		}
+		/// <summary>
+		/// Gets if the specified element has the specified sub element with specified key
+		/// </summary>
+		/// <param name="element">The <see cref="XElement"/> to look into</param>
+		/// <param name="name">The key to look for</param>
+		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
+		/// <returns>True if an element with specified key is found, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		public static bool HasElement(this XContainer source, XName name, StringComparison comparisonType)
+		{
+			if (source == null) throw new ArgumentNullException("source");
+			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
+			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType)) != null;
+		}
+		/// <summary>
 		/// Checks to see if the specified value is empty or null
 		/// </summary>
-		/// <param name="values">The array to check</param>
+		/// <param name="values">The enumerable object to check</param>
 		/// <returns>true if values is null or empty, false otherwise</returns>
-		public static bool IsEmpty(this object[] values)
+		public static bool IsEmpty(this IEnumerable values)
 		{
-			return (values == null) || (values.Length == 0);
+			return (values == null) || (values.Cast<object>().Count() == 0);
 		}
 		/// <summary>
 		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes

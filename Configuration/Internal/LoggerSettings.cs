@@ -1,132 +1,69 @@
 ﻿using System;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 using Adenson.Log;
 
-namespace Adenson.Configuration
+namespace Adenson.Configuration.Internal
 {
-	[XmlType(TypeName = "loggerSettings")]
-	internal sealed class LoggerSettings
+	internal sealed class LoggerSettings : XmlSettingsBase
 	{
-		#region Variables
-		private LogTypes? _type;
-		private LogSeverity? _severity;
-		#endregion
 		#region Constructor
 
-		public LoggerSettings()
+		public LoggerSettings(XElement element) : base(element)
 		{
-			this.Severity = "Error";
-			this.Type = "Debug";
-			this.Source = "Logger";
-			this.DateTimeFormat = "HH:mm:ss:fff";
-			this.EmailInfo = new LoggerSettingEmailInfo { From = "errors@adenson.com" };
-			this.FileName = "eventlogger.log";
+			this.BatchSize = this.GetValue("BatchSize", default(short));
+			this.Severity = this.GetValue("Severity", LogSeverity.Error);
+			this.Source = this.GetValue("Source", "Logger");
+			this.DateTimeFormat = this.GetValue("DateTimeFormat", "HH:mm:ss:fff");
+			this.FileName = this.GetValue("FileName", "eventlogger.log");
+			this.EmailInfo = new LoggerSettingEmailInfo(element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
+			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
+			
+			if (element.HasElement("Type", StringComparison.OrdinalIgnoreCase)) this.Types = this.GetValue("Type", LogTypes.Debug);//Backward compatibility
+			else this.Types = this.GetValue("Types", LogTypes.Debug);
 		}
 
 		#endregion
 		#region Properties
 
-		[XmlAttribute(AttributeName = "severity")]
-		public string Severity
-		{
-			get;
-			set;
-		}
-
-		[XmlAttribute(AttributeName = "type")]
-		public string Type
-		{
-			get;
-			set;
-		}
-
-		[XmlAttribute(AttributeName = "batchSize")]
 		public short BatchSize
 		{
 			get;
 			set;
 		}
-
-		[XmlAttribute(AttributeName = "source")]
+		public LogSeverity Severity
+		{
+			get;
+			set;
+		}
+		public LogTypes Types
+		{
+			get;
+			set;
+		}
 		public string Source
 		{
 			get;
 			set;
 		}
-
-		[XmlAttribute(AttributeName = "dateTimeFormat")]
 		public string DateTimeFormat
 		{
 			get;
 			set;
 		}
-
-		[XmlAttribute(AttributeName = "fileName")]
 		public string FileName
 		{
 			get;
 			set;
 		}
-
-		[XmlElement(ElementName = "database")]
 		public LoggerSettingDatabaseInfo DatabaseInfo
 		{
 			get;
 			set;
 		}
-
-		[XmlElement(ElementName = "email")]
 		public LoggerSettingEmailInfo EmailInfo
 		{
 			get;
 			set;
-		}
-
-		internal LogTypes TypeActual
-		{
-			get
-			{
-				if (_type == null)
-				{
-					int result = 0;
-					try
-					{
-						if (!Int32.TryParse(this.Type, out result))
-						{
-							var splits = this.Type.Split(',', '|');
-							foreach (var str in splits)
-							{
-								LogTypes t = (LogTypes)Enum.Parse(typeof(LogTypes), str.Trim());
-								result += (int)t;
-							}
-						}
-					}
-					catch
-					{
-						result = (int)LogTypes.Debug;
-					}
-					_type = (LogTypes)result;
-				}
-				return _type.Value;
-			}
-		}
-		internal LogSeverity SeverityActual
-		{
-			get
-			{
-				if (_severity == null)
-				{
-					try
-					{
-						_severity = (LogSeverity)Enum.Parse(typeof(LogSeverity), this.Severity);
-					}
-					catch
-					{
-						_severity = LogSeverity.Error;
-					}
-				}
-				return _severity.Value;
-			}
 		}
 
 		#endregion

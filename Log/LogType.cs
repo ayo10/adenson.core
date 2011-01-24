@@ -13,7 +13,7 @@ namespace Adenson.Log
 		/// </summary>
 		None = 0,
 		/// <summary>
-		/// Logs into a database
+		/// Logs into a database (expects config setting adenson/loggerSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set
 		/// </summary>
 		Database = 1,
 		/// <summary>
@@ -22,7 +22,7 @@ namespace Adenson.Log
 		/// <remarks>
 		/// <para>Files are written to the directory that contains the executing assembly, except for ASP.NET projects, which are written in the directory above the bin folder.</para>
 		/// <para>The user application is running under should have file create, read and write access to the specified location stated above</para>
-		/// <para>If <see cref="Adenson.Configuration.LoggerSettings.FileName"/> is prepended with a directory name, the directory should exit before hand</para>
+		/// <para>If config setting adenson/loggerSettings.fileName is prepended with a directory name, the directory should exit before hand</para>
 		/// </remarks>
 		File = 2,
 		/// <summary>
@@ -30,7 +30,7 @@ namespace Adenson.Log
 		/// </summary>
 		EventLog = 4,
 		/// <summary>
-		/// Spit logs via Console.WriteLine 
+		/// Logs via Console.WriteLine 
 		/// </summary>
 		Console = 8,
 		/// <summary>
@@ -38,8 +38,12 @@ namespace Adenson.Log
 		/// </summary>
 		Debug = 16,
 		/// <summary>
-		/// DataBase | File | EventLog | Console | DiagnosticsDebug
+		/// Logs via email (expects config setting adenson/loggerSettings/emailInfo[from, to] to be set
 		/// </summary>
-		All = Database | File | EventLog | Debug
+		Email = 32,
+		/// <summary>
+		/// DataBase | File | EventLog | Console | DiagnosticsDebug | Email
+		/// </summary>
+		All = Database | File | EventLog | Debug | Email
 	}
 }

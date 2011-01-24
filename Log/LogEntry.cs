@@ -26,14 +26,6 @@ namespace Adenson.Log
 			set;
 		}
 		/// <summary>
-		/// Gets the path
-		/// </summary>
-		public string Path
-		{
-			get;
-			set;
-		}
-		/// <summary>
 		/// Gets the message
 		/// </summary>
 		public string Message

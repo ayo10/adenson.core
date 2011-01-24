@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\3.5\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;NET35</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -62,13 +62,14 @@
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
-    <Compile Include="Configuration\Config.cs" />
     <Compile Include="Configuration\ConfigSectionHelper.cs" />
     <Compile Include="Configuration\ConnectionStrings.cs" />
+    <Compile Include="Configuration\Internal\Config.cs" />
+    <Compile Include="Configuration\Internal\LoggerSettingDatabaseInfo.cs" />
+    <Compile Include="Configuration\Internal\LoggerSettingEmailInfo.cs" />
+    <Compile Include="Configuration\Internal\LoggerSettings.cs" />
+    <Compile Include="Configuration\Internal\XmlSettingsBase.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
-    <Compile Include="Configuration\LoggerSettingDatabaseInfo.cs" />
-    <Compile Include="Configuration\LoggerSettingEmailInfo.cs" />
-    <Compile Include="Configuration\LoggerSettings.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
