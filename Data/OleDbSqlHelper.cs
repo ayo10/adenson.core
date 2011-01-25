@@ -6,7 +6,7 @@ using System.Data.OleDb;
 namespace Adenson.Data
 {
 	/// <summary>
-	/// The SqlHelper class for Oledb connections
+	/// The Sql Helper class for Oledb connections
 	/// </summary>
 	public sealed class OleDbSqlHelper : SqlHelperBase
 	{

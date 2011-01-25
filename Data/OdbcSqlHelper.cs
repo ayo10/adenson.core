@@ -1,15 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.Common;
 using System.Data.Odbc;
 
 namespace Adenson.Data
 {
 	/// <summary>
-	/// The OdbcHelper class is intended to encapsulate high performance, scalable best practices for
-	/// common uses of OdbcClient
+	/// The Sql Helper class for ODBC connections
 	/// </summary>
 	public sealed class OdbcSqlHelper : SqlHelperBase
 	{
