@@ -68,7 +68,7 @@ namespace Adenson
 		/// <summary>
 		/// Gets if the specified element has the specified sub element with specified key
 		/// </summary>
-		/// <param name="element">The <see cref="XElement"/> to look into</param>
+		/// <param name="source">The <see cref="XContainer"/> to look into</param>
 		/// <param name="name">The key to look for</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>True if an element with specified key is found, false otherwise</returns>

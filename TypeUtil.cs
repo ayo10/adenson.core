@@ -87,7 +87,7 @@ namespace Adenson
 		/// </summary>
 		/// <param name="value">the value to convert</param>
 		/// <param name="type">The type of the object we need to convert</param>
-		/// <param name="result">the output of the result</param>
+		/// <param name="output">the output of the conversion</param>
 		/// <returns>true if conversion happened correctly, false otherwise</returns>
 		public static bool TryConvert(object value, Type type, out object output)
 		{
