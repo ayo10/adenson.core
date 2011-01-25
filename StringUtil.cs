@@ -17,7 +17,7 @@ namespace Adenson
 		/// <remarks>Calls String.Format(<see cref="CultureInfo.CurrentCulture"/>, format, args)</remarks>
 		/// <param name="format">A composite format string.</param>
 		/// <param name="args">An object array that contains zero or more objects to format.</param>
-		/// <returns> A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
+		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
 		public static string Format(string format, params object[] args)
 		{
 			return String.Format(CultureInfo.CurrentCulture, format, args);
@@ -31,7 +31,7 @@ namespace Adenson
 		public static bool IsNullOrWhiteSpace(string value)
 		{
 			#if NET35
-			return StringUtil.IsNullOrWhiteSpace(value == null ? null : value.Trim());
+			return String.IsNullOrEmpty(value == null ? null : value.Trim());
 			#else
 			return String.IsNullOrWhiteSpace(value);
 			#endif
