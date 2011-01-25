@@ -87,7 +87,7 @@ namespace Adenson.Data
 			GC.SuppressFinalize(this);
 		}
 		/// <summary>
-		/// Executes and returns a new DataSet from specified stored procedure
+		/// Executes and returns a new DataSet from specified command text
 		/// </summary>
 		/// <param name="type">The command type</param>
 		/// <param name="commandText">The command to execute</param>
@@ -98,7 +98,7 @@ namespace Adenson.Data
 			return this.ExecuteDataSet(type, null, commandText, parameterValues);
 		}
 		/// <summary>
-		/// Executes and returns a new DataSet from specified stored procedure using specified transaction
+		/// Executes and returns a new DataSet from specified command text using specified transaction
 		/// </summary>
 		/// <param name="type">The command type</param>
 		/// <param name="transaction">The transaction</param>
