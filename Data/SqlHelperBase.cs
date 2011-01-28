@@ -17,19 +17,37 @@ namespace Adenson.Data
 		private static Logger logger = Logger.GetLogger(typeof(SqlHelperBase));
 		private static string[] crudites = new string[] { "alter ", "create ", "select ", "update ", "delete " };
 		private bool mustCloseConnection = true;
-		private ConnectionManager _connection;
+		private ConnectionManager _connectionManager;
+		private string _connectionString;
 		#endregion
 		#region Constructors
 
 		/// <summary>
-		/// When implemented, should instantiate a new instance of the sql helper using specified connection as a
-		/// connection string if isConnectionString is true, else uses ConnectionStrings.GetCS to retrieve it
+		/// Instantiates a new helper using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// </summary>
+		protected SqlHelperBase() : this(Configuration.ConnectionStrings.Default)
+		{
+		}
+		/// <summary>
+		/// Instantiates a new instance of the sql helper using specified connection string setting object
 		/// </summary>
 		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
+		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
 		protected SqlHelperBase(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null) throw new ArgumentNullException("connectionString");
 			this.ConnectionString = connectionString.ConnectionString;
+		}
+		/// <summary>
+		/// Instantiates a new instance of the sql helper using specified connection string setting object
+		/// </summary>
+		/// <param name="connectionString">The connection string to use</param>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		protected SqlHelperBase(string connectionString)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException("connectionString");
+			this.ConnectionString = connectionString;
 		}
 		
 		#endregion
@@ -38,10 +56,16 @@ namespace Adenson.Data
 		/// <summary>
 		/// Gets the connection string to use
 		/// </summary>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
 		public string ConnectionString
 		{
-			get;
-			private set;
+			get { return _connectionString; }
+			private set
+			{
+				DbConnectionStringBuilder builder = new DbConnectionStringBuilder();
+				builder.ConnectionString = value;
+				_connectionString = value;
+			}
 		}
 		/// <summary>
 		/// Gets the current connection object in use (if OpenConnection was invoked)
@@ -55,12 +79,12 @@ namespace Adenson.Data
 		{
 			get
 			{
-				if (_connection == null || _connection.Connection == null)
+				if (_connectionManager == null || _connectionManager.Connection == null)
 				{
-					_connection = new ConnectionManager(this.CreateConnection());
-					_connection.AllowClose = mustCloseConnection;
+					_connectionManager = new ConnectionManager(this.CreateConnection());
+					_connectionManager.AllowClose = mustCloseConnection;
 				}
-				return _connection;
+				return _connectionManager;
 			}
 		}
 
@@ -454,7 +478,7 @@ namespace Adenson.Data
 		/// <param name="disposing"></param>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_connection != null) _connection.Dispose();
+			if (_connectionManager != null) _connectionManager.Dispose();
 		}
 
 		/// <summary>

@@ -18,9 +18,19 @@ namespace Adenson
 		/// <param name="format">A composite format string.</param>
 		/// <param name="args">An object array that contains zero or more objects to format.</param>
 		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
+		/// <exception cref="ArgumentNullException">format or args is null.</exception>
 		public static string Format(string format, params object[] args)
 		{
-			return String.Format(CultureInfo.CurrentCulture, format, args);
+			try
+			{
+				return String.Format(CultureInfo.CurrentCulture, format, args);
+			}
+			catch (FormatException)
+			{
+				var str = format;
+				for (int i = 0; i < args.Length; i++) str = str.Replace("{" + i + "}", (args[i] == null ? "null" : StringUtil.ToString(args[i])));
+				return str;
+			}
 		}
 		/// <summary>
 		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.

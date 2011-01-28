@@ -15,10 +15,11 @@ namespace Adenson.Configuration.Internal
 			this.Source = this.GetValue("Source", "Logger");
 			this.DateTimeFormat = this.GetValue("DateTimeFormat", "HH:mm:ss:fff");
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
-			this.EmailInfo = new LoggerSettingEmailInfo(element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
-			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
-			
-			if (element.HasElement("Type", StringComparison.OrdinalIgnoreCase)) this.Types = this.GetValue("Type", LogTypes.Debug);//Backward compatibility
+
+			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
+			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
+
+			if (element != null && element.HasElement("Type", StringComparison.OrdinalIgnoreCase)) this.Types = this.GetValue("Type", LogTypes.Debug);
 			else this.Types = this.GetValue("Types", LogTypes.Debug);
 		}
 

@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using Adenson.Collections;
 using Adenson.Configuration;
 using Adenson.Configuration.Internal;
 using Adenson.Data;
+using System.Linq;
 
 namespace Adenson.Log
 {
@@ -16,16 +18,16 @@ namespace Adenson.Log
 	public sealed class Logger
 	{
 		#region Variables
-		private static List<LogEntry> entries = new List<LogEntry>();
-		private static List<Type> suspendedTypes = new List<Type>();
-		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
 		private static string OutFileName = GetOutFileName();
+		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
+		private List<LogEntry> entries = new List<LogEntry>();
 		private Type _classType;
 		private short _batchLogSize;
 		private LogTypes? _logTypes;
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
+		private Hashtable<string, DateTime> trackers = new Hashtable<string, DateTime>();
 		#endregion
 		#region Constructors
 
@@ -77,7 +79,7 @@ namespace Adenson.Log
 		/// </summary>
 		~Logger()
 		{
-			Logger.Flush(this.Types);
+			this.Flush();
 			lock (staticLoggers)
 			{
 				if (staticLoggers.ContainsKey(this.ClassType)) staticLoggers.Remove(this.ClassType);
@@ -96,7 +98,7 @@ namespace Adenson.Log
 			set
 			{
 				if (value < 1) throw new ArgumentException(SR.MsgExMinLogBatchSize, "value");
-				_batchLogSize = value; 
+				_batchLogSize = value;
 			}
 		}
 		/// <summary>
@@ -155,6 +157,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Info) return;
@@ -173,6 +176,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
@@ -191,6 +195,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Warn(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Warn) return;
@@ -209,6 +214,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Error(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Error, message, arguments);
@@ -225,55 +231,132 @@ namespace Adenson.Log
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
 		}
 		/// <summary>
-		/// Forces writing out of what is in the log
+		/// Forces writing out of what is in the current log
 		/// </summary>
 		public void Flush()
 		{
-			//new System.Threading.Thread(new ThreadStart(delegate()
-			//{
-			Logger.Flush(this.Types);
-			//})).Start();
+			lock (entries)
+			{
+				if (entries.Count == 0) return;
+				if ((this.Types & LogTypes.Database) != LogTypes.None) Logger.SaveToDatabase(entries);
+				if ((this.Types & LogTypes.File) != LogTypes.None) Logger.SaveToFile(entries);
+				if ((this.Types & LogTypes.EventLog) != LogTypes.None) Logger.SaveToEntryLog(entries);
+				entries.Clear();
+			}
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="TrackingEnd"/>)
+		/// </summary>
+		/// <remarks>Resets tracking if MeasureStart was called using the same identifier, but MeasureStop was not called.</remarks>
+		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
+		public void MeasureStart(string identifier)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
+
+			lock (trackers)
+			{
+				if (trackers.ContainsKey(identifier))
+				{
+					this.Debug("Measure '{0}': Force stopping existing measurement.", identifier);
+					this.MeasureStopAndRemove(identifier);
+				}
+				trackers.Add(identifier, DateTime.Now);
+				this.Debug("Measure '{0}': Start.", identifier);
+			}
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, ends all tracking started by <seealso cref="MeasureStart"/> regardless of identifier
+		/// </summary>
+		public void MeasureStop()
+		{
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
+
+			lock (trackers)
+			{
+				foreach (var identifier in trackers.Keys.ToList()) this.MeasureStopAndRemove(identifier);
+			}
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStop"/> using specified case sensitive identiifer
+		/// </summary>
+		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
+		public void MeasureStop(string identifier)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
+
+			lock (trackers)
+			{
+				this.MeasureStopAndRemove(identifier);
+			}
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, and <seealso cref="MeasureStart"/> was called with specified identifier, logs the value 
+		/// </summary>
+		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <param name="value">The value to log</param>
+		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
+		public void MeasureWrite(string identifier, object value)
+		{
+			this.MeasureWrite(identifier, StringUtil.ToString(value));
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, and <seealso cref="MeasureStart"/> was called with specified identifier, logs the value, formatting with specified arguments
+		/// </summary>
+		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if identifier OR message is null (or whitespace)</exception>
+		public void MeasureWrite(string identifier, string message, params object[] arguments)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
+
+			lock (trackers)
+			{
+				if (trackers.ContainsKey(identifier))
+				{
+					this.Debug("Measure '{0}': {1}. {2} secs", identifier, StringUtil.Format(message, arguments), DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+				}
+			}
 		}
 
-		internal LogEntry Write(LogSeverity severity, string message, params object[] arguments)
+		private void MeasureStopAndRemove(string identifier)
 		{
+			if (trackers.ContainsKey(identifier))
+			{
+				this.Debug("Measure '{0}': End. {1} secs", identifier, DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+				trackers.Remove(identifier);
+			}
+		}
+		private LogEntry Write(LogSeverity severity, string message, params object[] arguments)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(message)) throw new ArgumentNullException("message");
+
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
 			entry.Type = this.ClassType;
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = this.Types;
-			if (arguments.Length == 0) entry.Message = message;
-			else
-			{
-				try
-				{
-					entry.Message = StringUtil.Format(message, arguments);
-				}
-				catch (FormatException)
-				{
-					var str = message;
-					for (int i = 0; i < arguments.Length; i++) str = str.Replace("{" + i + "}", (arguments[i] == null ? "null" : StringUtil.ToString(arguments[i])));
-					entry.Message = str;
-				}
-				catch
-				{
-					entry.Message = message;
-				}
-			}
-			entries.Add(entry);
 
-			if (suspendedTypes.Contains(this.ClassType)) return entry;
+			if (arguments == null || arguments.Length == 0) entry.Message = message;
+			else entry.Message = StringUtil.Format(message, arguments);
+			entries.Add(entry);
 
 			Logger.OutWriteLine(entry);
 
-			try
+			//Careful with the lock now, Flush locks entries too
+			bool flush = false;
+			lock (entries)
 			{
-				if (entries.Count >= this.BatchSize) this.Flush();
+				flush = (entries.Count >= this.BatchSize);
 			}
-			catch
-			{
-			}
+			if (flush) this.Flush();
+
 			return entry;
 		}
 
@@ -291,6 +374,7 @@ namespace Adenson.Log
 			lock (staticLoggers)
 			{
 				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
+				else staticLoggers[type].Flush();
 				return staticLoggers[type];
 			}
 		}
@@ -377,26 +461,70 @@ namespace Adenson.Log
 			}
 			return message.ToString();
 		}
-
-		internal static void Flush(LogTypes logType)
+		/// <summary>
+		/// Forces writing out of what is in all logs
+		/// </summary>
+		public static void FlushAll()
 		{
-			try
+			lock (staticLoggers)
 			{
-				Monitor.Enter(entries);
-				if (entries.Count > 0)
-				{
-					if ((logType & LogTypes.Database) != LogTypes.None) Logger.SaveToDatabase();
-					if ((logType & LogTypes.File) != LogTypes.None) Logger.SaveToFile();
-					if ((logType & LogTypes.EventLog) != LogTypes.None) Logger.SaveToEntryLog();
-					entries.Clear();
-				}
-			}
-			finally
-			{
-				Monitor.Exit(entries);
+				foreach (var logger in staticLoggers.Values) logger.Flush();
 			}
 		}
-		internal static bool SaveToDatabase()
+
+		private static void LogInternalError(Exception ex)
+		{
+			#if DEBUG
+			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
+			#else
+			try
+			{
+				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex), EventLogEntryType.Warning);
+			}
+			catch { }
+			#endif
+		}
+		private static string GetOutFileName()
+		{
+			string filePath = Config.LogSettings.FileName;
+			string folder = null;
+			if (!Path.IsPathRooted(filePath))
+			{
+				var context = System.Web.HttpContext.Current;//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
+				if (context != null) filePath = context.Server.MapPath(filePath);
+				else filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
+				folder = Path.GetDirectoryName(filePath);
+			}
+			if (!Directory.Exists(folder))
+			{
+				System.Diagnostics.Debug.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
+			}
+
+			return filePath;
+		}
+		private static void OutWriteLine(LogEntry entry)
+		{
+			var format = "[{0}] {1} [{2}] - {3}";
+			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
+			var severity = entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture);
+			var message = StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message);
+			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
+			{
+				Console.WriteLine(message);
+			}
+			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
+			{
+				System.Diagnostics.Debug.WriteLine(message);
+			}
+			if ((entry.LogType & LogTypes.Email) != LogTypes.None)
+			{
+				if (!Config.LogSettings.EmailInfo.IsEmpty())
+				{
+					SmtpUtil.TrySend(Config.LogSettings.EmailInfo.From, Config.LogSettings.EmailInfo.To, Config.LogSettings.EmailInfo.Subject, message, false);
+				}
+			}
+		}
+		private static bool SaveToDatabase(List<LogEntry> entries)
 		{
 			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
 			if (sqlHelper == null) return false;
@@ -418,7 +546,7 @@ namespace Adenson.Log
 			}
 			return false;
 		}
-		internal static bool SaveToFile()
+		private static bool SaveToFile(List<LogEntry> entries)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
 
@@ -465,7 +593,7 @@ namespace Adenson.Log
 			}
 			return false;
 		}
-		internal static bool SaveToEntryLog()
+		private static bool SaveToEntryLog(List<LogEntry> entries)
 		{
 			try
 			{
@@ -483,62 +611,6 @@ namespace Adenson.Log
 				Logger.LogInternalError(ex);
 			}
 			return false;
-		}
-
-		private static void LogInternalError(Exception ex)
-		{
-			#if DEBUG
-			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
-			#else
-			try
-			{
-				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex), EventLogEntryType.Warning);
-			}
-			catch { }
-			#endif
-		}
-		private static void OutWriteLine(LogEntry entry)
-		{
-			var format = "[{0}] {1} [{2}] - {3}";
-			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
-			var severity = entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture);
-			var message = StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message);
-			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
-			{
-				Console.WriteLine(message);
-			}
-			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
-			{
-				System.Diagnostics.Debug.WriteLine(message);
-			}
-			if ((entry.LogType & LogTypes.Email) != LogTypes.None)
-			{
-				if (!Config.LogSettings.EmailInfo.IsEmpty())
-				{
-					SmtpUtil.TrySend(Config.LogSettings.EmailInfo.From, Config.LogSettings.EmailInfo.To, Config.LogSettings.EmailInfo.Subject, message, false);
-				}
-			}
-		}
-		private static string GetOutFileName()
-		{
-			string filePath = Config.LogSettings.FileName;
-			string folder = null;
-			if (!Path.IsPathRooted(filePath))
-			{
-				var context = System.Web.HttpContext.Current;//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
-				if (context != null) filePath = context.Server.MapPath(filePath);
-				else filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
-				folder = Path.GetDirectoryName(filePath);
-			}
-			if (!Directory.Exists(folder))
-			{
-				#if DEBUG
-				System.Diagnostics.Debug.WriteLine(StringUtil.Format("Folder {0} does not exist, file logging will not happen", folder));
-				#endif
-				return null;
-			}
-
-			return filePath;
 		}
 
 		#endregion

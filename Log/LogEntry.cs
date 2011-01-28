@@ -7,6 +7,13 @@ namespace Adenson.Log
 	/// </summary>
 	public sealed class LogEntry
 	{
+		#region Constructor
+
+		internal LogEntry()
+		{
+		}
+
+		#endregion
 		#region Properties
 
 		/// <summary>
