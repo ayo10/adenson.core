@@ -14,13 +14,29 @@ namespace Adenson.Data
 	/// </summary>
 	public sealed class SqlClientHelper : SqlHelperBase
 	{
-		#region Constructor
-
+		#region Constructors
+		
+		/// <summary>
+		/// Instantiates a new <see cref="SqlClientHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// </summary>
+		public SqlClientHelper() : base()
+		{
+		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
 		/// </summary>
-		/// <param name="connectionString"></param>
+		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
+		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
 		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
+		{
+		}
+		/// <summary>
+		/// Instantiates a new instance of <see cref="SqlClientHelper"/> using specified connection string setting object
+		/// </summary>
+		/// <param name="connectionString">The connection string to use</param>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		public SqlClientHelper(string connectionString) : base(connectionString)
 		{
 		}
 

@@ -11,12 +11,28 @@ namespace Adenson.Data
 	public sealed class OdbcSqlHelper : SqlHelperBase
 	{
 		#region Constructor
-
+		
 		/// <summary>
-		/// Initializes a new instance of the helper class.
+		/// Instantiates a new <see cref="OdbcSqlHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// </summary>
+		public OdbcSqlHelper() : base()
+		{
+		}
+		/// <summary>
+		/// Initializes a new instance of <see cref="OdbcSqlHelper"/>.
 		/// </summary>
 		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
+		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
+		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
 		public OdbcSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
+		{
+		}
+		/// <summary>
+		/// Instantiates a new instance of <see cref="OdbcSqlHelper"/> using specified connection string setting object
+		/// </summary>
+		/// <param name="connectionString">The connection string to use</param>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		public OdbcSqlHelper(string connectionString) : base(connectionString)
 		{
 		}
 

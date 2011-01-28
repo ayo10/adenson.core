@@ -13,10 +13,26 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
+		/// Instantiates a new <see cref="OleDbSqlHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// </summary>
+		public OleDbSqlHelper() : base()
+		{
+		}
+		/// <summary>
 		/// Initializes a new instance of the <see cref="OleDbSqlHelper"/> class.
 		/// </summary>
-		/// <param name="connectionString"></param>
+		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
+		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
+		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
 		public OleDbSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
+		{
+		}
+		/// <summary>
+		/// Instantiates a new instance of <see cref="OleDbSqlHelper"/> using specified connection string setting object
+		/// </summary>
+		/// <param name="connectionString">The connection string to use</param>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		public OleDbSqlHelper(string connectionString) : base(connectionString)
 		{
 		}
 

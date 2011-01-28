@@ -18,10 +18,26 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the helper class.
+		/// Instantiates a new <see cref="SqlCeHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
-		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
+		public SqlCeHelper() : base()
+		{
+		}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class.
+		/// </summary>
+		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
+		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
 		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
+		{
+		}
+		/// <summary>
+		/// Instantiates a new instance of <see cref="SqlCeHelper"/> using specified connection string setting object
+		/// </summary>
+		/// <param name="connectionString">The connection string to use</param>
+		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		public SqlCeHelper(string connectionString) : base(connectionString)
 		{
 		}
 
