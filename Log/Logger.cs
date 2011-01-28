@@ -245,7 +245,7 @@ namespace Adenson.Log
 			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="TrackingEnd"/>)
+		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(String)"/>)
 		/// </summary>
 		/// <remarks>Resets tracking if MeasureStart was called using the same identifier, but MeasureStop was not called.</remarks>
 		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
@@ -279,7 +279,7 @@ namespace Adenson.Log
 			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStop"/> using specified case sensitive identiifer
+		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart(String)"/> using specified case sensitive identiifer
 		/// </summary>
 		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
 		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
