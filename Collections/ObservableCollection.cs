@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Threading;
 
 namespace Adenson.Collections
@@ -16,6 +18,7 @@ namespace Adenson.Collections
 	{
 		#region Variables
 		private ReadOnlyObservableCollection<T> readOnly;
+		private bool suspendCollectionChange;
 		#endregion
 		#region Constructor
 
@@ -31,6 +34,14 @@ namespace Adenson.Collections
 		/// <param name="list">The collection from which the elements are copied.</param>
 		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
 		public ObservableCollection(IEnumerable<T> list) : base(list)
+		{
+		}
+		/// <summary>
+		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
+		/// </summary>
+		/// <param name="list">The collection from which the elements are copied.</param>
+		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
+		public ObservableCollection(List<T> list) : base(list)
 		{
 		}
 
@@ -57,7 +68,11 @@ namespace Adenson.Collections
 		public void AddRange(IEnumerable<T> items)
 		{
 			if (items == null) throw new ArgumentNullException("items");
+			suspendCollectionChange = true;
+			int startingIndex = this.Count;
 			foreach (T item in items) this.Add(item);
+			suspendCollectionChange = false;
+			this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items.ToList(), startingIndex));
 		}
 		/// <summary>
 		/// Removes each item in items from the list
@@ -149,7 +164,7 @@ namespace Adenson.Collections
 		/// <param name="e"></param>
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
-			if (this.CollectionChanged == null) return;
+			if (this.CollectionChanged == null || suspendCollectionChange) return;
 			using (IDisposable disposable = this.BlockReentrancy())
 			{
 				foreach (Delegate del in this.CollectionChanged.GetInvocationList())
@@ -159,13 +174,19 @@ namespace Adenson.Collections
 					ISynchronizeInvoke syncInvoker = del.Target as ISynchronizeInvoke;
 					if (dispatcherInvoker != null)
 					{
-						int count = dispatcherInvoker.Dispatcher.GetDisableProcessingCount();
+						int count = GetDisableProcessingCount(dispatcherInvoker.Dispatcher);
 						if (count == 0) dispatcherInvoker.Dispatcher.Invoke(DispatcherPriority.Normal, new MethodInvoker(delegate { handler(this, e); }));
+						else dispatcherInvoker.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new MethodInvoker(delegate { handler(this, e); }));
 					}
 					else if (syncInvoker != null) syncInvoker.Invoke(del, new Object[] { this, e });
 					else handler(this, e);
 				}
 			}
+		}
+
+		internal static int GetDisableProcessingCount(Dispatcher dispatcher)
+		{
+			return (int)dispatcher.GetType().GetField("_disableProcessingCount", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(dispatcher);
 		}
 
 		private void OnCollectionChanging(CollectionChangingEventArgs<T> e)

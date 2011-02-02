@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Threading;
 using System.Xml.Linq;
 
 namespace Adenson
@@ -213,13 +211,6 @@ namespace Adenson
 		public static DateTime TrimSeconds(this DateTime datetime)
 		{
 			return datetime.Subtract(new TimeSpan(0, 0, 0, datetime.TimeOfDay.Seconds, datetime.TimeOfDay.Milliseconds));
-		}
-
-		internal static int GetDisableProcessingCount(this Dispatcher dispatcher)
-		{
-			FieldInfo fieldInfo = dispatcher.GetType().GetField("_disableProcessingCount", BindingFlags.Instance | BindingFlags.NonPublic);
-			object obj = fieldInfo.GetValue(dispatcher);
-			return (int)obj;
 		}
 	}
 }
