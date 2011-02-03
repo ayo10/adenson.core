@@ -14,7 +14,7 @@ namespace Adenson.Collections
 	/// Portions of, from http://shevaspace.spaces.live.com/blog/cns!FD9A0F1F8DD06954!547.entry
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public sealed class ObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>
+	public class ObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>
 	{
 		#region Variables
 		private ReadOnlyObservableCollection<T> readOnly;
