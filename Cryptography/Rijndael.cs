@@ -6,7 +6,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Rijndael (AES) algorithm.
 	/// </summary>
-	public sealed class Rijndael : BaseEncryptor
+	public sealed class Rijndael : EncryptorBase
 	{
 		#region Constructor
 

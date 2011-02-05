@@ -6,7 +6,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Data Encryption Standard (DES) algorithm.
 	/// </summary>
-	public sealed class DES : BaseEncryptor
+	public sealed class DES : EncryptorBase
 	{
 		#region Constructors
 

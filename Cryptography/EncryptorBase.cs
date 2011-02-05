@@ -7,7 +7,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Base class for built in encryptors
 	/// </summary>
-	public abstract class BaseEncryptor
+	public abstract class EncryptorBase
 	{
 		#region Variables
 		private byte[] rgbKey = new byte[] { 143, 48, 7, 241, 35, 6, 35, 236, 123, 93, 240, 244, 62, 229, 41, 246, 49, 154, 85, 106, 14, 65, 208, 202, 228, 38, 253, 171, 52, 219, 22, 175 };
@@ -18,7 +18,7 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Initializes a new instance of the encryptor
 		/// </summary>
-		protected BaseEncryptor()
+		protected EncryptorBase()
 		{
 		}
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		protected BaseEncryptor(byte[] key, byte[] iv) : this()
+		protected EncryptorBase(byte[] key, byte[] iv) : this()
 		{
 			this.SetKeys(key, iv);
 		}

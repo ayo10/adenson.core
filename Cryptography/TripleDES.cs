@@ -6,7 +6,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Triple Data Encryption Standard algorithm.
 	/// </summary>
-	public sealed class TripleDES : BaseEncryptor
+	public sealed class TripleDES : EncryptorBase
 	{
 		#region Constructor
 
