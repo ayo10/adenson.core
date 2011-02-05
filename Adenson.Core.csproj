@@ -71,6 +71,7 @@
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
+    <Compile Include="Cryptography\EncryptorBase.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
     <Compile Include="Data\ConnectionManager.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="Cryptography\DES.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Cryptography\Encryptor.cs" />
-    <Compile Include="Cryptography\BaseEncryptor.cs" />
     <Compile Include="Cryptography\KeyFormat.cs" />
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />

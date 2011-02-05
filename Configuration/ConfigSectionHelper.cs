@@ -18,7 +18,7 @@ namespace Adenson.Configuration
 		/// <returns>Found section if any</returns>
 		public static object GetSection(string group, string name)
 		{
-			return ConfigurationManager.GetSection(string.Concat(group, "/", name));
+			return ConfigurationManager.GetSection(String.Concat(group, "/", name));
 		}
 		/// <summary>
 		/// Returns the config section with specified group and name as a Dictionary object
