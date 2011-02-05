@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Adenson.Collections;
 using Adenson.Configuration;
 using Adenson.Configuration.Internal;
 using Adenson.Data;
-using System.Linq;
 
 namespace Adenson.Log
 {
@@ -535,6 +535,7 @@ namespace Adenson.Log
 			{
 				sb.AppendLine(StringUtil.Format(statement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Date));
 			}
+
 			try
 			{
 				sqlHelper.ExecuteNonQuery(System.Data.CommandType.Text, sb.ToString());

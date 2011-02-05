@@ -105,6 +105,8 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
 		/// <returns>the result of each ExecuteNonQuery run on each command text</returns>
+		/// <exception cref="ArgumentNullException">if any of the items in <paramref name="commandTexts"/> is null</exception>
+		/// <exception cref="ArgumentException">if <paramref name="commandTexts"/> is empty</exception>
 		public override int[] ExecuteNonQuery(params string[] commandTexts)
 		{
 			if (commandTexts.Length == 1)
@@ -113,7 +115,7 @@ namespace Adenson.Data
 				string[] splits = str.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 				if (splits.Any(s => String.Equals(s, "GO", StringComparison.CurrentCultureIgnoreCase)))
 				{
-					//doing below for some odd reason changes the order of strings
+					//doing the following below for some odd reason changes the order of strings
 					//splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
 
 					List<string> sqls = new List<string>();
@@ -128,6 +130,7 @@ namespace Adenson.Data
 						}
 						else last += ins + Environment.NewLine;
 					}
+					if (!String.IsNullOrEmpty(last)) sqls.Add(last.Trim());
 					return base.ExecuteNonQuery(sqls.ToArray());
 				}
 			}

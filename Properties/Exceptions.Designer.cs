@@ -79,6 +79,15 @@ namespace Adenson {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no items in the specified argument list..
+        /// </summary>
+        internal static string ArgumentsEmpty {
+            get {
+                return ResourceManager.GetString("ArgumentsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection string with specified key &apos;{0}&apos; could be found. Check to make sure you have a connection string section in your configuration file with the specified key..
         /// </summary>
         internal static string ConnectionStringWithKeyArgNotFound {
