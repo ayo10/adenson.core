@@ -14,8 +14,6 @@ namespace Adenson.Data
 	public abstract class SqlHelperBase : IDisposable
 	{
 		#region Variables
-		private static Logger logger = Logger.GetLogger(typeof(SqlHelperBase));
-		private static string[] crudites = new string[] { "alter ", "create ", "select ", "update ", "delete " };
 		private bool mustCloseConnection = true;
 		private ConnectionManager _connectionManager;
 		private string _connectionString;
@@ -117,6 +115,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>a new DataSet object</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteDataSet(type, null, commandText, parameterValues);
@@ -129,6 +128,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>a new DataSet object</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual DataSet ExecuteDataSet(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteDataSet(this.CreateCommand(type, transaction, commandText, parameterValues));
@@ -138,8 +138,11 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command</param>
 		/// <returns>a new DataSet object</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="command"/> is null</exception>
 		public virtual DataSet ExecuteDataSet(DbCommand command)
 		{
+			if (command == null) throw new ArgumentNullException("command");
+
 			command.Connection = this.Manager.Connection;
 			this.Manager.Open();
 			using (DbDataAdapter dataAdapter = this.CreateAdapter(command))
@@ -156,18 +159,15 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
 		/// <returns>the result of each ExecuteDataSet run on each command text</returns>
+		/// <exception cref="ArgumentNullException">if any of the items in <paramref name="commandTexts"/> is null</exception>
+		/// <exception cref="ArgumentException">if <paramref name="commandTexts"/> is empty</exception>
 		public virtual DataSet[] ExecuteDataSet(params string[] commandTexts)
 		{
-			if (commandTexts.Length == 0) return null;
+			if (commandTexts.Any(t => String.IsNullOrEmpty(t))) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
+			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
-			DbTransaction transaction = this.OpenConnection().BeginTransaction();
 			List<DataSet> list = new List<DataSet>();
-			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
-			foreach (string commandText in commandTexts)
-			{
-				if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
+			DbTransaction transaction = this.OpenConnection().BeginTransaction();
 			try
 			{
 				foreach (string commandText in commandTexts)
@@ -192,6 +192,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual int ExecuteNonQuery(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteNonQuery(type, null, commandText, parameterValues);
@@ -204,57 +205,41 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The number of rows affected.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual int ExecuteNonQuery(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteNonQuery(this.CreateCommand(type, transaction, commandText, parameterValues));
-		}
-		/// <summary>
-		/// Executes the specified command text after applying specified parameter values
-		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination thereof)</param>
-		/// <returns>The number of rows affected.</returns>
-		public virtual int ExecuteNonQuery(string commandText, params object[] parameterValues)
-		{
-			CommandType type = IsCrud(commandText) ? CommandType.Text : CommandType.StoredProcedure;
-			return this.ExecuteNonQuery(type, commandText, parameterValues);
 		}
 		/// <summary>
 		/// Executes the command and returns the number of rows affected.
 		/// </summary>
 		/// <param name="command">The command</param>
 		/// <returns>The number of rows affected.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="command"/> is null</exception>
 		public virtual int ExecuteNonQuery(DbCommand command)
 		{
-			try
-			{
-				command.Connection = this.Manager.Connection;
-				this.Manager.Open();
-				int result = command.ExecuteNonQuery();
-				this.Manager.Close();
-				return result;
-			}
-			catch (Exception ex)
-			{
-				logger.Error(ex);
-				throw;
-			}
+			if (command == null) throw new ArgumentNullException("command");
+
+			command.Connection = this.Manager.Connection;
+			this.Manager.Open();
+			int result = command.ExecuteNonQuery();
+			this.Manager.Close();
+			return result;
 		}
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
 		/// <returns>the result of each ExecuteNonQuery run on each command text</returns>
+		/// <exception cref="ArgumentNullException">if any of the items in <paramref name="commandTexts"/> is null</exception>
+		/// <exception cref="ArgumentException">if <paramref name="commandTexts"/> is empty</exception>
 		public virtual int[] ExecuteNonQuery(params string[] commandTexts)
 		{
-			DbTransaction transaction = this.OpenConnection().BeginTransaction();
-			List<int> list = new List<int>();
-			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
-			foreach (string commandText in commandTexts)
-			{
-				if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
+			if (commandTexts.Any(t => String.IsNullOrEmpty(t))) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
+			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
+			List<int> list = new List<int>();
+			DbTransaction transaction = this.OpenConnection().BeginTransaction();
 			try
 			{
 				foreach (string commandText in commandTexts)
@@ -291,20 +276,10 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual IDataReader ExecuteReader(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteReader(this.CreateCommand(type, transaction, commandText, parameterValues));
-		}
-		/// <summary>
-		/// Executes the specified command text and builds an System.Data.IDataReader.
-		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>An System.Data.IDataReader object.</returns>
-		public virtual IDataReader ExecuteReader(string commandText, params object[] parameterValues)
-		{
-			CommandType type = IsCrud(commandText) ? CommandType.Text : CommandType.StoredProcedure;
-			return this.ExecuteReader(type, commandText, parameterValues);
 		}
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataReader.
@@ -323,8 +298,11 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="command"/> is null</exception>
 		public virtual object ExecuteScalar(DbCommand command)
 		{
+			if (command == null) throw new ArgumentNullException("command");
+
 			command.Connection = this.Manager.Connection;
 			this.Manager.Open();
 			object result = command.ExecuteScalar();
@@ -336,16 +314,15 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
 		/// <returns>the result of each ExecuteScalar run on each command text</returns>
+		/// <exception cref="ArgumentNullException">if any of the items in <paramref name="commandTexts"/> is null</exception>
+		/// <exception cref="ArgumentException">if <paramref name="commandTexts"/> is empty</exception>
 		public virtual object[] ExecuteScalar(params string[] commandTexts)
 		{
-			DbTransaction transaction = this.OpenConnection().BeginTransaction();
-			List<object> list = new List<object>();
-			if (commandTexts == null || commandTexts.Length == 0) return list.ToArray();
-			foreach (string commandText in commandTexts)
-			{
-				if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
+			if (commandTexts.Any(t => String.IsNullOrEmpty(t))) throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
+			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
+			List<object> list = new List<object>();
+			DbTransaction transaction = this.OpenConnection().BeginTransaction();
 			try
 			{
 				foreach (string commandText in commandTexts)
@@ -370,6 +347,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual object ExecuteScalar(CommandType type, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteScalar(type, null, commandText, parameterValues);
@@ -382,6 +360,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual object ExecuteScalar(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			return this.ExecuteScalar(this.CreateCommand(type, transaction, commandText, parameterValues));
@@ -426,12 +405,14 @@ namespace Adenson.Data
 		/// <param name="tableName">the table name</param>
 		/// <param name="columnName">the column name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="tableName"/> is null or empty, OR, <paramref name="columnName"/> is null or empty</exception>
 		public abstract bool CheckColumnExists(string tableName, string columnName);
 		/// <summary>
 		/// Runs a system check for the existence of specified table
 		/// </summary>
 		/// <param name="tableName">the table name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="tableName"/> is null or empty</exception>
 		public abstract bool CheckTableExists(string tableName);
 
 		/// <summary>
@@ -442,6 +423,7 @@ namespace Adenson.Data
 		/// <param name="commandText">The command text</param>
 		/// <param name="parameterValues"></param>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
 		protected DbCommand CreateCommand(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
@@ -451,6 +433,7 @@ namespace Adenson.Data
 			command.CommandText = commandText;
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = transaction;
+
 			if (!parameterValues.IsEmpty())
 			{
 				if (commandText.IndexOf("{0}", StringComparison.CurrentCulture) > 0) command.CommandText = StringUtil.Format(commandText, parameterValues);
@@ -479,16 +462,6 @@ namespace Adenson.Data
 		protected virtual void Dispose(bool disposing)
 		{
 			if (_connectionManager != null) _connectionManager.Dispose();
-		}
-
-		/// <summary>
-		/// Gets if the specified command text is a CRUD command
-		/// </summary>
-		/// <param name="commandText">The text to check</param>
-		/// <returns></returns>
-		protected static bool IsCrud(string commandText)
-		{
-			return crudites.Any(s => commandText.IndexOf(s, StringComparison.CurrentCultureIgnoreCase) > -1);
 		}
 
 		#endregion

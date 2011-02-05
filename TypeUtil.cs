@@ -60,11 +60,11 @@ namespace Adenson
 		/// <returns>An object of type enumType whose value is represented by value.</returns>
 		/// <exception cref="ArgumentNullException">If value is null or whitespace</exception>
 		/// <exception cref="ArgumentException">enumType is not an System.Enum.-or- value is either an empty string ("") or only contains white space.-or- value is a name, but not one of the named constants defined for the enumeration.</exception>
-		/// <exception cref="OverflowException">value is outside the range of the underlying type of enumType.
+		/// <exception cref="OverflowException">value is outside the range of the underlying type of enumType.</exception>
 		public static T EnumParse<T>(string value)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(value)) throw new ArgumentNullException("value");
-			if (!Enum.IsDefined(typeof(T), value)) throw new ArgumentException();
+
 			return (T)Enum.Parse(typeof(T), value, true);
 		}
 		/// <summary>

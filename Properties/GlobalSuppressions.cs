@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Scope = "type", Target = "Adenson.Collections.Hashtable`2")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Adenson.Collections.Hashtable`2.#System.Collections.Generic.ICollection`1<System.Collections.Generic.KeyValuePair`2<!0,!1>>.Contains(System.Collections.Generic.KeyValuePair`2<!0,!1>)", Justification = "Not supported")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Scope = "member", Target = "Adenson.Collections.Hashtable`2.#System.Collections.Generic.ICollection`1<System.Collections.Generic.KeyValuePair`2<!0,!1>>.CopyTo(System.Collections.Generic.KeyValuePair`2<!0,!1>[],System.Int32)", Justification = "Not supported")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Scope = "member", Target = "Adenson.Collections.ObservableCollection`1.#.ctor(System.Collections.Generic.List`1<!0>)", Justification = "Then the inherited ObservableCollection shouldnt either!")]
 
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.Internal.LoggerSettings.#get_SeverityActual()")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Configuration.Internal.LoggerSettings.#get_TypeActual()")]
@@ -23,9 +24,9 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "Adenson.Log", Justification = "Consider another namespace, like?")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Scope = "member", Target = "Adenson.Log.LogEntry.#Type")]
 [assembly: SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Scope = "member", Target = "Adenson.Log.Logger.#Type")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToDatabase()")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToEntryLog()")]
-[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToFile()")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToDatabase(System.Collections.Generic.List`1<Adenson.Log.LogEntry>)")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToEntryLog(System.Collections.Generic.List`1<Adenson.Log.LogEntry>)")]
+[assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#SaveToFile(System.Collections.Generic.List`1<Adenson.Log.LogEntry>)")]
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.Log.Logger.#Write(Adenson.Log.LogSeverity,System.String,System.Object[])")]
 
 [assembly: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope = "member", Target = "Adenson.SmtpUtil.#TrySend(System.String,System.Net.Mail.MailMessage,System.Boolean)")]

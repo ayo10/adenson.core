@@ -13,16 +13,18 @@ namespace Adenson
 	public static class Extensions
 	{
 		/// <summary>
-		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="str"/> using specified <see cref="StringComparison"/> object.
+		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="source"/> using specified <see cref="StringComparison"/> object.
 		/// </summary>
-		/// <param name="str">The string to look into</param>
+		/// <param name="source">The string to look into</param>
 		/// <param name="value">The string to seek.</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the search.</param>
 		/// <returns>true if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException"><paramref name="str"/> is null OR <paramref name="value"/> is null.</exception>
-		public static bool Contains(this string str, string value, StringComparison comparisonType)
+		/// <exception cref="ArgumentNullException"><paramref name="source"/> is null OR <paramref name="value"/> is null.</exception>
+		public static bool Contains(this string source, string value, StringComparison comparisonType)
 		{
-			return str.IndexOf(value, comparisonType) > -1;
+			if (source == null) throw new ArgumentNullException("source");
+			if (value == null) throw new ArgumentNullException("value");
+			return source.IndexOf(value, comparisonType) > -1;
 		}
 		/// <summary>
 		/// Determines whether the dictionary contains the specified key, using the comparism rule
@@ -76,7 +78,6 @@ namespace Adenson
 		/// <remarks>calls Extensions.Equals(array1, array2, StringComparison.CurrentCultureIgnoreCase)</remarks>
 		/// <param name="array1">The frst array</param>
 		/// <param name="array2">The second array</param>
-		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
 		public static bool Equals(this IEnumerable<string> array1, IEnumerable<string> array2)
 		{
@@ -123,7 +124,7 @@ namespace Adenson
 		/// <param name="name">The <see cref="XName"/> to match.</param>
 		/// <returns>Found value of any, default of T otherwise</returns>
 		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
-		public static T GetValue<T>(this XElement source, XName name)
+		public static T GetValue<T>(this XContainer source, XName name)
 		{
 			if (source == null) throw new ArgumentNullException("source");
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
@@ -197,20 +198,20 @@ namespace Adenson
 		/// <summary>
 		/// Subtracts the milliseconds duration from the specified datetime
 		/// </summary>
-		/// <param name="datetime">The source date time</param>
+		/// <param name="date">The source date time</param>
 		/// <returns>A new <see cref="DateTime"/> object without its milliseconds bit</returns>
-		public static DateTime TrimMilliseconds(this DateTime datetime)
+		public static DateTime TrimMilliseconds(this DateTime date)
 		{
-			return datetime.Subtract(new TimeSpan(0, 0, 0, 0, datetime.TimeOfDay.Milliseconds));
+			return date.Subtract(new TimeSpan(0, 0, 0, 0, date.TimeOfDay.Milliseconds));
 		}
 		/// <summary>
 		/// Subtracts the seconds (and milliseconds) duration duration from the specified datetime
 		/// </summary>
-		/// <param name="datetime">The source date time</param>
+		/// <param name="date">The source date time</param>
 		/// <returns>A new <see cref="DateTime"/> object without its seconds and milliseconds bit</returns>
-		public static DateTime TrimSeconds(this DateTime datetime)
+		public static DateTime TrimSeconds(this DateTime date)
 		{
-			return datetime.Subtract(new TimeSpan(0, 0, 0, datetime.TimeOfDay.Seconds, datetime.TimeOfDay.Milliseconds));
+			return date.Subtract(new TimeSpan(0, 0, 0, date.TimeOfDay.Seconds, date.TimeOfDay.Milliseconds));
 		}
 	}
 }

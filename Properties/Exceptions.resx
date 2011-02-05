@@ -123,6 +123,9 @@
   <data name="ArgumentInListNull" xml:space="preserve">
     <value>None of the argument in the list can be null.</value>
   </data>
+  <data name="ArgumentsEmpty" xml:space="preserve">
+    <value>There are no items in the specified argument list.</value>
+  </data>
   <data name="ConnectionStringWithKeyArgNotFound" xml:space="preserve">
     <value>No connection string with specified key '{0}' could be found. Check to make sure you have a connection string section in your configuration file with the specified key.</value>
   </data>
