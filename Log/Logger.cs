@@ -497,6 +497,7 @@ namespace Adenson.Log
 			}
 			if (!Directory.Exists(folder))
 			{
+				filePath = null;
 				System.Diagnostics.Debug.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
 			}
 
