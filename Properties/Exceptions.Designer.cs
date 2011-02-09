@@ -149,5 +149,14 @@ namespace Adenson {
                 return ResourceManager.GetString("TypeArgCouldNotBeLoaded", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified command text argument could not be parsed. Use strings formattable using String.Format, or use parameter value arguments that are of either &apos;Adenson.Data.Parameter&apos; a &apos;System.Data.IDataParameter&apos; objects..
+        /// </summary>
+        internal static string UnableToParseCommandText {
+            get {
+                return ResourceManager.GetString("UnableToParseCommandText", resourceCulture);
+            }
+        }
     }
 }
