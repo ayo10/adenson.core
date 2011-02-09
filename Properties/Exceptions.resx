@@ -147,4 +147,7 @@
   <data name="TypeArgCouldNotBeLoaded" xml:space="preserve">
     <value>Type '{0}' could not be loaded.</value>
   </data>
+  <data name="UnableToParseCommandText" xml:space="preserve">
+    <value>The specified command text argument could not be parsed. Use strings formattable using String.Format, or use parameter value arguments that are of either 'Adenson.Data.Parameter' a 'System.Data.IDataParameter' objects.</value>
+  </data>
 </root>

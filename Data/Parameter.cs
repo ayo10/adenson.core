@@ -10,11 +10,6 @@ namespace Adenson.Data
 	/// </summary>
 	public sealed class Parameter : IEquatable<Parameter>
 	{
-		#region Variables
-		private string _key;
-		private object _value;
-		private bool changed;
-		#endregion
 		#region Constructor
 
 		/// <summary>
@@ -24,48 +19,29 @@ namespace Adenson.Data
 		/// <param name="value">The value.</param>
 		public Parameter(string name, object value)
 		{
-			_key = name;
-			_value = value;
-			changed = true;
+			if (StringUtil.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("name");
+			this.Name = name;
+			this.Value = value;
 		}
 
 		#endregion
 		#region Properties
 
 		/// <summary>
-		/// Gets if this instance has been set or not
-		/// </summary>
-		public bool IsEmpty
-		{
-			get 
-			{
-				if (!changed) return this.Name == null && this.Value == null;
-				return false;
-			}
-		}
-		/// <summary>
-		/// Gets or sets the name of the parameter
+		/// Gets the name of the parameter
 		/// </summary>
 		public string Name
 		{
-			get { return _key; }
-			set 
-			{ 
-				_key = value;
-				changed = true;
-			}
+			get;
+			private set;
 		}
 		/// <summary>
-		/// Gets or sets the value of the parameter
+		/// Gets the value of the parameter
 		/// </summary>
 		public object Value
 		{
-			get { return _value; }
-			set
-			{
-				_value = value;
-				changed = true;
-			}
+			get;
+			private set;
 		}
 
 		#endregion

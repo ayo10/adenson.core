@@ -416,18 +416,26 @@ namespace Adenson.Data
 		public abstract bool CheckTableExists(string tableName);
 
 		/// <summary>
-		/// Creates a new command object of specified type
+		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>
 		/// </summary>
 		/// <param name="type">The type of command</param>
 		/// <param name="transaction">The transaction to use</param>
 		/// <param name="commandText">The command text</param>
-		/// <param name="parameterValues"></param>
+		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
 		protected DbCommand CreateCommand(CommandType type, DbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
 			if (!parameterValues.IsEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
+
+			string[] splits = null;
+			if (!parameterValues.IsEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
+			{
+				splits = commandText.Split('@');
+				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
+				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
+			}
 
 			DbCommand command = this.CreateCommand();
 			command.CommandText = commandText;
@@ -439,15 +447,24 @@ namespace Adenson.Data
 				if (commandText.IndexOf("{0}", StringComparison.CurrentCulture) > 0) command.CommandText = StringUtil.Format(commandText, parameterValues);
 				else
 				{
-					foreach (object obj in parameterValues)
+					for (var i = 0; i < parameterValues.Length; i++)
 					{
-						var parameter = obj as Parameter;
+						var obj = parameterValues[i];
 						IDataParameter dbParameter = obj as IDataParameter;
-						if (parameter != null)
+						if (dbParameter == null)
 						{
+							var parameter = obj as Parameter;
 							dbParameter = this.CreateParameter();
-							dbParameter.ParameterName = parameter.Name;
-							dbParameter.Value = parameter.Value;
+							if (parameter != null)
+							{
+								dbParameter.ParameterName = parameter.Name;
+								dbParameter.Value = parameter.Value;
+							}
+							else
+							{
+								dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
+								dbParameter.Value = obj;
+							}
 						}
 						if (dbParameter != null) command.Parameters.Add(dbParameter);
 					}
