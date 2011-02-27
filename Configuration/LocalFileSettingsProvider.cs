@@ -88,8 +88,9 @@ namespace Adenson.Configuration
 					var element = userSettings == null ? null : userSettings.Settings.Get(property.Name);
 					if (element != null)
 					{
-						settingsValue.SerializedValue = element.Value.ValueXml;
 						if (element.SerializeAs == SettingsSerializeAs.String) settingsValue.SerializedValue = element.Value.ValueXml.InnerText;
+						else if (element.SerializeAs == SettingsSerializeAs.Xml) settingsValue.SerializedValue = element.Value.ValueXml.InnerXml;
+						else settingsValue.SerializedValue = element.Value.ValueXml;
 					}
 					else if (property.DefaultValue != null) settingsValue.SerializedValue = property.DefaultValue;
 					else settingsValue.PropertyValue = null;
@@ -190,8 +191,7 @@ namespace Adenson.Configuration
 		}
 		private static XmlNode ConvertToXmlElement(SettingsProperty setting, SettingsPropertyValue value)
 		{
-			XmlDocument doc = new XmlDocument();
-			XmlElement element = doc.CreateElement("value");
+			XmlElement element = new XmlDocument().CreateElement("value");
 			string serializedValue = value.SerializedValue as string;
 			if ((serializedValue == null) && (setting.SerializeAs == SettingsSerializeAs.Binary))
 			{
@@ -202,16 +202,8 @@ namespace Adenson.Configuration
 			if (serializedValue == null) serializedValue = String.Empty;
 
 			element.InnerXml = serializedValue;
-			XmlNode oldChild = null;
-			foreach (XmlNode node in element.ChildNodes)
-			{
-				if (node.NodeType == XmlNodeType.XmlDeclaration)
-				{
-					oldChild = node;
-					break;
-				}
-			}
-			if (oldChild != null) element.RemoveChild(oldChild);
+			XmlNode declaration = element.ChildNodes.Cast<XmlNode>().FirstOrDefault(x => x.NodeType == XmlNodeType.XmlDeclaration);
+			if (declaration != null) element.RemoveChild(declaration);
 			return element;
 		}
 
