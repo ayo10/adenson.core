@@ -580,10 +580,6 @@ namespace Adenson.Log
 				writer.Write(sb.ToString());
 				return true;
 			}
-			catch (UnauthorizedAccessException ex)
-			{
-				Logger.LogInternalError(ex);
-			}
 			catch (Exception ex)
 			{
 				Logger.LogInternalError(ex);
