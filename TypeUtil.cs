@@ -133,27 +133,23 @@ namespace Adenson
 					}
 					else
 					{
-						var enumConverter = typeConverter as EnumConverter;
 						var valueAsString = value as string;
-						if (enumConverter != null && valueAsString != null)
+						if ((typeConverter is EnumConverter) && valueAsString != null)
 						{
-							var splits = valueAsString.Split(',', '|');
-							var intValue = 0;
-							var successful = true;
-							foreach (var str in splits)
+							try
 							{
-								object newOutput;
-								if (TryConvert(str.Trim(), type, out newOutput)) intValue += (int)newOutput;
-								else
-								{
-									successful = false;
-									break;
-								}
-							}
-							if (successful)
-							{
+								var splits = valueAsString.Split('|');
+								var intValue = 0;
+								foreach (var str in splits) intValue += (int)Enum.Parse(type, str);
 								output = Enum.Parse(type, intValue.ToString(CultureInfo.InvariantCulture));
-								result = true;
+							}
+							catch (ArgumentException)
+							{
+								result = false;
+							}
+							catch (OverflowException)
+							{
+								result = false;
 							}
 						}
 					}
