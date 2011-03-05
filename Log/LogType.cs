@@ -42,7 +42,7 @@ namespace Adenson.Log
 		/// </summary>
 		Email = 32,
 		/// <summary>
-		/// DataBase | File | EventLog | Console | DiagnosticsDebug | Email
+		/// DataBase | File | EventLog | Console | Debug | Email
 		/// </summary>
 		All = Database | File | EventLog | Debug | Email
 	}

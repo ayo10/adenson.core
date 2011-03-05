@@ -345,7 +345,6 @@ namespace Adenson.Log
 
 			if (arguments == null || arguments.Length == 0) entry.Message = message;
 			else entry.Message = StringUtil.Format(message, arguments);
-			entries.Add(entry);
 
 			Logger.OutWriteLine(entry);
 
@@ -353,6 +352,7 @@ namespace Adenson.Log
 			bool flush = false;
 			lock (entries)
 			{
+				entries.Add(entry);
 				flush = (entries.Count >= this.BatchSize);
 			}
 			if (flush) this.Flush();
@@ -490,9 +490,7 @@ namespace Adenson.Log
 			string folder = null;
 			if (!Path.IsPathRooted(filePath))
 			{
-				var context = System.Web.HttpContext.Current;//context can indeed be null sometimes, depending on when Logger is called, even in a ASP.NET project
-				if (context != null) filePath = context.Server.MapPath(filePath);
-				else filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
+				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
 				folder = Path.GetDirectoryName(filePath);
 			}
 			if (!Directory.Exists(folder))
