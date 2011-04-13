@@ -176,6 +176,16 @@ namespace Adenson
 			return (values == null) || (values.Cast<object>().Count() == 0);
 		}
 		/// <summary>
+		/// Converts specified stream to a byte array
+		/// </summary>
+		/// <param name="stream">The stream</param>
+		/// <returns>byte array, or null if stream is null</returns>
+		public static byte[] ToBytes(this Stream stream)
+		{
+			if (stream == null) return null;
+			return FileUtil.ReadStream(stream);
+		}
+		/// <summary>
 		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
 		/// </summary>
 		/// <param name="buffer">The byte array</param>
@@ -186,14 +196,32 @@ namespace Adenson
 			return BitConverter.ToString(buffer).Replace("-", String.Empty);
 		}
 		/// <summary>
-		/// Converts specified stream to a byte array
+		/// Converts specified integer value to roman numeral
 		/// </summary>
-		/// <param name="stream">The stream</param>
-		/// <returns>byte array, or null if stream is null</returns>
-		public static byte[] ToBytes(this Stream stream)
+		/// <remarks>http://www.dreamcubes.com/b2/software-development/21/to-roman-c-int-to-roman-converter/</remarks>
+		/// <param name="value">The value to convert</param>
+		/// <returns>Returns '0', if <paramref name="value"/> was 0 else the value in roman numeral</returns>
+		public static string ToRoman(this int value)
 		{
-			if (stream == null) return null;
-			return FileUtil.ReadStream(stream);
+			if (value == 0) return "O";
+
+			var wasNegative = value < 0;
+			if (wasNegative) value = value * -1;
+
+			int[] nums = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
+			string[] romanNums = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+
+			string result = "";
+			int n = value;
+			for (int i = nums.Length - 1; i >= 0; --i)
+			{
+				while (n >= nums[i])
+				{
+					n -= nums[i];
+					result += romanNums[i];
+				}
+			}
+			return (wasNegative ? "-" : String.Empty) + result;
 		}
 		/// <summary>
 		/// Subtracts the milliseconds duration from the specified datetime
