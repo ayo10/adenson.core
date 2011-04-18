@@ -10,6 +10,9 @@ namespace Adenson
 	/// </summary>
 	public static class SmtpUtil
 	{
+		#region Variables
+		private static Logger logger = Logger.GetLogger(typeof(SmtpUtil));
+		#endregion
 		#region Methods
 
 		/// <summary>
@@ -286,7 +289,6 @@ namespace Adenson
 			SmtpClient smtp = null;
 			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
 			else smtp = new SmtpClient(smtpHost);
-			Logger logger = Logger.GetLogger(typeof(SmtpUtil));
 			logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
 			if (sendAsync) smtp.SendAsync(message, null);
 			else smtp.Send(message);
@@ -301,7 +303,6 @@ namespace Adenson
 			}
 			catch (Exception ex)
 			{
-				Logger logger = Logger.GetLogger(typeof(SmtpUtil));
 				logger.Error(ex);
 				logger.Debug("Failed sending mail to '{1}' using server '{0}' (from '{2}')", smtpHost, message.To, message.From);
 				return false;
