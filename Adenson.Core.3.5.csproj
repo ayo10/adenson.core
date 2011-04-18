@@ -10,9 +10,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Adenson</RootNamespace>
     <AssemblyName>Adenson.Core</AssemblyName>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>Client</TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,7 +47,6 @@
       <Name>System.Data</Name>
     </Reference>
     <Reference Include="System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -72,6 +70,8 @@
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XmlSectionHandler.cs" />
+    <Compile Include="Cryptography\EncryptorBase.cs" />
+    <Compile Include="Cryptography\HashAlgorithmType.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
     <Compile Include="Data\ConnectionManager.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
@@ -83,7 +83,6 @@
     <Compile Include="Cryptography\DES.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Cryptography\Encryptor.cs" />
-    <Compile Include="Cryptography\BaseEncryptor.cs" />
     <Compile Include="Cryptography\KeyFormat.cs" />
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDES.cs" />
@@ -115,7 +114,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Adenson</CustomToolNamespace>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\SR.resx">
       <Generator>ResXFileCodeGenerator</Generator>
