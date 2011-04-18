@@ -72,7 +72,7 @@ namespace Adenson
 			if (buffer == null) return null;
 			if (buffer.Length == 0) return null;
 
-			string filePath = Path.Combine(directory, Encryptor.GetMD5Hash(buffer));
+			string filePath = Path.Combine(directory, StringUtil.ToString(Encryptor.GetHash(buffer, HashAlgorithmType.MD5)));
 			return FileUtil.CreateFile(filePath, buffer, overwrite);
 		}
 		/// <summary>
