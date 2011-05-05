@@ -46,7 +46,6 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -76,7 +75,6 @@
     <Compile Include="Data\ConnectionManager.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
     <Compile Include="Data\Parameter.cs" />
-    <Compile Include="Data\SqlCeHelper.cs" />
     <Compile Include="Data\SqlClientHelper.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />

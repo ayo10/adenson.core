@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core(2008)", "Adenson.Core.csproj", "{7246795C-9775-4A3E-958C-678FC7F2784C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core", "Adenson.Core.csproj", "{7246795C-9775-4A3E-958C-678FC7F2784C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Data.SqlCe", "Adenson.Data.SqlCe.csproj", "{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,10 +14,10 @@ Global
 		{7246795C-9775-4A3E-958C-678FC7F2784C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7246795C-9775-4A3E-958C-678FC7F2784C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7246795C-9775-4A3E-958C-678FC7F2784C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B00813D-F11B-455E-AE08-673AA9CC053A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B00813D-F11B-455E-AE08-673AA9CC053A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B00813D-F11B-455E-AE08-673AA9CC053A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B00813D-F11B-455E-AE08-673AA9CC053A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
