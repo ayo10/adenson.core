@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using Adenson.Configuration;
+using System.Reflection;
 
 namespace Adenson.Data
 {
@@ -77,13 +78,17 @@ namespace Adenson.Data
 				case "System.Data.Odbc": return new OdbcSqlHelper(connectionString);
 				case "System.Data.OleDb": return new OleDbSqlHelper(connectionString);
 				case "System.Data.SqlClient": return new SqlClientHelper(connectionString);
-#if SQLCE
 				case "Microsoft.SqlServerCe.Client":
 				case "System.Data.SqlServerCe":
-				case "System.Data.SqlServerCe.3.5": return new SqlCeHelper(connectionString);
-#endif
-				case "System.Data.OracleClient": throw new NotSupportedException(connectionString.ProviderName);
-				default: throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
+				case "System.Data.SqlServerCe.3.5":
+				case "System.Data.SqlServerCe.4.0":
+					Assembly assembly = Assembly.Load("Adenson.Data.SqlCe");
+					if (assembly == null) throw new InvalidOperationException();
+					return (SqlHelperBase)assembly.CreateInstance("Adenson.Data.SqlCeHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
+				case "System.Data.OracleClient": 
+					throw new NotSupportedException(connectionString.ProviderName);
+				default: 
+					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
 			}
 		}
 
