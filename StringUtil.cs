@@ -13,7 +13,8 @@ namespace Adenson
 		#region Methods
 
 		/// <summary>
-		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array.
+		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array, 
+		/// using <see cref="P:System.Globalization.CultureInfo.CurrentCulture"/>.
 		/// </summary>
 		/// <param name="format">A composite format string.</param>
 		/// <param name="args">An object array that contains zero or more objects to format.</param>
