@@ -31,10 +31,12 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
 		/// </summary>
-		/// <param name="list">The collection from which the elements are copied.</param>
+		/// <param name="collection">The collection from which the elements are copied.</param>
 		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
-		public ObservableCollection(IEnumerable<T> list) : base(list)
+		public ObservableCollection(IEnumerable<T> collection) : base(collection)
 		{
+			System.Collections.ObjectModel.ObservableCollection<T> obs = collection as System.Collections.ObjectModel.ObservableCollection<T>;
+			if (obs != null) obs.CollectionChanged += this.OnSourceCollectionChanged;
 		}
 		/// <summary>
 		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
@@ -193,6 +195,24 @@ namespace Adenson.Collections
 		{
 			if (this.CollectionChanging == null) return;
 			this.CollectionChanging(this, e);
+		}
+		private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			switch (e.Action)
+			{
+				case NotifyCollectionChangedAction.Add:
+					this.AddRange(e.NewItems.Cast<T>());
+					break;
+				case NotifyCollectionChangedAction.Move:
+					break;
+				case NotifyCollectionChangedAction.Remove:
+					this.RemoveRange(e.OldItems.Cast<T>());
+					break;
+				case NotifyCollectionChangedAction.Replace:
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					break;
+			}
 		}
 
 		#endregion
