@@ -5,7 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represents a log entry
 	/// </summary>
-	public sealed class LogEntry
+	internal sealed class LogEntry
 	{
 		#region Constructor
 
@@ -19,7 +19,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the severity
 		/// </summary>
-		public LogSeverity Severity
+		public LogSeverityInternal Severity
 		{
 			get;
 			set;
@@ -57,9 +57,9 @@ namespace Adenson.Log
 			set;
 		}
 		/// <summary>
-		/// Gets the type
+		/// Gets or sets the type name
 		/// </summary>
-		public Type Type
+		public string TypeName
 		{
 			get;
 			set;
