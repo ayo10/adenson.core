@@ -161,7 +161,7 @@ namespace Adenson.Log
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Info) return;
-			this.Write(LogSeverity.Info, message, arguments);
+			this.Write(LogSeverity.Info, null, message, arguments);
 		}
 		/// <summary>
 		/// Logs the value into the log of type debug, converting value to string
@@ -180,7 +180,7 @@ namespace Adenson.Log
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-			this.Write(LogSeverity.Debug, message, arguments);
+			this.Write(LogSeverity.Debug, null, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors of type Warning converting value to string
@@ -199,7 +199,7 @@ namespace Adenson.Log
 		public void Warn(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Warn) return;
-			this.Write(LogSeverity.Warn, message, arguments);
+			this.Write(LogSeverity.Warn, null, message, arguments);
 		}
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
@@ -217,7 +217,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Error(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Error, message, arguments);
+			this.Write(LogSeverity.Error, null, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors
@@ -226,7 +226,7 @@ namespace Adenson.Log
 		public void Error(Exception ex)
 		{
 			string message = Logger.ConvertToString(ex);
-			this.Write(LogSeverity.Error, message);
+			this.Write(LogSeverity.Error, null, message);
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
 		}
@@ -259,11 +259,11 @@ namespace Adenson.Log
 			{
 				if (trackers.ContainsKey(identifier))
 				{
-					this.Debug("Measure '{0}': Force stopping existing measurement.", identifier);
+					this.Write(LogSeverityInternal.Measure, identifier, "Force stopping existing measurement.", null);
 					this.MeasureStopAndRemove(identifier);
 				}
 				trackers.Add(identifier, DateTime.Now);
-				this.Debug("Measure '{0}': Start.", identifier);
+				this.Write(LogSeverityInternal.Measure, identifier, "STARTED", null);
 			}
 		}
 		/// <summary>
@@ -319,7 +319,7 @@ namespace Adenson.Log
 			{
 				if (trackers.ContainsKey(identifier))
 				{
-					this.Debug("Measure '{0}': {1}. {2} secs", identifier, StringUtil.Format(message, arguments), DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+					this.Write(LogSeverityInternal.Measure, identifier, "{0}. {1} secs", StringUtil.Format(message, arguments), DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
 				}
 			}
 		}
@@ -328,17 +328,17 @@ namespace Adenson.Log
 		{
 			if (trackers.ContainsKey(identifier))
 			{
-				this.Debug("Measure '{0}': End. {1} secs", identifier, DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+				this.Write(LogSeverityInternal.Measure, identifier, "STOP, Elapsed Time: {0} secs", DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
 				trackers.Remove(identifier);
 			}
 		}
-		private LogEntry Write(LogSeverity severity, string message, params object[] arguments)
+		private void Write(LogSeverityInternal severity, string identifier, string message, params object[] arguments)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(message)) throw new ArgumentNullException("message");
 
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
-			entry.Type = this.ClassType;
+			entry.TypeName = this.ClassType.Name + (String.IsNullOrEmpty(identifier) ? String.Empty : ("." + identifier));
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = this.Types;
@@ -356,8 +356,6 @@ namespace Adenson.Log
 				flush = (entries.Count >= this.BatchSize);
 			}
 			if (flush) this.Flush();
-
-			return entry;
 		}
 
 		#endregion
@@ -474,9 +472,8 @@ namespace Adenson.Log
 
 		private static void LogInternalError(Exception ex)
 		{
-			#if DEBUG
-			System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
-			#else
+			System.Diagnostics.Trace.WriteLine(Logger.ConvertToString(ex));
+			#if !DEBUG
 			try
 			{
 				EventLog.WriteEntry("Adenson.Log.Logger", ConvertToString(ex), EventLogEntryType.Warning);
@@ -496,25 +493,27 @@ namespace Adenson.Log
 			if (!Directory.Exists(folder))
 			{
 				filePath = null;
-				System.Diagnostics.Debug.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
+				System.Diagnostics.Trace.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
 			}
 
 			return filePath;
 		}
 		private static void OutWriteLine(LogEntry entry)
 		{
-			var format = "[{0}] {1} [{2}] - {3}";
+			var format = "{0} {1} [{2}] - {3}";
 			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
-			var severity = entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture);
-			var message = StringUtil.Format(format, severity, date, entry.Type.Name, entry.Message);
+			var message = StringUtil.Format(format, entry.Severity.ToString(), date, entry.TypeName, entry.Message);
+			
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
 				Console.WriteLine(message);
 			}
+			
 			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
 			{
-				System.Diagnostics.Debug.WriteLine(message);
+				System.Diagnostics.Trace.WriteLine(message);
 			}
+			
 			if ((entry.LogType & LogTypes.Email) != LogTypes.None)
 			{
 				if (!Config.LogSettings.EmailInfo.IsEmpty())
@@ -530,9 +529,9 @@ namespace Adenson.Log
 
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
 			var statement = Config.LogSettings.DatabaseInfo.CreateInsertStatement();
-			foreach (LogEntry row in entries)
+			foreach (LogEntry entry in entries)
 			{
-				sb.AppendLine(StringUtil.Format(statement, row.Severity, row.Type, row.Message.Replace("'", "''"), row.Date));
+				sb.AppendLine(StringUtil.Format(statement, entry.Severity, entry.TypeName, entry.Message.Replace("'", "''"), entry.Date));
 			}
 
 			try
@@ -569,7 +568,7 @@ namespace Adenson.Log
 			TextWriter writer = null;
 			Stream stream = null;
 			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
-			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}", row.Date, row.Severity, row.Type, row.Message));
+			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}", row.Date, row.Severity, row.TypeName, row.Message));
 			FileInfo traceFile = new FileInfo(Logger.OutFileName);
 			try
 			{
@@ -598,7 +597,7 @@ namespace Adenson.Log
 					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
 					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
 					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
-					EventLog.WriteEntry(entry.Source, StringUtil.Format("Date: {0}\nType: {1}\n\n{2}", DateTime.Now, entry.Type, entry.Message), eventLogEntryType);
+					EventLog.WriteEntry(entry.Source, StringUtil.Format("Date: {0}\nType: {1}\n\n{2}", DateTime.Now, entry.TypeName, entry.Message), eventLogEntryType);
 				}
 				return true;
 			}
