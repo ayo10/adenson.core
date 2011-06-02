@@ -26,6 +26,7 @@ namespace Adenson
 			if (value == null) throw new ArgumentNullException("value");
 			return source.IndexOf(value, comparisonType) > -1;
 		}
+		
 		/// <summary>
 		/// Determines whether the dictionary contains the specified key, using the comparism rule
 		/// </summary>
@@ -38,6 +39,7 @@ namespace Adenson
 		{
 			return dictionary.Keys.Any(k => k.Equals(key, comparison));
 		}
+		
 		/// <summary>
 		/// Gets the first (in document order) child element with the specified <see cref="XName"/>.
 		/// </summary>
@@ -52,6 +54,7 @@ namespace Adenson
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
 			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType));
 		}
+		
 		/// <summary>
 		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
 		/// </summary>
@@ -72,6 +75,7 @@ namespace Adenson
 			}
 			return true;
 		}
+		
 		/// <summary>
 		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using <see cref="StringComparison.CurrentCultureIgnoreCase"/>.
 		/// </summary>
@@ -83,6 +87,7 @@ namespace Adenson
 		{
 			return Extensions.Equals(array1, array2, StringComparison.CurrentCultureIgnoreCase);
 		}
+		
 		/// <summary>
 		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified culture, case, and sort rules used in the comparison.
 		/// </summary>
@@ -104,6 +109,7 @@ namespace Adenson
 			}
 			return true;
 		}
+		
 		/// <summary>
 		/// Gets the element with the specified key, case insensitive
 		/// </summary>
@@ -116,6 +122,7 @@ namespace Adenson
 			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, StringComparison.CurrentCultureIgnoreCase));
 			return dictionary[actualKey];
 		}
+		
 		/// <summary>
 		/// Gets the value of a child of specified <paramref name="source"/> with specified name, and converts it into specified type
 		/// </summary>
@@ -139,6 +146,7 @@ namespace Adenson
 			}
 			return result;
 		}
+		
 		/// <summary>
 		/// Gets if the specified element has the specified sub element with specified key
 		/// </summary>
@@ -152,6 +160,7 @@ namespace Adenson
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
 			return source.HasElement(name, StringComparison.CurrentCulture);
 		}
+		
 		/// <summary>
 		/// Gets if the specified element has the specified sub element with specified key
 		/// </summary>
@@ -166,6 +175,7 @@ namespace Adenson
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
 			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType)) != null;
 		}
+		
 		/// <summary>
 		/// Checks to see if the specified value is empty or null
 		/// </summary>
@@ -175,6 +185,20 @@ namespace Adenson
 		{
 			return (values == null) || (values.Cast<object>().Count() == 0);
 		}
+		
+		/// <summary>
+		/// Rounds a double-precision floating-point value to a specified number of fractional digits.
+		/// </summary>
+		/// <remarks>All it does is to call Math.Round(value, digits)</remarks>
+		/// <param name="value">A double-precision floating-point number to be rounded.</param>
+		/// <param name="digits">The number of fractional digits in the return value.</param>
+		/// <returns>The number nearest to value that contains a number of fractional digits equal to digits.</returns>
+		/// <exception cref="ArgumentOutOfRangeException">digits is less than 0 or greater than 15.</exception>
+		public static double Round(this double value, int digits)
+		{
+			return Math.Round(value, digits);
+		}
+		
 		/// <summary>
 		/// Converts specified stream to a byte array
 		/// </summary>
@@ -185,6 +209,7 @@ namespace Adenson
 			if (stream == null) return null;
 			return FileUtil.ReadStream(stream);
 		}
+		
 		/// <summary>
 		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
 		/// </summary>
@@ -195,6 +220,7 @@ namespace Adenson
 			if (buffer == null) return null;
 			return BitConverter.ToString(buffer).Replace("-", String.Empty);
 		}
+		
 		/// <summary>
 		/// Converts specified integer value to roman numeral
 		/// </summary>
@@ -223,6 +249,7 @@ namespace Adenson
 			}
 			return (wasNegative ? "-" : String.Empty) + result;
 		}
+		
 		/// <summary>
 		/// Subtracts the milliseconds duration from the specified datetime
 		/// </summary>
@@ -232,6 +259,7 @@ namespace Adenson
 		{
 			return date.Subtract(new TimeSpan(0, 0, 0, 0, date.TimeOfDay.Milliseconds));
 		}
+		
 		/// <summary>
 		/// Subtracts the seconds (and milliseconds) duration duration from the specified datetime
 		/// </summary>

@@ -6,9 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using Adenson.Collections;
-using Adenson.Configuration;
 using Adenson.Configuration.Internal;
-using Adenson.Data;
 
 namespace Adenson.Log
 {
@@ -319,7 +317,7 @@ namespace Adenson.Log
 			{
 				if (trackers.ContainsKey(identifier))
 				{
-					this.Write(LogSeverityInternal.Measure, identifier, "{0}. {1} secs", StringUtil.Format(message, arguments), DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+					this.Write(LogSeverityInternal.Measure, identifier, "[@ {1} secs] {0}", StringUtil.Format(message, arguments), this.GetElapsedTime(identifier));
 				}
 			}
 		}
@@ -328,7 +326,7 @@ namespace Adenson.Log
 		{
 			if (trackers.ContainsKey(identifier))
 			{
-				this.Write(LogSeverityInternal.Measure, identifier, "STOP, Elapsed Time: {0} secs", DateTime.Now.Subtract(trackers[identifier]).TotalSeconds);
+				this.Write(LogSeverityInternal.Measure, identifier, "STOP [@ {0} secs]", this.GetElapsedTime(identifier));
 				trackers.Remove(identifier);
 			}
 		}
@@ -356,6 +354,12 @@ namespace Adenson.Log
 				flush = (entries.Count >= this.BatchSize);
 			}
 			if (flush) this.Flush();
+		}
+		private string GetElapsedTime(string identifier)
+		{
+			var total = DateTime.Now.Subtract(trackers[identifier]).TotalSeconds;
+			total = total.Round(6);
+			return (total == 0 ? "0.0" : total.ToString()).PadRight(8, '0');
 		}
 
 		#endregion
@@ -470,7 +474,7 @@ namespace Adenson.Log
 			}
 		}
 
-		private static void LogInternalError(Exception ex)
+		internal static void LogInternalError(Exception ex)
 		{
 			System.Diagnostics.Trace.WriteLine(Logger.ConvertToString(ex));
 			#if !DEBUG
@@ -481,6 +485,7 @@ namespace Adenson.Log
 			catch { }
 			#endif
 		}
+		
 		private static string GetOutFileName()
 		{
 			string filePath = Config.LogSettings.FileName;
@@ -488,8 +493,10 @@ namespace Adenson.Log
 			if (!Path.IsPathRooted(filePath))
 			{
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
-				folder = Path.GetDirectoryName(filePath);
 			}
+			
+			folder = Path.GetDirectoryName(filePath);
+			
 			if (!Directory.Exists(folder))
 			{
 				filePath = null;
@@ -500,7 +507,7 @@ namespace Adenson.Log
 		}
 		private static void OutWriteLine(LogEntry entry)
 		{
-			var format = "{0} {1} [{2}] - {3}";
+			var format = "{0}\t{1}\t[{2}]\t- {3}";
 			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
 			var message = StringUtil.Format(format, entry.Severity.ToString(), date, entry.TypeName, entry.Message);
 			
@@ -508,8 +515,8 @@ namespace Adenson.Log
 			{
 				Console.WriteLine(message);
 			}
-			
-			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
+
+			if ((entry.LogType & LogTypes.Trace) != LogTypes.None)
 			{
 				System.Diagnostics.Trace.WriteLine(message);
 			}
@@ -522,28 +529,9 @@ namespace Adenson.Log
 				}
 			}
 		}
-		private static bool SaveToDatabase(List<LogEntry> entries)
+		private static bool SaveToDatabase(IEnumerable<LogEntry> entries)
 		{
-			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
-			if (sqlHelper == null) return false;
-
-			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
-			var statement = Config.LogSettings.DatabaseInfo.CreateInsertStatement();
-			foreach (LogEntry entry in entries)
-			{
-				sb.AppendLine(StringUtil.Format(statement, entry.Severity, entry.TypeName, entry.Message.Replace("'", "''"), entry.Date));
-			}
-
-			try
-			{
-				sqlHelper.ExecuteNonQuery(System.Data.CommandType.Text, sb.ToString());
-				return true;
-			}
-			catch (Exception ex)
-			{
-				Logger.LogInternalError(ex);
-			}
-			return false;
+			return Config.LogSettings.DatabaseInfo.Save(entries);
 		}
 		private static bool SaveToFile(List<LogEntry> entries)
 		{

@@ -34,9 +34,14 @@ namespace Adenson.Log
 		/// </summary>
 		Console = 8,
 		/// <summary>
-		/// Logs via System.Diagnostics.Debug.WriteLine
+		/// Logs via System.Diagnostics.Trace.WriteLine
 		/// </summary>
+		[Obsolete("Use Trace instead", false)]
 		Debug = 16,
+		/// <summary>
+		/// Logs via System.Diagnostics.Trace.WriteLine
+		/// </summary>
+		Trace = 16,
 		/// <summary>
 		/// Logs via email (expects config setting adenson/loggerSettings/emailInfo[from, to] to be set
 		/// </summary>
@@ -44,6 +49,6 @@ namespace Adenson.Log
 		/// <summary>
 		/// DataBase | File | EventLog | Console | Debug | Email
 		/// </summary>
-		All = Database | File | EventLog | Debug | Email
+		All = Database | File | EventLog | Trace | Email
 	}
 }

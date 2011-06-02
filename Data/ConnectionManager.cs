@@ -8,7 +8,7 @@ namespace Adenson.Data
 	{
 		#region Constructor
 
-		internal ConnectionManager(DbConnection connection)
+		internal ConnectionManager(IDbConnection connection)
 		{
 			this.Connection = connection;
 		}
@@ -16,7 +16,7 @@ namespace Adenson.Data
 		#endregion
 		#region Properties
 
-		public DbConnection Connection
+		public IDbConnection Connection
 		{
 			get;
 			private set;

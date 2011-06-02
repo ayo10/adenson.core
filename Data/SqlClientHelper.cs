@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 
 namespace Adenson.Data
@@ -72,7 +70,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="SqlDataAdapter"/> object</returns>
-		public override DbDataAdapter CreateAdapter(DbCommand command)
+		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new SqlDataAdapter((SqlCommand)command);
 		}
@@ -80,7 +78,7 @@ namespace Adenson.Data
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlCommand"/> object</returns>
-		public override DbCommand CreateCommand()
+		public override IDbCommand CreateCommand()
 		{
 			return new SqlCommand();
 		}
@@ -88,7 +86,7 @@ namespace Adenson.Data
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="SqlConnection"/> object</returns>
-		public override DbConnection CreateConnection()
+		public override IDbConnection CreateConnection()
 		{
 			return new SqlConnection(this.ConnectionString);
 		}
@@ -96,7 +94,7 @@ namespace Adenson.Data
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
 		/// <returns>New <see cref="SqlParameter"/> object</returns>
-		public override DbParameter CreateParameter()
+		public override IDbDataParameter CreateParameter()
 		{
 			return new SqlParameter();
 		}
