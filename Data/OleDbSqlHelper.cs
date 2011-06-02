@@ -1,6 +1,6 @@
 using System;
 using System.Configuration;
-using System.Data.Common;
+using System.Data;
 using System.Data.OleDb;
 
 namespace Adenson.Data
@@ -63,7 +63,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="OleDbDataAdapter"/> object</returns>
-		public override DbDataAdapter CreateAdapter(DbCommand command)
+		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new OleDbDataAdapter((OleDbCommand)command);
 		}
@@ -71,7 +71,7 @@ namespace Adenson.Data
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="OleDbCommand"/> object</returns>
-		public override DbCommand CreateCommand()
+		public override IDbCommand CreateCommand()
 		{
 			return new OleDbCommand();
 		}
@@ -79,7 +79,7 @@ namespace Adenson.Data
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="OleDbConnection"/> object</returns>
-		public override DbConnection CreateConnection()
+		public override IDbConnection CreateConnection()
 		{
 			return new OleDbConnection(this.ConnectionString);
 		}
@@ -87,7 +87,7 @@ namespace Adenson.Data
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
 		/// <returns>New <see cref="OleDbParameter"/> object</returns>
-		public override DbParameter CreateParameter()
+		public override IDbDataParameter CreateParameter()
 		{
 			return new OleDbParameter();
 		}

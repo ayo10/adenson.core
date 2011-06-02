@@ -111,7 +111,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="SqlCeDataAdapter"/> object</returns>
-		public override DbDataAdapter CreateAdapter(DbCommand command)
+		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new SqlCeDataAdapter((SqlCeCommand)command);
 		}
@@ -119,7 +119,7 @@ namespace Adenson.Data
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlCeCommand"/> object</returns>
-		public override DbCommand CreateCommand()
+		public override IDbCommand CreateCommand()
 		{
 			return new SqlCeCommand();
 		}
@@ -127,7 +127,7 @@ namespace Adenson.Data
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="SqlCeConnection"/> object</returns>
-		public override DbConnection CreateConnection()
+		public override IDbConnection CreateConnection()
 		{
 			return new SqlCeConnection(this.ConnectionString);
 		}
@@ -135,7 +135,7 @@ namespace Adenson.Data
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
 		/// <returns>New <see cref="SqlCeParameter"/> object</returns>
-		public override DbParameter CreateParameter()
+		public override IDbDataParameter CreateParameter()
 		{
 			return new SqlCeParameter();
 		}

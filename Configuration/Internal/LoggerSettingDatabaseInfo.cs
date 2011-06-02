@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Xml.Linq;
+using Adenson.Data;
+using Adenson.Log;
 
 namespace Adenson.Configuration.Internal
 {
 	internal sealed class LoggerSettingDatabaseInfo : XmlSettingsBase
 	{
+		#region Variables
+		private const string InsertStatementText = "INSERT INTO {0} ({1}, {2}, {3}, {4}) VALUES ({5})";
+		private const string InsertValuesText = "'{0}', '{1}', '{2}', '{3}'";
+		#endregion
 		#region Constructor
 
 		public LoggerSettingDatabaseInfo() : this(null)
@@ -17,6 +26,7 @@ namespace Adenson.Configuration.Internal
 			this.DateColumn = this.GetValue("DateColumn", "Date");
 			this.TypeColumn = this.GetValue("TypeColumn", "Type");
 			this.MessageColumn = this.GetValue("MessageColumn", "Message");
+			this.InsertStatement = StringUtil.Format(LoggerSettingDatabaseInfo.InsertStatementText, this.TableName, this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn, LoggerSettingDatabaseInfo.InsertValuesText);
 		}
 
 		#endregion
@@ -48,12 +58,42 @@ namespace Adenson.Configuration.Internal
 			set;
 		}
 
+		public string InsertStatement
+		{
+			get;
+			private set;
+		}
+
 		#endregion
 		#region Methods
 
-		public string CreateInsertStatement()
+		internal bool Save(IEnumerable<LogEntry> entries)
 		{
-			return String.Concat(StringUtil.Format("INSERT INTO {4} ({0}, {1}, {2}, {3}) ", this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn, this.TableName), "VALUES ('{0}', '{1}', '{2}', '{3}')");
+			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
+			if (sqlHelper == null) return false;
+			
+			var commands = new List<DbCommand>();
+			foreach (LogEntry entry in entries)
+			{
+				IDbCommand command = sqlHelper.CreateCommand();
+				command.CommandText = this.InsertStatement;
+				command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
+				command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
+				command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
+				command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
+			}
+
+			try
+			{
+				sqlHelper.ExecuteNonQuery(commands.ToArray());
+			}
+			catch (Exception ex)
+			{
+				Logger.LogInternalError(ex);
+				return false;
+			}
+
+			return true;
 		}
 
 		#endregion

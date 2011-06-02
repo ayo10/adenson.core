@@ -19,8 +19,7 @@ namespace Adenson.Configuration.Internal
 			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
 			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
 
-			if (element != null && element.HasElement("Type", StringComparison.OrdinalIgnoreCase)) this.Types = this.GetValue("Type", LogTypes.Debug);
-			else this.Types = this.GetValue("Types", LogTypes.Debug);
+			this.Types = this.GetValue("Types", LogTypes.Trace);
 		}
 
 		#endregion
