@@ -25,7 +25,8 @@ namespace Adenson.Log
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
-		private Hashtable<string, DateTime> trackers = new Hashtable<string, DateTime>();
+		private Hashtable<int, DateTime> trackers = new Hashtable<int, DateTime>();
+		private int lastToken;
 		#endregion
 		#region Constructors
 
@@ -159,7 +160,7 @@ namespace Adenson.Log
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Info) return;
-			this.Write(LogSeverity.Info, null, message, arguments);
+			this.Write(LogSeverity.Info, message, arguments);
 		}
 		/// <summary>
 		/// Logs the value into the log of type debug, converting value to string
@@ -178,7 +179,7 @@ namespace Adenson.Log
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-			this.Write(LogSeverity.Debug, null, message, arguments);
+			this.Write(LogSeverity.Debug, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors of type Warning converting value to string
@@ -197,7 +198,7 @@ namespace Adenson.Log
 		public void Warn(string message, params object[] arguments)
 		{
 			if ((int)this.Severity > (int)LogSeverity.Warn) return;
-			this.Write(LogSeverity.Warn, null, message, arguments);
+			this.Write(LogSeverity.Warn, message, arguments);
 		}
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
@@ -215,7 +216,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Error(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Error, null, message, arguments);
+			this.Write(LogSeverity.Error, message, arguments);
 		}
 		/// <summary>
 		/// Called to log errors
@@ -224,7 +225,7 @@ namespace Adenson.Log
 		public void Error(Exception ex)
 		{
 			string message = Logger.ConvertToString(ex);
-			this.Write(LogSeverity.Error, null, message);
+			this.Write(LogSeverity.Error, message);
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
 		}
@@ -243,29 +244,33 @@ namespace Adenson.Log
 			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(String)"/>)
+		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(int)"/>)
 		/// </summary>
-		/// <remarks>Resets tracking if MeasureStart was called using the same identifier, but MeasureStop was not called.</remarks>
-		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
-		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
-		public void MeasureStart(string identifier)
+		/// <returns>A token to use to track the measurement or 0 if the current Severity level is greater than LogSeverity.Debug</returns>
+		public int MeasureStart()
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
-			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-
-			lock (trackers)
-			{
-				if (trackers.ContainsKey(identifier))
-				{
-					this.Write(LogSeverityInternal.Measure, identifier, "Force stopping existing measurement.", null);
-					this.MeasureStopAndRemove(identifier);
-				}
-				trackers.Add(identifier, DateTime.Now);
-				this.Write(LogSeverityInternal.Measure, identifier, "STARTED", null);
-			}
+			return this.MeasureStart(null);
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, ends all tracking started by <seealso cref="MeasureStart"/> regardless of identifier
+		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(int)"/>)
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <returns>A token to use to track the measurement or 0 if the current Severity level is greater than LogSeverity.Debug</returns>
+		public int MeasureStart(string message, params object[] arguments)
+		{
+			if ((int)this.Severity > (int)LogSeverity.Debug) return 0;
+			
+			lock (trackers)
+			{
+				lastToken++;
+				trackers.Add(lastToken, DateTime.Now);
+				this.Write(LogSeverityInternal.Measure, "{0}{1}", "START", message == null ? String.Empty : (" " + String.Format(message, arguments)));
+			}
+			return lastToken;
+		}
+		/// <summary>
+		/// When Severity is Debug or higher, ends all tracking started by <seealso cref="MeasureStart()"/> regardless of token
 		/// </summary>
 		public void MeasureStop()
 		{
@@ -273,70 +278,74 @@ namespace Adenson.Log
 
 			lock (trackers)
 			{
-				foreach (var identifier in trackers.Keys.ToList()) this.MeasureStopAndRemove(identifier);
+				foreach (var token in trackers.Keys.ToList()) this.MeasureStopAndRemove(token, null);
 			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart(String)"/> using specified case sensitive identiifer
+		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart()"/> using specified case sensitive identiifer
 		/// </summary>
-		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <param name="token">The unique token from MeasureStart</param>
 		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
-		public void MeasureStop(string identifier)
+		public void MeasureStop(int token)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
 
 			lock (trackers)
 			{
-				this.MeasureStopAndRemove(identifier);
+				this.MeasureStopAndRemove(token, null);
 			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, and <seealso cref="MeasureStart"/> was called with specified identifier, logs the value 
+		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart()"/> using specified case sensitive identiifer
 		/// </summary>
-		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
-		/// <param name="value">The value to log</param>
+		/// <param name="token">The unique token from MeasureStart</param>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
-		public void MeasureWrite(string identifier, object value)
+		public void MeasureStop(int token, string message, params object[] arguments)
 		{
-			this.MeasureWrite(identifier, StringUtil.ToString(value));
+			if ((int)this.Severity > (int)LogSeverity.Debug) return;
+
+			lock (trackers)
+			{
+				this.MeasureStopAndRemove(token, message, arguments);
+			}
 		}
 		/// <summary>
-		/// When Severity is Debug or higher, and <seealso cref="MeasureStart"/> was called with specified identifier, logs the value, formatting with specified arguments
+		/// When Severity is Debug or higher, and <seealso cref="MeasureStart()"/> was called with specified identifier, logs the value, formatting with specified arguments
 		/// </summary>
-		/// <param name="identifier">The unique case sensitive identifier to use as track</param>
+		/// <param name="token">The unique token from MeasureStart</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">if identifier OR message is null (or whitespace)</exception>
-		public void MeasureWrite(string identifier, string message, params object[] arguments)
+		public void MeasureWrite(int token, string message, params object[] arguments)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
 
 			lock (trackers)
 			{
-				if (trackers.ContainsKey(identifier))
+				if (trackers.ContainsKey(token))
 				{
-					this.Write(LogSeverityInternal.Measure, identifier, "[@ {1} secs] {0}", StringUtil.Format(message, arguments), this.GetElapsedTime(identifier));
+					this.Write(LogSeverityInternal.Measure, "[@ {0} secs] {1}", this.GetElapsedTime(token), (message == null ? String.Empty : StringUtil.Format(message, arguments)));
 				}
 			}
 		}
 
-		private void MeasureStopAndRemove(string identifier)
+		private void MeasureStopAndRemove(int token, string message, params object[] arguments)
 		{
-			if (trackers.ContainsKey(identifier))
+			if (trackers.ContainsKey(token))
 			{
-				this.Write(LogSeverityInternal.Measure, identifier, "STOP [@ {0} secs]", this.GetElapsedTime(identifier));
-				trackers.Remove(identifier);
+				this.Write(LogSeverityInternal.Measure, "STOP [@ {0} secs].{1}", this.GetElapsedTime(token), StringUtil.Format(message, arguments));
+				trackers.Remove(token);
 			}
 		}
-		private void Write(LogSeverityInternal severity, string identifier, string message, params object[] arguments)
+		private void Write(LogSeverityInternal severity, string message, params object[] arguments)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(message)) throw new ArgumentNullException("message");
 
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
-			entry.TypeName = this.ClassType.Name + (String.IsNullOrEmpty(identifier) ? String.Empty : ("." + identifier));
+			entry.TypeName = this.ClassType.Name;
 			entry.Source = this.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = this.Types;
@@ -355,9 +364,9 @@ namespace Adenson.Log
 			}
 			if (flush) this.Flush();
 		}
-		private string GetElapsedTime(string identifier)
+		private string GetElapsedTime(int token)
 		{
-			var total = DateTime.Now.Subtract(trackers[identifier]).TotalSeconds;
+			var total = DateTime.Now.Subtract(trackers[token]).TotalSeconds;
 			total = total.Round(6);
 			return (total == 0 ? "0.0" : total.ToString()).PadRight(8, '0');
 		}
