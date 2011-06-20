@@ -4,16 +4,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Adenson.Log
 {
 	/// <summary>
-	/// Represetns a log profiler object
+	/// Represetns a log profiler object, active only when the parent Logger object's severity is Debug or lower
 	/// </summary>
 	public sealed class LogProfiler : IDisposable
 	{
 		#region Constructor
 
-		internal LogProfiler(Logger parent)
+		internal LogProfiler(Logger parent, string identifier)
 		{
 			this.Start = DateTime.Now;
 			this.Parent = parent;
+			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
 		}
 
@@ -30,6 +31,15 @@ namespace Adenson.Log
 				if (this.IsDisposed) throw new ObjectDisposedException("LogProfiler");
 				return DateTime.Now.Subtract(this.Start).TotalSeconds.Round(6);
 			}
+		}
+
+		/// <summary>
+		/// Gets the identifier
+		/// </summary>
+		public string Identifier
+		{
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -66,17 +76,28 @@ namespace Adenson.Log
 		public Guid Uid
 		{
 			get;
-			set;
+			private set;
 		}
 
 		#endregion
 		#region Methods
 
+		/// <summary>
+		/// Called to log errors of type Debug
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		public void Debug(string message, params object[] arguments)
+		{
+			this.Parent.Debug("[{0}s] {1} {2}", this.ElapsedTime.ToString(8, '0'), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
+		}
+
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "Perfectly happy with this implementation.")]
 		void IDisposable.Dispose()
 		{
+			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
-			this.Parent.MeasureStop(this.Uid);
 		}
 
 		#endregion
