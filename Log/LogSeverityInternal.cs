@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace Adenson.Log
 {
@@ -14,7 +13,7 @@ namespace Adenson.Log
 		}
 		public string Value
 		{
-			get { return _value == null ? this.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) : _value; }
+			get { return _value == null ? this.Severity.ToString().ToUpper() : _value; }
 			set { _value = value; }
 		}
 

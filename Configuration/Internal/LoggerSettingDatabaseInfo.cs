@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using Adenson.Data;
 using Adenson.Log;
@@ -67,6 +68,7 @@ namespace Adenson.Configuration.Internal
 		#endregion
 		#region Methods
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		internal bool Save(IEnumerable<LogEntry> entries)
 		{
 			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));

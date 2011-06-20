@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Adenson.Collections;
@@ -191,6 +192,7 @@ namespace Adenson
 		/// <param name="hexValue">The string to convert</param>
 		/// <param name="result">The result</param>
 		/// <returns>false if an exception occurred true, true otherwise</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public static bool TryGetBytes(string hexValue, out byte[] result)
 		{
 			result = null;

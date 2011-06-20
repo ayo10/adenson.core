@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Mail;
 using Adenson.Log;
@@ -294,6 +295,8 @@ namespace Adenson
 			else smtp.Send(message);
 			logger.Debug("Send Success");
 		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static bool TrySend(string smtpHost, MailMessage message, bool sendAsync)
 		{
 			try

@@ -151,7 +151,7 @@ namespace Adenson.Configuration
 			SettingsPropertyValue settingValue = new SettingsPropertyValue(setting) { IsDirty = false };
 
 			object result;
-			if (tryConvert) TypeUtil.TryConvert(registryValue, setting.PropertyType, out result);
+			if (tryConvert) TypeUtil.TryConvert(setting.PropertyType, registryValue, out result);
 			else result = registryValue;
 			if (result != null)
 			{
