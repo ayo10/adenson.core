@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
-using Adenson.Collections;
 using Adenson.Configuration.Internal;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Log
 {
@@ -25,8 +25,7 @@ namespace Adenson.Log
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
 		private string _source;
-		private Hashtable<int, DateTime> trackers = new Hashtable<int, DateTime>();
-		private int lastToken;
+		private List<LogProfiler> profilers = new List<LogProfiler>();
 		#endregion
 		#region Constructors
 
@@ -100,6 +99,7 @@ namespace Adenson.Log
 				_batchLogSize = value;
 			}
 		}
+	
 		/// <summary>
 		/// Gets the severity level that is logged.
 		/// </summary>
@@ -108,6 +108,7 @@ namespace Adenson.Log
 			get { return _severity == null ? Config.LogSettings.Severity : _severity.Value; }
 			set { _severity = value; }
 		}
+		
 		/// <summary>
 		/// Gets the logging type
 		/// </summary>
@@ -116,6 +117,7 @@ namespace Adenson.Log
 			get { return _logTypes == null ? Config.LogSettings.Types : _logTypes.Value; }
 			set { _logTypes = value; }
 		}
+	
 		/// <summary>
 		/// The type form which this instance is forged from
 		/// </summary>
@@ -123,6 +125,7 @@ namespace Adenson.Log
 		{
 			get { return _classType; }
 		}
+	
 		/// <summary>
 		/// Gets the string tht will be used as source for Window's Event Log
 		/// </summary>
@@ -131,6 +134,7 @@ namespace Adenson.Log
 			get { return String.IsNullOrEmpty(_source) ? Config.LogSettings.Source : _source; }
 			set { _source = value; }
 		}
+		
 		/// <summary>
 		/// Gets the string tht will be used as source for Window's Event Log
 		/// </summary>
@@ -151,6 +155,7 @@ namespace Adenson.Log
 		{
 			this.Info(StringUtil.ToString(value));
 		}
+		
 		/// <summary>
 		/// Called to log errors of type Info
 		/// </summary>
@@ -162,6 +167,7 @@ namespace Adenson.Log
 			if ((int)this.Severity > (int)LogSeverity.Info) return;
 			this.Write(LogSeverity.Info, message, arguments);
 		}
+		
 		/// <summary>
 		/// Logs the value into the log of type debug, converting value to string
 		/// </summary>>
@@ -170,6 +176,7 @@ namespace Adenson.Log
 		{
 			this.Debug(StringUtil.ToString(value));
 		}
+		
 		/// <summary>
 		/// Called to log errors of type Debug
 		/// </summary>
@@ -181,6 +188,7 @@ namespace Adenson.Log
 			if ((int)this.Severity > (int)LogSeverity.Debug) return;
 			this.Write(LogSeverity.Debug, message, arguments);
 		}
+		
 		/// <summary>
 		/// Called to log errors of type Warning converting value to string
 		/// </summary>
@@ -189,6 +197,7 @@ namespace Adenson.Log
 		{
 			this.Warn(StringUtil.ToString(value));
 		}
+		
 		/// <summary>
 		/// Called to log errors of type Warning
 		/// </summary>
@@ -200,6 +209,7 @@ namespace Adenson.Log
 			if ((int)this.Severity > (int)LogSeverity.Warn) return;
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
+		
 		/// <summary>
 		/// Log the value into the log of type Error, converting value to string
 		/// </summary>
@@ -208,6 +218,7 @@ namespace Adenson.Log
 		{
 			this.Error(StringUtil.ToString(value));
 		}
+		
 		/// <summary>
 		/// Called to log errors
 		/// </summary>
@@ -218,6 +229,7 @@ namespace Adenson.Log
 		{
 			this.Write(LogSeverity.Error, message, arguments);
 		}
+		
 		/// <summary>
 		/// Called to log errors
 		/// </summary>
@@ -229,6 +241,7 @@ namespace Adenson.Log
 
 			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
 		}
+		
 		/// <summary>
 		/// Forces writing out of what is in the current log
 		/// </summary>
@@ -243,100 +256,33 @@ namespace Adenson.Log
 				entries.Clear();
 			}
 		}
+		
 		/// <summary>
-		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(int)"/>)
+		/// Starts a execution duration profiler
 		/// </summary>
-		/// <returns>A token to use to track the measurement or 0 if the current Severity level is greater than LogSeverity.Debug</returns>
-		public int MeasureStart()
+		/// <param name="identifier">Some kind of identifier</param>
+		/// <returns>A profiler object</returns>
+		public LogProfiler ProfilerStart(string identifier)
 		{
-			return this.MeasureStart(null);
-		}
-		/// <summary>
-		/// When Severity is Debug or higher, enables and starts tracking of time passage, unique to case sensitive specified identifier (to be used in conjuction with <seealso cref="MeasureStop(int)"/>)
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <returns>A token to use to track the measurement or 0 if the current Severity level is greater than LogSeverity.Debug</returns>
-		public int MeasureStart(string message, params object[] arguments)
-		{
-			if ((int)this.Severity > (int)LogSeverity.Debug) return 0;
-			
-			lock (trackers)
+			LogProfiler profile;
+			lock (profilers)
 			{
-				lastToken++;
-				trackers.Add(lastToken, DateTime.Now);
-				this.Write(LogSeverityInternal.Measure, "{0}{1}", "START", message == null ? String.Empty : (" " + String.Format(message, arguments)));
+				profile = new LogProfiler(this);
+				profilers.Add(profile);
+				this.Write(LogSeverityInternal.Measure, "{0}{1}", "START", identifier);
 			}
-			return lastToken;
+			return profile;
 		}
-		/// <summary>
-		/// When Severity is Debug or higher, ends all tracking started by <seealso cref="MeasureStart()"/> regardless of token
-		/// </summary>
-		public void MeasureStop()
+		
+		internal void MeasureStop(Guid uid)
 		{
-			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-
-			lock (trackers)
+			lock(profilers)
 			{
-				foreach (var token in trackers.Keys.ToList()) this.MeasureStopAndRemove(token, null);
-			}
-		}
-		/// <summary>
-		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart()"/> using specified case sensitive identiifer
-		/// </summary>
-		/// <param name="token">The unique token from MeasureStart</param>
-		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
-		public void MeasureStop(int token)
-		{
-			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-
-			lock (trackers)
-			{
-				this.MeasureStopAndRemove(token, null);
-			}
-		}
-		/// <summary>
-		/// When Severity is Debug or higher, ends tracking started with <seealso cref="MeasureStart()"/> using specified case sensitive identiifer
-		/// </summary>
-		/// <param name="token">The unique token from MeasureStart</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if identifier is null (or whitespace)</exception>
-		public void MeasureStop(int token, string message, params object[] arguments)
-		{
-			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-
-			lock (trackers)
-			{
-				this.MeasureStopAndRemove(token, message, arguments);
-			}
-		}
-		/// <summary>
-		/// When Severity is Debug or higher, and <seealso cref="MeasureStart()"/> was called with specified identifier, logs the value, formatting with specified arguments
-		/// </summary>
-		/// <param name="token">The unique token from MeasureStart</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if identifier OR message is null (or whitespace)</exception>
-		public void MeasureWrite(int token, string message, params object[] arguments)
-		{
-			if ((int)this.Severity > (int)LogSeverity.Debug) return;
-
-			lock (trackers)
-			{
-				if (trackers.ContainsKey(token))
-				{
-					this.Write(LogSeverityInternal.Measure, "[@ {0} secs] {1}", this.GetElapsedTime(token), (message == null ? String.Empty : StringUtil.Format(message, arguments)));
-				}
-			}
-		}
-
-		private void MeasureStopAndRemove(int token, string message, params object[] arguments)
-		{
-			if (trackers.ContainsKey(token))
-			{
-				this.Write(LogSeverityInternal.Measure, "STOP [@ {0} secs].{1}", this.GetElapsedTime(token), StringUtil.Format(message, arguments));
-				trackers.Remove(token);
+				LogProfiler profile = profilers.First(p => p.Uid == uid);
+				var elt = profile.ElapsedTime;
+				string elts = (elt == 0 ? "0.0" : elt.ToString()).PadRight(8, '0');
+				this.Write(LogSeverityInternal.Measure, "STOP [@ {0} secs].{1}", elts);
+				profilers.Remove(profile);
 			}
 		}
 		private void Write(LogSeverityInternal severity, string message, params object[] arguments)
@@ -364,12 +310,6 @@ namespace Adenson.Log
 			}
 			if (flush) this.Flush();
 		}
-		private string GetElapsedTime(int token)
-		{
-			var total = DateTime.Now.Subtract(trackers[token]).TotalSeconds;
-			total = total.Round(6);
-			return (total == 0 ? "0.0" : total.ToString()).PadRight(8, '0');
-		}
 
 		#endregion
 		#region Static Methods
@@ -382,6 +322,7 @@ namespace Adenson.Log
 		public static Logger GetLogger(Type type)
 		{
 			if (type == null) throw new ArgumentNullException("type");
+			
 			lock (staticLoggers)
 			{
 				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
@@ -389,8 +330,9 @@ namespace Adenson.Log
 				return staticLoggers[type];
 			}
 		}
+
 		/// <summary>
-		/// Instantiates a Logger object, then calls LogInfo 
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Info(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
@@ -399,8 +341,9 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Info(message, arguments);
 		}
+
 		/// <summary>
-		/// Instantiates a Logger object, then calls LogDebug
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Debug(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
@@ -409,8 +352,9 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Debug(message, arguments);
 		}
+
 		/// <summary>
-		/// Called to log errors of type Warning converting value to string
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="value">The value</param>
@@ -418,8 +362,9 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Warn(value);
 		}
+		
 		/// <summary>
-		/// Called to log errors of type Warning
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
@@ -428,8 +373,9 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Warn(message, arguments);
 		}
+
 		/// <summary>
-		/// Instantiates a Logger object, then calls LogError
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Error(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
@@ -438,8 +384,9 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Error(message, arguments);
 		}
+		
 		/// <summary>
-		/// Instantiates a Logger object, then calls LogError
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Error(Exception)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="ex">The Exception object to log</param>
@@ -447,31 +394,60 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Error(ex);
 		}
+		
 		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
 		/// </summary>
-		/// <param name="exception">The Exception object to log</param>
+		/// <param name="exception">The Exception object to convert</param>
 		/// <returns>String of the exception</returns>
+		/// <remarks>Calls <see cref="ConvertToString(Exception, bool)"/>, with messageOnly = false</remarks>
 		public static string ConvertToString(Exception exception)
 		{
+			return Logger.ConvertToString(exception, false);
+		}
+
+		/// <summary>
+		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
+		/// </summary>
+		/// <param name="exception">The Exception object to convert</param>
+		/// <param name="messageOnly"></param>
+		/// <returns></returns>
+		public static string ConvertToString(Exception exception, bool messageOnly)
+		{
 			if (exception == null) throw new ArgumentNullException("exception");
-			System.Text.StringBuilder message = new System.Text.StringBuilder();
+
+			StringBuilder message = new StringBuilder();
 			Exception ex = exception;
 			while (ex != null)
 			{
 				if (message.Length != 0)
 				{
-					message.Append(String.Empty.PadRight(20, '-'));
-					message.Append(Environment.NewLine);
+					if (messageOnly) message.Append(" ");
+					else
+					{
+						message.Append(String.Empty.PadRight(20, '-'));
+						message.Append(Environment.NewLine);
+					}
 				}
-				message.Append(ex.GetType());
-				message.Append(": ");
-				message.AppendLine(ex.Message);
-				message.AppendLine(ex.StackTrace);
+
+				if (messageOnly)
+				{
+					message.Append(ex.Message);
+					message.Append(".");
+				}
+				else
+				{
+					message.Append(ex.GetType().FullName);
+					message.Append(": ");
+					message.AppendLine(ex.Message);
+					message.AppendLine(ex.StackTrace);
+				}
 				ex = ex.InnerException;
 			}
+
 			return message.ToString();
 		}
+		
 		/// <summary>
 		/// Forces writing out of what is in all logs
 		/// </summary>
@@ -481,6 +457,17 @@ namespace Adenson.Log
 			{
 				foreach (var logger in staticLoggers.Values) logger.Flush();
 			}
+		}
+
+		/// <summary>
+		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>
+		/// </summary>
+		/// <param name="type">Type where Logger is being called on</param>
+		/// <param name="identifier">Some kind of identifier</param>
+		/// <returns>A disposable profiler object</returns>
+		public static LogProfiler ProfilerStart(Type type, string identifier)
+		{
+			return Logger.GetLogger(type).ProfilerStart(identifier);
 		}
 
 		internal static void LogInternalError(Exception ex)
@@ -517,7 +504,7 @@ namespace Adenson.Log
 		private static void OutWriteLine(LogEntry entry)
 		{
 			var format = "{0}\t{1}\t[{2}]\t- {3}";
-			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.InvariantCulture);
+			var date = entry.Date.ToString("H:mm:ss.fff");
 			var message = StringUtil.Format(format, entry.Severity.ToString(), date, entry.TypeName, entry.Message);
 			
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
@@ -542,6 +529,8 @@ namespace Adenson.Log
 		{
 			return Config.LogSettings.DatabaseInfo.Save(entries);
 		}
+		
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static bool SaveToFile(List<LogEntry> entries)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
@@ -553,7 +542,7 @@ namespace Adenson.Log
 				{
 					string fileName = Path.GetFileNameWithoutExtension(Logger.OutFileName);
 					string extension = Path.GetExtension(Logger.OutFileName);
-					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.InvariantCulture), extension);
+					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd"), extension);
 					string oldNewFilePath = Path.Combine(Path.GetDirectoryName(Logger.OutFileName), oldNewFileName);
 					if (!File.Exists(oldNewFilePath)) File.Move(Logger.OutFileName, oldNewFilePath);
 				}
@@ -564,7 +553,7 @@ namespace Adenson.Log
 
 			TextWriter writer = null;
 			Stream stream = null;
-			System.Text.StringBuilder sb = new System.Text.StringBuilder(entries.Count);
+			StringBuilder sb = new StringBuilder(entries.Count);
 			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}", row.Date, row.Severity, row.TypeName, row.Message));
 			FileInfo traceFile = new FileInfo(Logger.OutFileName);
 			try
@@ -585,6 +574,8 @@ namespace Adenson.Log
 			}
 			return false;
 		}
+
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static bool SaveToEntryLog(List<LogEntry> entries)
 		{
 			try

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("\x00a9 Adenson.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("3.15.0.*")]
+[assembly: AssemblyVersion("3.16.0.*")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]

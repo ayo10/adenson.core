@@ -86,6 +86,7 @@
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogSeverityInternal.cs" />
     <Compile Include="MethodInvoker.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">

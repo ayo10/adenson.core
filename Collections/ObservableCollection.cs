@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Threading;
@@ -28,6 +29,7 @@ namespace Adenson.Collections
 		public ObservableCollection() : base()
 		{
 		}
+		
 		/// <summary>
 		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
 		/// </summary>
@@ -38,11 +40,13 @@ namespace Adenson.Collections
 			System.Collections.ObjectModel.ObservableCollection<T> obs = collection as System.Collections.ObjectModel.ObservableCollection<T>;
 			if (obs != null) obs.CollectionChanged += this.OnSourceCollectionChanged;
 		}
+		
 		/// <summary>
 		/// Initializes a new instance of the collection class that contains elements copied from the specified collection.
 		/// </summary>
 		/// <param name="list">The collection from which the elements are copied.</param>
 		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
+		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
 		public ObservableCollection(List<T> list) : base(list)
 		{
 		}

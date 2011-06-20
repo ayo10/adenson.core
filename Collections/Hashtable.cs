@@ -12,7 +12,7 @@ namespace Adenson.Collections
 	public class Hashtable<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		#region Variables
-		private Dictionary<TKey, TValue> dick;
+		private IDictionary<TKey, TValue> dick;
 		#endregion
 		#region Constructors
 
@@ -78,7 +78,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Gets if the dictionary is read only
 		/// </summary>
-		public virtual bool IsReadOnly
+		public bool IsReadOnly
 		{
 			get;
 			internal set;
@@ -92,19 +92,41 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The object to use as the key of the element to add.</param>
 		/// <param name="value">The object to use as the value</param>
-		public virtual void Add(TKey key, TValue value)
+		public void Add(TKey key, TValue value)
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Add(key, value);
 		}
+		
 		/// <summary>
 		/// Removes all items
 		/// </summary>
-		public virtual void Clear()
+		public void Clear()
 		{
 			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			dick.Clear();
 		}
+		
+		/// <summary>
+		/// Copies the elements of the hashtable to the specified array, starting at the specified index.
+		/// </summary>
+		/// <param name="array"></param>
+		/// <param name="arrayIndex"></param>
+		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		{
+			dick.CopyTo(array, arrayIndex);
+		}
+		
+		/// <summary>
+		/// Determines whether the hashtable contains the specified item.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		public bool Contains(KeyValuePair<TKey, TValue> item)
+		{
+			return dick.Contains(item);
+		}
+		
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
 		/// </summary>
@@ -114,6 +136,7 @@ namespace Adenson.Collections
 		{
 			return dick.ContainsKey(key);
 		}
+		
 		/// <summary>
 		/// Determines whether the dictionary contains a specific value.
 		/// </summary>
@@ -121,8 +144,9 @@ namespace Adenson.Collections
 		/// <returns></returns>
 		public bool ContainsValue(TValue value)
 		{
-			return dick.ContainsValue(value);
+			return dick.Values.Contains(value);
 		}
+		
 		/// <summary>
 		/// Returns an enumerator that iterates through the dictionary
 		/// </summary>
@@ -131,6 +155,7 @@ namespace Adenson.Collections
 		{
 			return dick.GetEnumerator();
 		}
+		
 		/// <summary>
 		/// Removes the value with the specified key from the dictionary
 		/// </summary>
@@ -142,6 +167,7 @@ namespace Adenson.Collections
 			bool result = dick.Remove(key);
 			return result;
 		}
+		
 		/// <summary>
 		/// Gets the value associated with the specified key.
 		/// </summary>
@@ -164,16 +190,6 @@ namespace Adenson.Collections
 		void ICollection<KeyValuePair<TKey, TValue>>.Clear()
 		{
 			this.Clear();
-		}
-		bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
-		{
-			if (!this.ContainsKey(item.Key)) return false;
-			if (!this.ContainsValue(item.Value)) return false;
-			return Object.Equals(this[item.Key], item.Value);
-		}
-		void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
-		{
-			throw new NotSupportedException();
 		}
 		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
 		{

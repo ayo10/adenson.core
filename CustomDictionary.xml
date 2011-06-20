@@ -2,15 +2,22 @@
 	<Words>
 		<Recognized>
 			<Word>Adenson</Word>
+			<Word>Ce</Word>
+			<Word>Db</Word>
 			<Word>Decryptor</Word>
 			<Word>Encryptor</Word>
 			<Word>Util</Word>
 		</Recognized>
 		<Unrecognized>
-			<Word>DES</Word>
 		</Unrecognized>
-		<Deprecated>
-			<Term PreferredAlternate="LogOn">login</Term>
-		</Deprecated>
 	</Words>
+      <Acronyms>
+         <CasingExceptions>
+            <Acronym>DES</Acronym>
+            <Acronym>HMAC</Acronym>
+            <Acronym>MAC</Acronym>
+            <Acronym>RIPEMD</Acronym>
+            <Acronym>SHA</Acronym>
+         </CasingExceptions>
+      </Acronyms>
 </Dictionary>

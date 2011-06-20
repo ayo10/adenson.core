@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson
 {
@@ -26,6 +26,7 @@ namespace Adenson
 			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
 			return Activator.CreateInstance(type);
 		}
+		
 		/// <summary>
 		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
 		/// </summary>
@@ -38,6 +39,7 @@ namespace Adenson
 			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
 			return (T)TypeUtil.CreateInstance(typeName);
 		}
+		
 		/// <summary>
 		/// Creates an instance of the specified type using that type's default constructor.
 		/// </summary>
@@ -51,6 +53,7 @@ namespace Adenson
 			if (type == null) throw new ArgumentNullException("type");
 			return (T)Activator.CreateInstance(type);
 		}
+		
 		/// <summary>
 		/// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object. (Case insensitive).
 		/// </summary>
@@ -67,6 +70,7 @@ namespace Adenson
 
 			return (T)Enum.Parse(typeof(T), value, true);
 		}
+		
 		/// <summary>
 		/// Gets the System.Type with the specified name.
 		/// </summary>
@@ -89,6 +93,7 @@ namespace Adenson
 			}
 			return type;
 		}
+		
 		/// <summary>
 		/// Tries to convert the specified value
 		/// </summary>
@@ -99,19 +104,21 @@ namespace Adenson
 		public static bool TryConvert<T>(object value, out T result)
 		{
 			object output;
-			var converted = TypeUtil.TryConvert(value, typeof(T), out output);
+			var converted = TypeUtil.TryConvert(typeof(T), value, out output);
 			if (converted) result = (T)output;
 			else result = default(T);
 			return converted;
 		}
+		
 		/// <summary>
 		/// Tries to convert the specified value
 		/// </summary>
-		/// <param name="value">the value to convert</param>
 		/// <param name="type">The type of the object we need to convert</param>
+		/// <param name="value">the value to convert</param>
 		/// <param name="output">the output of the conversion</param>
 		/// <returns>true if conversion happened correctly, false otherwise</returns>
-		public static bool TryConvert(object value, Type type, out object output)
+		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate")]
+		public static bool TryConvert(Type type, object value, out object output)
 		{
 			var result = false;
 			if (value == null) output = null;
@@ -141,7 +148,7 @@ namespace Adenson
 								var splits = valueAsString.Split('|');
 								var intValue = 0;
 								foreach (var str in splits) intValue += (int)Enum.Parse(type, str);
-								output = Enum.Parse(type, intValue.ToString(CultureInfo.InvariantCulture));
+								output = Enum.Parse(type, intValue.ToString());
 								result = true;
 							}
 							catch (ArgumentException)
