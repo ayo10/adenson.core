@@ -148,7 +148,7 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Logs the value into the log of type info, converting value to string
+		/// Log debug message, converting the specified value to string.
 		/// </summary>
 		/// <param name="value">The value</param>
 		public void Info(object value)
@@ -157,7 +157,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors of type Info
+		/// Log information message
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
@@ -169,7 +169,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Logs the value into the log of type debug, converting value to string
+		/// Log debug messages, converting the specified value to string.
 		/// </summary>>
 		/// <param name="value">The value</param>
 		public void Debug(object value)
@@ -178,7 +178,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors of type Debug
+		/// Log debug message
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
@@ -190,7 +190,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors of type Warning converting value to string
+		/// Log warning message, converting the specified value to string.
 		/// </summary>
 		/// <param name="value">The value</param>
 		public void Warn(object value)
@@ -199,7 +199,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors of type Warning
+		/// Log warning message
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
@@ -211,7 +211,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Log the value into the log of type Error, converting value to string
+		/// Log error message, converting the specified value to string.
 		/// </summary>
 		/// <param name="value">The value</param>
 		public void Error(object value)
@@ -220,7 +220,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors
+		/// Log error message
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
@@ -231,7 +231,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Called to log errors
+		/// Log exception
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
 		public void Error(Exception ex)
@@ -243,7 +243,7 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Forces writing out of what is in the current log
+		/// Forces writing out of what is in the current log, meaningless if <see cref="BatchSize"/> is the default value of 0.
 		/// </summary>
 		public void Flush()
 		{
@@ -264,25 +264,25 @@ namespace Adenson.Log
 		/// <returns>A profiler object</returns>
 		public LogProfiler ProfilerStart(string identifier)
 		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
+
 			LogProfiler profile;
 			lock (profilers)
 			{
-				profile = new LogProfiler(this);
+				profile = new LogProfiler(this, identifier);
 				profilers.Add(profile);
-				this.Write(LogSeverityInternal.Measure, "{0}{1}", "START", identifier);
+				this.Write(LogSeverityInternal.Default, "{0} {1}", "START", profile.Identifier);
 			}
 			return profile;
 		}
 		
-		internal void MeasureStop(Guid uid)
+		internal void ProfilerStop(Guid uid)
 		{
-			lock(profilers)
+			lock (profilers)
 			{
-				LogProfiler profile = profilers.First(p => p.Uid == uid);
-				var elt = profile.ElapsedTime;
-				string elts = (elt == 0 ? "0.0" : elt.ToString()).PadRight(8, '0');
-				this.Write(LogSeverityInternal.Measure, "STOP [@ {0} secs].{1}", elts);
-				profilers.Remove(profile);
+				LogProfiler profiler = profilers.First(p => p.Uid == uid);
+				this.Write(LogSeverityInternal.Default, "[{0}s] STOP {1}", profiler.ElapsedTime.ToString(8, '0'), profiler.Identifier);
+				profilers.Remove(profiler);
 			}
 		}
 		private void Write(LogSeverityInternal severity, string message, params object[] arguments)
@@ -503,7 +503,7 @@ namespace Adenson.Log
 		}
 		private static void OutWriteLine(LogEntry entry)
 		{
-			var format = "{0}\t{1}\t[{2}]\t- {3}";
+			var format = "{0}\t{1}\t[{2}]\t {3}";
 			var date = entry.Date.ToString("H:mm:ss.fff");
 			var message = StringUtil.Format(format, entry.Severity.ToString(), date, entry.TypeName, entry.Message);
 			

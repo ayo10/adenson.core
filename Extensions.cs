@@ -249,7 +249,19 @@ namespace Adenson
 			}
 			return (wasNegative ? "-" : String.Empty) + result;
 		}
-		
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="totalWidth"></param>
+		/// <param name="paddingChar"></param>
+		/// <returns></returns>
+		public static string ToString(this double value, int totalWidth, char paddingChar)
+		{
+			return (value == 0 ? "0.0" : value.ToString()).PadRight(totalWidth, paddingChar);
+		}
+
 		/// <summary>
 		/// Subtracts the milliseconds duration from the specified datetime
 		/// </summary>
