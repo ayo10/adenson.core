@@ -120,4 +120,10 @@
   <data name="MsgExMinLogBatchSize" xml:space="preserve">
     <value>The minimum value for 'LogBatchSize' is 1.</value>
   </data>
+  <data name="ProfilerStart" xml:space="preserve">
+    <value>START</value>
+  </data>
+  <data name="ProfilerStop" xml:space="preserve">
+    <value>STOP</value>
+  </data>
 </root>

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Collections
 {
 	/// <summary>
-	/// Behaves like hashtable of old, adds change events
+	/// Represents a collection of keys and values.
 	/// </summary>
+	///<remarks>
+	/// Behaves like System.Collections.Hashtable of old.
+	///</remarks>
 	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "No, I want the name Hashtable, NOT WhateverDictionary")]
 	public class Hashtable<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		#region Variables
@@ -23,6 +27,7 @@ namespace Adenson.Collections
 		{
 			dick = new Dictionary<TKey, TValue>();
 		}
+		
 		/// <summary>
 		/// Instantiates a new hashtable with specified capacity
 		/// </summary>
@@ -54,6 +59,7 @@ namespace Adenson.Collections
 				else dick.Add(key, value);
 			}
 		}
+		
 		/// <summary>
 		/// Gets the number of items in the dictionary
 		/// </summary>
@@ -61,6 +67,7 @@ namespace Adenson.Collections
 		{
 			get { return dick.Count; }
 		}
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -68,6 +75,7 @@ namespace Adenson.Collections
 		{
 			get { return dick.Keys; }
 		}
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -75,6 +83,7 @@ namespace Adenson.Collections
 		{
 			get { return dick.Values; }
 		}
+		
 		/// <summary>
 		/// Gets if the dictionary is read only
 		/// </summary>

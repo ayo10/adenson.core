@@ -8,28 +8,33 @@ namespace Adenson.Log
 	/// </summary>
 	public sealed class LogProfiler : IDisposable
 	{
+		#region Variables
+		private long MemoryStart;
+		#endregion
 		#region Constructor
 
 		internal LogProfiler(Logger parent, string identifier)
 		{
 			this.Start = DateTime.Now;
+			this.MemoryStart = GC.GetTotalMemory(true);
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
+			this.Debug(SR.ProfilerStart);
 		}
 
 		#endregion
 		#region Properties
 		
 		/// <summary>
-		/// Gets the elapsed time (in total seconds) between when the object was initialzied and this property is called.
+		/// Gets the elapsed time between when the object was initialzied and this property is called.
 		/// </summary>
-		public double ElapsedTime
+		public TimeSpan Elapsed
 		{
 			get
 			{
 				if (this.IsDisposed) throw new ObjectDisposedException("LogProfiler");
-				return DateTime.Now.Subtract(this.Start).TotalSeconds.Round(6);
+				return DateTime.Now.Subtract(this.Start);
 			}
 		}
 
@@ -70,6 +75,14 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
+		/// Gets the number of bytes currently thought to be allocated.
+		/// </summary>
+		public long TotalMemory
+		{
+			get { return GC.GetTotalMemory(true) - this.MemoryStart; }
+		}
+
+		/// <summary>
 		/// Gets the unique identifier for the profiler
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uid")]
@@ -90,12 +103,13 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Parent.Debug("[{0}s] {1} {2}", this.ElapsedTime.ToString(8, '0'), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
+			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.Round(6).ToString(8, '0'), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "Perfectly happy with this implementation.")]
 		void IDisposable.Dispose()
 		{
+			this.Debug(SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
