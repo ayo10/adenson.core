@@ -251,35 +251,88 @@ namespace Adenson
 		}
 
 		/// <summary>
-		/// 
+		/// Returns a new string that left-aligns the characters in the value (converted to string) by padding them on the right with a specified Unicode character, for the specified total length.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <param name="totalWidth"></param>
-		/// <param name="paddingChar"></param>
-		/// <returns></returns>
-		public static string ToString(this double value, int totalWidth, char paddingChar)
+		/// <param name="value">The value to string</param>
+		/// <param name="totalLength">The number of characters in the resulting string.</param>
+		/// <param name="padding">The unicode padding character.</param>
+		/// <returns>A new string that is equivalent to the <paramref name="value"/> instance, but left-aligned and padded on the right with as many <paramref name="padding"/> characters as needed to create a length of <paramref name="totalLength"/>.</returns>
+		public static string ToString(this double value, int totalLength, char padding)
 		{
-			return (value == 0 ? "0.0" : value.ToString()).PadRight(totalWidth, paddingChar);
+			return value.ToString().PadRight(totalLength, padding);
 		}
 
 		/// <summary>
-		/// Subtracts the milliseconds duration from the specified datetime
+		/// Subtracts the milliseconds duration from the specified <see cref="DateTime"/> object.
 		/// </summary>
-		/// <param name="date">The source date time</param>
+		/// <param name="date">The source date.</param>
 		/// <returns>A new <see cref="DateTime"/> object without its milliseconds bit</returns>
-		public static DateTime TrimMilliseconds(this DateTime date)
+		public static DateTime Trim(this DateTime date)
 		{
-			return date.Subtract(new TimeSpan(0, 0, 0, 0, date.TimeOfDay.Milliseconds));
+			return date.Trim("f");
 		}
-		
+
 		/// <summary>
-		/// Subtracts the seconds (and milliseconds) duration duration from the specified datetime
+		/// Subtracts the specified bit duration from the specified <see cref="DateTime"/> object.
 		/// </summary>
-		/// <param name="date">The source date time</param>
-		/// <returns>A new <see cref="DateTime"/> object without its seconds and milliseconds bit</returns>
-		public static DateTime TrimSeconds(this DateTime date)
+		/// <param name="date">The source date.</param>
+		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm')</param>
+		/// <returns>A new <see cref="DateTime"/> object without its specified bit.</returns>
+		public static DateTime Trim(this DateTime date, string specifier)
 		{
-			return date.Subtract(new TimeSpan(0, 0, 0, date.TimeOfDay.Seconds, date.TimeOfDay.Milliseconds));
+			if (StringUtil.IsNullOrWhiteSpace(specifier)) throw new ArgumentNullException("specifier");
+
+			return date.Subtract(date.TimeOfDay.Trim(specifier));
+		}
+
+		/// <summary>
+		/// Subtracts the milliseconds duration from the specified <see cref="TimeSpan"/> object.
+		/// </summary>
+		/// <param name="span">The source time.</param>
+		/// <returns>A new <see cref="TimeSpan"/> object without its milliseconds bit.</returns>
+		public static TimeSpan Trim(this TimeSpan span)
+		{
+			return span.Subtract(new TimeSpan(0, 0, 0, 0, span.Milliseconds));
+		}
+
+		/// <summary>
+		/// Subtracts the specified bit duration from the specified <see cref="TimeSpan"/> object.
+		/// </summary>
+		/// <param name="span">The source date.</param>
+		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm')</param>
+		/// <returns>A new <see cref="TimeSpan"/> object without its specified bit.</returns>
+		public static TimeSpan Trim(this TimeSpan span, string specifier)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(specifier)) throw new ArgumentNullException("specifier");
+
+			TimeSpan subtract;
+			switch (specifier)
+			{
+				case "f":
+				case "ff":
+				case "fff":
+					subtract = new TimeSpan(0, 0, 0, 0, span.Milliseconds);
+					break;
+				case "s":
+				case "ss":
+					subtract = new TimeSpan(0, 0, 0, span.Seconds, span.Milliseconds);
+					break;
+				case "m":
+				case "mm":
+					subtract = new TimeSpan(0, 0, span.Minutes, span.Seconds, span.Milliseconds);
+					break;
+				case "h":
+				case "hh":
+					subtract = new TimeSpan(0, span.Hours, span.Minutes, span.Seconds, span.Milliseconds);
+					break;
+				case "d":
+				case "dd":
+					subtract = new TimeSpan(span.Days, span.Hours, span.Minutes, span.Seconds, span.Milliseconds);
+					break;
+				default:
+					throw new NotSupportedException();
+			}
+			return span.Subtract(subtract);
 		}
 	}
 }

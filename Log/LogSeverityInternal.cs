@@ -5,7 +5,7 @@ namespace Adenson.Log
 	internal struct LogSeverityInternal
 	{
 		#region Variables
-		internal static LogSeverityInternal Default = new LogSeverityInternal { Value = "PROFILE" };
+		internal static LogSeverityInternal Profiler = new LogSeverityInternal { Value = "PROFILER" };
 		private string _value;
 		#endregion
 		#region Properties
@@ -34,7 +34,7 @@ namespace Adenson.Log
 
 		public static implicit operator LogSeverity(LogSeverityInternal value)
 		{
-			if (value.Value == LogSeverityInternal.Default.Value) return LogSeverity.Debug;
+			if (value.Value == LogSeverityInternal.Profiler.Value) return LogSeverity.Debug;
 			return value.Severity;
 		}
 		public static implicit operator LogSeverityInternal(LogSeverity value)

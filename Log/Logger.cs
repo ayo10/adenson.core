@@ -266,26 +266,23 @@ namespace Adenson.Log
 		{
 			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
 
-			LogProfiler profile;
+			LogProfiler profiler;
 			lock (profilers)
 			{
-				profile = new LogProfiler(this, identifier);
-				profilers.Add(profile);
-				this.Write(LogSeverityInternal.Default, "{0} {1}", "START", profile.Identifier);
+				profiler = new LogProfiler(this, identifier);
+				profilers.Add(profiler);
 			}
-			return profile;
+			return profiler;
 		}
 		
 		internal void ProfilerStop(Guid uid)
 		{
 			lock (profilers)
 			{
-				LogProfiler profiler = profilers.First(p => p.Uid == uid);
-				this.Write(LogSeverityInternal.Default, "[{0}s] STOP {1}", profiler.ElapsedTime.ToString(8, '0'), profiler.Identifier);
-				profilers.Remove(profiler);
+				profilers.Remove(profilers.First(p => p.Uid == uid));
 			}
 		}
-		private void Write(LogSeverityInternal severity, string message, params object[] arguments)
+		internal void Write(LogSeverityInternal severity, string message, params object[] arguments)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(message)) throw new ArgumentNullException("message");
 
