@@ -15,8 +15,8 @@ namespace Adenson.Log
 
 		internal LogProfiler(Logger parent, string identifier)
 		{
+			this.MemoryStart = GC.GetTotalMemory(false);
 			this.Start = DateTime.Now;
-			this.MemoryStart = GC.GetTotalMemory(true);
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
@@ -79,7 +79,7 @@ namespace Adenson.Log
 		/// </summary>
 		public long TotalMemory
 		{
-			get { return GC.GetTotalMemory(true) - this.MemoryStart; }
+			get { return GC.GetTotalMemory(false) - this.MemoryStart; }
 		}
 
 		/// <summary>
