@@ -437,7 +437,7 @@ namespace Adenson.Log
 					message.Append(ex.GetType().FullName);
 					message.Append(": ");
 					message.AppendLine(ex.Message);
-					message.AppendLine(ex.StackTrace);
+					if (ex.StackTrace != null) message.AppendLine(ex.StackTrace);
 				}
 				ex = ex.InnerException;
 			}

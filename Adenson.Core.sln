@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core", "Adenson.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Data.SqlCe", "Adenson.Data.SqlCe.csproj", "{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.CoreTest", "Test\Adenson.CoreTest.csproj", "{60701161-BAC6-405C-811C-D2B4B3E5063A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59A70FB8-CDCF-416B-BB91-EA3691B16BE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

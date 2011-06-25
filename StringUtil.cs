@@ -46,6 +46,25 @@ namespace Adenson
 
 			return StringUtil.Format(value, arg);
 		}
+
+		/// <summary>
+		/// Generates a random string of specified <paramref name="length"/>.
+		/// </summary>
+		/// <param name="length">Max length of string to generate</param>
+		/// <returns>String generated</returns>
+		/// <exception cref="ArgumentOutOfRangeException">if <paramref name="lengh"/> is less or equal to 0.</exception>
+		public static string GenerateRandomString(int length)
+		{
+			if (length <= 0) throw new ArgumentOutOfRangeException("length");
+
+			Random ra = new Random();
+			string result = string.Empty;
+			for (int i = 0; i < length; i++)
+			{
+				result += (char)ra.Next(65, 122); //65 = 'A', 122 = 'z'
+			}
+			return result;
+		}
 		
 		/// <summary>
 		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.
