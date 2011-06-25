@@ -12,19 +12,14 @@ namespace Adenson
 		#region Methods
 
 		/// <summary>
-		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor.
+		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
 		/// </summary>
-		/// <remarks>calls Activator.CreateInstance(type).</remarks>
+		/// <typeparam name="T">The type of instance to return</typeparam>
 		/// <param name="typeName">The full name of the type</param>
 		/// <returns>Created instance</returns>
-		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
-		/// <exception cref="TypeLoadException">If a type with specified name could not be loaded.</exception>
-		public static object CreateInstance(string typeName)
+		public static T CreateInstance<T>()
 		{
-			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
-			Type type = TypeUtil.GetType(typeName);
-			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
-			return Activator.CreateInstance(type);
+			return Activator.CreateInstance<T>();
 		}
 		
 		/// <summary>
@@ -52,6 +47,22 @@ namespace Adenson
 		{
 			if (type == null) throw new ArgumentNullException("type");
 			return (T)Activator.CreateInstance(type);
+		}
+
+		/// <summary>
+		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor.
+		/// </summary>
+		/// <remarks>calls Activator.CreateInstance(type).</remarks>
+		/// <param name="typeName">The full name of the type</param>
+		/// <returns>Created instance</returns>
+		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
+		/// <exception cref="TypeLoadException">If a type with specified name could not be loaded.</exception>
+		public static object CreateInstance(string typeName)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
+			Type type = TypeUtil.GetType(typeName);
+			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			return Activator.CreateInstance(type);
 		}
 		
 		/// <summary>

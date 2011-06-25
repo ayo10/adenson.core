@@ -13,6 +13,51 @@ namespace Adenson
 	public static class Extensions
 	{
 		/// <summary>
+		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
+		/// </summary>
+		/// <typeparam name="T">The type of items</typeparam>
+		/// <param name="array1">The frst array</param>
+		/// <param name="array2">The second array</param>
+		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
+		public static bool AreEqualTo<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
+		{
+			if (Object.ReferenceEquals(array1, array2)) return true;
+			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
+			if (array1.Count() != array2.Count()) return false;
+			for (int i = 0; i < array1.Count(); i++)
+			{
+				T e1 = array1.ElementAt(i);
+				T e2 = array2.ElementAt(i);
+				if (!Object.Equals(e1, e2)) return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified culture, case, and sort rules used in the comparison.
+		/// </summary>
+		/// <param name="array1">The frst array</param>
+		/// <param name="array2">The second array</param>
+		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
+		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if array1 is null or array2 is null and they are both not null.</exception>
+		public static bool AreEqualTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
+		{
+			if (Object.ReferenceEquals(array1, array2)) return true;
+			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
+			if (array1.Count() != array2.Count()) return false;
+
+			for (int i = 0; i < array1.Count(); i++)
+			{
+				string e1 = array1.ElementAt(i);
+				string e2 = array2.ElementAt(i);
+				if (e1 == null && e2 != null || e1 != null && e2 == null) return false;
+				if (!e1.Equals(e2, comparisonType)) return false;
+			}
+			return true;
+		}
+
+		/// <summary>
 		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="source"/> using specified <see cref="StringComparison"/> object.
 		/// </summary>
 		/// <param name="source">The string to look into</param>
@@ -24,6 +69,7 @@ namespace Adenson
 		{
 			if (source == null) throw new ArgumentNullException("source");
 			if (value == null) throw new ArgumentNullException("value");
+			
 			return source.IndexOf(value, comparisonType) > -1;
 		}
 		
@@ -35,8 +81,10 @@ namespace Adenson
 		/// <param name="key">The key to find</param>
 		/// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
 		/// <returns>true if the value of the value parameter is the same as this string; otherwise, false.</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="key"/> is null.</exception>
 		public static bool ContainsKey<T>(this Dictionary<string, T> dictionary, string key, StringComparison comparison)
 		{
+			if (StringUtil.IsNullOrWhiteSpace(key)) throw new ArgumentNullException("key");
 			return dictionary.Keys.Any(k => k.Equals(key, comparison));
 		}
 		
@@ -56,70 +104,19 @@ namespace Adenson
 		}
 		
 		/// <summary>
-		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
-		/// </summary>
-		/// <typeparam name="T">The type of items</typeparam>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool Equals<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
-		{
-			if (Object.ReferenceEquals(array1, array2)) return true;
-			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
-			if (array1.Count() != array2.Count()) return false;
-			for (int i = 0; i < array1.Count(); i++)
-			{
-				T e1 = array1.ElementAt(i);
-				T e2 = array2.ElementAt(i);
-				if (!Object.Equals(e1, e2)) return false;
-			}
-			return true;
-		}
-		
-		/// <summary>
-		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using <see cref="StringComparison.CurrentCultureIgnoreCase"/>.
-		/// </summary>
-		/// <remarks>calls Extensions.Equals(array1, array2, StringComparison.CurrentCultureIgnoreCase)</remarks>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool Equals(this IEnumerable<string> array1, IEnumerable<string> array2)
-		{
-			return Extensions.Equals(array1, array2, StringComparison.CurrentCultureIgnoreCase);
-		}
-		
-		/// <summary>
-		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified culture, case, and sort rules used in the comparison.
-		/// </summary>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool Equals(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
-		{
-			if (Object.ReferenceEquals(array1, array2)) return true;
-			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
-			if (array1.Count() != array2.Count()) return false;
-			for (int i = 0; i < array1.Count(); i++)
-			{
-				string e1 = array1.ElementAt(i);
-				string e2 = array2.ElementAt(i);
-				if (e1 == null && e2 != null || e1 != null && e2 == null) return false;
-				if (!e1.Equals(e2, comparisonType)) return false;
-			}
-			return true;
-		}
-		
-		/// <summary>
 		/// Gets the element with the specified key, case insensitive
 		/// </summary>
 		/// <typeparam name="T">The type</typeparam>
 		/// <param name="dictionary">The dictionary to parse</param>
 		/// <param name="key">The key to find</param>
 		/// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a System.Collections.Generic.KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
+		/// <exception cref="KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
 		public static T GetValue<T>(this Dictionary<string, T> dictionary, string key)
 		{
+			if (key == null) throw new ArgumentNullException("key");
+			
 			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, StringComparison.CurrentCultureIgnoreCase));
+			if (actualKey == null) throw new KeyNotFoundException(key);
 			return dictionary[actualKey];
 		}
 		
@@ -224,18 +221,22 @@ namespace Adenson
 		/// <summary>
 		/// Converts specified integer value to roman numeral
 		/// </summary>
-		/// <remarks>http://www.dreamcubes.com/b2/software-development/21/to-roman-c-int-to-roman-converter/</remarks>
+		/// <remarks>
+		/// <para>Any numerals greater than 5000 will begin with the the overbar character, i.e, 5000 = ¯V, 10000 = ¯X, etc, etc</para>
+		/// <para>Based on http://www.dreamcubes.com/b2/software-development/21/to-roman-c-int-to-roman-converter/ </para>
+		/// </remarks>
 		/// <param name="value">The value to convert</param>
 		/// <returns>Returns '0', if <paramref name="value"/> was 0 else the value in roman numeral</returns>
 		public static string ToRoman(this int value)
 		{
-			if (value == 0) return "O";
+			if (value == 0) return String.Empty;
+			///if (value > 4999) throw new NotSupportedException("Roman numerals over 4999 are not supported a the current time.");
 
 			var wasNegative = value < 0;
 			if (wasNegative) value = value * -1;
 
-			int[] nums = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
-			string[] romanNums = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M" };
+			int[] nums = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000, 5000, 10000, 50000, 100000, 500000, 1000000 };
+			string[] romanNums = { "I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M", "¯V", "¯X", "¯L", "¯C", "¯D", "¯M" };
 
 			string result = "";
 			int n = value;
@@ -248,18 +249,6 @@ namespace Adenson
 				}
 			}
 			return (wasNegative ? "-" : String.Empty) + result;
-		}
-
-		/// <summary>
-		/// Returns a new string that left-aligns the characters in the value (converted to string) by padding them on the right with a specified Unicode character, for the specified total length.
-		/// </summary>
-		/// <param name="value">The value to string</param>
-		/// <param name="totalLength">The number of characters in the resulting string.</param>
-		/// <param name="padding">The unicode padding character.</param>
-		/// <returns>A new string that is equivalent to the <paramref name="value"/> instance, but left-aligned and padded on the right with as many <paramref name="padding"/> characters as needed to create a length of <paramref name="totalLength"/>.</returns>
-		public static string ToString(this double value, int totalLength, char padding)
-		{
-			return value.ToString().PadRight(totalLength, padding);
 		}
 
 		/// <summary>

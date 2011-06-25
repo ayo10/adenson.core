@@ -150,4 +150,10 @@
   <data name="UnableToParseCommandText" xml:space="preserve">
     <value>The specified command text argument could not be parsed. Use strings formattable using String.Format, or use parameter value arguments that are of either 'Adenson.Data.Parameter' a 'System.Data.IDataParameter' objects.</value>
   </data>
+	<data name="NoSupportNonSingleParameterArrayedObjects" xml:space="preserve">
+    <value>Retrieving property values using reflection for more than one arrayed object is not supported, yet!</value>
+  </data>
+	<data name="PropertyOrFieldArgNotFound" xml:space="preserve">
+    <value>A field or property with the name '{0}' was not found on the provided data item.</value>
+  </data>
 </root>

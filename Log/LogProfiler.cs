@@ -66,15 +66,6 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets when the profiler was initialized
-		/// </summary>
-		public DateTime Start
-		{
-			get;
-			private set;
-		}
-
-		/// <summary>
 		/// Gets the number of bytes currently thought to be allocated.
 		/// </summary>
 		public long TotalMemory
@@ -92,6 +83,12 @@ namespace Adenson.Log
 			private set;
 		}
 
+		private DateTime Start
+		{
+			get;
+			set;
+		}
+
 		#endregion
 		#region Methods
 
@@ -103,7 +100,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.Round(6).ToString(8, '0'), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
+			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.ToString("0.000000"), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "Perfectly happy with this implementation.")]
