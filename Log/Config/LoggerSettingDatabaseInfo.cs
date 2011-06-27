@@ -4,12 +4,12 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
+using Adenson.Configuration;
 using Adenson.Data;
-using Adenson.Log;
 
-namespace Adenson.Configuration.Internal
+namespace Adenson.Log.Config
 {
-	internal sealed class LoggerSettingDatabaseInfo : XmlSettingsBase
+	internal sealed class LoggerSettingDatabaseInfo : XElementSettingBase
 	{
 		#region Variables
 		private const string InsertStatementText = "INSERT INTO {0} ({1}, {2}, {3}, {4}) VALUES ({5})";

@@ -32,7 +32,9 @@ namespace Adenson
 		public static T CreateInstance<T>(string typeName)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
-			return (T)TypeUtil.CreateInstance(typeName);
+			Type type = TypeUtil.GetType(typeName);
+			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			return (T)Activator.CreateInstance(type);
 		}
 		
 		/// <summary>
@@ -47,22 +49,6 @@ namespace Adenson
 		{
 			if (type == null) throw new ArgumentNullException("type");
 			return (T)Activator.CreateInstance(type);
-		}
-
-		/// <summary>
-		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor.
-		/// </summary>
-		/// <remarks>calls Activator.CreateInstance(type).</remarks>
-		/// <param name="typeName">The full name of the type</param>
-		/// <returns>Created instance</returns>
-		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
-		/// <exception cref="TypeLoadException">If a type with specified name could not be loaded.</exception>
-		public static object CreateInstance(string typeName)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
-			Type type = TypeUtil.GetType(typeName);
-			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
-			return Activator.CreateInstance(type);
 		}
 		
 		/// <summary>

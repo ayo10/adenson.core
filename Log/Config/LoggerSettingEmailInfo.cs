@@ -1,8 +1,9 @@
 ﻿using System.Xml.Linq;
+using Adenson.Configuration;
 
-namespace Adenson.Configuration.Internal
+namespace Adenson.Log.Config
 {
-	internal sealed class LoggerSettingEmailInfo : XmlSettingsBase
+	internal sealed class LoggerSettingEmailInfo : XElementSettingBase
 	{
 		#region Constructor
 

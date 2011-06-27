@@ -50,6 +50,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigHelperTest.cs" />
     <Compile Include="ExtensionsTest.cs" />
     <Compile Include="FileUtilTest.cs" />
     <Compile Include="Log\LogProfilerTest.cs" />
@@ -64,6 +65,9 @@
       <Project>{7246795C-9775-4A3E-958C-678FC7F2784C}</Project>
       <Name>Adenson.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

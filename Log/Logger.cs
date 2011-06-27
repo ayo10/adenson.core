@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Adenson.Configuration.Internal;
-using System.Diagnostics.CodeAnalysis;
+using Adenson.Configuration;
+using Adenson.Log.Config;
 
 namespace Adenson.Log
 {
@@ -18,6 +19,7 @@ namespace Adenson.Log
 		#region Variables
 		private static string OutFileName = GetOutFileName();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
+		private static LoggerSettings _settings;
 		private List<LogEntry> entries = new List<LogEntry>();
 		private Type _classType;
 		private short _batchLogSize;
@@ -34,44 +36,12 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="classType">Type to use to create new instance</param>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type classType)
+		private Logger(Type classType)
 		{
 			if (classType == null) throw new ArgumentNullException("classType");
 			_classType = classType;
 		}
-		/// <summary>	
-		/// Creates a new instance of Logger from type
-		/// </summary>
-		/// <param name="classType">Type to use to create new instance</param>
-		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
-		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type classType, string source) : this(classType, LogTypes.None, source)
-		{
-		}
-		/// <summary>
-		/// Instantiates a new Logger class for specified type
-		/// </summary>
-		/// <param name="classType">Type to use to create new instance</param>
-		/// <param name="logType">The log type</param>
-		/// <exception cref="ArgumentNullException">If type is null</exception>
-		public Logger(Type classType, LogTypes logType) : this(classType)
-		{
-			_logTypes = logType;
-		}
-		/// <summary>
-		/// Instantiates a new Logger class for specified type
-		/// </summary>
-		/// <param name="classType">Type to use to create new instance</param>
-		/// <param name="logType">The log type</param>
-		/// <param name="source">A string to identify logs in Event Logs if the log type is as such</param>
-		/// <exception cref="ArgumentNullException">If type is null</exception>
-		/// <exception cref="ArgumentNullException">if source is null and logType includes EventLog</exception>
-		public Logger(Type classType, LogTypes logType, string source) : this(classType)
-		{
-			if ((logType & LogTypes.EventLog) != LogTypes.None && String.IsNullOrEmpty(source)) throw new ArgumentNullException("source", Exceptions.EventLogTypeWithSourceNull);
-			_logTypes = logType;
-			_source = source;
-		}
+		
 		/// <summary>
 		/// Clean up when logger is destroyed
 		/// </summary>
@@ -92,7 +62,7 @@ namespace Adenson.Log
 		/// </summary>
 		public short BatchSize
 		{
-			get { return _batchLogSize == 0 ? Config.LogSettings.BatchSize : _batchLogSize; }
+			get { return _batchLogSize == 0 ? LoggerSettings.Default.BatchSize : _batchLogSize; }
 			set
 			{
 				if (value < 1) throw new ArgumentException(SR.MsgExMinLogBatchSize, "value");
@@ -105,7 +75,7 @@ namespace Adenson.Log
 		/// </summary>
 		public LogSeverity Severity
 		{
-			get { return _severity == null ? Config.LogSettings.Severity : _severity.Value; }
+			get { return _severity == null ? LoggerSettings.Default.Severity : _severity.Value; }
 			set { _severity = value; }
 		}
 		
@@ -114,7 +84,7 @@ namespace Adenson.Log
 		/// </summary>
 		public LogTypes Types
 		{
-			get { return _logTypes == null ? Config.LogSettings.Types : _logTypes.Value; }
+			get { return _logTypes == null ? LoggerSettings.Default.Types : _logTypes.Value; }
 			set { _logTypes = value; }
 		}
 	
@@ -131,7 +101,7 @@ namespace Adenson.Log
 		/// </summary>
 		public string Source
 		{
-			get { return String.IsNullOrEmpty(_source) ? Config.LogSettings.Source : _source; }
+			get { return String.IsNullOrEmpty(_source) ? LoggerSettings.Default.Source : _source; }
 			set { _source = value; }
 		}
 		
@@ -140,7 +110,7 @@ namespace Adenson.Log
 		/// </summary>
 		public string DateTimeFormat
 		{
-			get { return (String.IsNullOrEmpty(_dateTimeFormat) ? Config.LogSettings.DateTimeFormat : _dateTimeFormat); }
+			get { return (String.IsNullOrEmpty(_dateTimeFormat) ? LoggerSettings.Default.DateTimeFormat : _dateTimeFormat); }
 			set { _dateTimeFormat = value; }
 		}
 
@@ -481,7 +451,7 @@ namespace Adenson.Log
 		
 		private static string GetOutFileName()
 		{
-			string filePath = Config.LogSettings.FileName;
+			string filePath = LoggerSettings.Default.FileName;
 			string folder = null;
 			if (!Path.IsPathRooted(filePath))
 			{
@@ -516,15 +486,15 @@ namespace Adenson.Log
 			
 			if ((entry.LogType & LogTypes.Email) != LogTypes.None)
 			{
-				if (!Config.LogSettings.EmailInfo.IsEmpty())
+				if (!LoggerSettings.Default.EmailInfo.IsEmpty())
 				{
-					SmtpUtil.TrySend(Config.LogSettings.EmailInfo.From, Config.LogSettings.EmailInfo.To, Config.LogSettings.EmailInfo.Subject, message, false);
+					SmtpUtil.TrySend(LoggerSettings.Default.EmailInfo.From, LoggerSettings.Default.EmailInfo.To, LoggerSettings.Default.EmailInfo.Subject, message, false);
 				}
 			}
 		}
 		private static bool SaveToDatabase(IEnumerable<LogEntry> entries)
 		{
-			return Config.LogSettings.DatabaseInfo.Save(entries);
+			return LoggerSettings.Default.DatabaseInfo.Save(entries);
 		}
 		
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]

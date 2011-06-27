@@ -66,8 +66,11 @@ namespace Adenson.CoreTest
 		[TestMethod]
 		public void GetValueTest2()
 		{
-			XContainer source = XDocument.Parse("<elem>1</elem>");
+			XElement source = XDocument.Parse("<elem>1</elem>").Root;
 			Assert.AreEqual(1, source.GetValue<int>("elem"));
+			
+			source = XDocument.Parse("<elem attribute=\"1\" />").Root;
+			Assert.AreEqual(1, source.GetValue<int>("attribute"));
 		}
 
 		[TestMethod]

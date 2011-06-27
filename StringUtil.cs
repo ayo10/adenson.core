@@ -33,21 +33,6 @@ namespace Adenson
 		}
 
 		/// <summary>
-		/// Uses the specified object to try and format the specified string
-		/// </summary>
-		/// <param name="value">A composite format string.</param>
-		/// <param name="arg">An object array that contains zero or more objects to format.</param>
-		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding arg object.</returns>
-		/// <exception cref="ArgumentNullException">format or args is null.</exception>
-		public static string Format(string value, object arg)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(value)) return String.Empty;
-			if (arg == null) throw new ArgumentNullException("arg");
-
-			return StringUtil.Format(value, arg);
-		}
-
-		/// <summary>
 		/// Generates a random string of specified <paramref name="length"/>.
 		/// </summary>
 		/// <param name="length">Max length of string to generate</param>
@@ -69,7 +54,7 @@ namespace Adenson
 		/// <summary>
 		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.
 		/// </summary>
-		/// <remarks>For .NET 4, simply calls String.IsNullOrWhiteSpace</remarks>
+		/// <remarks>Method exists for .NET 3.5, for .NET 4, simply calls String.IsNullOrWhiteSpace</remarks>
 		/// <param name="value">The string to test.</param>
 		/// <returns>true if the value parameter is null or System.String.Empty, or if value consists exclusively of white-space characters.</returns>
 		public static bool IsNullOrWhiteSpace(string value)
