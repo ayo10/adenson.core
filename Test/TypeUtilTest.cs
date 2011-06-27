@@ -1,7 +1,8 @@
-﻿using Adenson;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Adenson;
+using Adenson.Log;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Adenson.CoreTest
 {
@@ -11,100 +12,65 @@ namespace Adenson.CoreTest
 		[TestMethod]
 		public void CreateInstanceTest1()
 		{
-			Assert.AreEqual(0, TypeUtil.CreateInstance<int>());
-			Assert.AreEqual(String.Empty, TypeUtil.CreateInstance<string>());
+			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>());
 		}
 
 		[TestMethod]
 		public void CreateInstanceTest2()
 		{
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			var typeName = typeof(GenericParameterHelper).FullName;
+			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>(typeName));
 		}
 
 		[TestMethod]
 		public void CreateInstanceTest3()
 		{
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
-
-		[TestMethod]
-		public void CreateInstanceTest4()
-		{
-			Assert.AreEqual(0, (int)TypeUtil.CreateInstance(typeof(int).FullName));
-			Assert.AreEqual(String.Empty, (int)TypeUtil.CreateInstance(typeof(string).FullName));
-		}
-
-		/// <summary>
-		///A test for EnumParse
-		///</summary>
-		public void EnumParseTestHelper<T>()
-		{
-			string value = string.Empty; // TODO: Initialize to an appropriate value
-			T expected = default(T); // TODO: Initialize to an appropriate value
-			T actual;
-			actual = TypeUtil.EnumParse<T>(value);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			var type = typeof(GenericParameterHelper);
+			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>(type));
 		}
 
 		[TestMethod]
 		public void EnumParseTest()
 		{
-			EnumParseTestHelper<GenericParameterHelper>();
+			Assert.AreEqual(DataAccessMethod.Random, TypeUtil.EnumParse<DataAccessMethod>(DataAccessMethod.Random.ToString()));
 		}
 
-		/// <summary>
-		///A test for GetType
-		///</summary>
 		[TestMethod]
 		public void GetTypeTest()
 		{
-			string typeName = string.Empty; // TODO: Initialize to an appropriate value
-			Type expected = null; // TODO: Initialize to an appropriate value
-			Type actual;
-			actual = TypeUtil.GetType(typeName);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			var type = typeof(GenericParameterHelper);
+			Assert.AreEqual(type, TypeUtil.GetType(type.FullName));
+			Assert.AreEqual(type, TypeUtil.GetType(String.Format("{0};{1}", type.Assembly, type.Name)));
 		}
 
-		/// <summary>
-		///A test for TryConvert
-		///</summary>
 		[TestMethod]
 		public void TryConvertTest()
 		{
-			Type type = null; // TODO: Initialize to an appropriate value
-			object value = null; // TODO: Initialize to an appropriate value
-			object output = null; // TODO: Initialize to an appropriate value
-			object outputExpected = null; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = TypeUtil.TryConvert(type, value, out output);
-			Assert.AreEqual(outputExpected, output);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
-		}
+			object output = null;
+			Assert.IsTrue(TypeUtil.TryConvert(typeof(int), "1", out output));
+			Assert.AreEqual(1, output);
 
-		/// <summary>
-		///A test for TryConvert
-		///</summary>
-		public void TryConvertTest1Helper<T>()
-		{
-			object value = null; // TODO: Initialize to an appropriate value
-			T result = default(T); // TODO: Initialize to an appropriate value
-			T resultExpected = default(T); // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = TypeUtil.TryConvert<T>(value, out result);
-			Assert.AreEqual(resultExpected, result);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			Assert.IsTrue(TypeUtil.TryConvert(typeof(DataAccessMethod), DataAccessMethod.Random.ToString(), out output));
+			Assert.AreEqual(DataAccessMethod.Random, output);
+
+			Assert.IsTrue(TypeUtil.TryConvert(typeof(LogTypes), "Database | File | EventLog | Trace | Email", out output));
+			Assert.AreEqual(LogTypes.All, output);
 		}
 
 		[TestMethod]
 		public void TryConvertTest1()
 		{
-			TryConvertTest1Helper<GenericParameterHelper>();
+			int intResult = 1;
+			Assert.IsTrue(TypeUtil.TryConvert<int>("1", out intResult));
+			Assert.AreEqual(1, intResult);
+
+			DataAccessMethod damResult;
+			Assert.IsTrue(TypeUtil.TryConvert<DataAccessMethod>(DataAccessMethod.Random.ToString(), out damResult));
+			Assert.AreEqual(DataAccessMethod.Random, damResult);
+
+			LogTypes ltResult;
+			Assert.IsTrue(TypeUtil.TryConvert<LogTypes>("Database | File | EventLog | Trace | Email", out ltResult));
+			Assert.AreEqual(LogTypes.All, ltResult);
 		}
 	}
 }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Xml.Linq;
-using Adenson.Log;
+using Adenson.Configuration;
 
-namespace Adenson.Configuration.Internal
+namespace Adenson.Log.Config
 {
-	internal sealed class LoggerSettings : XmlSettingsBase
+	internal sealed class LoggerSettings : XElementSettingBase
 	{
+		#region Variables
+		internal static LoggerSettings Default = ReadSettings();
+		#endregion
 		#region Constructor
 
 		public LoggerSettings(XElement element) : base(element)
@@ -64,6 +67,15 @@ namespace Adenson.Configuration.Internal
 		{
 			get;
 			set;
+		}
+
+		#endregion
+		#region Methods
+
+		private static LoggerSettings ReadSettings()
+		{
+			var section = ConfigHelper.GetSection<XDocument>("adenson", "loggerSettings");
+			return new LoggerSettings((section != null) ? section.Root : null);
 		}
 
 		#endregion

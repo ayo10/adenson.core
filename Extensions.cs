@@ -128,19 +128,34 @@ namespace Adenson
 		/// <param name="name">The <see cref="XName"/> to match.</param>
 		/// <returns>Found value of any, default of T otherwise</returns>
 		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
-		public static T GetValue<T>(this XContainer source, XName name)
+		public static T GetValue<T>(this XElement source, XName name)
 		{
 			if (source == null) throw new ArgumentNullException("source");
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
 
 			T result = default(T);
-			var element = source.Element(name);
-			if (element != null)
+			string value = null;
+
+			value = source.Value;
+
+			if (StringUtil.IsNullOrWhiteSpace(value))
 			{
-				var value = element.Value;
+				var element = source.Element(name);
+				if (element != null) value = element.Value;
+			}
+
+			if (StringUtil.IsNullOrWhiteSpace(value))
+			{
+				var attribute = source.Attribute(name);
+				if (attribute != null) value = attribute.Value;
+			}
+
+			if (!StringUtil.IsNullOrWhiteSpace(value))
+			{
 				T output;
 				if (TypeUtil.TryConvert<T>(value, out output)) result = output;
 			}
+
 			return result;
 		}
 		

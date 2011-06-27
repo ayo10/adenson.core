@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Adenson.Configuration.Internal
+namespace Adenson.Configuration
 {
-	internal abstract class XmlSettingsBase
+	internal abstract class XElementSettingBase
 	{
 		#region Constructor
 
-		public XmlSettingsBase(XElement element)
+		public XElementSettingBase(XElement element)
 		{
 			this.BaseElement = element;
 		}
@@ -19,7 +19,7 @@ namespace Adenson.Configuration.Internal
 		public XElement BaseElement
 		{
 			get;
-			set;
+			private set;
 		}
 
 		#endregion
