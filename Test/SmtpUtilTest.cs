@@ -1,7 +1,6 @@
-﻿using Adenson;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Net.Mail;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Adenson.CoreTest
 {

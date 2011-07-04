@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using Adenson.Log;
 
-namespace Adenson
+namespace System
 {
 	/// <summary>
 	/// SMTP Helper utility class
@@ -273,8 +273,8 @@ namespace Adenson
 
 		private static MailMessage ComposelMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Exceptions.EmailAddressInvalid);
-			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s))) throw new ArgumentException(Exceptions.EmailAddressInvalid, "to");
+			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Adenson.Exceptions.EmailAddressInvalid);
+			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s))) throw new ArgumentException(Adenson.Exceptions.EmailAddressInvalid, "to");
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);

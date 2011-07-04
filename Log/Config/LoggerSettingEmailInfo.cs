@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using Adenson.Configuration;
 
 namespace Adenson.Log.Config

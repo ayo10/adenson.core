@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Adenson
+namespace System
 {
 	/// <summary>
 	/// Collection of string utility methods
@@ -92,7 +92,7 @@ namespace Adenson
 			if (arr != null) return StringUtil.ToString(arr);
 
 			Exception ex = value as Exception;
-			if (ex != null) return Log.Logger.ConvertToString(ex, true);
+			if (ex != null) return Adenson.Log.Logger.ConvertToString(ex, true);
 
 			return Convert.ToString(value);
 		}

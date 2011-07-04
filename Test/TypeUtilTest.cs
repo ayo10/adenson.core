@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using Adenson;
 using Adenson.Log;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

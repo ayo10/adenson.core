@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Adenson
+namespace System
 {
 	/// <summary>
 	/// Utility classes for types
@@ -33,7 +33,7 @@ namespace Adenson
 		{
 			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
 			Type type = TypeUtil.GetType(typeName);
-			if (type == null) throw new TypeLoadException(StringUtil.Format(Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			if (type == null) throw new TypeLoadException(StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
 			return (T)Activator.CreateInstance(type);
 		}
 		

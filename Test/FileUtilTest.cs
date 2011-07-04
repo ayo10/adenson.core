@@ -1,75 +1,13 @@
-﻿using Adenson;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using Adenson.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Adenson.CoreTest
 {
-    
-    
-    /// <summary>
-    ///This is a test class for FileUtilTest and is intended
-    ///to contain all FileUtilTest Unit Tests
-    ///</summary>
 	[TestClass]
 	public class FileUtilTest
 	{
-
-
-		private TestContext testContextInstance;
-
-		/// <summary>
-		///Gets or sets the test context which provides
-		///information about and functionality for the current test run.
-		///</summary>
-		public TestContext TestContext
-		{
-			get
-			{
-				return testContextInstance;
-			}
-			set
-			{
-				testContextInstance = value;
-			}
-		}
-
-		#region Additional test attributes
-		// 
-		//You can use the following additional attributes as you write your tests:
-		//
-		//Use ClassInitialize to run code before running the first test in the class
-		//[ClassInitialize()]
-		//public static void MyClassInitialize(TestContext testContext)
-		//{
-		//}
-		//
-		//Use ClassCleanup to run code after all tests in a class have run
-		//[ClassCleanup()]
-		//public static void MyClassCleanup()
-		//{
-		//}
-		//
-		//Use TestInitialize to run code before running each test
-		//[TestInitialize()]
-		//public void MyTestInitialize()
-		//{
-		//}
-		//
-		//Use TestCleanup to run code after each test has run
-		//[TestCleanup()]
-		//public void MyTestCleanup()
-		//{
-		//}
-		//
-		#endregion
-
-
-		/// <summary>
-		///A test for CreateFile
-		///</summary>
 		[TestMethod]
 		public void CreateFileTest()
 		{
@@ -83,9 +21,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for CreateMD5HashedFile
-		///</summary>
 		[TestMethod]
 		public void CreateMD5HashedFileTest()
 		{
@@ -99,9 +34,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for FixFilePath
-		///</summary>
 		[TestMethod]
 		public void FixFilePathTest()
 		{
@@ -113,9 +45,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for GetBytes
-		///</summary>
 		[TestMethod]
 		public void GetBytesTest()
 		{
@@ -127,9 +56,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for GetFiles
-		///</summary>
 		[TestMethod]
 		public void GetFilesTest()
 		{
@@ -142,9 +68,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for GetIsDirectory
-		///</summary>
 		[TestMethod]
 		public void GetIsDirectoryTest()
 		{
@@ -156,11 +79,8 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for ReadStream
-		///</summary>
 		[TestMethod]
-		public void ReadStreamTest()
+		public void ReadStreamTest1()
 		{
 			Uri url = null; // TODO: Initialize to an appropriate value
 			byte[] expected = null; // TODO: Initialize to an appropriate value
@@ -170,11 +90,8 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for ReadStream
-		///</summary>
 		[TestMethod]
-		public void ReadStreamTest1()
+		public void ReadStreamTest2()
 		{
 			Stream stream = null; // TODO: Initialize to an appropriate value
 			byte[] expected = null; // TODO: Initialize to an appropriate value
@@ -184,11 +101,8 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for ReadStream
-		///</summary>
 		[TestMethod]
-		public void ReadStreamTest2()
+		public void ReadStreamTest3()
 		{
 			string filePath = string.Empty; // TODO: Initialize to an appropriate value
 			byte[] expected = null; // TODO: Initialize to an appropriate value
@@ -198,9 +112,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TryGetBytes
-		///</summary>
 		[TestMethod]
 		public void TryGetBytesTest()
 		{
