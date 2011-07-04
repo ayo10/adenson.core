@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace Adenson
+namespace System
 {
 	/// <summary>
 	/// Bunch of extensions

@@ -6,7 +6,7 @@ using System.Linq;
 using Adenson.Collections;
 using Adenson.Cryptography;
 
-namespace Adenson
+namespace System
 {
 	/// <summary>
 	/// Collection of file/directory/io utility methods
@@ -46,7 +46,7 @@ namespace Adenson
 		/// <returns></returns>
 		public static string CreateFile(string filePath, byte[] buffer, bool overwrite)
 		{
-			if (Adenson.StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
+			if (StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
 			if (buffer == null) return null;
 			if (buffer.Length == 0) return null;
 
@@ -69,7 +69,7 @@ namespace Adenson
 		/// <returns></returns>
 		public static string CreateMD5HashedFile(string directory, byte[] buffer, bool overwrite)
 		{
-			if (Adenson.StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
+			if (StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
 			if (buffer == null) return null;
 			if (buffer.Length == 0) return null;
 
@@ -85,7 +85,7 @@ namespace Adenson
 		/// <exception cref="ArgumentNullException">if directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
 		{
-			if (Adenson.StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
+			if (StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
 			List<string> filesToProcess = new List<string>();
 			foreach (string ext in extensions)
 			{
@@ -101,7 +101,7 @@ namespace Adenson
 		/// <exception cref="ArgumentNullException">if fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
 		{
-			if (Adenson.StringUtil.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException("fullPath");
+			if (StringUtil.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException("fullPath");
 			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath);//Prob a directory
 		}
 		/// <summary>
@@ -136,7 +136,7 @@ namespace Adenson
 		/// <exception cref="FileNotFoundException">if the specified filePath does not exist</exception>
 		public static byte[] ReadStream(string filePath)
 		{
-			if (Adenson.StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
+			if (StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
 			if (!File.Exists(filePath)) throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
 			return FileUtil.ReadStream(new Uri(filePath, UriKind.Absolute));
 		}
