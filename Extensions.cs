@@ -13,51 +13,6 @@ namespace System
 	public static class Extensions
 	{
 		/// <summary>
-		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
-		/// </summary>
-		/// <typeparam name="T">The type of items</typeparam>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool AreEqualTo<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
-		{
-			if (Object.ReferenceEquals(array1, array2)) return true;
-			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
-			if (array1.Count() != array2.Count()) return false;
-			for (int i = 0; i < array1.Count(); i++)
-			{
-				T e1 = array1.ElementAt(i);
-				T e2 = array2.ElementAt(i);
-				if (!Object.Equals(e1, e2)) return false;
-			}
-			return true;
-		}
-
-		/// <summary>
-		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified culture, case, and sort rules used in the comparison.
-		/// </summary>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if array1 is null or array2 is null and they are both not null.</exception>
-		public static bool AreEqualTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
-		{
-			if (Object.ReferenceEquals(array1, array2)) return true;
-			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
-			if (array1.Count() != array2.Count()) return false;
-
-			for (int i = 0; i < array1.Count(); i++)
-			{
-				string e1 = array1.ElementAt(i);
-				string e2 = array2.ElementAt(i);
-				if (e1 == null && e2 != null || e1 != null && e2 == null) return false;
-				if (!e1.Equals(e2, comparisonType)) return false;
-			}
-			return true;
-		}
-
-		/// <summary>
 		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="source"/> using specified <see cref="StringComparison"/> object.
 		/// </summary>
 		/// <param name="source">The string to look into</param>
@@ -101,6 +56,51 @@ namespace System
 			if (source == null) throw new ArgumentNullException("source");
 			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName)) throw new ArgumentNullException("name");
 			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType));
+		}
+	
+		/// <summary>
+		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
+		/// </summary>
+		/// <typeparam name="T">The type of items</typeparam>
+		/// <param name="array1">The frst array</param>
+		/// <param name="array2">The second array</param>
+		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
+		public static bool EqualsTo<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
+		{
+			if (Object.ReferenceEquals(array1, array2)) return true;
+			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
+			if (array1.Count() != array2.Count()) return false;
+			for (int i = 0; i < array1.Count(); i++)
+			{
+				T e1 = array1.ElementAt(i);
+				T e2 = array2.ElementAt(i);
+				if (!Object.Equals(e1, e2)) return false;
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified culture, case, and sort rules used in the comparison.
+		/// </summary>
+		/// <param name="array1">The frst array</param>
+		/// <param name="array2">The second array</param>
+		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
+		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if array1 is null or array2 is null and they are both not null.</exception>
+		public static bool EqualsTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
+		{
+			if (Object.ReferenceEquals(array1, array2)) return true;
+			if (array1 == null && array2 != null || array1 != null && array2 == null) return false;
+			if (array1.Count() != array2.Count()) return false;
+
+			for (int i = 0; i < array1.Count(); i++)
+			{
+				string e1 = array1.ElementAt(i);
+				string e2 = array2.ElementAt(i);
+				if (e1 == null && e2 != null || e1 != null && e2 == null) return false;
+				if (!e1.Equals(e2, comparisonType)) return false;
+			}
+			return true;
 		}
 		
 		/// <summary>
