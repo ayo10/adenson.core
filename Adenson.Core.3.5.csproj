@@ -58,17 +58,13 @@
     </Compile>
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Configuration\ConfigHelper.cs" />
     <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
-    <Compile Include="Configuration\ConfigSectionHelper.cs" />
     <Compile Include="Configuration\ConnectionStrings.cs" />
-    <Compile Include="Configuration\Internal\Config.cs" />
-    <Compile Include="Configuration\Internal\LoggerSettingDatabaseInfo.cs" />
-    <Compile Include="Configuration\Internal\LoggerSettingEmailInfo.cs" />
-    <Compile Include="Configuration\Internal\LoggerSettings.cs" />
-    <Compile Include="Configuration\Internal\XmlSettingsBase.cs" />
     <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
-    <Compile Include="Configuration\XmlSectionHandler.cs" />
+    <Compile Include="Configuration\XDocumentSectionHandler.cs" />
+    <Compile Include="Configuration\XElementSettingBase.cs" />
     <Compile Include="Cryptography\EncryptorBase.cs" />
     <Compile Include="Cryptography\HashAlgorithmType.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
@@ -86,6 +82,9 @@
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Log\Config\LoggerSettingDatabaseInfo.cs" />
+    <Compile Include="Log\Config\LoggerSettingEmailInfo.cs" />
+    <Compile Include="Log\Config\LoggerSettings.cs" />
     <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogSeverityInternal.cs" />
     <Compile Include="MethodInvoker.cs" />

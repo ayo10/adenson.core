@@ -43,7 +43,6 @@ namespace Adenson.Data
 		{
 			if (this.Connection != null) this.Connection.Dispose();
 		}
-		//private void Dispose(bool disposing)
 
 		#endregion
 	}
