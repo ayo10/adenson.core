@@ -14,6 +14,7 @@ namespace Adenson.Data
 		#region Variables
 		private bool mustCloseConnection = true;
 		private ConnectionManager _connectionManager;
+		private bool _useTransactionAlways = true;
 		#endregion
 		#region Constructors
 
@@ -23,17 +24,20 @@ namespace Adenson.Data
 		protected SqlHelperBase() : this(Configuration.ConnectionStrings.Default)
 		{
 		}
+
 		/// <summary>
 		/// Instantiates a new instance of the sql helper using specified connection string setting object
 		/// </summary>
-		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <param name="settings">The connection string settings object to use</param>
 		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
 		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
-		protected SqlHelperBase(ConnectionStringSettings connectionString)
+		protected SqlHelperBase(ConnectionStringSettings settings)
 		{
-			if (connectionString == null) throw new ArgumentNullException("connectionString");
-			this.ConnectionString = connectionString.ConnectionString;
+			if (settings == null) throw new ArgumentNullException("connectionString");
+			this.ConnectionString = settings.ConnectionString;
+			this.UseTransactionAlways = true;
 		}
+
 		/// <summary>
 		/// Instantiates a new instance of the sql helper using specified connection string setting object
 		/// </summary>
@@ -43,6 +47,7 @@ namespace Adenson.Data
 		{
 			if (StringUtil.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException("connectionString");
 			this.ConnectionString = connectionString;
+			this.UseTransactionAlways = true;
 		}
 		
 		#endregion
@@ -56,12 +61,22 @@ namespace Adenson.Data
 			get;
 			private set;
 		}
+
 		/// <summary>
 		/// Gets the current connection object in use (if OpenConnection was invoked)
 		/// </summary>
 		public IDbConnection CurrentConnection
 		{
 			get { return this.Manager.Connection; }
+		}
+
+		/// <summary>
+		/// Gets or sets if to use transactions if a method that doesn't take a <see cref="IDbTransaction"/> object is called, defaults to true.
+		/// </summary>
+		public bool UseTransactionAlways
+		{
+			get { return _useTransactionAlways; }
+			set { _useTransactionAlways = value; }
 		}
 
 		internal ConnectionManager Manager
@@ -86,8 +101,6 @@ namespace Adenson.Data
 		/// <exception cref="InvalidOperationException">if the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
 		public virtual void CloseConnection()
 		{
-			if (this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection must be called before CloseConnection.");
-			this.Manager.AllowClose = false;
 			this.Manager.AllowClose = true;
 			this.Manager.Close();
 		}
@@ -176,25 +189,26 @@ namespace Adenson.Data
 			if (commands.Any(c => c == null)) throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
 
 			List<DataSet> list = new List<DataSet>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (IDbCommand command in commands)
 				{
-					command.Transaction = transaction;
+					if (transaction != null) command.Transaction = transaction;
 					list.Add(this.ExecuteDataSet(command));
 				}
 
-				transaction.Commit();
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
-				list.Clear();
+				if (transaction != null) transaction.Rollback();
 				throw;
 			}
-
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
 
 			return list.ToArray();
 		}
@@ -211,22 +225,26 @@ namespace Adenson.Data
 			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
 			List<DataSet> list = new List<DataSet>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (string commandText in commandTexts)
 				{
 					list.Add(this.ExecuteDataSet(CommandType.Text, transaction, commandText));
 				}
-				transaction.Commit();
+
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
-				list.Clear();
+				if (transaction != null) transaction.Rollback();
 				throw;
 			}
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
+
 			return list.ToArray();
 		}
 		
@@ -284,23 +302,27 @@ namespace Adenson.Data
 			if (commands.Any(c => c == null)) throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
 
 			List<int> list = new List<int>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (IDbCommand command in commands)
 				{
-					command.Transaction = transaction;
+					if (transaction != null) command.Transaction = transaction;
 					list.Add(this.ExecuteNonQuery(command));
 				}
-				transaction.Commit();
+
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
+				if (transaction != null) transaction.Rollback();
 				list.Clear();
 				throw;
 			}
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
 
 			return list.ToArray();
 		}
@@ -317,22 +339,26 @@ namespace Adenson.Data
 			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
 			List<int> list = new List<int>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (string commandText in commandTexts)
 				{
 					list.Add(this.ExecuteNonQuery(CommandType.Text, transaction, commandText));
 				}
-				transaction.Commit();
+
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
-				list.Clear();
+				if (transaction != null) transaction.Rollback();
 				throw;
 			}
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
+
 			return list.ToArray();
 		}
 		
@@ -402,23 +428,26 @@ namespace Adenson.Data
 			if (commands.Any(c => c == null)) throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
 
 			List<object> list = new List<object>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (IDbCommand command in commands)
 				{
-					command.Transaction = transaction;
+					if (transaction != null) command.Transaction = transaction;
 					list.Add(this.ExecuteScalar(command));
 				}
-				transaction.Commit();
+
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
-				list.Clear();
+				if (transaction != null) transaction.Rollback();
 				throw;
 			}
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
 
 			return list.ToArray();
 		}
@@ -435,22 +464,26 @@ namespace Adenson.Data
 			if (commandTexts.Length == 0) throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
 
 			List<object> list = new List<object>();
-			IDbTransaction transaction = this.OpenConnection().BeginTransaction();
+			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
 			try
 			{
 				foreach (string commandText in commandTexts)
 				{
 					list.Add(this.ExecuteScalar(CommandType.Text, transaction, commandText));
 				}
-				transaction.Commit();
+
+				if (transaction != null) transaction.Commit();
 			}
 			catch
 			{
-				transaction.Rollback();
-				list.Clear();
+				if (transaction != null) transaction.Rollback();
 				throw;
 			}
-			this.CloseConnection();
+			finally
+			{
+				this.CloseConnection();
+			}
+
 			return list.ToArray();
 		}
 		/// <summary>

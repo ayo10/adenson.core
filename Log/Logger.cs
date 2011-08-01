@@ -19,7 +19,6 @@ namespace Adenson.Log
 		#region Variables
 		private static string OutFileName = GetOutFileName();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private static LoggerSettings _settings;
 		private List<LogEntry> entries = new List<LogEntry>();
 		private Type _classType;
 		private short _batchLogSize;
