@@ -162,6 +162,7 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
+			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
 			this.Manager.Open();
 			
 			IDbDataAdapter dataAdapter = this.CreateAdapter(command);
@@ -284,6 +285,7 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
+			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
 			this.Manager.Open();
 			int result = command.ExecuteNonQuery();
 			this.Manager.Close();
@@ -394,6 +396,7 @@ namespace Adenson.Data
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
 			command.Connection = this.Manager.Connection;
+			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
 			this.Manager.Open();
 			IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
 			return result;
@@ -410,6 +413,7 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
+			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
 			this.Manager.Open();
 			object result = command.ExecuteScalar();
 			this.Manager.Close();
@@ -578,6 +582,13 @@ namespace Adenson.Data
 			string[] splits = null;
 			if (!parameterValues.IsEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
 			{
+				splits = commandText.Split('{');
+				if ((splits.Length - 1) == parameterValues.Length)
+				{
+					var formats = Enumerable.Range(0, parameterValues.Length).Select(i => "@param" + i).ToArray();
+					commandText = String.Format(commandText, formats);
+				}
+
 				splits = commandText.Split('@');
 				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
 				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
@@ -590,30 +601,26 @@ namespace Adenson.Data
 
 			if (!parameterValues.IsEmpty())
 			{
-				if (commandText.IndexOf("{0}", StringComparison.CurrentCulture) > 0) command.CommandText = StringUtil.Format(commandText, parameterValues);
-				else
+				for (var i = 0; i < parameterValues.Length; i++)
 				{
-					for (var i = 0; i < parameterValues.Length; i++)
+					var obj = parameterValues[i];
+					IDataParameter dbParameter = obj as IDataParameter;
+					if (dbParameter == null)
 					{
-						var obj = parameterValues[i];
-						IDataParameter dbParameter = obj as IDataParameter;
-						if (dbParameter == null)
+						var parameter = obj as Parameter;
+						dbParameter = this.CreateParameter();
+						if (parameter != null)
 						{
-							var parameter = obj as Parameter;
-							dbParameter = this.CreateParameter();
-							if (parameter != null)
-							{
-								dbParameter.ParameterName = parameter.Name;
-								dbParameter.Value = parameter.Value;
-							}
-							else
-							{
-								dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
-								dbParameter.Value = obj;
-							}
+							dbParameter.ParameterName = parameter.Name;
+							dbParameter.Value = parameter.Value;
 						}
-						if (dbParameter != null) command.Parameters.Add(dbParameter);
+						else
+						{
+							dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
+							dbParameter.Value = obj;
+						}
 					}
+					if (dbParameter != null) command.Parameters.Add(dbParameter);
 				}
 			}
 			return command;
