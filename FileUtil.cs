@@ -105,19 +105,19 @@ namespace System
 			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath);//Prob a directory
 		}
 		/// <summary>
-		/// Fixes path by removing characters that are invalid
+		/// Fixes the specified name by removing characters that are invalid
 		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
-		public static string FixFilePath(string path)
+		/// <param name="fileName">The name to clean up</param>
+		/// <returns>Cleaned up name.</returns>
+		public static string FixFileName(string fileName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(path)) throw new ArgumentNullException("path");
+			if (StringUtil.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("path");
 
 			var invalidCharacters = FileUtil.fileInvalidCharsReplacements.Keys.ToArray();
-			IEnumerable<char> intersect = path.ToCharArray().Intersect(invalidCharacters);
+			IEnumerable<char> intersect = fileName.ToCharArray().Intersect(invalidCharacters);
 			if (intersect.Count() > 0)
 			{
-				string result = path;
+				string result = fileName;
 				foreach (char c in intersect)
 				{
 					char replaceChar = fileInvalidCharsReplacements[c];
@@ -125,7 +125,7 @@ namespace System
 				}
 				return result;
 			}
-			return path;
+			return fileName;
 		}
 		/// <summary>
 		/// Creates a byte array, by reading the response stream of the specified url 

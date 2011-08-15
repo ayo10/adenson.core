@@ -71,19 +71,6 @@ namespace Adenson.Cryptography
 			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
 		}
 		/// <summary>
-		/// Gets the MD5 hash of specified bit array. Deprecated, use Encryptor.GetHash(buffer, HashAlgorithmType.MD5) instead.
-		/// </summary>
-		/// <param name="buffer">The bit array</param>
-		/// <returns>String representation of the md5 hash of array</returns>
-		[Obsolete("Use Encryptor.GetHash(buffer, HashAlgorithmType.MD5) instead.", false)]
-		public static string GetMD5Hash(byte[] buffer)
-		{
-			if (buffer == null) return null;
-			System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
-			string hash = System.Convert.ToBase64String(md5.ComputeHash(buffer)).Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
-			return hash;
-		}
-		/// <summary>
 		/// Gets the hash of specified bit array using specified hash algorithm type
 		/// </summary>
 		/// <param name="buffer">The bit array</param>

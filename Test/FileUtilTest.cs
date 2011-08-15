@@ -11,36 +11,38 @@ namespace Adenson.CoreTest
 		[TestMethod]
 		public void CreateFileTest()
 		{
-			string filePath = string.Empty; // TODO: Initialize to an appropriate value
-			byte[] buffer = null; // TODO: Initialize to an appropriate value
-			bool overwrite = false; // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = FileUtil.CreateFile(filePath, buffer, overwrite);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string filePath = Path.GetTempFileName();
+			byte[] buffer = new byte[] { 1, 3, 4, 5 };
+			bool overwrite = false;
+			string actual = FileUtil.CreateFile(filePath, buffer, overwrite);
+
+			Assert.IsTrue(File.Exists(actual));
+			Assert.AreEqual(filePath, actual);
+			byte[] bytes = FileUtil.ReadStream(filePath);
+			buffer.EqualsTo(bytes);
 		}
 
 		[TestMethod]
 		public void CreateMD5HashedFileTest()
 		{
-			string directory = string.Empty; // TODO: Initialize to an appropriate value
-			byte[] buffer = null; // TODO: Initialize to an appropriate value
-			bool overwrite = false; // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = FileUtil.CreateMD5HashedFile(directory, buffer, overwrite);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string directory = Path.GetTempPath();
+			byte[] buffer = new byte[] { 1, 3, 4, 5 };
+			bool overwrite = false;
+			string actual = FileUtil.CreateMD5HashedFile(directory, buffer, overwrite);
+
+			Assert.IsTrue(File.Exists(actual));
+			Assert.AreEqual(directory, Path.GetDirectoryName(actual));
+			byte[] bytes = FileUtil.ReadStream(actual);
+			buffer.EqualsTo(bytes);
 		}
 
 		[TestMethod]
-		public void FixFilePathTest()
+		public void FixFileNameTest()
 		{
 			string path = string.Empty; // TODO: Initialize to an appropriate value
 			string expected = string.Empty; // TODO: Initialize to an appropriate value
 			string actual;
-			actual = FileUtil.FixFilePath(path);
+			actual = FileUtil.FixFileName(path);
 			Assert.AreEqual(expected, actual);
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}

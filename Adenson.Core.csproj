@@ -53,12 +53,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackgroundThread.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Collections\CollectionChangingEventArgs.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="BackgroundThread.cs" />
+    <Compile Include="Collections\CollectionChangingEventArgs.cs"/>
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Configuration\ConfigHelper.cs" />

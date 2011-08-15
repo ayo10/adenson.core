@@ -10,21 +10,27 @@ namespace Adenson.CoreTest
 		[TestMethod]
 		public void CreateInstanceTest1()
 		{
-			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>());
+			var result = TypeUtil.CreateInstance<GenericParameterHelper>();
+			Assert.IsNotNull(result);
+			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
 		}
 
 		[TestMethod]
 		public void CreateInstanceTest2()
 		{
-			var typeName = typeof(GenericParameterHelper).FullName;
-			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>(typeName));
+			var typeName = typeof(GenericParameterHelper).AssemblyQualifiedName;
+			var result = TypeUtil.CreateInstance<GenericParameterHelper>(typeName);
+			Assert.IsNotNull(result);
+			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
 		}
 
 		[TestMethod]
 		public void CreateInstanceTest3()
 		{
 			var type = typeof(GenericParameterHelper);
-			Assert.IsNotNull(TypeUtil.CreateInstance<GenericParameterHelper>(type));
+			var result = TypeUtil.CreateInstance<GenericParameterHelper>(type);
+			Assert.IsNotNull(result);
+			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
 		}
 
 		[TestMethod]
@@ -37,7 +43,7 @@ namespace Adenson.CoreTest
 		public void GetTypeTest()
 		{
 			var type = typeof(GenericParameterHelper);
-			Assert.AreEqual(type, TypeUtil.GetType(type.FullName));
+			Assert.AreEqual(type, TypeUtil.GetType(type.AssemblyQualifiedName));
 			Assert.AreEqual(type, TypeUtil.GetType(String.Format("{0};{1}", type.Assembly, type.Name)));
 		}
 
