@@ -181,8 +181,8 @@ namespace Adenson.Collections
 					if (dispatcherInvoker != null)
 					{
 						int count = GetDisableProcessingCount(dispatcherInvoker.Dispatcher);
-						if (count == 0) dispatcherInvoker.Dispatcher.Invoke(DispatcherPriority.Normal, new MethodInvoker(delegate { handler(this, e); }));
-						else dispatcherInvoker.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new MethodInvoker(delegate { handler(this, e); }));
+						if (count == 0) dispatcherInvoker.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate { handler(this, e); }));
+						else dispatcherInvoker.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate { handler(this, e); }));
 					}
 					else if (syncInvoker != null) syncInvoker.Invoke(del, new Object[] { this, e });
 					else handler(this, e);

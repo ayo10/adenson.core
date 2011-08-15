@@ -135,14 +135,9 @@ namespace System
 
 			T result = default(T);
 			string value = null;
-
-			value = source.Value;
-
-			if (StringUtil.IsNullOrWhiteSpace(value))
-			{
-				var element = source.Element(name);
-				if (element != null) value = element.Value;
-			}
+			
+			var element = source.Element(name);
+			if (element != null) value = element.Value;
 
 			if (StringUtil.IsNullOrWhiteSpace(value))
 			{
