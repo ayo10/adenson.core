@@ -145,6 +145,8 @@ namespace System
 				if (attribute != null) value = attribute.Value;
 			}
 
+			if (StringUtil.IsNullOrWhiteSpace(value)) value = source.Value;
+
 			if (!StringUtil.IsNullOrWhiteSpace(value))
 			{
 				T output;

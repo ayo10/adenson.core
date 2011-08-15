@@ -11,23 +11,12 @@ namespace Adenson.CoreTest
 	public class ExtensionsTest
 	{
 		[TestMethod]
-		public void AreEqualToTest1()
+		public void ContainsKeyTest()
 		{
-			IEnumerable<string> array1 = new string[] { "one", "TWO", "three" };
-			IEnumerable<string> array2 = new string[] { "one", "TWO", "three" };
-			IEnumerable<string> array3 = new string[] { "ONE", "TWO", "THREE" };
-
-			Assert.IsTrue(array1.AreEqualTo(array2, StringComparison.CurrentCulture));
-			Assert.IsFalse(array1.AreEqualTo(array3, StringComparison.CurrentCulture));
-			Assert.IsTrue(array1.AreEqualTo(array3, StringComparison.CurrentCultureIgnoreCase));
-		}
-
-		[TestMethod]
-		public void AreEqualToTest2()
-		{
-			EqualsTest2Helper<byte>(1, 2, 3);
-			EqualsTest2Helper<string>("one", "TWO", "three");
-			EqualsTest2Helper<int>(1, 2, 3);
+			Dictionary<string, int> dictionary = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
+			Assert.IsTrue(dictionary.ContainsKey("one", StringComparison.CurrentCulture));
+			Assert.IsTrue(dictionary.ContainsKey("ONE", StringComparison.CurrentCultureIgnoreCase));
+			Assert.IsFalse(dictionary.ContainsKey("tHREe", StringComparison.CurrentCultureIgnoreCase));
 		}
 
 		[TestMethod]
@@ -40,19 +29,30 @@ namespace Adenson.CoreTest
 		}
 
 		[TestMethod]
-		public void ContainsKeyTest()
-		{
-			Dictionary<string, int> dictionary = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
-			Assert.IsTrue(dictionary.ContainsKey("one", StringComparison.CurrentCulture));
-			Assert.IsTrue(dictionary.ContainsKey("ONE", StringComparison.CurrentCultureIgnoreCase));
-			Assert.IsFalse(dictionary.ContainsKey("tHREe", StringComparison.CurrentCultureIgnoreCase));
-		}
-
-		[TestMethod]
 		public void ElementTest()
 		{
 			XContainer source = XDocument.Parse("<eLem>1</eLem>");
 			Assert.AreEqual("eLem", source.Element("ELEM", StringComparison.CurrentCultureIgnoreCase).Name);
+		}
+
+		[TestMethod]
+		public void EqualsToTest1()
+		{
+			IEnumerable<string> array1 = new string[] { "one", "TWO", "three" };
+			IEnumerable<string> array2 = new string[] { "one", "TWO", "three" };
+			IEnumerable<string> array3 = new string[] { "ONE", "TWO", "THREE" };
+
+			Assert.IsTrue(array1.EqualsTo(array2, StringComparison.CurrentCulture));
+			Assert.IsFalse(array1.EqualsTo(array3, StringComparison.CurrentCulture));
+			Assert.IsTrue(array1.EqualsTo(array3, StringComparison.CurrentCultureIgnoreCase));
+		}
+
+		[TestMethod]
+		public void EqualsToTest2()
+		{
+			EqualsTest2Helper<byte>(1, 2, 3);
+			EqualsTest2Helper<string>("one", "TWO", "three");
+			EqualsTest2Helper<int>(1, 2, 3);
 		}
 
 		[TestMethod]
@@ -66,7 +66,10 @@ namespace Adenson.CoreTest
 		[TestMethod]
 		public void GetValueTest2()
 		{
-			XElement source = XDocument.Parse("<elem>1</elem>").Root;
+			XElement source = XDocument.Parse("<root><elem>1</elem></root>").Root;
+			Assert.AreEqual(1, source.GetValue<int>("elem"));
+
+			source = XDocument.Parse("<elem>1</elem>").Root;
 			Assert.AreEqual(1, source.GetValue<int>("elem"));
 			
 			source = XDocument.Parse("<elem attribute=\"1\" />").Root;
@@ -118,7 +121,7 @@ namespace Adenson.CoreTest
 		{
 			byte[] buffer = new byte[] { 1, 2, 3 };
 			Stream stream = new MemoryStream(buffer);
-			Assert.IsTrue(buffer.AreEqualTo(stream.ToBytes()));
+			Assert.IsTrue(buffer.EqualsTo(stream.ToBytes()));
 		}
 
 		[TestMethod]
@@ -204,14 +207,14 @@ namespace Adenson.CoreTest
 			IEnumerable<T> array1 = new List<T>(items);
 			IEnumerable<T> array2 = new List<T>(items);
 
-			Assert.IsTrue(array1.AreEqualTo(array2));
-			Assert.IsTrue(array2.AreEqualTo(array1));
+			Assert.IsTrue(array1.EqualsTo(array2));
+			Assert.IsTrue(array2.EqualsTo(array1));
 
 			List<T> array3 = new List<T>(items);
 			array3.Add(default(T));
 
-			Assert.IsFalse(array1.AreEqualTo(array3));
-			Assert.IsFalse(array3.AreEqualTo(array1));
+			Assert.IsFalse(array1.EqualsTo(array3));
+			Assert.IsFalse(array3.EqualsTo(array1));
 		}
 	}
 }

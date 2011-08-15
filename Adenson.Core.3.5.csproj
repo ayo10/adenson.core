@@ -53,9 +53,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\CollectionChangingEventArgs.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="BackgroundThread.cs" />
+    <Compile Include="Collections\CollectionChangingEventArgs.cs"/>
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Configuration\ConfigHelper.cs" />
@@ -87,7 +86,8 @@
     <Compile Include="Log\Config\LoggerSettings.cs" />
     <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogSeverityInternal.cs" />
-    <Compile Include="MethodInvoker.cs" />
+    <Compile Include="NotifyObject.cs" />
+    <Compile Include="Pair.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
