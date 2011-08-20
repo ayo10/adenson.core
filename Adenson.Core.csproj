@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackgroundThread.cs" />
-    <Compile Include="Collections\CollectionChangingEventArgs.cs"/>
+    <Compile Include="Collections\CollectionChangingEventArgs.cs" />
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Configuration\ConfigHelper.cs" />
@@ -123,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AdensonCore.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

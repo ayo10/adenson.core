@@ -28,13 +28,13 @@ namespace Adenson.Data
 		/// <summary>
 		/// Instantiates a new instance of the sql helper using specified connection string setting object
 		/// </summary>
-		/// <param name="settings">The connection string settings object to use</param>
+		/// <param name="connectionStringSettings">The connection string settings object to use</param>
 		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
 		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
-		protected SqlHelperBase(ConnectionStringSettings settings)
+		protected SqlHelperBase(ConnectionStringSettings connectionStringSettings)
 		{
-			if (settings == null) throw new ArgumentNullException("connectionString");
-			this.ConnectionString = settings.ConnectionString;
+			if (connectionStringSettings == null) throw new ArgumentNullException("connectionStringSettings");
+			this.ConnectionString = connectionStringSettings.ConnectionString;
 			this.UseTransactionAlways = true;
 		}
 
@@ -586,7 +586,7 @@ namespace Adenson.Data
 				if ((splits.Length - 1) == parameterValues.Length)
 				{
 					var formats = Enumerable.Range(0, parameterValues.Length).Select(i => "@param" + i).ToArray();
-					commandText = String.Format(commandText, formats);
+					commandText = StringUtil.Format(commandText, formats);
 				}
 
 				splits = commandText.Split('@');

@@ -100,7 +100,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.ToString("0.000000"), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
+			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.ToString("0.000000", System.Globalization.CultureInfo.CurrentCulture), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly", Justification = "Perfectly happy with this implementation.")]

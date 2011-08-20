@@ -145,7 +145,7 @@ namespace System
 								var splits = valueAsString.Split('|');
 								var intValue = 0;
 								foreach (var str in splits) intValue += (int)Enum.Parse(type, str);
-								output = Enum.Parse(type, intValue.ToString());
+								output = Enum.Parse(type, intValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
 								result = true;
 							}
 							catch (ArgumentException)

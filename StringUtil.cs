@@ -22,7 +22,7 @@ namespace System
 
 			try
 			{
-				return String.Format(value, args);
+				return StringUtil.Format(value, args);
 			}
 			catch (FormatException)
 			{
@@ -93,8 +93,7 @@ namespace System
 
 			Exception ex = value as Exception;
 			if (ex != null) return Adenson.Log.Logger.ConvertToString(ex, true);
-
-			return Convert.ToString(value);
+			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
 		}
 
 		#endregion

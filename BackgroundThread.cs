@@ -29,9 +29,6 @@ namespace System.Threading
 		/// Occurs when Abort is called on the current thread.
 		/// </summary>
 		public event EventHandler Aborted;
-		
-		#endregion
-		#region Methods
 
 		/// <summary>
 		/// Gets a value indicating the execution status of the current thread.
@@ -40,6 +37,10 @@ namespace System.Threading
 		{
 			get { return thread.IsAlive; }
 		}
+		
+		#endregion
+
+		#region Methods
 		/// <summary>
 		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
 		/// </summary>
@@ -75,11 +76,11 @@ namespace System.Threading
 		/// <summary>
 		/// Creates a new <see cref="BackgroundThread"/> class.
 		/// </summary>
-		/// <param name="threadstart">A <see cref="ThreadStart"/> delegate that represents the methods to be invoked when the thread begins executing.</param>
+		/// <param name="threadStart">A <see cref="ThreadStart"/> delegate that represents the methods to be invoked when the thread begins executing.</param>
 		/// <returns></returns>
-		public static BackgroundThread Create(ThreadStart threadstart)
+		public static BackgroundThread Create(ThreadStart threadStart)
 		{
-			BackgroundThread th = new BackgroundThread(threadstart);
+			BackgroundThread th = new BackgroundThread(threadStart);
 			createdThreads.Add(th);
 			th.Start();
 			return th;

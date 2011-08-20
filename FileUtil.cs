@@ -111,7 +111,7 @@ namespace System
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("path");
+			if (StringUtil.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("fileName");
 
 			var invalidCharacters = FileUtil.fileInvalidCharsReplacements.Keys.ToArray();
 			IEnumerable<char> intersect = fileName.ToCharArray().Intersect(invalidCharacters);
