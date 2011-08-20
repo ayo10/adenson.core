@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Adenson.Configuration;
 using Adenson.Log.Config;
 
 namespace Adenson.Log
@@ -470,7 +470,7 @@ namespace Adenson.Log
 		private static void OutWriteLine(LogEntry entry)
 		{
 			var format = "{0}\t{1}\t[{2}]\t {3}";
-			var date = entry.Date.ToString("H:mm:ss.fff");
+			var date = entry.Date.ToString("H:mm:ss.fff", CultureInfo.CurrentCulture);
 			var message = StringUtil.Format(format, entry.Severity.ToString(), date, entry.TypeName, entry.Message);
 			
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
@@ -508,7 +508,7 @@ namespace Adenson.Log
 				{
 					string fileName = Path.GetFileNameWithoutExtension(Logger.OutFileName);
 					string extension = Path.GetExtension(Logger.OutFileName);
-					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd"), extension);
+					string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), extension);
 					string oldNewFilePath = Path.Combine(Path.GetDirectoryName(Logger.OutFileName), oldNewFileName);
 					if (!File.Exists(oldNewFilePath)) File.Move(Logger.OutFileName, oldNewFilePath);
 				}

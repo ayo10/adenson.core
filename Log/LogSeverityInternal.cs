@@ -17,7 +17,7 @@ namespace Adenson.Log
 		}
 		public string Value
 		{
-			get { return _value == null ? this.Severity.ToString().ToUpper() : _value; }
+			get { return _value == null ? this.Severity.ToString().ToUpper(System.Globalization.CultureInfo.CurrentCulture) : _value; }
 			set { _value = value; }
 		}
 

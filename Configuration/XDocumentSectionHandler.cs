@@ -19,8 +19,8 @@ namespace Adenson.Configuration
 		#endregion
 	}
 
-	[Obsolete("Use XDocumentSectionHandler")]
-	public class XmlSectionHandler : IConfigurationSectionHandler
+	[Obsolete("Use XDocumentSectionHandler", true)]
+	public sealed class XmlSectionHandler : IConfigurationSectionHandler
 	{
 		#region Methods
 
