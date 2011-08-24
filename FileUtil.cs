@@ -6,7 +6,7 @@ using System.Linq;
 using Adenson.Collections;
 using Adenson.Cryptography;
 
-namespace System
+namespace System.IO
 {
 	/// <summary>
 	/// Collection of file/directory/io utility methods
