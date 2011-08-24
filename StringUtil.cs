@@ -22,7 +22,7 @@ namespace System
 
 			try
 			{
-				return StringUtil.Format(value, args);
+				return String.Format(System.Globalization.CultureInfo.CurrentCulture, value, args);
 			}
 			catch (FormatException)
 			{
