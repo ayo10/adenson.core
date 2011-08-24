@@ -577,10 +577,10 @@ namespace Adenson.Data
 		protected IDbCommand CreateCommand(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
-			if (!parameterValues.IsEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
+			if (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
 
 			string[] splits = null;
-			if (!parameterValues.IsEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
+			if (!parameterValues.IsNullOrEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
 			{
 				splits = commandText.Split('{');
 				if ((splits.Length - 1) == parameterValues.Length)
@@ -599,7 +599,7 @@ namespace Adenson.Data
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = transaction;
 
-			if (!parameterValues.IsEmpty())
+			if (!parameterValues.IsNullOrEmpty())
 			{
 				for (var i = 0; i < parameterValues.Length; i++)
 				{

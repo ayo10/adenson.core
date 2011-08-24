@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using Adenson.Log;
 
-namespace System
+namespace System.Net.Mail
 {
 	/// <summary>
 	/// SMTP Helper utility class

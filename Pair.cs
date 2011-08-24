@@ -9,10 +9,6 @@ namespace System
 	/// <typeparam name="T">The type of the value.</typeparam>
 	public struct Pair<T> : IEquatable<Pair<T>>
 	{
-		#region Variables
-		private T _left;
-		private T _right;
-		#endregion
 		#region Constructor
 
 		/// <summary>
@@ -69,6 +65,7 @@ namespace System
 			if (Object.ReferenceEquals(other, null)) return false;
 			return Object.Equals(this.Left, other.Left) && Object.Equals(this.Right, other.Right);
 		}
+
 		/// <summary>
 		/// Indicates whether this instance and a specified object are equal.
 		/// </summary>
@@ -80,6 +77,7 @@ namespace System
 			if (obj is Pair<T>) return this.Equals((Pair<T>)obj);
 			return base.Equals(obj);
 		}
+
 		/// <summary>
 		/// Returns the hash code for this instance.
 		/// </summary>
@@ -88,6 +86,7 @@ namespace System
 		{
 			return this.ToString().GetHashCode();
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -101,6 +100,7 @@ namespace System
 			else if (this.Right != null) return new Pair<T>(part.Left, this.Right);
 			return this;
 		}
+
 		/// <summary>
 		/// Returns a string representation of the Pair, using the string representations of the value.
 		/// </summary>
