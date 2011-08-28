@@ -59,13 +59,15 @@ namespace Adenson.Data
 				logger.Error(ex);
 			}
 		}
+
 		/// <summary>
-		/// Creates a new database.
+		/// Creates a new database using information from the connection string.
 		/// </summary>
-		public void CreateDatabase()
+		public override void CreateDatabase()
 		{
 			new SqlCeEngine(this.ConnectionString).CreateDatabase();
 		}
+
 		/// <summary>
 		/// Upgrades a SQL Server Compact database from version 3.1 to 3.5. After the upgrade, the database will be encrypted if the source database was encrypted. If it was not, the upgraded database will be unencrypted.
 		/// </summary>
@@ -75,37 +77,14 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Runs a query to determine if the specified column exists in the specified table
+		/// Runs a check for the existence of database specified in the connectionstring (Not Supported)
 		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <param name="columnName">the column name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckColumnExists(string tableName, string columnName)
+		/// <returns>True if the database exists, false otherwise</returns>
+		public override bool DatabaseExists()
 		{
-			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
-			if (StringUtil.IsNullOrWhiteSpace(columnName)) throw new ArgumentNullException("columnName");
-			bool result = false;
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "' AND COLUMN_NAME = '" + columnName + "'"))
-			{
-				result = r.Read();
-			}
-			return result;
+			throw new NotSupportedException();
 		}
-		/// <summary>
-		/// Runs a query to determine if the specified table exists
-		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckTableExists(string tableName)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
-			bool result = false;
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '" + tableName + "'"))
-			{
-				result = r.Read();
-			}
-			return result;
-		}
+
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>

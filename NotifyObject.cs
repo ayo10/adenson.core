@@ -40,6 +40,7 @@ namespace System
 		/// Gets the value matching the specified key, or <paramref name="defaultValue"/> if none is found.
 		/// </summary>
 		/// <param name="key">The key of the value</param>
+		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
 		protected T GetValue(String key, T defaultValue)
 		{

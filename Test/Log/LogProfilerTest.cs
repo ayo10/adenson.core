@@ -28,7 +28,7 @@ namespace Adenson.CoreTest.Log
 			Assert.IsTrue(prf.IsDisposed);
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void ElapsedTimeTest()
 		{
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
@@ -81,7 +81,7 @@ namespace Adenson.CoreTest.Log
 			}
 		}
 
-		[TestMethod()]
+		[TestMethod]
 		public void UidTest()
 		{
 			var uids = new List<Guid>();

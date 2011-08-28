@@ -55,8 +55,11 @@
     <Compile Include="FileUtilTest.cs" />
     <Compile Include="Log\LogProfilerTest.cs" />
     <Compile Include="Log\LoggerTest.cs" />
+    <Compile Include="Data\ParameterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmtpUtilTest.cs" />
+    <Compile Include="Data\SqlClientHelperTest.cs" />
+    <Compile Include="Data\SqlHelperBaseTest.cs" />
     <Compile Include="StringUtilTest.cs" />
     <Compile Include="TypeUtilTest.cs" />
   </ItemGroup>

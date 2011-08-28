@@ -45,7 +45,15 @@ namespace Adenson.Data
 		/// <param name="tableName">the table name</param>
 		/// <param name="columnName">the column name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckColumnExists(string tableName, string columnName)
+		public override bool ColumnExists(string tableName, string columnName)
+		{
+			throw new NotSupportedException();
+		}
+		/// <summary>
+		/// Runs a check for the existence of database specified in the connectionstring (Not supported)
+		/// </summary>
+		/// <returns>True if the database exists, false otherwise</returns>
+		public override bool DatabaseExists()
 		{
 			throw new NotSupportedException();
 		}
@@ -54,7 +62,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="tableName">the table name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckTableExists(string tableName)
+		public override bool TableExists(string tableName)
 		{
 			throw new NotSupportedException();
 		}

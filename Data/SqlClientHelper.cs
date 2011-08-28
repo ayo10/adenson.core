@@ -20,6 +20,7 @@ namespace Adenson.Data
 		public SqlClientHelper() : base()
 		{
 		}
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
 		/// </summary>
@@ -29,6 +30,7 @@ namespace Adenson.Data
 		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
+		
 		/// <summary>
 		/// Instantiates a new instance of <see cref="SqlClientHelper"/> using specified connection string setting object
 		/// </summary>
@@ -40,31 +42,7 @@ namespace Adenson.Data
 
 		#endregion
 		#region Methods
-
-		/// <summary>
-		/// Runs a query to determine if the specified column exists in the specified table
-		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <param name="columnName">the column name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckColumnExists(string tableName, string columnName)
-		{
-			throw new NotSupportedException();
-		}
-		/// <summary>
-		/// Runs a query to determine if the specified table exists
-		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckTableExists(string tableName)
-		{
-			bool result = false;
-			using (IDataReader reader = this.ExecuteReader(CommandType.Text, "select * from dbo.sysobjects where id = object_id(N'{0}') and OBJECTPROPERTY(id, N'IsUserTable') = 1", tableName))
-			{
-				result = reader.Read();
-			}
-			return result;
-		}
+		
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
@@ -74,6 +52,7 @@ namespace Adenson.Data
 		{
 			return new SqlDataAdapter((SqlCommand)command);
 		}
+
 		/// <summary>
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
@@ -82,6 +61,7 @@ namespace Adenson.Data
 		{
 			return new SqlCommand();
 		}
+
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
@@ -90,6 +70,24 @@ namespace Adenson.Data
 		{
 			return new SqlConnection(this.ConnectionString);
 		}
+
+		/// <summary>
+		/// Creates a new database using information from the connection stringg (after switching the database to master).
+		/// </summary>
+		public override void CreateDatabase()
+		{
+			var ssb = new SqlConnectionStringBuilder(this.ConnectionString);
+			var database = ssb.InitialCatalog;
+			ssb.InitialCatalog = "master";
+			using (var connection = new SqlConnection(ssb.ToString()))
+			{
+				connection.Open();
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, String.Format("CREATE DATABASE [{0}]", database));
+				cmd.Connection = connection;
+				cmd.ExecuteNonQuery();
+			}
+		}
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
@@ -98,6 +96,45 @@ namespace Adenson.Data
 		{
 			return new SqlParameter();
 		}
+
+		/// <summary>
+		/// Runs a check for the existence of database specified in the connection string (after switching the database to master).
+		/// </summary>
+		/// <returns>True if the database exists, false otherwise</returns>
+		public override bool DatabaseExists()
+		{
+			var ssb = new SqlConnectionStringBuilder(this.ConnectionString);
+			var database = ssb.InitialCatalog;
+			ssb.InitialCatalog = "master";
+			using (var connection = new SqlConnection(ssb.ToString()))
+			{
+				connection.Open();
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, "SELECT * FROM sys.databases WHERE Name = {0}", database);
+				cmd.Connection = connection;
+				using (IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+				{
+					return reader.Read();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Drops the database using information from the connection string.
+		/// </summary>
+		public override void DropDatabase()
+		{
+			var ssb = new SqlConnectionStringBuilder(this.ConnectionString);
+			var database = ssb.InitialCatalog;
+			ssb.InitialCatalog = "master";
+			using (var connection = new SqlConnection(ssb.ToString()))
+			{
+				connection.Open();
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, String.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
+				cmd.Connection = connection;
+				cmd.ExecuteNonQuery();
+			}
+		}
+		
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>

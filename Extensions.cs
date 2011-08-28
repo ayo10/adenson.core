@@ -64,7 +64,7 @@ namespace System
 		public static string ToRoman(this int value)
 		{
 			if (value == 0) return String.Empty;
-			///if (value > 4999) throw new NotSupportedException("Roman numerals over 4999 are not supported a the current time.");
+			//if (value > 4999) throw new NotSupportedException("Roman numerals over 4999 are not supported a the current time.");
 
 			var wasNegative = value < 0;
 			if (wasNegative) value = value * -1;
@@ -257,6 +257,9 @@ namespace System.Collections.Generic
 }
 namespace System.IO
 {
+	/// <summary>
+	/// Bunch of extensions on the System.IO namespace
+	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>
@@ -273,6 +276,9 @@ namespace System.IO
 }
 namespace System.Xml.Linq
 {
+	/// <summary>
+	/// Bunch of extensions on the System.Xml.Linq namespace
+	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>

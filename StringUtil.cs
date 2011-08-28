@@ -37,7 +37,7 @@ namespace System
 		/// </summary>
 		/// <param name="length">Max length of string to generate</param>
 		/// <returns>String generated</returns>
-		/// <exception cref="ArgumentOutOfRangeException">if <paramref name="lengh"/> is less or equal to 0.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">if <paramref name="length"/> is less or equal to 0.</exception>
 		public static string GenerateRandomString(int length)
 		{
 			if (length <= 0) throw new ArgumentOutOfRangeException("length");

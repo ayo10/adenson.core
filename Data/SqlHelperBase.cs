@@ -96,6 +96,24 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
+		/// Runs a system check for the existence of specified column in the specified table using TSQL INFORMATION_SCHEMA.
+		/// </summary>
+		/// <param name="tableName">the table name</param>
+		/// <param name="columnName">the column name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="tableName"/> is null or empty, OR, <paramref name="columnName"/> is null or empty</exception>
+		public virtual bool ColumnExists(string tableName, string columnName)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
+			if (StringUtil.IsNullOrWhiteSpace(columnName)) throw new ArgumentNullException("columnName");
+
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'", tableName, columnName))
+			{
+				return r.Read();
+			}
+		}
+
+		/// <summary>
 		/// Closes the connection opened by OpenConnection, then, lets CreateConnection know to always create new connections henceforth.
 		/// </summary>
 		/// <exception cref="InvalidOperationException">if the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
@@ -104,6 +122,15 @@ namespace Adenson.Data
 			this.Manager.AllowClose = true;
 			this.Manager.Close();
 		}
+
+		/// <summary>
+		/// Creates a new database using information from the connection string.
+		/// </summary>
+		public virtual void CreateDatabase()
+		{
+			this.ExecuteNonQuery(CommandType.Text, String.Format("CREATE DATABASE [{0}]", this.Manager.Connection.Database));
+		}
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
@@ -117,6 +144,7 @@ namespace Adenson.Data
 			parameter.Value = value;
 			return parameter;
 		}
+
 		/// <summary>
 		/// Disposes the object
 		/// </summary>
@@ -125,7 +153,115 @@ namespace Adenson.Data
 			this.Dispose(true);
 			GC.SuppressFinalize(this);
 		}
+
+		/// <summary>
+		/// Drops the database using information from the connection string.
+		/// </summary>
+		public virtual void DropDatabase()
+		{
+			this.ExecuteNonQuery(CommandType.Text, String.Format("DROP DATABASE [{0}]", this.Manager.Connection.Database));
+		}
+
+		/// <summary>
+		/// Uses CreateConnection() to get a new connection, and until CloseConnection is closed, uses that connection object
+		/// </summary>
+		/// <returns>The IDbConnection connection that will be used until CloseConnection is called.</returns>
+		/// <exception cref="InvalidOperationException">if the method has been called already.</exception>
+		public virtual IDbConnection OpenConnection()
+		{
+			if (!this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
+			this.Manager.AllowClose = false;
+			this.Manager.Open();
+			return this.Manager.Connection;
+		}
+
+		/// <summary>
+		/// Runs a query to determine if the specified table exists using TSQL INFORMATION_SCHEMA.
+		/// </summary>
+		/// <param name="tableName">the table name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
+		public virtual bool TableExists(string tableName)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
+
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName))
+			{
+				return r.Read();
+			}
+		}
+
+		/// <summary>
+		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>
+		/// </summary>
+		/// <param name="type">The type of command</param>
+		/// <param name="transaction">The transaction to use</param>
+		/// <param name="commandText">The command text</param>
+		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
+		/// <returns>New <see cref="IDbCommand"/> object</returns>
+		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
+		protected IDbCommand CreateCommand(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
+			if (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
+
+			string[] splits = null;
+			if (!parameterValues.IsNullOrEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
+			{
+				splits = commandText.Split('{');
+				if ((splits.Length - 1) == parameterValues.Length)
+				{
+					var formats = Enumerable.Range(0, parameterValues.Length).Select(i => "@param" + i).ToArray();
+					commandText = StringUtil.Format(commandText, formats);
+				}
+
+				splits = commandText.Split(new char[] { '@', '\'', '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
+				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
+			}
+
+			IDbCommand command = this.CreateCommand();
+			command.CommandText = commandText;
+			command.CommandType = type;
+			if (transaction != null) command.Transaction = transaction;
+
+			if (!parameterValues.IsNullOrEmpty())
+			{
+				for (var i = 0; i < parameterValues.Length; i++)
+				{
+					var obj = parameterValues[i];
+					IDataParameter dbParameter = obj as IDataParameter;
+					if (dbParameter == null)
+					{
+						var parameter = obj as Parameter;
+						dbParameter = this.CreateParameter();
+						if (parameter != null)
+						{
+							dbParameter.ParameterName = parameter.Name;
+							dbParameter.Value = parameter.Value;
+						}
+						else
+						{
+							dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
+							dbParameter.Value = obj;
+						}
+					}
+					if (dbParameter != null) command.Parameters.Add(dbParameter);
+				}
+			}
+			return command;
+		}
 		
+		/// <summary>
+		/// Disposes the helper class
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_connectionManager != null) _connectionManager.Dispose();
+		}
+
+		#region Execute Methods
+
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command text
 		/// </summary>
@@ -515,18 +651,9 @@ namespace Adenson.Data
 		{
 			return this.ExecuteScalar(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
-		/// <summary>
-		/// Uses CreateConnection() to get a new connection, and until CloseConnection is closed, uses that connection object
-		/// </summary>
-		/// <returns>The IDbConnection connection that will be used until CloseConnection is called.</returns>
-		/// <exception cref="InvalidOperationException">if the method has been called already.</exception>
-		public virtual IDbConnection OpenConnection()
-		{
-			if (!this.Manager.AllowClose) throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
-			this.Manager.AllowClose = false;
-			this.Manager.Open();
-			return this.Manager.Connection;
-		}
+
+		#endregion
+		#region Abstract Methods
 
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
@@ -550,89 +677,12 @@ namespace Adenson.Data
 		/// <returns>New <see cref="IDataParameter"/> object</returns>
 		public abstract IDbDataParameter CreateParameter();
 		/// <summary>
-		/// Runs a system check for the existence of specified column in the specified table
+		/// Runs a check for the existence of database specified in the connectionstring
 		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <param name="columnName">the column name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if <paramref name="tableName"/> is null or empty, OR, <paramref name="columnName"/> is null or empty</exception>
-		public abstract bool CheckColumnExists(string tableName, string columnName);
-		/// <summary>
-		/// Runs a system check for the existence of specified table
-		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if <paramref name="tableName"/> is null or empty</exception>
-		public abstract bool CheckTableExists(string tableName);
+		/// <returns>True if the database exists, false otherwise</returns>
+		public abstract bool DatabaseExists();
 
-		/// <summary>
-		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>
-		/// </summary>
-		/// <param name="type">The type of command</param>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command text</param>
-		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
-		/// <returns>New <see cref="IDbCommand"/> object</returns>
-		/// <exception cref="ArgumentNullException">if <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
-		protected IDbCommand CreateCommand(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
-			if (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
-
-			string[] splits = null;
-			if (!parameterValues.IsNullOrEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
-			{
-				splits = commandText.Split('{');
-				if ((splits.Length - 1) == parameterValues.Length)
-				{
-					var formats = Enumerable.Range(0, parameterValues.Length).Select(i => "@param" + i).ToArray();
-					commandText = StringUtil.Format(commandText, formats);
-				}
-
-				splits = commandText.Split('@');
-				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
-				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
-			}
-
-			IDbCommand command = this.CreateCommand();
-			command.CommandText = commandText;
-			command.CommandType = type;
-			if (transaction != null) command.Transaction = transaction;
-
-			if (!parameterValues.IsNullOrEmpty())
-			{
-				for (var i = 0; i < parameterValues.Length; i++)
-				{
-					var obj = parameterValues[i];
-					IDataParameter dbParameter = obj as IDataParameter;
-					if (dbParameter == null)
-					{
-						var parameter = obj as Parameter;
-						dbParameter = this.CreateParameter();
-						if (parameter != null)
-						{
-							dbParameter.ParameterName = parameter.Name;
-							dbParameter.Value = parameter.Value;
-						}
-						else
-						{
-							dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
-							dbParameter.Value = obj;
-						}
-					}
-					if (dbParameter != null) command.Parameters.Add(dbParameter);
-				}
-			}
-			return command;
-		}
-		/// <summary>
-		/// Disposes the helper class
-		/// </summary>
-		/// <param name="disposing"></param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (_connectionManager != null) _connectionManager.Dispose();
-		}
+		#endregion
 
 		#endregion
 	}

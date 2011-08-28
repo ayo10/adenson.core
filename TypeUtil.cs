@@ -15,7 +15,6 @@ namespace System
 		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
 		/// </summary>
 		/// <typeparam name="T">The type of instance to return</typeparam>
-		/// <param name="typeName">The full name of the type</param>
 		/// <returns>Created instance</returns>
 		public static T CreateInstance<T>()
 		{
