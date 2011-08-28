@@ -59,8 +59,18 @@ namespace Adenson.CoreTest
 		public void GetValueTest1()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.AreEqual(1, dic.GetValue("ONE"));
-			Assert.AreEqual(2, dic.GetValue("two"));
+			Assert.AreEqual(1, dic.GetValue("ONE", StringComparison.CurrentCultureIgnoreCase));
+			Assert.AreEqual(2, dic.GetValue("two", StringComparison.CurrentCultureIgnoreCase));
+			Assert.IsNull(dic.GetValue("ONE", StringComparison.CurrentCulture));
+			Assert.IsNull(dic.GetValue("two", StringComparison.CurrentCulture));
+		}
+
+		[TestMethod, ExpectedException(typeof(KeyNotFoundException))]
+		public void GetValueFailTest()
+		{
+			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
+			Assert.IsNull(dic.GetValue("ONE", StringComparison.CurrentCulture));
+			Assert.IsNull(dic.GetValue("two", StringComparison.CurrentCulture));
 		}
 
 		[TestMethod]
@@ -94,16 +104,16 @@ namespace Adenson.CoreTest
 		}
 
 		[TestMethod]
-		public void IsEmptyTest()
+		public void IsNullOrEmptyTest()
 		{
-			IEnumerable values = null;
-			Assert.IsTrue(values.IsEmpty());
+			IEnumerable<int> values = null;
+			Assert.IsTrue(values.IsNullOrEmpty());
 
 			values = new int[] { };
-			Assert.IsTrue(values.IsEmpty());
+			Assert.IsTrue(values.IsNullOrEmpty());
 
 			values = new int[] { 2 };
-			Assert.IsFalse(values.IsEmpty());
+			Assert.IsFalse(values.IsNullOrEmpty());
 		}
 
 		[TestMethod]

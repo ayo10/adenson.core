@@ -40,6 +40,16 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
+		/// Runs a query to see if the specified column in the specified table (Not supported)
+		/// </summary>
+		/// <param name="tableName">the table name</param>
+		/// <param name="columnName">the column name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
+		public override bool ColumnExists(string tableName, string columnName)
+		{
+			throw new NotSupportedException();
+		}
+		/// <summary>
 		/// Creates a new DbDataAdapter object for use by the helper methods.
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
@@ -73,21 +83,19 @@ namespace Adenson.Data
 			return new OdbcParameter();
 		}
 		/// <summary>
-		/// Runs a query to see if the specified column in the specified table (Not supported)
+		/// Runs a check for the existence of database specified in the connectionstring
 		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <param name="columnName">the column name</param>
-		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckColumnExists(string tableName, string columnName)
+		/// <returns>True if the database exists, false otherwise</returns>
+		public override bool DatabaseExists()
 		{
-			throw new NotSupportedException();
+			throw new NotImplementedException();
 		}
 		/// <summary>
 		/// Runs a query to see if the specified table exists (Not supported)
 		/// </summary>
 		/// <param name="tableName">the table name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
-		public override bool CheckTableExists(string tableName)
+		public override bool TableExists(string tableName)
 		{
 			throw new NotSupportedException();
 		}

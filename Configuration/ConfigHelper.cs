@@ -14,8 +14,7 @@ namespace Adenson.Configuration
 		/// <summary>
 		/// Returns the config section with specified group and name
 		/// </summary>
-		/// <param name="group">The section group name</param>
-		/// <param name="name">The section name</param>
+		/// <param name="sectionName">The section name</param>
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string sectionName) where T : class
 		{
@@ -56,7 +55,7 @@ namespace Adenson.Configuration
 		/// Reads the config file to get the specified value from the appSettings section.
 		/// </summary>
 		/// <typeparam name="T">The type of value to return</typeparam>
-		/// <param name="section">The name of the section to find.</param>
+		/// <param name="key">The name of the section to find.</param>
 		/// <param name="defaultResult">The result to return if no value was found</param>
 		/// <returns>Found value (and converted to type) if found, <paramref name="defaultResult"/> otherwise.</returns>
 		public static T GetValue<T>(string key, T defaultResult)
