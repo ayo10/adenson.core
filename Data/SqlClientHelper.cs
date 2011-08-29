@@ -82,7 +82,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, String.Format("CREATE DATABASE [{0}]", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("CREATE DATABASE [{0}]", database));
 				cmd.Connection = connection;
 				cmd.ExecuteNonQuery();
 			}
@@ -129,7 +129,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, String.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
 				cmd.Connection = connection;
 				cmd.ExecuteNonQuery();
 			}

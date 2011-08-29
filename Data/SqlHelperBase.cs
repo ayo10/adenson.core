@@ -128,7 +128,7 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual void CreateDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, String.Format("CREATE DATABASE [{0}]", this.Manager.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("CREATE DATABASE [{0}]", this.Manager.Connection.Database));
 		}
 
 		/// <summary>
@@ -159,7 +159,7 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual void DropDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, String.Format("DROP DATABASE [{0}]", this.Manager.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("DROP DATABASE [{0}]", this.Manager.Connection.Database));
 		}
 
 		/// <summary>
