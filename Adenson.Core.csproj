@@ -64,6 +64,7 @@
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XDocumentSectionHandler.cs" />
     <Compile Include="Configuration\XElementSettingBase.cs" />
+    <Compile Include="Coordinate.cs" />
     <Compile Include="Cryptography\EncryptorBase.cs" />
     <Compile Include="Cryptography\HashAlgorithmType.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
