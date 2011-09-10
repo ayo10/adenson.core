@@ -69,25 +69,21 @@ namespace Adenson.Log.Config
 		#region Methods
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		internal bool Save(IEnumerable<LogEntry> entries)
+		internal bool Save(LogEntry entry)
 		{
 			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
 			if (sqlHelper == null) return false;
-			
-			var commands = new List<DbCommand>();
-			foreach (LogEntry entry in entries)
-			{
-				IDbCommand command = sqlHelper.CreateCommand();
-				command.CommandText = this.InsertStatement;
-				command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
-			}
+
+			IDbCommand command = sqlHelper.CreateCommand();
+			command.CommandText = this.InsertStatement;
+			command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
+			command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
+			command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
+			command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
 
 			try
 			{
-				sqlHelper.ExecuteNonQuery(commands.ToArray());
+				sqlHelper.ExecuteNonQuery(command);
 			}
 			catch (Exception ex)
 			{

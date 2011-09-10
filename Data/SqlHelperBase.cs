@@ -214,7 +214,7 @@ namespace Adenson.Data
 					commandText = StringUtil.Format(commandText, formats);
 				}
 
-				splits = commandText.Split(new char[] { '@', '\'', '[', ']' }, StringSplitOptions.RemoveEmptyEntries);
+				splits = commandText.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
 				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
 				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
 			}
