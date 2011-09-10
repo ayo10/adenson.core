@@ -132,10 +132,9 @@ namespace Adenson.Cryptography
 		/// Gets the hash of specified string, using HashAlgorithmType.SHA512 and default text encoding.
 		/// </summary>
 		/// <param name="toEncrypt">The string to hash</param>
-		/// <param name="hashAlgorithmType">The hash algorithm to use.</param>
 		/// <returns>Hashed version of string</returns>
 		/// <exception cref="ArgumentNullException">if encoding is null</exception>
-		/// <remarks>Calls <see cref="Encryptor.GetHash(String, HashAlgorithmType.SHA512, Encoding.Default)"/>.</remarks>
+		/// <remarks>Calls Encryptor.GetHash(toEncrypt, HashAlgorithmType, Encoding.Default).</remarks>
 		public static byte[] GetHash(string toEncrypt)
 		{
 			return Encryptor.GetHash(toEncrypt, HashAlgorithmType.SHA512);
@@ -148,7 +147,7 @@ namespace Adenson.Cryptography
 		/// <param name="hashAlgorithmType">The hash algorithm to use.</param>
 		/// <returns>Hashed version of string</returns>
 		/// <exception cref="ArgumentNullException">if encoding is null</exception>
-		/// <remarks>Calls <see cref="Encryptor.GetHash(String, HashAlgorithmType, Encoding.Default)"/>.</remarks>
+		/// <remarks>Calls Encryptor.GetHash(toEncrypt, hashAlgorithmType, Encoding.Default"/>.</remarks>
 		public static byte[] GetHash(string toEncrypt, HashAlgorithmType hashAlgorithmType)
 		{
 			return Encryptor.GetHash(toEncrypt, hashAlgorithmType, Encoding.Default);

@@ -13,7 +13,6 @@ namespace Adenson.Log.Config
 
 		public LoggerSettings(XElement element) : base(element)
 		{
-			this.BatchSize = this.GetValue("BatchSize", default(short));
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
 			this.Source = this.GetValue("Source", "Logger");
 			this.DateTimeFormat = this.GetValue("DateTimeFormat", "HH:mm:ss:fff");
@@ -22,17 +21,15 @@ namespace Adenson.Log.Config
 			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
 			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
 
-			this.Types = this.GetValue("Types", LogTypes.Trace);
+			var types = this.GetValue("Types", LogTypes.None);
+			if (types == LogTypes.None) types = this.GetValue("Type", LogTypes.None);
+			if (types == LogTypes.None) types = LogTypes.Trace;
+			this.Types = types;
 		}
 
 		#endregion
 		#region Properties
 
-		public short BatchSize
-		{
-			get;
-			set;
-		}
 		public LogSeverity Severity
 		{
 			get;

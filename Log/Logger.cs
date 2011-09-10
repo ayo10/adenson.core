@@ -20,9 +20,7 @@ namespace Adenson.Log
 		#region Variables
 		private static string OutFileName = GetOutFileName();
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private List<LogEntry> entries = new List<LogEntry>();
 		private Type _classType;
-		private short _batchLogSize;
 		private LogTypes? _logTypes;
 		private LogSeverity? _severity;
 		private string _dateTimeFormat;
@@ -41,34 +39,9 @@ namespace Adenson.Log
 			if (classType == null) throw new ArgumentNullException("classType");
 			_classType = classType;
 		}
-		
-		/// <summary>
-		/// Clean up when logger is destroyed
-		/// </summary>
-		~Logger()
-		{
-			this.Flush();
-			lock (staticLoggers)
-			{
-				if (staticLoggers.ContainsKey(this.ClassType)) staticLoggers.Remove(this.ClassType);
-			}
-		}
 
 		#endregion
 		#region Properties
-
-		/// <summary>
-		/// Gets the number of logs thats kept in memory before they are dumped into the database, defaults to 0 (flush imediately)
-		/// </summary>
-		public short BatchSize
-		{
-			get { return _batchLogSize == 0 ? LoggerSettings.Default.BatchSize : _batchLogSize; }
-			set
-			{
-				if (value < 1) throw new ArgumentException(SR.MsgExMinLogBatchSize, "value");
-				_batchLogSize = value;
-			}
-		}
 	
 		/// <summary>
 		/// Gets the severity level that is logged.
@@ -213,21 +186,6 @@ namespace Adenson.Log
 		}
 		
 		/// <summary>
-		/// Forces writing out of what is in the current log, meaningless if <see cref="BatchSize"/> is the default value of 0.
-		/// </summary>
-		public void Flush()
-		{
-			lock (entries)
-			{
-				if (entries.Count == 0) return;
-				if ((this.Types & LogTypes.Database) != LogTypes.None) Logger.SaveToDatabase(entries);
-				if ((this.Types & LogTypes.File) != LogTypes.None) Logger.SaveToFile(entries);
-				if ((this.Types & LogTypes.EventLog) != LogTypes.None) Logger.SaveToEntryLog(entries);
-				entries.Clear();
-			}
-		}
-		
-		/// <summary>
 		/// Starts a execution duration profiler
 		/// </summary>
 		/// <param name="identifier">Some kind of identifier</param>
@@ -236,10 +194,9 @@ namespace Adenson.Log
 		{
 			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
 
-			LogProfiler profiler;
+			LogProfiler profiler = new LogProfiler(this, identifier);
 			lock (profilers)
 			{
-				profiler = new LogProfiler(this, identifier);
 				profilers.Add(profiler);
 			}
 			return profiler;
@@ -268,14 +225,9 @@ namespace Adenson.Log
 
 			Logger.OutWriteLine(entry);
 
-			//Careful with the lock now, Flush locks entries too
-			bool flush = false;
-			lock (entries)
-			{
-				entries.Add(entry);
-				flush = (entries.Count >= this.BatchSize);
-			}
-			if (flush) this.Flush();
+			if ((this.Types & LogTypes.Database) != LogTypes.None) Logger.SaveToDatabase(entry);
+			if ((this.Types & LogTypes.File) != LogTypes.None) Logger.SaveToFile(entry);
+			if ((this.Types & LogTypes.EventLog) != LogTypes.None) Logger.SaveToEntryLog(entry);
 		}
 
 		#endregion
@@ -293,7 +245,6 @@ namespace Adenson.Log
 			lock (staticLoggers)
 			{
 				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
-				else staticLoggers[type].Flush();
 				return staticLoggers[type];
 			}
 		}
@@ -414,17 +365,6 @@ namespace Adenson.Log
 
 			return message.ToString();
 		}
-		
-		/// <summary>
-		/// Forces writing out of what is in all logs
-		/// </summary>
-		public static void FlushAll()
-		{
-			lock (staticLoggers)
-			{
-				foreach (var logger in staticLoggers.Values) logger.Flush();
-			}
-		}
 
 		/// <summary>
 		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>
@@ -492,13 +432,13 @@ namespace Adenson.Log
 				}
 			}
 		}
-		private static bool SaveToDatabase(IEnumerable<LogEntry> entries)
+		private static bool SaveToDatabase(LogEntry entry)
 		{
-			return LoggerSettings.Default.DatabaseInfo.Save(entries);
+			return LoggerSettings.Default.DatabaseInfo.Save(entry);
 		}
 		
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private static bool SaveToFile(List<LogEntry> entries)
+		private static bool SaveToFile(LogEntry entry)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(Logger.OutFileName)) return false;
 
@@ -520,15 +460,18 @@ namespace Adenson.Log
 
 			TextWriter writer = null;
 			Stream stream = null;
-			StringBuilder sb = new StringBuilder(entries.Count);
-			foreach (LogEntry row in entries) sb.AppendLine(StringUtil.Format("{0}	{1}	{2}	{3}", row.Date, row.Severity, row.TypeName, row.Message));
+			string sb = StringUtil.Format("{0}	{1}	{2}	{3}", entry.Date, entry.Severity, entry.TypeName, entry.Message);
 			FileInfo traceFile = new FileInfo(Logger.OutFileName);
 			try
 			{
 				stream = traceFile.Open(FileMode.Append, FileAccess.Write);
 				writer = new StreamWriter(stream);
-				writer.Write(sb.ToString());
+				writer.Write(sb);
 				return true;
+			}
+			catch (IOException ex)
+			{
+				Logger.LogInternalError(ex);
 			}
 			catch (Exception ex)
 			{
@@ -543,18 +486,14 @@ namespace Adenson.Log
 		}
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private static bool SaveToEntryLog(List<LogEntry> entries)
+		private static bool SaveToEntryLog(LogEntry entry)
 		{
 			try
 			{
-				foreach (LogEntry entry in entries)
-				{
-					EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
-					if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
-					else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
-					EventLog.WriteEntry(entry.Source, StringUtil.Format("Date: {0}\nType: {1}\n\n{2}", DateTime.Now, entry.TypeName, entry.Message), eventLogEntryType);
-				}
-				return true;
+				EventLogEntryType eventLogEntryType = EventLogEntryType.Information;
+				if (entry.Severity == LogSeverity.Error) eventLogEntryType = EventLogEntryType.Error;
+				else if (entry.Severity == LogSeverity.Warn) eventLogEntryType = EventLogEntryType.Warning;
+				EventLog.WriteEntry(entry.Source, StringUtil.Format("Date: {0}\nType: {1}\n\n{2}", DateTime.Now, entry.TypeName, entry.Message), eventLogEntryType);
 			}
 			catch (Exception ex)
 			{
