@@ -61,22 +61,6 @@ namespace System.IO
 			return filePath;
 		}
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="directory"></param>
-		/// <param name="buffer"></param>
-		/// <param name="overwrite"></param>
-		/// <returns></returns>
-		public static string CreateMD5HashedFile(string directory, byte[] buffer, bool overwrite)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
-			if (buffer == null) return null;
-			if (buffer.Length == 0) return null;
-
-			string filePath = Path.Combine(directory, StringUtil.ToString(Encryptor.GetHash(buffer, HashAlgorithmType.MD5)));
-			return FileUtil.CreateFile(filePath, buffer, overwrite);
-		}
-		/// <summary>
 		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>
 		/// </summary>
 		/// <param name="directory">The directory to search.</param>

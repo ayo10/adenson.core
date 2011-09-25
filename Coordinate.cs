@@ -79,23 +79,23 @@ namespace System
 		/// <summary>
 		/// Checks the equality of the two specified objects.
 		/// </summary>
-		/// <param name="coord1">The first</param>
-		/// <param name="coord2">The second</param>
+		/// <param name="value1">The first</param>
+		/// <param name="value2">The second</param>
 		/// <returns>True, if they are equal, false otherwise</returns>
-		public static bool operator ==(Coordinate coord1, Coordinate coord2)
+		public static bool operator ==(Coordinate value1, Coordinate value2)
 		{
-			return coord1.Equals(coord2);
+			return value1.Equals(value2);
 		}
 
 		/// <summary>
 		/// Checks the inequality of the two specified objects.
 		/// </summary>
-		/// <param name="coord1">The first</param>
-		/// <param name="coord2">The second</param>
+		/// <param name="value1">The first</param>
+		/// <param name="value2">The second</param>
 		/// <returns>True, if they are not equal, false otherwise</returns>
-		public static bool operator !=(Coordinate coord1, Coordinate coord2)
+		public static bool operator !=(Coordinate value1, Coordinate value2)
 		{
-			return !coord1.Equals(coord2);
+			return !value1.Equals(value2);
 		}
 
 		#endregion
