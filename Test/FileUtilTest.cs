@@ -23,20 +23,6 @@ namespace Adenson.CoreTest
 		}
 
 		[TestMethod]
-		public void CreateMD5HashedFileTest()
-		{
-			string directory = Path.GetTempPath();
-			byte[] buffer = new byte[] { 1, 3, 4, 5 };
-			bool overwrite = false;
-			string actual = FileUtil.CreateMD5HashedFile(directory, buffer, overwrite);
-
-			Assert.IsTrue(File.Exists(actual));
-			Assert.AreEqual(directory, Path.GetDirectoryName(actual));
-			byte[] bytes = FileUtil.ReadStream(actual);
-			buffer.EqualsTo(bytes);
-		}
-
-		[TestMethod]
 		public void FixFileNameTest()
 		{
 			string path = string.Empty; // TODO: Initialize to an appropriate value
