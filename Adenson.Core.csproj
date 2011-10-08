@@ -82,6 +82,7 @@
     <Compile Include="Cryptography\TripleDES.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileUtil.cs" />
+    <Compile Include="Log\LogFilter.cs" />
     <Compile Include="Log\Config\LoggerSettingDatabaseInfo.cs" />
     <Compile Include="Log\Config\LoggerSettingEmailInfo.cs" />
     <Compile Include="Log\Config\LoggerSettings.cs" />
