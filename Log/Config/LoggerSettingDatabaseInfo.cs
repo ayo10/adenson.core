@@ -87,7 +87,7 @@ namespace Adenson.Log.Config
 			}
 			catch (Exception ex)
 			{
-				Logger.LogInternalError(ex);
+				System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
 				return false;
 			}
 

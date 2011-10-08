@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Collections;
 
 namespace Adenson.Data
 {
@@ -204,50 +205,87 @@ namespace Adenson.Data
 			if (StringUtil.IsNullOrWhiteSpace(commandText)) throw new ArgumentNullException("commandText");
 			if (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)) throw new ArgumentNullException("parameterValues");
 
-			string[] splits = null;
-			if (!parameterValues.IsNullOrEmpty() && (!parameterValues.All(p => p is Parameter) || !parameterValues.All(p => p is IDataParameter)))
+			List<IDataParameter> parameters = new List<IDataParameter>();
+			if (parameterValues.Any(p => p is Parameter) || parameterValues.Any(p => p is IDataParameter))
 			{
-				splits = commandText.Split('{');
+				foreach (var item in parameterValues)
+				{
+					IDataParameter dbParameter = item as IDataParameter;
+					var parameter = item as Parameter;
+					if (parameter != null) dbParameter = this.CreateParameter(parameter.Name, parameter.Value);
+					if (dbParameter != null) parameters.Add(dbParameter);
+				}
+			}
+			else if (parameterValues.All(p => p is KeyValuePair<string, object>))
+			{
+				foreach (var item in parameterValues)
+				{
+					var kv = (KeyValuePair<string, object>)item;
+					IDataParameter dbParameter = this.CreateParameter(kv.Key, kv.Value);
+					parameters.Add(dbParameter);
+				}
+			}
+			else if (parameterValues.Length == 1 && parameterValues[0] is IDictionary)
+			{
+				IDictionary dic = parameterValues[0] as IDictionary;
+				foreach (var k in dic.Keys)
+				{
+					IDataParameter dbParameter = this.CreateParameter(k.ToString(), dic[k]);
+					parameters.Add(dbParameter);
+				}
+			}
+			else if (commandText.Contains("{0}"))
+			{
+				if (parameterValues.Any(p => p is Parameter) || !parameterValues.Any(p => p is IDataParameter))
+				{
+					throw new ArgumentException(Exceptions.UnableToParseCommandText);
+				}
+				else
+				{
+					String.Format(commandText, parameterValues);//Cheap way of throwing a FormatException, if the commandText is invalid.-or- The index of a parameterValues item is less than zero, or greater than or equal to the length of the args array.
+					for (var i = 0; i < parameterValues.Length; i++)
+					{
+						string name = "@param" + i;
+						commandText = commandText.Replace("{" + i + "}", name);
+						var parameter = this.CreateParameter();
+						parameter.ParameterName = name;
+						parameter.Value = parameterValues[i];
+					}
+				}
+			}
+			else if (commandText.Contains("@"))
+			{
+				var splits = commandText.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
 				if ((splits.Length - 1) == parameterValues.Length)
 				{
-					var formats = Enumerable.Range(0, parameterValues.Length).Select(i => "@param" + i).ToArray();
-					commandText = StringUtil.Format(commandText, formats);
+					for (var i = 0; i < parameterValues.Length; i++)
+					{
+						IDataParameter dbParameter = this.CreateParameter();
+						dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
+						dbParameter.Value = parameterValues[i];
+						parameters.Add(dbParameter);
+					}
 				}
-
-				splits = commandText.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
-				//'Insert into blah(a, b) values (@a, @b)', splitted by '@' will yield 3 items, but the parameterValues should be 2 ('@a' and '@b')
-				if ((splits.Length - 1) != parameterValues.Length) throw new ArgumentException(Exceptions.UnableToParseCommandText);
 			}
+			else if (type == CommandType.StoredProcedure)
+			{
+
+				for (var i = 0; i < parameterValues.Length; i++)
+				{
+					IDataParameter dbParameter = this.CreateParameter();
+					dbParameter.ParameterName = "@param" + i;
+					dbParameter.Value = parameterValues[i];
+					parameters.Add(dbParameter);
+				}
+			}
+
+			if (parameterValues.Length != parameters.Count) throw new ArgumentException(Exceptions.UnableToParseCommandText);
 
 			IDbCommand command = this.CreateCommand();
 			command.CommandText = commandText;
 			command.CommandType = type;
 			if (transaction != null) command.Transaction = transaction;
-
-			if (!parameterValues.IsNullOrEmpty())
-			{
-				for (var i = 0; i < parameterValues.Length; i++)
-				{
-					var obj = parameterValues[i];
-					IDataParameter dbParameter = obj as IDataParameter;
-					if (dbParameter == null)
-					{
-						var parameter = obj as Parameter;
-						dbParameter = this.CreateParameter();
-						if (parameter != null)
-						{
-							dbParameter.ParameterName = parameter.Name;
-							dbParameter.Value = parameter.Value;
-						}
-						else
-						{
-							dbParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
-							dbParameter.Value = obj;
-						}
-					}
-					if (dbParameter != null) command.Parameters.Add(dbParameter);
-				}
-			}
+			foreach (var p in parameters) command.Parameters.Add(p);
 			return command;
 		}
 		
@@ -661,26 +699,37 @@ namespace Adenson.Data
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="IDbDataAdapter"/> adapter</returns>
 		public abstract IDbDataAdapter CreateAdapter(IDbCommand command);
+		
 		/// <summary>
 		/// Creates a new command object for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		public abstract IDbCommand CreateCommand();
+		
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="IDbConnection"/> object</returns>
 		public abstract IDbConnection CreateConnection();
+		
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
 		/// <returns>New <see cref="IDataParameter"/> object</returns>
 		public abstract IDbDataParameter CreateParameter();
+		
 		/// <summary>
 		/// Runs a check for the existence of database specified in the connectionstring
 		/// </summary>
 		/// <returns>True if the database exists, false otherwise</returns>
 		public abstract bool DatabaseExists();
+		
+		///// <summary>
+		///// 
+		///// </summary>
+		///// <param name="storedProcedureCommand"></param>
+		///// <returns></returns>
+		//public IDataParameter[] TryDeriveParameters(string storedProcedureCommand);
 
 		#endregion
 
