@@ -84,6 +84,7 @@
     <Compile Include="Log\Config\LoggerSettingDatabaseInfo.cs" />
     <Compile Include="Log\Config\LoggerSettingEmailInfo.cs" />
     <Compile Include="Log\Config\LoggerSettings.cs" />
+    <Compile Include="Log\LogFilter.cs" />
     <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogSeverityInternal.cs" />
     <Compile Include="NotifyObject.cs" />
