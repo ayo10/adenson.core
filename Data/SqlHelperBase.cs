@@ -42,12 +42,14 @@ namespace Adenson.Data
 		/// <summary>
 		/// Instantiates a new instance of the sql helper using specified connection string setting object
 		/// </summary>
-		/// <param name="connectionString">The connection string to use</param>
+		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
-		protected SqlHelperBase(string connectionString)
+		protected SqlHelperBase(string keyOrConnectionString)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException("connectionString");
-			this.ConnectionString = connectionString;
+			if (StringUtil.IsNullOrWhiteSpace(keyOrConnectionString)) throw new ArgumentNullException("keyOrConnectionString");
+			
+			var cs = ConfigurationManager.ConnectionStrings[keyOrConnectionString];
+			this.ConnectionString = cs == null ? keyOrConnectionString : cs.ConnectionString;
 			this.UseTransactionAlways = true;
 		}
 		
