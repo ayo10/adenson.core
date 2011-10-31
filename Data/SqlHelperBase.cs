@@ -110,7 +110,7 @@ namespace Adenson.Data
 			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
 			if (StringUtil.IsNullOrWhiteSpace(columnName)) throw new ArgumentNullException("columnName");
 
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'", tableName, columnName))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, String.Format("SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'", tableName, columnName)))
 			{
 				return r.Read();
 			}
@@ -187,7 +187,7 @@ namespace Adenson.Data
 		{
 			if (StringUtil.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName");
 
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, "SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, String.Format("SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName)))
 			{
 				return r.Read();
 			}
