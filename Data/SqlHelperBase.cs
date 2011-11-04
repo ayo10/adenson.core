@@ -58,7 +58,7 @@ namespace Adenson.Data
 		#region Properties
 		
 		/// <summary>
-		/// Gets or sets the wait time before terminating the attempt to execute a command and generating an error.
+		/// Gets or sets the wait time (in seconds) before terminating the attempt to execute a command and generating an error (default 30).
 		/// </summary>
 		/// <exception cref="ArgumentException">The property value assigned is less than 0.</exception>
 		public int CommandTimeout
