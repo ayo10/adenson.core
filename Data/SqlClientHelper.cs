@@ -34,9 +34,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Instantiates a new instance of <see cref="SqlClientHelper"/> using specified connection string setting object
 		/// </summary>
-		/// <param name="connectionString">The connection string to use</param>
+		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
-		public SqlClientHelper(string connectionString) : base(connectionString)
+		public SqlClientHelper(string keyOrConnectionString) : base(keyOrConnectionString)
 		{
 		}
 
