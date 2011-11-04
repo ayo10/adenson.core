@@ -16,6 +16,7 @@ namespace Adenson.Data
 		private bool mustCloseConnection = true;
 		private ConnectionManager _connectionManager;
 		private bool _useTransactionAlways = true;
+		private int _commandTimeout = 30;
 		#endregion
 		#region Constructors
 
@@ -55,6 +56,20 @@ namespace Adenson.Data
 		
 		#endregion
 		#region Properties
+		
+		/// <summary>
+		/// Gets or sets the wait time before terminating the attempt to execute a command and generating an error.
+		/// </summary>
+		/// <exception cref="ArgumentException">The property value assigned is less than 0.</exception>
+		public int CommandTimeout
+		{
+			get { return _commandTimeout; }
+			set
+			{
+				if (value < 0) throw new ArgumentException("The value must be greater than 0.", "value");
+				_commandTimeout = value;
+			}
+		}
 		
 		/// <summary>
 		/// Gets the connection string to use
@@ -314,6 +329,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteDataSet(type, null, commandText, parameterValues);
 		}
+		
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command text using specified transaction
 		/// </summary>
@@ -327,6 +343,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteDataSet(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
+		
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command
 		/// </summary>
@@ -338,7 +355,7 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
+			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
 			this.Manager.Open();
 			
 			IDbDataAdapter dataAdapter = this.CreateAdapter(command);
@@ -353,6 +370,7 @@ namespace Adenson.Data
 			
 			return dataset;
 		}
+		
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -389,6 +407,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
+		
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
@@ -437,6 +456,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteNonQuery(type, null, commandText, parameterValues);
 		}
+		
 		/// <summary>
 		/// Executes the specified command text using specified transaction and returns the number of rows affected.
 		/// </summary>
@@ -450,6 +470,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteNonQuery(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
+		
 		/// <summary>
 		/// Executes the command and returns the number of rows affected.
 		/// </summary>
@@ -461,12 +482,13 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
+			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
 			this.Manager.Open();
 			int result = command.ExecuteNonQuery();
 			this.Manager.Close();
 			return result;
 		}
+		
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -504,6 +526,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
+		
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
@@ -551,6 +574,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteReader(type, null, commandText, parameterValues);
 		}
+		
 		/// <summary>
 		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
 		/// </summary>
@@ -564,6 +588,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteReader(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
+		
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataReader.
 		/// </summary>
@@ -572,7 +597,7 @@ namespace Adenson.Data
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
 			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
+			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
 			this.Manager.Open();
 			IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
 			return result;
@@ -589,12 +614,13 @@ namespace Adenson.Data
 			if (command == null) throw new ArgumentNullException("command");
 
 			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, command.Connection.ConnectionTimeout);
+			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
 			this.Manager.Open();
 			object result = command.ExecuteScalar();
 			this.Manager.Close();
 			return result;
 		}
+		
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -631,6 +657,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
+		
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
@@ -666,6 +693,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
+		
 		/// <summary>
 		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
@@ -678,6 +706,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteScalar(type, null, commandText, parameterValues);
 		}
+		
 		/// <summary>
 		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>

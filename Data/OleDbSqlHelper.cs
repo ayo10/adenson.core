@@ -30,9 +30,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Instantiates a new instance of <see cref="OleDbSqlHelper"/> using specified connection string setting object
 		/// </summary>
-		/// <param name="connectionString">The connection string to use</param>
+		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
-		public OleDbSqlHelper(string connectionString) : base(connectionString)
+		public OleDbSqlHelper(string keyOrConnectionString) : base(keyOrConnectionString)
 		{
 		}
 
