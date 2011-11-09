@@ -13,6 +13,33 @@ namespace System
 	public static class Extensions
 	{
 		/// <summary>
+		/// Capitalizes the specified string.
+		/// </summary>
+		/// <example>"SOME WORDS" returns "Some Words"</example>
+		/// <example>"some words" returns "Some Words", etc.</example>
+		/// <param name="value">The value to capitalize</param>
+		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
+		public static string Capitalize(this string value)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(value)) return value;
+
+			var result = value.ToLower().ToCharArray();
+			var index = 0;
+			while (index < value.Length)
+			{
+				var c = value[index];
+				var prev = index == 0 ? ' ' : value.ToCharArray()[index - 1];
+				if (!Char.IsLetter(prev))
+				{
+					result[index] = Char.ToUpper(c);
+				}
+				index++;
+			}
+
+			return new String(result);
+		}
+
+		/// <summary>
 		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="source"/> using specified <see cref="StringComparison"/> object.
 		/// </summary>
 		/// <param name="source">The string to look into</param>
