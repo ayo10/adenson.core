@@ -12,7 +12,7 @@ namespace Adenson.Configuration
 	{
 		#region Constants
 		/// <summary>
-		/// 
+		/// The default key constant ('default')
 		/// </summary>
 		public const string DefaultKey = "default";
 		#endregion
@@ -40,6 +40,7 @@ namespace Adenson.Configuration
 		{
 			return Get(key, true);
 		}
+
 		/// <summary>
 		/// Gets a connection string using the key
 		/// </summary>
@@ -50,10 +51,22 @@ namespace Adenson.Configuration
 		/// <exception cref="ArgumentOutOfRangeException">if no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>
 		public static ConnectionStringSettings Get(string key, bool useDefaultIfNull)
 		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+			if (String.IsNullOrEmpty(key))
+			{
+				throw new ArgumentNullException("key");
+			}
+
 			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
-			if (result == null && useDefaultIfNull) result = ConnectionStrings.Default;
-			if (result == null) throw new ConfigurationErrorsException(StringUtil.Format(Exceptions.ConnectionStringWithKeyArgNotFound, key, ConnectionStrings.DefaultKey));
+			if (result == null && useDefaultIfNull)
+			{
+				result = ConnectionStrings.Default;
+			}
+
+			if (result == null)
+			{
+				throw new ConfigurationErrorsException(StringUtil.Format(Exceptions.ConnectionStringWithKeyArgNotFound, key, ConnectionStrings.DefaultKey));
+			}
+
 			return result;
 		}
 

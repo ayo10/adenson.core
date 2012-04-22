@@ -16,19 +16,19 @@ namespace Adenson.Log
 	{
 		#region Variables
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
+		private static LoggerSettings defaultSettings = LoggerSettings.ReadSettings();
 		private Type _classType;
 		private List<LogProfiler> profilers = new List<LogProfiler>();
 		#endregion
 		#region Constructors
 
-		/// <summary>	
-		/// Creates a new instance of Logger from type
-		/// </summary>
-		/// <param name="classType">Type to use to create new instance</param>
-		/// <exception cref="ArgumentNullException">If type is null</exception>
 		private Logger(Type classType)
 		{
-			if (classType == null) throw new ArgumentNullException("classType");
+			if (classType == null)
+			{
+				throw new ArgumentNullException("classType");
+			}
+
 			_classType = classType;
 		}
 
@@ -36,7 +36,7 @@ namespace Adenson.Log
 		#region Properties
 	
 		/// <summary>
-		/// The type form which this instance is forged from
+		/// Gets the type form which this instance is forged from
 		/// </summary>
 		public Type ClassType
 		{
@@ -63,7 +63,11 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
-			if ((int)LoggerSettings.Default.Severity > (int)LogSeverity.Debug) return;
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
+			{
+				return;
+			}
+
 			this.Write(LogSeverity.Debug, message, arguments);
 		}
 
@@ -93,10 +97,13 @@ namespace Adenson.Log
 		/// <param name="ex">The Exception object to log</param>
 		public void Error(Exception ex)
 		{
-			string message = Logger.ConvertToString(ex);
+			string message = Logger.ToString(ex);
 			this.Write(LogSeverity.Error, message);
 
-			if (ex is OutOfMemoryException) Thread.CurrentThread.Abort();
+			if (ex is OutOfMemoryException)
+			{
+				Thread.CurrentThread.Abort();
+			}
 		}
 
 		/// <summary>
@@ -116,7 +123,11 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Info(string message, params object[] arguments)
 		{
-			if ((int)LoggerSettings.Default.Severity > (int)LogSeverity.Info) return;
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
+			{
+				return;
+			}
+
 			this.Write(LogSeverity.Info, message, arguments);
 		}
 
@@ -127,13 +138,17 @@ namespace Adenson.Log
 		/// <returns>A profiler object</returns>
 		public LogProfiler ProfilerStart(string identifier)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier)) throw new ArgumentNullException("identifier");
+			if (StringUtil.IsNullOrWhiteSpace(identifier))
+			{
+				throw new ArgumentNullException("identifier");
+			}
 
 			LogProfiler profiler = new LogProfiler(this, identifier);
 			lock (profilers)
 			{
 				profilers.Add(profiler);
 			}
+
 			return profiler;
 		}
 		
@@ -154,7 +169,11 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Warn(string message, params object[] arguments)
 		{
-			if ((int)LoggerSettings.Default.Severity > (int)LogSeverity.Warn) return;
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Warn)
+			{
+				return;
+			}
+
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
 		
@@ -165,78 +184,35 @@ namespace Adenson.Log
 				profilers.Remove(profilers.First(p => p.Uid == uid));
 			}
 		}
+
 		internal void Write(LogSeverityInternal severity, string message, params object[] arguments)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(message)) throw new ArgumentNullException("message");
+			if (StringUtil.IsNullOrWhiteSpace(message))
+			{
+				throw new ArgumentNullException("message");
+			}
 
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
 			entry.TypeName = this.ClassType.Name;
-			entry.Source = LoggerSettings.Default.Source;
+			entry.Source = defaultSettings.Source;
 			entry.Date = DateTime.Now;
-			entry.LogType = LoggerSettings.Default.Types;
+			entry.LogType = defaultSettings.Types;
 
-			if (arguments == null || arguments.Length == 0) entry.Message = message;
-			else entry.Message = StringUtil.Format(message, arguments);
+			if (arguments == null || arguments.Length == 0)
+			{
+				entry.Message = message;
+			}
+			else
+			{
+				entry.Message = StringUtil.Format(message, arguments);
+			}
 
 			Logger.OutWriteLine(entry);
 		}
 
 		#endregion
 		#region Static Methods
-		
-		/// <summary>
-		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
-		/// </summary>
-		/// <param name="exception">The Exception object to convert</param>
-		/// <returns>String of the exception</returns>
-		/// <remarks>Calls <see cref="ConvertToString(Exception, bool)"/>, with messageOnly = false</remarks>
-		public static string ConvertToString(Exception exception)
-		{
-			return Logger.ConvertToString(exception, false);
-		}
-
-		/// <summary>
-		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
-		/// </summary>
-		/// <param name="exception">The Exception object to convert</param>
-		/// <param name="messageOnly"></param>
-		/// <returns></returns>
-		public static string ConvertToString(Exception exception, bool messageOnly)
-		{
-			if (exception == null) throw new ArgumentNullException("exception");
-
-			StringBuilder message = new StringBuilder();
-			Exception ex = exception;
-			while (ex != null)
-			{
-				if (message.Length != 0)
-				{
-					if (messageOnly) message.Append(" ");
-					else
-					{
-						message.Append(String.Empty.PadRight(20, '-'));
-						message.Append(Environment.NewLine);
-					}
-				}
-
-				if (messageOnly)
-				{
-					message.Append(ex.Message);
-					message.Append(".");
-				}
-				else
-				{
-					message.Append(ex.GetType().FullName);
-					message.Append(": ");
-					message.AppendLine(ex.Message);
-					if (ex.StackTrace != null) message.AppendLine(ex.StackTrace);
-				}
-				ex = ex.InnerException;
-			}
-
-			return message.ToString();
-		}
 
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Debug(string, object[])"/>
@@ -285,11 +261,18 @@ namespace Adenson.Log
 		/// <returns>Existing, or newly minted logger</returns>
 		public static Logger GetLogger(Type type)
 		{
-			if (type == null) throw new ArgumentNullException("type");
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
 
 			lock (staticLoggers)
 			{
-				if (!staticLoggers.ContainsKey(type)) staticLoggers.Add(type, new Logger(type));
+				if (!staticLoggers.ContainsKey(type))
+				{
+					staticLoggers.Add(type, new Logger(type));
+				}
+
 				return staticLoggers[type];
 			}
 		}
@@ -314,6 +297,69 @@ namespace Adenson.Log
 		public static LogProfiler ProfilerStart(Type type, string identifier)
 		{
 			return Logger.GetLogger(type).ProfilerStart(identifier);
+		}
+
+		/// <summary>
+		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
+		/// </summary>
+		/// <param name="exception">The Exception object to convert</param>
+		/// <returns>String of the exception</returns>
+		/// <remarks>Calls <see cref="ToString(Exception, bool)"/>, with messageOnly = false</remarks>
+		public static string ToString(Exception exception)
+		{
+			return Logger.ToString(exception, false);
+		}
+
+		/// <summary>
+		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
+		/// </summary>
+		/// <param name="exception">The Exception object to convert</param>
+		/// <param name="messageOnly">If to return the message portions only</param>
+		/// <returns>The string</returns>
+		public static string ToString(Exception exception, bool messageOnly)
+		{
+			if (exception == null)
+			{
+				throw new ArgumentNullException("exception");
+			}
+
+			StringBuilder message = new StringBuilder();
+			Exception ex = exception;
+			while (ex != null)
+			{
+				if (message.Length != 0)
+				{
+					if (messageOnly)
+					{
+						message.Append(" ");
+					}
+					else
+					{
+						message.Append(String.Empty.PadRight(20, '-'));
+						message.Append(Environment.NewLine);
+					}
+				}
+
+				if (messageOnly)
+				{
+					message.Append(ex.Message);
+					message.Append(".");
+				}
+				else
+				{
+					message.Append(ex.GetType().FullName);
+					message.Append(": ");
+					message.AppendLine(ex.Message);
+					if (ex.StackTrace != null)
+					{
+						message.AppendLine(ex.StackTrace);
+					}
+				}
+
+				ex = ex.InnerException;
+			}
+
+			return message.ToString();
 		}
 
 		/// <summary>
@@ -354,14 +400,15 @@ namespace Adenson.Log
 				Logger.SaveToDatabase(entry);
 			}
 			
-			if ((entry.LogType & LogTypes.Email) != LogTypes.None && !LoggerSettings.Default.EmailInfo.IsEmpty())
+			if ((entry.LogType & LogTypes.Email) != LogTypes.None && !defaultSettings.EmailInfo.IsEmpty())
 			{
-				SmtpUtil.TrySend(LoggerSettings.Default.EmailInfo.From, LoggerSettings.Default.EmailInfo.To, LoggerSettings.Default.EmailInfo.Subject, entry.ToString(), false);
+				SmtpUtil.TrySend(defaultSettings.EmailInfo.From, defaultSettings.EmailInfo.To, defaultSettings.EmailInfo.Subject, entry.ToString(), false);
 			}
 		}
+
 		private static bool SaveToDatabase(LogEntry entry)
 		{
-			return LoggerSettings.Default.DatabaseInfo.Save(entry);
+			return defaultSettings.DatabaseInfo.Save(entry);
 		}
 
 		#endregion

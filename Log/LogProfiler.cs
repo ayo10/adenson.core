@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Log
@@ -9,13 +9,13 @@ namespace Adenson.Log
 	public sealed class LogProfiler : IDisposable
 	{
 		#region Variables
-		private long MemoryStart;
+		private long memoryStart;
 		#endregion
 		#region Constructor
 
 		internal LogProfiler(Logger parent, string identifier)
 		{
-			this.MemoryStart = GC.GetTotalMemory(false);
+			memoryStart = GC.GetTotalMemory(false);
 			this.Start = DateTime.Now;
 			this.Parent = parent;
 			this.Identifier = identifier;
@@ -33,7 +33,11 @@ namespace Adenson.Log
 		{
 			get
 			{
-				if (this.IsDisposed) throw new ObjectDisposedException("LogProfiler");
+				if (this.IsDisposed)
+				{
+					throw new ObjectDisposedException("LogProfiler");
+				}
+
 				return DateTime.Now.Subtract(this.Start);
 			}
 		}
@@ -48,7 +52,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets if the object has been disposed
+		/// Gets a value indicating whether the object has been disposed
 		/// </summary>
 		public bool IsDisposed
 		{
@@ -70,13 +74,13 @@ namespace Adenson.Log
 		/// </summary>
 		public long TotalMemory
 		{
-			get { return GC.GetTotalMemory(false) - this.MemoryStart; }
+			get { return GC.GetTotalMemory(false) - memoryStart; }
 		}
 
 		/// <summary>
 		/// Gets the unique identifier for the profiler
 		/// </summary>
-		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uid")]
+		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uid", Justification = "I love uid")]
 		public Guid Uid
 		{
 			get;

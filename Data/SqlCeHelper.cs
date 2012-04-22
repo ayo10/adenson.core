@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
@@ -18,11 +18,12 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Instantiates a new <see cref="SqlCeHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
 		public SqlCeHelper() : base()
 		{
 		}
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class.
 		/// </summary>
@@ -32,8 +33,9 @@ namespace Adenson.Data
 		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
+
 		/// <summary>
-		/// Instantiates a new instance of <see cref="SqlCeHelper"/> using specified connection string setting object
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="connectionString">The connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
@@ -51,7 +53,7 @@ namespace Adenson.Data
 		{
 			try
 			{
-				SqlCeEngine engine = new SqlCeEngine(this.ConnectionString);//yes, u need this here connection string
+				SqlCeEngine engine = new SqlCeEngine(this.ConnectionString); // Yes, u need this here connection string
 				engine.Compact(this.ConnectionString);
 			}
 			catch (SqlCeException ex)
@@ -94,6 +96,7 @@ namespace Adenson.Data
 		{
 			return new SqlCeDataAdapter((SqlCeCommand)command);
 		}
+
 		/// <summary>
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
@@ -102,6 +105,7 @@ namespace Adenson.Data
 		{
 			return new SqlCeCommand();
 		}
+
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
@@ -110,6 +114,7 @@ namespace Adenson.Data
 		{
 			return new SqlCeConnection(this.ConnectionString);
 		}
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>

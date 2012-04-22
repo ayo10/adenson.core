@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Adenson.Log;
-using Adenson.Configuration;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -27,13 +24,29 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Decrypts the specified string using specified type
 		/// </summary>
+		/// <param name="toDecrypt">The string to decrypt</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Decrypted string</returns>
+		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
+		public static string Decrypt(string toDecrypt, byte[] key, byte[] iv)
+		{
+			return Encryptor.Decrypt(EncryptorType.Rijndael, toDecrypt, key, iv);
+		}
+
+		/// <summary>
+		/// Decrypts the specified string using specified type
+		/// </summary>
 		/// <param name="type">The type</param>
 		/// <param name="toDecrypt">The string to decrypt</param>
 		/// <returns>Decrypted string</returns>
 		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
 		public static string Decrypt(EncryptorType type, string toDecrypt)
 		{
-			if (type == EncryptorType.None) throw new ArgumentNullException("type");
+			if (type == EncryptorType.None)
+			{
+				throw new ArgumentNullException("type");
+			}
 
 			switch (type)
 			{
@@ -41,6 +54,33 @@ namespace Adenson.Cryptography
 				case EncryptorType.Rijndael: return new Rijndael().Decrypt(toDecrypt);
 				case EncryptorType.TripleDES: return new TripleDES().Decrypt(toDecrypt);
 			}
+
+			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
+		}
+
+		/// <summary>
+		/// Decrypts the specified string using specified type
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <param name="toDecrypt">The string to decrypt</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Decrypted string</returns>
+		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
+		public static string Decrypt(EncryptorType type, string toDecrypt, byte[] key, byte[] iv)
+		{
+			if (type == EncryptorType.None)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			switch (type)
+			{
+				case EncryptorType.DES: return new DES(key, iv).Decrypt(toDecrypt);
+				case EncryptorType.Rijndael: return new Rijndael(key, iv).Decrypt(toDecrypt);
+				case EncryptorType.TripleDES: return new TripleDES(key, iv).Decrypt(toDecrypt);
+			}
+
 			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
 		}
 
@@ -55,15 +95,30 @@ namespace Adenson.Cryptography
 		}
 
 		/// <summary>
+		/// Encrypts the specified string using Rijndael (AES)
+		/// </summary>
+		/// <param name="toEncrypt">The string to encrypt</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Encrypted string</returns>
+		public static string Encrypt(string toEncrypt, byte[] key, byte[] iv)
+		{
+			return Encryptor.Encrypt(EncryptorType.Rijndael, toEncrypt, key, iv);
+		}
+
+		/// <summary>
 		/// Encrypts the specified string using specified type
 		/// </summary>
 		/// <param name="type">The type</param>
-		/// <param name="toEncrypt"></param>
+		/// <param name="toEncrypt">The string to encrypt</param>
 		/// <returns>Encrypted string</returns>
 		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
 		public static string Encrypt(EncryptorType type, string toEncrypt)
 		{
-			if (type == EncryptorType.None) throw new ArgumentNullException("type");
+			if (type == EncryptorType.None)
+			{
+				throw new ArgumentNullException("type");
+			}
 
 			switch (type)
 			{
@@ -71,6 +126,33 @@ namespace Adenson.Cryptography
 				case EncryptorType.Rijndael: return new Rijndael().Encrypt(toEncrypt);
 				case EncryptorType.TripleDES: return new TripleDES().Encrypt(toEncrypt);
 			}
+
+			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
+		}
+
+		/// <summary>
+		/// Encrypts the specified string using specified type
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <param name="toEncrypt">The string to encrypt</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Encrypted string</returns>
+		/// <exception cref="ArgumentException">If no encryption of specified type exists</exception>
+		public static string Encrypt(EncryptorType type, string toEncrypt, byte[] key, byte[] iv)
+		{
+			if (type == EncryptorType.None)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			switch (type)
+			{
+				case EncryptorType.DES: return new DES(key, iv).Encrypt(toEncrypt);
+				case EncryptorType.Rijndael: return new Rijndael(key, iv).Encrypt(toEncrypt);
+				case EncryptorType.TripleDES: return new TripleDES(key, iv).Encrypt(toEncrypt);
+			}
+
 			throw new ArgumentException(Exceptions.NoEncryptorExists, "type");
 		}
 
@@ -92,8 +174,15 @@ namespace Adenson.Cryptography
 		/// <returns>String representation of the hash of array</returns>
 		public static byte[] GetHash(byte[] buffer, HashAlgorithmType hashAlgorithmType)
 		{
-			if (buffer == null) return null;
-			if (hashAlgorithmType == HashAlgorithmType.None) return buffer;
+			if (buffer == null)
+			{
+				return null;
+			}
+
+			if (hashAlgorithmType == HashAlgorithmType.None)
+			{
+				return buffer;
+			}
 
 			HashAlgorithm algorithm = null;
 			switch (hashAlgorithmType)
@@ -162,8 +251,15 @@ namespace Adenson.Cryptography
 		/// <returns>Hashed version of string</returns>
 		public static byte[] GetHash(string toEncrypt, HashAlgorithmType hashAlgorithmType, Encoding encoding)
 		{
-			if (toEncrypt == null) return null;
-			if (encoding == null) throw new ArgumentNullException("encoding");
+			if (toEncrypt == null)
+			{
+				return null;
+			}
+
+			if (encoding == null)
+			{
+				throw new ArgumentNullException("encoding");
+			}
 
 			byte[] buffer = encoding.GetBytes(toEncrypt);
 			return Encryptor.GetHash(buffer, hashAlgorithmType);

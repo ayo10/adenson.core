@@ -13,13 +13,14 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Instantiates a new <see cref="OleDbSqlHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="OleDbSqlHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
 		public OleDbSqlHelper() : base()
 		{
 		}
+
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OleDbSqlHelper"/> class.
+		/// Initializes a new instance of the <see cref="OleDbSqlHelper"/> class class.
 		/// </summary>
 		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
 		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
@@ -27,8 +28,9 @@ namespace Adenson.Data
 		public OleDbSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
+
 		/// <summary>
-		/// Instantiates a new instance of <see cref="OleDbSqlHelper"/> using specified connection string setting object
+		/// Initializes a new instance of the <see cref="OleDbSqlHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
@@ -49,6 +51,7 @@ namespace Adenson.Data
 		{
 			throw new NotSupportedException();
 		}
+
 		/// <summary>
 		/// Runs a check for the existence of database specified in the connectionstring (Not supported)
 		/// </summary>
@@ -57,6 +60,7 @@ namespace Adenson.Data
 		{
 			throw new NotSupportedException();
 		}
+
 		/// <summary>
 		/// Runs a query to see if the specified table exists (Not supported)
 		/// </summary>
@@ -66,6 +70,7 @@ namespace Adenson.Data
 		{
 			throw new NotSupportedException();
 		}
+
 		/// <summary>
 		/// Creates a new DbDataAdapter object for use by the helper methods.
 		/// </summary>
@@ -75,6 +80,7 @@ namespace Adenson.Data
 		{
 			return new OleDbDataAdapter((OleDbCommand)command);
 		}
+
 		/// <summary>
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
@@ -83,6 +89,7 @@ namespace Adenson.Data
 		{
 			return new OleDbCommand();
 		}
+
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
@@ -91,6 +98,7 @@ namespace Adenson.Data
 		{
 			return new OleDbConnection(this.ConnectionString);
 		}
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>

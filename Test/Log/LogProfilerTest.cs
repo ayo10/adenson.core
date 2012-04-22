@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Adenson.Log;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,6 +25,7 @@ namespace Adenson.CoreTest.Log
 			{
 				Assert.IsFalse(prf.IsDisposed);
 			}
+
 			Assert.IsTrue(prf.IsDisposed);
 		}
 
@@ -58,6 +59,7 @@ namespace Adenson.CoreTest.Log
 			{
 				Assert.IsFalse(prf.IsDisposed);
 			}
+
 			Assert.IsTrue(prf.IsDisposed);
 		}
 
@@ -90,10 +92,12 @@ namespace Adenson.CoreTest.Log
 				Assert.AreNotEqual(Guid.Empty, prf.Uid);
 				uids.Add(prf.Uid);
 			}
+
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
 			{
 				uids.Add(prf.Uid);
 			}
+
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
 			{
 				uids.Add(prf.Uid);

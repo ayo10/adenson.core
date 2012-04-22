@@ -1,7 +1,5 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net.Mail;
 using Adenson.Log;
 
 namespace System.Net.Mail
@@ -23,9 +21,14 @@ namespace System.Net.Mail
 		/// <exception cref="ArgumentNullException">if message is null</exception>
 		public static void Send(MailMessage message)
 		{
-			if (message == null) throw new ArgumentNullException("message");
+			if (message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+
 			SmtpUtil.Send(null, message, true);
 		}
+
 		/// <summary>
 		/// Sends an email using MailMessage object
 		/// </summary>
@@ -34,10 +37,19 @@ namespace System.Net.Mail
 		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR message is null</exception>
 		public static void Send(string smtpHost, MailMessage message)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
-			if (message == null) throw new ArgumentNullException("message");
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
+			{
+				throw new ArgumentNullException("smtpHost");
+			}
+
+			if (message == null)
+			{
+				throw new ArgumentNullException("message");
+			}
+
 			SmtpUtil.Send(smtpHost, message, false);
 		}
+
 		/// <summary>
 		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -53,6 +65,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -68,6 +81,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -84,6 +98,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Sends an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -100,6 +115,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Sends email asynchronously, using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -109,18 +125,23 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(null, message, true);
 		}
+
 		/// <summary>
 		/// Sends an email asynchronously using MailMessage object
 		/// </summary>
 		/// <param name="smtpHost">The smtp host address to use</param>
 		/// <param name="message">MailMessage Object to use</param>
-		/// <returns>True if there were no exceptions calling SmtpClient.Send, false otherwise</returns>
 		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR message is null</exception>
 		public static void SendAsync(string smtpHost, MailMessage message)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
+			{
+				throw new ArgumentNullException("smtpHost");
+			}
+
 			SmtpUtil.Send(smtpHost, message, true);
 		}
+
 		/// <summary>
 		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -136,6 +157,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), true);
 		}
+
 		/// <summary>
 		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -151,6 +173,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), true);
 		}
+
 		/// <summary>
 		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -167,6 +190,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), true);
 		}
+
 		/// <summary>
 		/// Sends email asynchronously, using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -183,6 +207,7 @@ namespace System.Net.Mail
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), true);
 		}
+
 		/// <summary>
 		/// Tries to send an email using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -193,6 +218,7 @@ namespace System.Net.Mail
 		{
 			return SmtpUtil.TrySend(null, message, true);
 		}
+
 		/// <summary>
 		/// Tries to send an email using MailMessage object
 		/// </summary>
@@ -201,9 +227,14 @@ namespace System.Net.Mail
 		/// <returns>True if there were no exceptions, false otherwise</returns>
 		public static bool TrySend(string smtpHost, MailMessage message)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) throw new ArgumentNullException("smtpHost");
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
+			{
+				throw new ArgumentNullException("smtpHost");
+			}
+
 			return SmtpUtil.TrySend(smtpHost, message, false);
 		}
+
 		/// <summary>
 		/// Tries to send an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -220,6 +251,7 @@ namespace System.Net.Mail
 		{
 			return SmtpUtil.TrySend(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Tries to send an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -236,6 +268,7 @@ namespace System.Net.Mail
 		{
 			return SmtpUtil.TrySend(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Tries to send an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -253,6 +286,7 @@ namespace System.Net.Mail
 		{
 			return SmtpUtil.TrySend(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
 		}
+
 		/// <summary>
 		/// Tries to send an email using passed variables using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
@@ -273,30 +307,55 @@ namespace System.Net.Mail
 
 		private static MailMessage ComposelMessage(string from, string[] to, string subject, string message, bool isHtml)
 		{
-			if (to == null || to.Length == 0) throw new ArgumentNullException("to", Adenson.Exceptions.EmailAddressInvalid);
-			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s))) throw new ArgumentException(Adenson.Exceptions.EmailAddressInvalid, "to");
+			if (to == null || to.Length == 0)
+			{
+				throw new ArgumentNullException("to", Adenson.Exceptions.EmailAddressInvalid);
+			}
+
+			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s)))
+			{
+				throw new ArgumentException(Adenson.Exceptions.EmailAddressInvalid, "to");
+			}
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress(from);
-			foreach (string str in to) mailMessage.To.Add(str);
 			mailMessage.Subject = subject;
 			mailMessage.Body = message;
 			mailMessage.IsBodyHtml = isHtml;
+			foreach (string str in to)
+			{
+				mailMessage.To.Add(str);
+			}
 
 			return mailMessage;
 		}
+
 		private static void Send(string smtpHost, MailMessage message, bool sendAsync)
 		{
 			SmtpClient smtp = null;
-			if (StringUtil.IsNullOrWhiteSpace(smtpHost)) smtp = new SmtpClient();
-			else smtp = new SmtpClient(smtpHost);
+			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
+			{
+				smtp = new SmtpClient();
+			}
+			else
+			{
+				smtp = new SmtpClient(smtpHost);
+			}
+
 			logger.Debug("Trying to send mail to '{1}' using server '{0}' (from '{2}')", smtp.Host, message.To, message.From);
-			if (sendAsync) smtp.SendAsync(message, null);
-			else smtp.Send(message);
+			if (sendAsync)
+			{
+				smtp.SendAsync(message, null);
+			}
+			else
+			{
+				smtp.Send(message);
+			}
+
 			logger.Debug("Send Success");
 		}
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Method is a try method")]
 		private static bool TrySend(string smtpHost, MailMessage message, bool sendAsync)
 		{
 			try

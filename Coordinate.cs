@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace System
 {
@@ -10,10 +10,10 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Instantiates a new coordinate object
+		/// Initializes a new instance of the Coordinate struct
 		/// </summary>
-		/// <param name="latitude"></param>
-		/// <param name="longitude"></param>
+		/// <param name="latitude">The latitude</param>
+		/// <param name="longitude">The longitude</param>
 		public Coordinate(double latitude, double longitude) : this()
 		{
 			this.Latitude = latitude;

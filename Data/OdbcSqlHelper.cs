@@ -11,15 +11,16 @@ namespace Adenson.Data
 	public sealed class OdbcSqlHelper : SqlHelperBase
 	{
 		#region Constructor
-		
+
 		/// <summary>
-		/// Instantiates a new <see cref="OdbcSqlHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
 		public OdbcSqlHelper() : base()
 		{
 		}
+
 		/// <summary>
-		/// Initializes a new instance of <see cref="OdbcSqlHelper"/>.
+		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
 		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
@@ -27,8 +28,9 @@ namespace Adenson.Data
 		public OdbcSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
+
 		/// <summary>
-		/// Instantiates a new instance of <see cref="OdbcSqlHelper"/> using specified connection string setting object
+		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
@@ -49,6 +51,7 @@ namespace Adenson.Data
 		{
 			throw new NotSupportedException();
 		}
+
 		/// <summary>
 		/// Creates a new DbDataAdapter object for use by the helper methods.
 		/// </summary>
@@ -58,6 +61,7 @@ namespace Adenson.Data
 		{
 			return new OdbcDataAdapter((OdbcCommand)command);
 		}
+
 		/// <summary>
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
@@ -66,6 +70,7 @@ namespace Adenson.Data
 		{
 			return new OdbcCommand();
 		}
+
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
@@ -74,6 +79,7 @@ namespace Adenson.Data
 		{
 			return new OdbcConnection(this.ConnectionString);
 		}
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
@@ -82,6 +88,7 @@ namespace Adenson.Data
 		{
 			return new OdbcParameter();
 		}
+
 		/// <summary>
 		/// Runs a check for the existence of database specified in the connectionstring
 		/// </summary>
@@ -90,6 +97,7 @@ namespace Adenson.Data
 		{
 			throw new NotImplementedException();
 		}
+
 		/// <summary>
 		/// Runs a query to see if the specified table exists (Not supported)
 		/// </summary>

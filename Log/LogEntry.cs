@@ -18,49 +18,54 @@ namespace Adenson.Log
 		#region Properties
 
 		/// <summary>
-		/// Gets the severity
+		/// Gets or sets the severity
 		/// </summary>
 		public LogSeverityInternal Severity
 		{
 			get;
 			set;
 		}
+
 		/// <summary>
-		/// Gets the type
-		/// </summary>
-		internal LogTypes LogType
-		{
-			get;
-			set;
-		}
-		/// <summary>
-		/// Gets the message
+		/// Gets or sets the message
 		/// </summary>
 		public string Message
 		{
 			get;
 			set;
 		}
+
 		/// <summary>
-		/// Gets the source
+		/// Gets or sets the source
 		/// </summary>
 		public string Source
 		{
 			get;
 			set;
 		}
+
 		/// <summary>
-		/// Gets the date
+		/// Gets or sets the date
 		/// </summary>
 		public DateTime Date
 		{
 			get;
 			set;
 		}
+
 		/// <summary>
 		/// Gets or sets the type name
 		/// </summary>
 		public string TypeName
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets or sets the log type
+		/// </summary>
+		internal LogTypes LogType
 		{
 			get;
 			set;

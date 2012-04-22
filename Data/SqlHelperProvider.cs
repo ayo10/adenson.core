@@ -1,8 +1,7 @@
 using System;
 using System.Configuration;
-using System.Globalization;
-using Adenson.Configuration;
 using System.Reflection;
+using Adenson.Configuration;
 
 namespace Adenson.Data
 {
@@ -31,6 +30,7 @@ namespace Adenson.Data
 		{
 			return SqlHelperProvider.Create(ConnectionStrings.Default);
 		}
+
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
 		/// </summary>
@@ -39,10 +39,14 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">if 'connectionKey' is null or empty.</exception>
 		public static SqlHelperBase Create(string connectionKey)
 		{
-			if (String.IsNullOrEmpty(connectionKey)) throw new ArgumentNullException("connectionKey");
+			if (String.IsNullOrEmpty(connectionKey))
+			{
+				throw new ArgumentNullException("connectionKey");
+			}
 
 			return SqlHelperProvider.Create(ConnectionStrings.Get(connectionKey));
 		}
+
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
 		/// </summary>
@@ -52,13 +56,22 @@ namespace Adenson.Data
 		/// <exception cref="NotSupportedException">if unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
 		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
-			if (connectionString == null) throw new ArgumentNullException("connectionString");
+			if (connectionString == null)
+			{
+				throw new ArgumentNullException("connectionString");
+			}
 
 			if (String.IsNullOrEmpty(connectionString.ProviderName))
 			{
 				string connString = connectionString.ConnectionString;
-				if (connString.IndexOf(".mdf", StringComparison.CurrentCultureIgnoreCase) > -1) connectionString.ProviderName = "System.Data.SqlClient";
-				else if (connString.IndexOf(".sdf", StringComparison.CurrentCultureIgnoreCase) > -1) connectionString.ProviderName = "System.Data.SqlServerCe";
+				if (connString.IndexOf(".mdf", StringComparison.CurrentCultureIgnoreCase) > -1)
+				{
+					connectionString.ProviderName = "System.Data.SqlClient";
+				}
+				else if (connString.IndexOf(".sdf", StringComparison.CurrentCultureIgnoreCase) > -1)
+				{
+					connectionString.ProviderName = "System.Data.SqlServerCe";
+				}
 				else
 				{
 					var splits = connString.Split(';');
@@ -68,11 +81,15 @@ namespace Adenson.Data
 						if (subsplit.Length > 1)
 						{
 							var split0 = subsplit[0];
-							if (split0.Equals("provider", StringComparison.CurrentCultureIgnoreCase) || split0.Equals("providername", StringComparison.CurrentCultureIgnoreCase)) connectionString.ProviderName = subsplit[1];
+							if (split0.Equals("provider", StringComparison.CurrentCultureIgnoreCase) || split0.Equals("providername", StringComparison.CurrentCultureIgnoreCase))
+							{
+								connectionString.ProviderName = subsplit[1];
+							}
 						}
 					}
 				}
 			}
+
 			switch (connectionString.ProviderName)
 			{
 				case "System.Data.Odbc": return new OdbcSqlHelper(connectionString);
@@ -83,7 +100,11 @@ namespace Adenson.Data
 				case "System.Data.SqlServerCe.3.5":
 				case "System.Data.SqlServerCe.4.0":
 					Assembly assembly = Assembly.Load("Adenson.Data.SqlCe");
-					if (assembly == null) throw new InvalidOperationException();
+					if (assembly == null)
+					{
+						throw new InvalidOperationException();
+					}
+
 					return (SqlHelperBase)assembly.CreateInstance("Adenson.Data.SqlCeHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
 				case "System.Data.OracleClient": 
 					throw new NotSupportedException(connectionString.ProviderName);

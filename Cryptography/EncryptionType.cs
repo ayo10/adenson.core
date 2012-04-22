@@ -11,14 +11,17 @@ namespace Adenson.Cryptography
 		/// None specified
 		/// </summary>
 		None = 0,
+
 		/// <summary>
 		/// Also known as AES
 		/// </summary>
 		Rijndael = 1,
+
 		/// <summary>
-		/// TripleDes
+		/// TripleDes type
 		/// </summary>
 		TripleDES = 2,
+
 		/// <summary>
 		/// Just Des
 		/// </summary>

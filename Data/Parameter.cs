@@ -13,13 +13,17 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Parameter"/> struct.
+		/// Initializes a new instance of the <see cref="Parameter"/> class.
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="value">The value.</param>
 		public Parameter(string name, object value)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("name");
+			if (StringUtil.IsNullOrWhiteSpace(name))
+			{
+				throw new ArgumentNullException("name");
+			}
+
 			this.Name = name;
 			this.Value = value;
 		}
@@ -35,6 +39,7 @@ namespace Adenson.Data
 			get;
 			private set;
 		}
+
 		/// <summary>
 		/// Gets the value of the parameter
 		/// </summary>
@@ -54,9 +59,14 @@ namespace Adenson.Data
 		/// <returns>true, or false, i dont know</returns>
 		public bool Equals(Parameter other)
 		{
-			if (Object.ReferenceEquals(this, other)) return true;
+			if (Object.ReferenceEquals(this, other))
+			{
+				return true;
+			}
+
 			return other.Name == this.Name && other.Value == this.Value;
 		}
+
 		/// <summary>
 		/// if obj is Parameter, does this.Equals((Parameter)obj), else does the base equality check
 		/// </summary>
@@ -65,9 +75,14 @@ namespace Adenson.Data
 		public override bool Equals(object obj)
 		{
 			var other = obj as Parameter;
-			if (other != null) return this.Equals(other);
+			if (other != null)
+			{
+				return this.Equals(other);
+			}
+
 			return base.Equals(obj);
 		}
+
 		/// <summary>
 		/// Returns the hash code for this instance.
 		/// </summary>

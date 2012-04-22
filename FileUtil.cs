@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -14,7 +14,7 @@ namespace System.IO
 	public static class FileUtil
 	{
 		#region Variables
-		private readonly static Hashtable<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
+		private static readonly Hashtable<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
 		#endregion
 		#region Methods
 
@@ -29,37 +29,64 @@ namespace System.IO
 		/// <exception cref="OverflowException">value, which represents a base 10 unsigned number, is prefixed with a negative  sign.  -or- The return value is less than System.Byte.MinValue or larger than System.Byte.MaxValue.</exception>
 		public static byte[] GetBytes(string hexValue)
 		{
-			if (hexValue == null) return null;
-			if (hexValue.Length % 2 != 0) throw new NotSupportedException();
-			if (hexValue.Length == 0) return new byte[] { };
+			if (hexValue == null)
+			{
+				return null;
+			}
+
+			if (hexValue.Length % 2 != 0)
+			{
+				throw new NotSupportedException();
+			}
+
+			if (hexValue.Length == 0)
+			{
+				return new byte[] { };
+			}
 
 			byte[] buffer = new byte[hexValue.Length / 2];
-			for (int i = 0; i < buffer.Length; i++) buffer[i] = Convert.ToByte(hexValue.Substring(i * 2, 2), 16);
+			for (int i = 0; i < buffer.Length; i++)
+			{
+				buffer[i] = Convert.ToByte(hexValue.Substring(i * 2, 2), 16);
+			}
+
 			return buffer;
 		}
+
 		/// <summary>
-		/// 
+		/// Creates a new (or overwrites) a file at the specified path using the specified buffer
 		/// </summary>
-		/// <param name="filePath"></param>
-		/// <param name="buffer"></param>
-		/// <param name="overwrite"></param>
-		/// <returns></returns>
+		/// <param name="filePath">The path and name of the file to create.</param>
+		/// <param name="buffer">The buffer containing data to write to the stream.</param>
+		/// <param name="overwrite">If to overwrite the file if it exists</param>
+		/// <returns>Newly created path</returns>
 		public static string CreateFile(string filePath, byte[] buffer, bool overwrite)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
-			if (buffer == null) return null;
-			if (buffer.Length == 0) return null;
+			if (StringUtil.IsNullOrWhiteSpace(filePath))
+			{
+				throw new ArgumentNullException("filePath");
+			}
 
 			if (!File.Exists(filePath) || overwrite)
 			{
 				var directory = Path.GetDirectoryName(filePath);
-				if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+				if (!Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+
 				FileStream stream = File.Create(filePath);
-				stream.Write(buffer, 0, buffer.Length);
-				stream.Close();
+
+				if (buffer != null)
+				{
+					stream.Write(buffer, 0, buffer.Length);
+					stream.Close();
+				}
 			}
+
 			return filePath;
 		}
+
 		/// <summary>
 		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>
 		/// </summary>
@@ -69,14 +96,20 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">if directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(directory)) throw new ArgumentNullException("directory");
+			if (StringUtil.IsNullOrWhiteSpace(directory))
+			{
+				throw new ArgumentNullException("directory");
+			}
+
 			List<string> filesToProcess = new List<string>();
 			foreach (string ext in extensions)
 			{
 				filesToProcess.AddRange(Directory.GetFiles(directory, ext.Trim(), SearchOption.AllDirectories).ToList());
 			}
+
 			return filesToProcess.ToArray();
 		}
+
 		/// <summary>
 		/// Gets if the specified path is a file or a directory, operation not guaranteed
 		/// </summary>
@@ -85,9 +118,14 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">if fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(fullPath)) throw new ArgumentNullException("fullPath");
-			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath);//Prob a directory
+			if (StringUtil.IsNullOrWhiteSpace(fullPath))
+			{
+				throw new ArgumentNullException("fullPath");
+			}
+
+			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath); // Prob a directory
 		}
+
 		/// <summary>
 		/// Fixes the specified name by removing characters that are invalid
 		/// </summary>
@@ -95,7 +133,10 @@ namespace System.IO
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("fileName");
+			if (StringUtil.IsNullOrWhiteSpace(fileName))
+			{
+				throw new ArgumentNullException("fileName");
+			}
 
 			var invalidCharacters = FileUtil.fileInvalidCharsReplacements.Keys.ToArray();
 			IEnumerable<char> intersect = fileName.ToCharArray().Intersect(invalidCharacters);
@@ -107,23 +148,35 @@ namespace System.IO
 					char replaceChar = fileInvalidCharsReplacements[c];
 					result = result.Replace(c.ToString(), replaceChar == Char.MinValue ? "_" : replaceChar.ToString());
 				}
+
 				return result;
 			}
+
 			return fileName;
 		}
+
 		/// <summary>
 		/// Creates a byte array, by reading the response stream of the specified url 
 		/// </summary>
-		/// <param name="filePath"></param>
+		/// <param name="filePath">The path and name of the file to create.</param>
 		/// <returns>byte array, or null if stream is null</returns>
 		/// <exception cref="ArgumentNullException">if filePath is null or empty or is just white space</exception>
 		/// <exception cref="FileNotFoundException">if the specified filePath does not exist</exception>
 		public static byte[] ReadStream(string filePath)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException("filePath");
-			if (!File.Exists(filePath)) throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
+			if (StringUtil.IsNullOrWhiteSpace(filePath))
+			{
+				throw new ArgumentNullException("filePath");
+			}
+
+			if (!File.Exists(filePath))
+			{
+				throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
+			}
+
 			return FileUtil.ReadStream(new Uri(filePath, UriKind.Absolute));
 		}
+
 		/// <summary>
 		/// Creates a byte array, by reading the response stream of the specified url
 		/// </summary>
@@ -132,17 +185,25 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">if url is null</exception>
 		public static byte[] ReadStream(Uri url)
 		{
-			if (url == null) throw new ArgumentNullException("url");
+			if (url == null)
+			{
+				throw new ArgumentNullException("url");
+			}
 
 			Stream stream;
-			if (File.Exists(url.AbsolutePath)) stream = File.Open(url.AbsolutePath, FileMode.Open);
+			if (File.Exists(url.AbsolutePath))
+			{
+				stream = File.Open(url.AbsolutePath, FileMode.Open);
+			}
 			else
 			{
 				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
 				stream = request.GetResponse().GetResponseStream();
 			}
+
 			return FileUtil.ReadStream(stream);
 		}
+
 		/// <summary>
 		/// Creates a byte array, by reading the specified stream
 		/// </summary>
@@ -152,7 +213,10 @@ namespace System.IO
 		/// <exception cref="NotSupportedException">if stream does not support reading</exception>
 		public static byte[] ReadStream(Stream stream)
 		{
-			if (stream == null) throw new ArgumentNullException("stream");
+			if (stream == null)
+			{
+				throw new ArgumentNullException("stream");
+			}
 
 			MemoryStream ms = stream as MemoryStream;
 			bool ours = false;
@@ -163,20 +227,30 @@ namespace System.IO
 				stream.Seek(0, SeekOrigin.Begin);
 				byte[] buffer = new byte[1024];
 				int len;
-				while ((len = stream.Read(buffer, 0, 1024)) > 0) ms.Write(buffer, 0, len);
+				while ((len = stream.Read(buffer, 0, 1024)) > 0)
+				{
+					ms.Write(buffer, 0, len);
+				}
+
 				stream.Close();
 			}
+
 			var result = ms.ToArray();
-			if (ours) ms.Dispose();
+			if (ours)
+			{
+				ms.Dispose();
+			}
+
 			return result;
 		}
+
 		/// <summary>
 		/// Calls GetBytes(hexString) in a try catch
 		/// </summary>
 		/// <param name="hexValue">The string to convert</param>
 		/// <param name="result">The result</param>
 		/// <returns>false if an exception occurred true, true otherwise</returns>
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Its a try method, it should succeed or fail.")]
 		public static bool TryGetBytes(string hexValue, out byte[] result)
 		{
 			result = null;
@@ -184,10 +258,6 @@ namespace System.IO
 			{
 				result = FileUtil.GetBytes(hexValue);
 				return true;
-			}
-			catch (NotSupportedException)
-			{
-				throw;
 			}
 			catch
 			{
@@ -201,7 +271,11 @@ namespace System.IO
 		private static Hashtable<char, char> GetFileInvalidCharsReplacements()
 		{
 			var result = new Hashtable<char, char>();
-			foreach (var c in Path.GetInvalidPathChars()) result.Add(c, ' ');
+			foreach (var c in Path.GetInvalidPathChars())
+			{
+				result.Add(c, ' ');
+			}
+
 			result[':'] = '-';
 			result['/'] = ',';
 			return result;
