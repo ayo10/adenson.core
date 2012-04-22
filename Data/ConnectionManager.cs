@@ -6,6 +6,9 @@ namespace Adenson.Data
 {
 	internal sealed class ConnectionManager : IDisposable
 	{
+		#region Variables
+		private bool _allowClose = true;
+		#endregion
 		#region Constructor
 
 		internal ConnectionManager(IDbConnection connection)
@@ -21,15 +24,24 @@ namespace Adenson.Data
 			get;
 			private set;
 		}
-		public bool AllowClose = true; 
+
+		public bool AllowClose
+		{
+			get { return _allowClose; }
+			set { _allowClose = value; }
+		}
 
 		#endregion
 		#region Methods
 
 		public void Open()
 		{
-			if (this.Connection.State != ConnectionState.Open) this.Connection.Open();
+			if (this.Connection.State != ConnectionState.Open)
+			{
+				this.Connection.Open();
+			}
 		}
+
 		public void Close()
 		{
 			if (this.AllowClose && this.Connection.State != ConnectionState.Closed)
@@ -39,9 +51,13 @@ namespace Adenson.Data
 				this.Connection = null;
 			}
 		}
+
 		public void Dispose()
 		{
-			if (this.Connection != null) this.Connection.Dispose();
+			if (this.Connection != null)
+			{
+				this.Connection.Dispose();
+			}
 		}
 
 		#endregion

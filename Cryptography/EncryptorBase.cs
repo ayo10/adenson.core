@@ -16,13 +16,14 @@ namespace Adenson.Cryptography
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the encryptor
+		/// Initializes a new instance of the EncryptorBase class.
 		/// </summary>
 		protected EncryptorBase()
 		{
 		}
+
 		/// <summary>
-		/// Initializes a new instance of the encryptor with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
+		/// Initializes a new instance of the EncryptorBase class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
@@ -52,7 +53,10 @@ namespace Adenson.Cryptography
 		/// <returns>The encrypted value</returns>
 		public byte[] Encrypt(byte[] toEncrypt)
 		{
-			if (toEncrypt == null) return null;
+			if (toEncrypt == null)
+			{
+				return null;
+			}
 
 			ICryptoTransform transform = this.CreateEncryptor();
 			MemoryStream ms = new MemoryStream();
@@ -67,6 +71,7 @@ namespace Adenson.Cryptography
 			ms.Flush();
 			return result;
 		}
+
 		/// <summary>
 		/// Encrypts the specified string
 		/// </summary>
@@ -74,7 +79,10 @@ namespace Adenson.Cryptography
 		/// <returns>The resulting encrypted value, in base64</returns>
 		public string Encrypt(string toEncrypt)
 		{
-			if (toEncrypt == null) return null;
+			if (toEncrypt == null)
+			{
+				return null;
+			}
 
 			ICryptoTransform transform = this.CreateEncryptor();
 
@@ -90,6 +98,7 @@ namespace Adenson.Cryptography
 			ms.Flush();
 			return Convert.ToBase64String(result, 0, result.Length);
 		}
+
 		/// <summary>
 		/// Decrypts specified encrypted string
 		/// </summary>
@@ -107,6 +116,7 @@ namespace Adenson.Cryptography
 			sr.Dispose();
 			return result;
 		}
+
 		/// <summary>
 		/// Decrypts specified encrypted byte array
 		/// </summary>
@@ -124,6 +134,7 @@ namespace Adenson.Cryptography
 			cs.Dispose();
 			return buffer;
 		}
+
 		/// <summary>
 		/// Creates a symmetric enryptor object with the configured algorithm key and initialization vector.
 		/// </summary>
@@ -131,10 +142,19 @@ namespace Adenson.Cryptography
 		/// <exception cref="ArgumentException">If the <see cref="Algorithm"/> property is null</exception>
 		public ICryptoTransform CreateEncryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentException(Exceptions.AlgorithmNull);
-			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateEncryptor();
+			if (this.Algorithm == null)
+			{
+				throw new ArgumentException(Exceptions.AlgorithmNull);
+			}
+
+			if (rgbIV == null && rgbKey == null)
+			{
+				return this.Algorithm.CreateEncryptor();
+			}
+
 			return this.Algorithm.CreateEncryptor(rgbKey, rgbIV);
 		}
+
 		/// <summary>
 		/// Creates a symmetric decryptor object with the configured algorithm key and initialization vector.
 		/// </summary>
@@ -142,10 +162,19 @@ namespace Adenson.Cryptography
 		/// <exception cref="ArgumentException">If the <see cref="Algorithm"/> property is null</exception>
 		public ICryptoTransform CreateDecryptor()
 		{
-			if (this.Algorithm == null) throw new ArgumentException(Exceptions.AlgorithmNull);
-			if (rgbIV == null && rgbKey == null) return this.Algorithm.CreateDecryptor();
+			if (this.Algorithm == null)
+			{
+				throw new ArgumentException(Exceptions.AlgorithmNull);
+			}
+
+			if (rgbIV == null && rgbKey == null)
+			{
+				return this.Algorithm.CreateDecryptor();
+			}
+
 			return this.Algorithm.CreateDecryptor(rgbKey, rgbIV);
 		}
+
 		/// <summary>
 		/// Sets the algorithm key and initialization vector to use in the encryptor
 		/// </summary>

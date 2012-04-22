@@ -32,15 +32,24 @@ namespace Adenson.Configuration
 		{
 			get
 			{
-				if (_applicationKey == null) _applicationKey = StringUtil.Format("Software\\{0}\\{1}", this.CompanyName, this.ProductName);
+				if (_applicationKey == null)
+				{
+					_applicationKey = StringUtil.Format("Software\\{0}\\{1}", this.CompanyName, this.ProductName);
+				}
+
 				return _applicationKey;
 			}
 		}
+
 		private string SettingKey
 		{
 			get
 			{
-				if (_settingKey == null) _settingKey = StringUtil.Format("{0}.{1}", this.Version.Major, this.Version.Minor);
+				if (_settingKey == null)
+				{
+					_settingKey = StringUtil.Format("{0}.{1}", this.Version.Major, this.Version.Minor);
+				}
+
 				return _settingKey;
 			}
 		}
@@ -58,6 +67,7 @@ namespace Adenson.Configuration
 		{
 			return new SettingsPropertyValue(property);
 		}
+
 		/// <summary>
 		/// Returns the collection of settings property values for the specified application instance and settings property group.
 		/// </summary>
@@ -67,9 +77,14 @@ namespace Adenson.Configuration
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
 			SettingsPropertyValueCollection settingValues = new SettingsPropertyValueCollection();
-			foreach (SettingsProperty setting in collection) settingValues.Add(this.GetSettingsValue(setting));
+			foreach (SettingsProperty setting in collection)
+			{
+				settingValues.Add(this.GetSettingsValue(setting));
+			}
+
 			return settingValues;
 		}
+
 		/// <summary>
 		/// Initializes the provider.
 		/// </summary>
@@ -77,9 +92,14 @@ namespace Adenson.Configuration
 		/// <param name="config">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>
 		public override void Initialize(string name, NameValueCollection config)
 		{
-			if (String.IsNullOrEmpty(name)) name = "RegistrySettingsProvider";
+			if (String.IsNullOrEmpty(name))
+			{
+				name = "RegistrySettingsProvider";
+			}
+
 			base.Initialize(name, config);
 		}
+
 		/// <summary>
 		///  Resets the application settings associated with the specified application to their default values.
 		/// </summary>
@@ -88,6 +108,7 @@ namespace Adenson.Configuration
 		{
 			throw new NotImplementedException();
 		}
+
 		/// <summary>
 		/// Sets the values of the specified group of property settings.
 		/// </summary>
@@ -98,7 +119,10 @@ namespace Adenson.Configuration
 			foreach (SettingsPropertyValue setting in collection)
 			{
 				bool isApplicationScoped = setting.Property.Attributes.Values.OfType<ApplicationScopedSettingAttribute>().Count() > 0;
-				if (isApplicationScoped) throw new InvalidOperationException();
+				if (isApplicationScoped)
+				{
+					throw new InvalidOperationException();
+				}
 
 				RegistryKey settingKey = this.GetSettingRegistryKey(true);
 				RegistryValueKind registryKind = RegistryValueKind.String;
@@ -112,20 +136,30 @@ namespace Adenson.Configuration
 				else
 				{
 					TypeConverter typeConverter = TypeDescriptor.GetConverter(setting.Property.PropertyType);
-					if (setting.Property.PropertyType == typeof(bool) || setting.Property.PropertyType == typeof(int)) registryKind = RegistryValueKind.DWord;
+					if (setting.Property.PropertyType == typeof(bool) || setting.Property.PropertyType == typeof(int))
+					{
+						registryKind = RegistryValueKind.DWord;
+					}
 					else if (setting.PropertyValue != null)
 					{
-						if (typeConverter.CanConvertTo(typeof(String))) registryValue = typeConverter.ConvertTo(setting.PropertyValue, typeof(String));
-						else
+						if (typeConverter.CanConvertTo(typeof(String)))
 						{
+							registryValue = typeConverter.ConvertTo(setting.PropertyValue, typeof(String));
 						}
 					}
 				}
 
-				if (registryValue == null) settingKey.DeleteValue(setting.Name, false);
-				else settingKey.SetValue(setting.Name, registryValue, registryKind);
+				if (registryValue == null)
+				{
+					settingKey.DeleteValue(setting.Name, false);
+				}
+				else
+				{
+					settingKey.SetValue(setting.Name, registryValue, registryKind);
+				}
 			}
 		}
+
 		/// <summary>
 		/// Indicates to the provider that the application has been upgraded. This offers the provider an opportunity to upgrade its stored settings as appropriate.
 		/// </summary>
@@ -134,25 +168,41 @@ namespace Adenson.Configuration
 		public override void Upgrade(SettingsContext context, SettingsPropertyCollection properties)
 		{
 			SettingsPropertyValueCollection spvc = this.GetPreviousSettings(properties);
-			if (spvc.Count > 0) this.SetPropertyValues(context, spvc);
+			if (spvc.Count > 0)
+			{
+				this.SetPropertyValues(context, spvc);
+			}
 		}
 
 		private SettingsPropertyValue GetSettingsValue(SettingsProperty setting)
 		{
 			bool isApplicationScoped = setting.Attributes.Values.OfType<ApplicationScopedSettingAttribute>().Count() > 0;
-			if (isApplicationScoped) throw new InvalidOperationException();
+			if (isApplicationScoped)
+			{
+				throw new InvalidOperationException();
+			}
 
 			bool tryConvert = true;
 			RegistryKey settingRegistryKey = this.GetSettingRegistryKey(false);
 			object registryValue = settingRegistryKey == null ? null : settingRegistryKey.GetValue(setting.Name);
 
-			if (registryValue == null) registryValue = setting.DefaultValue;
+			if (registryValue == null)
+			{
+				registryValue = setting.DefaultValue;
+			}
 
 			SettingsPropertyValue settingValue = new SettingsPropertyValue(setting) { IsDirty = false };
 
 			object result;
-			if (tryConvert) TypeUtil.TryConvert(setting.PropertyType, registryValue, out result);
-			else result = registryValue;
+			if (tryConvert)
+			{
+				TypeUtil.TryConvert(setting.PropertyType, registryValue, out result);
+			}
+			else
+			{
+				result = registryValue;
+			}
+
 			if (result != null)
 			{
 				settingValue.PropertyValue = result;
@@ -166,6 +216,7 @@ namespace Adenson.Configuration
 
 			return settingValue;
 		}
+
 		private SettingsPropertyValueCollection GetPreviousSettings(SettingsPropertyCollection properties)
 		{
 			SettingsPropertyValueCollection previousSettings = null;
@@ -175,9 +226,19 @@ namespace Adenson.Configuration
 			{
 				string[] names = registryKey.GetSubKeyNames();
 				int index = Array.IndexOf<string>(names, this.SettingKey);
-				if (index > 0) previousVersionKeyName = names[index - 1];
-				else if (names.Length > 0) previousVersionKeyName = names[names.Length - 1];
-				if (previousVersionKeyName == this.SettingKey) previousVersionKeyName = null;
+				if (index > 0)
+				{
+					previousVersionKeyName = names[index - 1];
+				}
+				else if (names.Length > 0)
+				{
+					previousVersionKeyName = names[names.Length - 1];
+				}
+
+				if (previousVersionKeyName == this.SettingKey)
+				{
+					previousVersionKeyName = null;
+				}
 
 				if (!StringUtil.IsNullOrWhiteSpace(previousVersionKeyName))
 				{
@@ -185,21 +246,40 @@ namespace Adenson.Configuration
 					rsp.Version = new Version(previousVersionKeyName);
 					rsp.Initialize(this.ApplicationName, null);
 					previousSettings = new SettingsPropertyValueCollection();
-					foreach (SettingsProperty setting in properties) previousSettings.Add(rsp.GetSettingsValue(setting));
+					foreach (SettingsProperty setting in properties)
+					{
+						previousSettings.Add(rsp.GetSettingsValue(setting));
+					}
 				}
 			}
 
-			if (previousSettings == null) previousSettings = new SettingsPropertyValueCollection();
+			if (previousSettings == null)
+			{
+				previousSettings = new SettingsPropertyValueCollection();
+			}
 
 			return previousSettings;
 		}
+
 		private RegistryKey GetSettingRegistryKey(bool createIfNotExist)
 		{
 			RegistryKey registryKey = Registry.CurrentUser.OpenSubKey(this.ApplicationKey, createIfNotExist);
 			RegistryKey result = null;
-			if (registryKey == null && createIfNotExist) registryKey = Registry.CurrentUser.CreateSubKey(this.ApplicationKey);
-			if (registryKey != null) result = registryKey.OpenSubKey(this.SettingKey, true);
-			if (result == null && createIfNotExist) result = registryKey.CreateSubKey(this.SettingKey);
+			if (registryKey == null && createIfNotExist)
+			{
+				registryKey = Registry.CurrentUser.CreateSubKey(this.ApplicationKey);
+			}
+
+			if (registryKey != null)
+			{
+				result = registryKey.OpenSubKey(this.SettingKey, true);
+			}
+
+			if (result == null && createIfNotExist)
+			{
+				result = registryKey.CreateSubKey(this.SettingKey);
+			}
+
 			return result;
 		}
 

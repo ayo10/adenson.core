@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -7,58 +7,38 @@ namespace Adenson.Collections
 	/// <summary>
 	/// Represents a collection of keys and values.
 	/// </summary>
-	///<remarks>
+	/// <remarks>
 	/// Behaves like System.Collections.Hashtable of old.
-	///</remarks>
-	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
-	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
+	/// </remarks>
+	/// <typeparam name="K">The type of keys in the dictionary.</typeparam>
+	/// <typeparam name="V">The type of values in the dictionary.</typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "No, I want the name Hashtable, NOT WhateverDictionary")]
-	public class Hashtable<TKey, TValue> : IDictionary<TKey, TValue>
+	public class Hashtable<K, V> : IDictionary<K, V>
 	{
 		#region Variables
-		private IDictionary<TKey, TValue> dick;
+		private IDictionary<K, V> dick;
 		#endregion
 		#region Constructors
 
 		/// <summary>
-		/// Instantiates a new hashtable
+		/// Initializes a new instance of the Hashtable class.
 		/// </summary>
 		public Hashtable()
 		{
-			dick = new Dictionary<TKey, TValue>();
+			dick = new Dictionary<K, V>();
 		}
 		
 		/// <summary>
-		/// Instantiates a new hashtable with specified capacity
+		/// Initializes a new instance of the Hashtable class with specified capacity
 		/// </summary>
-		/// <param name="capacity"></param>
+		/// <param name="capacity">The initial number of elements that the dictionary can contain.</param>
 		public Hashtable(int capacity)
 		{
-			dick = new Dictionary<TKey, TValue>(capacity);
+			dick = new Dictionary<K, V>(capacity);
 		}
 
 		#endregion
 		#region Properties
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public TValue this[TKey key]
-		{
-			get
-			{
-				if (dick.ContainsKey(key)) return dick[key];
-				return default(TValue);
-			}
-			set
-			{
-				if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
-				if (dick.ContainsKey(key)) dick[key] = value;
-				else dick.Add(key, value);
-			}
-		}
 		
 		/// <summary>
 		/// Gets the number of items in the dictionary
@@ -67,30 +47,64 @@ namespace Adenson.Collections
 		{
 			get { return dick.Count; }
 		}
-		
+
 		/// <summary>
-		/// 
-		/// </summary>
-		public ICollection<TKey> Keys
-		{
-			get { return dick.Keys; }
-		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		public ICollection<TValue> Values
-		{
-			get { return dick.Values; }
-		}
-		
-		/// <summary>
-		/// Gets if the dictionary is read only
+		/// Gets a value indicating whether the dictionary is read only
 		/// </summary>
 		public bool IsReadOnly
 		{
 			get;
 			internal set;
+		}
+		
+		/// <summary>
+		/// Gets all the keys in the hashtable
+		/// </summary>
+		public ICollection<K> Keys
+		{
+			get { return dick.Keys; }
+		}
+		
+		/// <summary>
+		/// Gets all the values in the hashtable
+		/// </summary>
+		public ICollection<V> Values
+		{
+			get { return dick.Values; }
+		}
+
+		/// <summary>
+		/// Gets or sets the value at the specified item
+		/// </summary>
+		/// <param name="key">The key</param>
+		/// <returns>Found value</returns>
+		public V this[K key]
+		{
+			get
+			{
+				if (dick.ContainsKey(key))
+				{
+					return dick[key];
+				}
+
+				return default(V);
+			}
+			set
+			{
+				if (this.IsReadOnly)
+				{
+					throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+				}
+
+				if (dick.ContainsKey(key))
+				{
+					dick[key] = value;
+				}
+				else
+				{
+					dick.Add(key, value);
+				}
+			}
 		}
 
 		#endregion
@@ -101,9 +115,13 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The object to use as the key of the element to add.</param>
 		/// <param name="value">The object to use as the value</param>
-		public void Add(TKey key, TValue value)
+		public void Add(K key, V value)
 		{
-			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			if (this.IsReadOnly)
+			{
+				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			}
+
 			dick.Add(key, value);
 		}
 		
@@ -112,16 +130,20 @@ namespace Adenson.Collections
 		/// </summary>
 		public void Clear()
 		{
-			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			if (this.IsReadOnly)
+			{
+				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			}
+
 			dick.Clear();
 		}
 		
 		/// <summary>
 		/// Copies the elements of the hashtable to the specified array, starting at the specified index.
 		/// </summary>
-		/// <param name="array"></param>
-		/// <param name="arrayIndex"></param>
-		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		/// <param name="array">The one-dimensional System.Array that is the destination of the elements.</param>
+		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+		public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex)
 		{
 			dick.CopyTo(array, arrayIndex);
 		}
@@ -129,9 +151,9 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Determines whether the hashtable contains the specified item.
 		/// </summary>
-		/// <param name="item"></param>
-		/// <returns></returns>
-		public bool Contains(KeyValuePair<TKey, TValue> item)
+		/// <param name="item">The object to locate.</param>
+		/// <returns>true if item is found; otherwise, false.</returns>
+		public bool Contains(KeyValuePair<K, V> item)
 		{
 			return dick.Contains(item);
 		}
@@ -139,9 +161,9 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
 		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public bool ContainsKey(TKey key)
+		/// <param name="key">The key to locate</param>
+		/// <returns>true if the hashtable contains an element with the key; otherwise, false.</returns>
+		public bool ContainsKey(K key)
 		{
 			return dick.ContainsKey(key);
 		}
@@ -149,9 +171,9 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Determines whether the dictionary contains a specific value.
 		/// </summary>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public bool ContainsValue(TValue value)
+		/// <param name="value">The value</param>
+		/// <returns>true if the hashtable contains an element with the value; otherwise, false.</returns>
+		public bool ContainsValue(V value)
 		{
 			return dick.Values.Contains(value);
 		}
@@ -159,8 +181,8 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Returns an enumerator that iterates through the dictionary
 		/// </summary>
-		/// <returns></returns>
-		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+		/// <returns>The enumerator</returns>
+		public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
 		{
 			return dick.GetEnumerator();
 		}
@@ -168,11 +190,15 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Removes the value with the specified key from the dictionary
 		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		public bool Remove(TKey key)
+		/// <param name="key">The key to locate</param>
+		/// <returns>true if the item was removed, false otherwise.</returns>
+		public bool Remove(K key)
 		{
-			if (this.IsReadOnly) throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			if (this.IsReadOnly)
+			{
+				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+			}
+
 			bool result = dick.Remove(key);
 			return result;
 		}
@@ -180,10 +206,10 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Gets the value associated with the specified key.
 		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public bool TryGetValue(TKey key, out TValue value)
+		/// <param name="key">The key</param>
+		/// <param name="value">The value found if any</param>
+		/// <returns>true, or false</returns>
+		public bool TryGetValue(K key, out V value)
 		{
 			return dick.TryGetValue(key, out value);
 		}
@@ -192,15 +218,18 @@ namespace Adenson.Collections
 		{
 			return dick.GetEnumerator();
 		}
-		void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+
+		void ICollection<KeyValuePair<K, V>>.Add(KeyValuePair<K, V> item)
 		{
 			this.Add(item.Key, item.Value);
 		}
-		void ICollection<KeyValuePair<TKey, TValue>>.Clear()
+
+		void ICollection<KeyValuePair<K, V>>.Clear()
 		{
 			this.Clear();
 		}
-		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
+
+		bool ICollection<KeyValuePair<K, V>>.Remove(KeyValuePair<K, V> item)
 		{
 			return this.Remove(item.Key);
 		}

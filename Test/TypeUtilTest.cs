@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Adenson.Log;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

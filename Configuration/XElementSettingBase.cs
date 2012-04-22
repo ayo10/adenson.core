@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -35,11 +35,14 @@ namespace Adenson.Configuration
 				{
 					var value = child.Value;
 					T output;
-					if (TypeUtil.TryConvert<T>(value, out output)) result = (T)output;
+					if (TypeUtil.TryConvert<T>(value, out output))
+					{
+						result = (T)output;
+					}
 				}
 			}
-			return result;
 
+			return result;
 		}
 
 		#endregion

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -30,9 +30,17 @@ namespace System
 		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
 		public static T CreateInstance<T>(string typeName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
+			if (StringUtil.IsNullOrWhiteSpace(typeName))
+			{
+				throw new ArgumentNullException("typeName");
+			}
+
 			Type type = TypeUtil.GetType(typeName);
-			if (type == null) throw new TypeLoadException(StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			if (type == null)
+			{
+				throw new TypeLoadException(StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			}
+
 			return (T)Activator.CreateInstance(type);
 		}
 		
@@ -46,7 +54,11 @@ namespace System
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public static T CreateInstance<T>(Type type)
 		{
-			if (type == null) throw new ArgumentNullException("type");
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
 			return (T)Activator.CreateInstance(type);
 		}
 		
@@ -62,7 +74,10 @@ namespace System
 		/// <exception cref="OverflowException">value is outside the range of the underlying type of enumType.</exception>
 		public static T EnumParse<T>(string value)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(value)) throw new ArgumentNullException("value");
+			if (StringUtil.IsNullOrWhiteSpace(value))
+			{
+				throw new ArgumentNullException("value");
+			}
 
 			return (T)Enum.Parse(typeof(T), value, true);
 		}
@@ -74,7 +89,10 @@ namespace System
 		/// <returns>The type with the specified name.</returns>
 		public static Type GetType(string typeName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(typeName)) throw new ArgumentNullException("typeName");
+			if (StringUtil.IsNullOrWhiteSpace(typeName))
+			{
+				throw new ArgumentNullException("typeName");
+			}
 
 			Type type = Type.GetType(typeName, false, true);
 			if (type == null)
@@ -87,6 +105,7 @@ namespace System
 					type = Type.GetType(typestr + ", " + assembly, false, true);
 				}
 			}
+
 			return type;
 		}
 		
@@ -101,8 +120,15 @@ namespace System
 		{
 			object output;
 			var converted = TypeUtil.TryConvert(typeof(T), value, out output);
-			if (converted) result = (T)output;
-			else result = default(T);
+			if (converted)
+			{
+				result = (T)output;
+			}
+			else
+			{
+				result = default(T);
+			}
+
 			return converted;
 		}
 		
@@ -113,11 +139,14 @@ namespace System
 		/// <param name="value">the value to convert</param>
 		/// <param name="output">the output of the conversion</param>
 		/// <returns>true if conversion happened correctly, false otherwise</returns>
-		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate")]
+		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Method either succeeds, or fails")]
 		public static bool TryConvert(Type type, object value, out object output)
 		{
 			var result = false;
-			if (value == null) output = null;
+			if (value == null)
+			{
+				output = null;
+			}
 			else if (value != null && type == value.GetType())
 			{
 				output = value;
@@ -143,7 +172,11 @@ namespace System
 							{
 								var splits = valueAsString.Split('|');
 								var intValue = 0;
-								foreach (var str in splits) intValue += (int)Enum.Parse(type, str);
+								foreach (var str in splits)
+								{
+									intValue += (int)Enum.Parse(type, str);
+								}
+
 								output = Enum.Parse(type, intValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
 								result = true;
 							}
@@ -159,6 +192,7 @@ namespace System
 					}
 				}
 			}
+
 			return result;
 		}
 

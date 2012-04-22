@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Configuration;
 
@@ -14,11 +14,15 @@ namespace Adenson.Configuration
 		/// <summary>
 		/// Returns the config section with specified group and name
 		/// </summary>
+		/// <typeparam name="T">The type of object expected to be returned.</typeparam>
 		/// <param name="sectionName">The section name</param>
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string sectionName) where T : class
 		{
-			if (String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException("sectionName");
+			if (String.IsNullOrEmpty(sectionName))
+			{
+				throw new ArgumentNullException("sectionName");
+			}
 
 			return (T)ConfigurationManager.GetSection(sectionName);
 		}
@@ -26,14 +30,21 @@ namespace Adenson.Configuration
 		/// <summary>
 		/// Returns the config section with specified group and name
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
+		/// <typeparam name="T">The type of configuation section to retrieve</typeparam>
 		/// <param name="groupName">The section group name</param>
 		/// <param name="sectionName">The section name</param>
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string groupName, string sectionName) where T : class
 		{
-			if (String.IsNullOrEmpty(groupName)) throw new ArgumentNullException("groupName");
-			if (String.IsNullOrEmpty(sectionName)) throw new ArgumentNullException("sectionName");
+			if (String.IsNullOrEmpty(groupName))
+			{
+				throw new ArgumentNullException("groupName");
+			}
+
+			if (String.IsNullOrEmpty(sectionName))
+			{
+				throw new ArgumentNullException("sectionName");
+			}
 
 			return ConfigHelper.GetSection<T>(String.Concat(groupName, "/", sectionName));
 		}
@@ -46,7 +57,10 @@ namespace Adenson.Configuration
 		/// <returns>Found value (and converted to type) if found, default of T otherwise.</returns>
 		public static T GetValue<T>(string key)
 		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+			if (String.IsNullOrEmpty(key))
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			return ConfigHelper.GetValue<T>(key, default(T));
 		}
@@ -60,16 +74,25 @@ namespace Adenson.Configuration
 		/// <returns>Found value (and converted to type) if found, <paramref name="defaultResult"/> otherwise.</returns>
 		public static T GetValue<T>(string key, T defaultResult)
 		{
-			if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+			if (String.IsNullOrEmpty(key))
+			{
+				throw new ArgumentNullException("key");
+			}
 
 			string value = ConfigurationManager.AppSettings[key];
 			T result = defaultResult;
 
-			if (typeof(T) == typeof(string) && value != null) result = (T)(object)value;//one thing that sucks about generics is, you cant cast somethign straight to T if you dont specify T isnt a value type
+			if (typeof(T) == typeof(string) && value != null)
+			{
+				result = (T)(object)value; // one thing that sucks about generics is, you cant cast somethign straight to T if you dont specify T isnt a value type
+			}
 			else if (!String.IsNullOrEmpty(value))
 			{
 				TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(T));
-				if (typeConverter.CanConvertFrom(typeof(String))) result = (T)typeConverter.ConvertFrom(value);
+				if (typeConverter.CanConvertFrom(typeof(String)))
+				{
+					result = (T)typeConverter.ConvertFrom(value);
+				}
 			}
 
 			return (T)result;

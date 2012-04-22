@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+using System;
 
 namespace System
 {
@@ -12,7 +11,7 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Instantiates a new instance of a pair object with specified values
+		/// Initializes a new instance of the Pair struct with specified values
 		/// </summary>
 		/// <param name="left">The left value.</param>
 		/// <param name="right">The right value.</param>
@@ -26,7 +25,7 @@ namespace System
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the left side of the pair
+		/// Gets the left side of the pair
 		/// </summary>
 		public T Left
 		{
@@ -35,7 +34,7 @@ namespace System
 		}
 		
 		/// <summary>
-		/// Gets or sets the right side of the pair
+		/// Gets the right side of the pair
 		/// </summary>
 		public T Right
 		{
@@ -44,7 +43,7 @@ namespace System
 		}
 		
 		/// <summary>
-		/// Gets or sets if the pair is empty, i.e, a pair that was instantiated with an empty constructor
+		/// Gets a value indicating whether the pair is empty, i.e, a pair that was instantiated with an empty constructor
 		/// </summary>
 		public bool IsEmpty
 		{
@@ -61,8 +60,16 @@ namespace System
 		/// <returns>true if </returns>
 		public bool Equals(Pair<T> other)
 		{
-			if (Object.ReferenceEquals(this, other)) return true;
-			if (Object.ReferenceEquals(other, null)) return false;
+			if (Object.ReferenceEquals(this, other))
+			{
+				return true;
+			}
+
+			if (Object.ReferenceEquals(other, null))
+			{
+				return false;
+			}
+
 			return Object.Equals(this.Left, other.Left) && Object.Equals(this.Right, other.Right);
 		}
 
@@ -73,8 +80,16 @@ namespace System
 		/// <returns>true if obj and this instance are the same type and represent the same value; otherwise, false.</returns>
 		public override bool Equals(object obj)
 		{
-			if (Object.ReferenceEquals(this, obj)) return true;
-			if (obj is Pair<T>) return this.Equals((Pair<T>)obj);
+			if (Object.ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+
+			if (obj is Pair<T>)
+			{
+				return this.Equals((Pair<T>)obj);
+			}
+
 			return base.Equals(obj);
 		}
 
@@ -88,16 +103,30 @@ namespace System
 		}
 
 		/// <summary>
-		/// 
+		/// Fills this object with the source part object
 		/// </summary>
-		/// <param name="part"></param>
-		/// <returns></returns>
+		/// <param name="part">The part</param>
+		/// <returns>The new pair</returns>
 		public Pair<T> Fill(Pair<T> part)
 		{
-			if (this.IsEmpty) return part;
-			if (this.Left != null && this.Right != null) return this;
-			else if (this.Left != null) return new Pair<T>(this.Left, part.Right);
-			else if (this.Right != null) return new Pair<T>(part.Left, this.Right);
+			if (this.IsEmpty)
+			{
+				return part;
+			}
+
+			if (this.Left != null && this.Right != null)
+			{
+				return this;
+			}
+			else if (this.Left != null)
+			{
+				return new Pair<T>(this.Left, part.Right);
+			}
+			else if (this.Right != null)
+			{
+				return new Pair<T>(part.Left, this.Right);
+			}
+
 			return this;
 		}
 
@@ -107,9 +136,18 @@ namespace System
 		/// <returns>A string representation of the Pair, using the string representations of the value</returns>
 		public override string ToString()
 		{
-			if (this.IsEmpty) return String.Empty;
-			else if (this.Right == null) return this.Left == null ? String.Empty : this.Left.ToString();
-			else return String.Concat(this.Left, ", ", this.Right);
+			if (this.IsEmpty)
+			{
+				return String.Empty;
+			}
+			else if (this.Right == null)
+			{
+				return this.Left == null ? String.Empty : this.Left.ToString();
+			}
+			else
+			{
+				return String.Concat(this.Left, ", ", this.Right);
+			}
 		}
 
 		#endregion
@@ -125,6 +163,7 @@ namespace System
 		{
 			return pair1.Equals(pair2);
 		}
+
 		/// <summary>
 		/// Checks the inequality of the two specified pairs
 		/// </summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Adenson.Log
 {
@@ -15,6 +15,7 @@ namespace Adenson.Log
 			get;
 			set;
 		}
+
 		public string Value
 		{
 			get { return _value == null ? this.Severity.ToString().ToUpper(System.Globalization.CultureInfo.CurrentCulture) : _value; }
@@ -34,9 +35,14 @@ namespace Adenson.Log
 
 		public static implicit operator LogSeverity(LogSeverityInternal value)
 		{
-			if (value.Value == LogSeverityInternal.Profiler.Value) return LogSeverity.Debug;
+			if (value.Value == LogSeverityInternal.Profiler.Value)
+			{
+				return LogSeverity.Debug;
+			}
+
 			return value.Severity;
 		}
+
 		public static implicit operator LogSeverityInternal(LogSeverity value)
 		{
 			return new LogSeverityInternal { Severity = value };

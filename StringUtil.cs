@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace System
 {
@@ -18,7 +18,10 @@ namespace System
 		/// <exception cref="ArgumentNullException">format or args is null.</exception>
 		public static string Format(string value, params object[] args)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(value)) return String.Empty;
+			if (StringUtil.IsNullOrWhiteSpace(value))
+			{
+				return String.Empty;
+			}
 
 			try
 			{
@@ -27,7 +30,11 @@ namespace System
 			catch (FormatException)
 			{
 				var str = value;
-				for (int i = 0; i < args.Length; i++) str = str.Replace("{" + i + "}", (args[i] == null ? "null" : StringUtil.ToString(args[i])));
+				for (int i = 0; i < args.Length; i++)
+				{
+					str = str.Replace("{" + i + "}", (args[i] == null ? "null" : StringUtil.ToString(args[i])));
+				}
+
 				return str;
 			}
 		}
@@ -40,14 +47,18 @@ namespace System
 		/// <exception cref="ArgumentOutOfRangeException">if <paramref name="length"/> is less or equal to 0.</exception>
 		public static string GenerateRandomString(int length)
 		{
-			if (length <= 0) throw new ArgumentOutOfRangeException("length");
+			if (length <= 0)
+			{
+				throw new ArgumentOutOfRangeException("length");
+			}
 
 			Random ra = new Random();
 			string result = string.Empty;
 			for (int i = 0; i < length; i++)
 			{
-				result += (char)ra.Next(65, 122); //65 = 'A', 122 = 'z'
+				result += (char)ra.Next(65, 122); ////65 = 'A', 122 = 'z'
 			}
+
 			return result;
 		}
 		
@@ -73,7 +84,11 @@ namespace System
 		/// <returns>The string representation of the specified byte array, or null if its null.</returns>
 		public static string ToString(byte[] buffer)
 		{
-			if (buffer == null) return null;
+			if (buffer == null)
+			{
+				return null;
+			}
+
 			var base64 = System.Convert.ToBase64String(buffer);
 			return base64.Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
 		}
@@ -86,13 +101,23 @@ namespace System
 		/// <returns>The string representation of value, or System.String.Empty if value is null.</returns>
 		public static string ToString(object value)
 		{
-			if (value == null) return null;
+			if (value == null)
+			{
+				return null;
+			}
 			
 			byte[] arr = value as byte[];
-			if (arr != null) return StringUtil.ToString(arr);
+			if (arr != null)
+			{
+				return StringUtil.ToString(arr);
+			}
 
 			Exception ex = value as Exception;
-			if (ex != null) return Adenson.Log.Logger.ConvertToString(ex, true);
+			if (ex != null)
+			{
+				return Adenson.Log.Logger.ToString(ex, true);
+			}
+
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
 		}
 

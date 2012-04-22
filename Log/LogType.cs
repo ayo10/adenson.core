@@ -12,10 +12,12 @@ namespace Adenson.Log
 		/// No logs
 		/// </summary>
 		None = 0,
+		
 		/// <summary>
 		/// Logs into a database (expects config setting adenson/loggerSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set
 		/// </summary>
 		Database = 1,
+		
 		/// <summary>
 		/// Logs into a physical file.
 		/// </summary>
@@ -25,27 +27,33 @@ namespace Adenson.Log
 		/// <para>If config setting adenson/loggerSettings.fileName is prepended with a directory name, the directory should exit before hand</para>
 		/// </remarks>
 		File = 2,
+		
 		/// <summary>
 		/// Logs into Windows Event Log
 		/// </summary>
 		EventLog = 4,
+		
 		/// <summary>
 		/// Logs via Console.WriteLine 
 		/// </summary>
 		Console = 8,
+		
 		/// <summary>
 		/// Logs via System.Diagnostics.Trace.WriteLine
 		/// </summary>
 		[Obsolete("Use Trace instead", false)]
 		Debug = 16,
+		
 		/// <summary>
 		/// Logs via System.Diagnostics.Trace.WriteLine
 		/// </summary>
 		Trace = 16,
+		
 		/// <summary>
 		/// Logs via email (expects config setting adenson/loggerSettings/emailInfo[from, to] to be set
 		/// </summary>
 		Email = 32,
+		
 		/// <summary>
 		/// DataBase | File | EventLog | Console | Debug | Email
 		/// </summary>

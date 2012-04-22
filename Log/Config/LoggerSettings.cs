@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,9 +10,6 @@ namespace Adenson.Log.Config
 {
 	internal sealed class LoggerSettings : XElementSettingBase
 	{
-		#region Variables
-		internal static LoggerSettings Default = ReadSettings();
-		#endregion
 		#region Constructor
 
 		public LoggerSettings(XElement element) : base(element)
@@ -26,8 +23,16 @@ namespace Adenson.Log.Config
 			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
 
 			var types = this.GetValue("Types", LogTypes.None);
-			if (types == LogTypes.None) types = this.GetValue("Type", LogTypes.None);
-			if (types == LogTypes.None) types = LogTypes.Trace;
+			if (types == LogTypes.None)
+			{
+				types = this.GetValue("Type", LogTypes.None);
+			}
+
+			if (types == LogTypes.None)
+			{
+				types = LogTypes.Trace;
+			}
+
 			this.Types = types;
 
 			if (this.Severity != LogSeverity.None)
@@ -58,10 +63,13 @@ namespace Adenson.Log.Config
 								string extension = Path.GetExtension(filePath);
 								string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), extension);
 								string oldNewFilePath = Path.Combine(folder, oldNewFileName);
-								if (!File.Exists(oldNewFilePath)) File.Move(fileName, oldNewFilePath);
+								if (!File.Exists(oldNewFilePath))
+								{
+									File.Move(fileName, oldNewFilePath);
+								}
 							}
 						}
-						catch (Exception)
+						catch
 						{
 						}
 
@@ -99,31 +107,37 @@ namespace Adenson.Log.Config
 			get;
 			set;
 		}
+
 		public LogTypes Types
 		{
 			get;
 			set;
 		}
+
 		public string Source
 		{
 			get;
 			set;
 		}
+
 		public string DateTimeFormat
 		{
 			get;
 			set;
 		}
+
 		public string FileName
 		{
 			get;
 			set;
 		}
+
 		public LoggerSettingDatabaseInfo DatabaseInfo
 		{
 			get;
 			set;
 		}
+
 		public LoggerSettingEmailInfo EmailInfo
 		{
 			get;
@@ -133,7 +147,7 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Methods
 
-		private static LoggerSettings ReadSettings()
+		internal static LoggerSettings ReadSettings()
 		{
 			var section = ConfigHelper.GetSection<XDocument>("adenson", "loggerSettings");
 			return new LoggerSettings((section != null) ? section.Root : null);

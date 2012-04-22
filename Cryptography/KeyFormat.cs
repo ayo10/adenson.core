@@ -11,6 +11,7 @@ namespace Adenson.Cryptography
 		/// Key is stored in base 64
 		/// </summary>
 		Base64,
+		
 		/// <summary>
 		/// Key is comma-delimited bytes
 		/// </summary>

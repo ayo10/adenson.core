@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace System.Threading
 {
 	/// <summary>
-	/// 
+	/// Represents a back ground running task in a thread
 	/// </summary>
 	public sealed class BackgroundThread
 	{
 		#region Variables
 		private static List<BackgroundThread> createdThreads = new List<BackgroundThread>();
-		Thread thread;
+		private Thread thread;
 		#endregion
 		#region Constructor
 
@@ -31,7 +31,7 @@ namespace System.Threading
 		public event EventHandler Aborted;
 
 		/// <summary>
-		/// Gets a value indicating the execution status of the current thread.
+		/// Gets a value indicating whether the thread is alive or not.
 		/// </summary>
 		public bool IsAlive
 		{
@@ -39,8 +39,8 @@ namespace System.Threading
 		}
 		
 		#endregion
-
 		#region Methods
+		
 		/// <summary>
 		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
 		/// </summary>
@@ -48,6 +48,7 @@ namespace System.Threading
 		{
 			thread.Start();
 		}
+
 		/// <summary>
 		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
 		/// </summary>
@@ -56,18 +57,23 @@ namespace System.Threading
 		{
 			thread.Start(parameter);
 		}
+
 		/// <summary>
 		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
 		/// </summary>
 		public void Abort()
 		{
 			thread.Abort();
-			if (this.Aborted != null) this.Aborted(this, EventArgs.Empty);
+			if (this.Aborted != null)
+			{
+				this.Aborted(this, EventArgs.Empty);
+			}
 		}
+
 		/// <summary>
 		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
 		/// </summary>
-		/// <param>An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
+		/// <param name="stateInfo">An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
 		public void Abort(object stateInfo)
 		{
 			thread.Abort(stateInfo);
@@ -77,7 +83,7 @@ namespace System.Threading
 		/// Creates a new <see cref="BackgroundThread"/> class.
 		/// </summary>
 		/// <param name="threadStart">A <see cref="ThreadStart"/> delegate that represents the methods to be invoked when the thread begins executing.</param>
-		/// <returns></returns>
+		/// <returns>A BackgroundThread object</returns>
 		public static BackgroundThread Create(ThreadStart threadStart)
 		{
 			BackgroundThread th = new BackgroundThread(threadStart);
@@ -85,6 +91,7 @@ namespace System.Threading
 			th.Start();
 			return th;
 		}
+
 		/// <summary>
 		///  Queues a method for execution by a <see cref="BackgroundThread"/> object. The method executes when a thread pool thread becomes available.
 		/// </summary>
@@ -94,6 +101,7 @@ namespace System.Threading
 			System.Threading.ThreadPool.SetMaxThreads(1, 1);
 			ThreadPool.QueueUserWorkItem(waitCallback);
 		}
+
 		/// <summary>
 		/// Aborts all threads created by <see cref="Create(ThreadStart)"/> by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
 		/// </summary>
@@ -101,18 +109,25 @@ namespace System.Threading
 		{
 			foreach (BackgroundThread th in createdThreads)
 			{
-				if (th.IsAlive) th.Abort();
+				if (th.IsAlive)
+				{
+					th.Abort();
+				}
 			}
 		}
+
 		/// <summary>
 		/// Aborts all threads created by <see cref="Create(ThreadStart)"/> by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
 		/// </summary>
-		/// <param>An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
+		/// <param name="stateInfo">An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
 		public static void AbortThreads(object stateInfo)
 		{
 			foreach (BackgroundThread th in createdThreads)
 			{
-				if (th.IsAlive) th.Abort(stateInfo);
+				if (th.IsAlive)
+				{
+					th.Abort(stateInfo);
+				}
 			}
 		}
 

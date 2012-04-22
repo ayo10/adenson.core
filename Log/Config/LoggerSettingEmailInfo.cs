@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Linq;
 using Adenson.Configuration;
 
@@ -23,11 +23,13 @@ namespace Adenson.Log.Config
 			get;
 			set;
 		}
+
 		public string Subject
 		{
 			get;
 			set;
 		}
+
 		public string To
 		{
 			get;

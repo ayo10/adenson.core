@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -20,6 +20,7 @@ namespace Adenson.Log.Config
 		public LoggerSettingDatabaseInfo() : this(null)
 		{
 		}
+
 		public LoggerSettingDatabaseInfo(XElement element) : base(element)
 		{
 			this.TableName = this.GetValue("TableName", "EventLog");
@@ -38,21 +39,25 @@ namespace Adenson.Log.Config
 			get;
 			set;
 		}
+
 		public string SeverityColumn
 		{
 			get;
 			set;
 		}
+
 		public string DateColumn
 		{
 			get;
 			set;
 		}
+
 		public string MessageColumn
 		{
 			get;
 			set;
 		}
+
 		public string TypeColumn
 		{
 			get;
@@ -68,11 +73,14 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Methods
 
-		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Should not fail regardless of any exception.")]
 		internal bool Save(LogEntry entry)
 		{
 			var sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
-			if (sqlHelper == null) return false;
+			if (sqlHelper == null)
+			{
+				return false;
+			}
 
 			IDbCommand command = sqlHelper.CreateCommand();
 			command.CommandText = this.InsertStatement;
@@ -87,7 +95,8 @@ namespace Adenson.Log.Config
 			}
 			catch (Exception ex)
 			{
-				System.Diagnostics.Debug.WriteLine(Logger.ConvertToString(ex));
+				System.Diagnostics.Debug.WriteLine("Unable to log to DB");
+				System.Diagnostics.Debug.WriteLine(Logger.ToString(ex));
 				return false;
 			}
 

@@ -15,7 +15,7 @@ namespace Adenson.Data
 		#region Constructors
 		
 		/// <summary>
-		/// Instantiates a new <see cref="SqlClientHelper"/> using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
 		public SqlClientHelper() : base()
 		{
@@ -32,7 +32,7 @@ namespace Adenson.Data
 		}
 		
 		/// <summary>
-		/// Instantiates a new instance of <see cref="SqlClientHelper"/> using specified connection string setting object
+		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
@@ -150,25 +150,42 @@ namespace Adenson.Data
 				string[] splits = str.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 				if (splits.Any(s => String.Equals(s, "GO", StringComparison.CurrentCultureIgnoreCase)))
 				{
-					//doing the following below for some odd reason changes the order of strings
-					//splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+					// doing the following below for some odd reason changes the order of strings
+					////splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
 
 					List<string> sqls = new List<string>();
 					string last = String.Empty;
 					foreach (string ins in splits.Select(s => s.Trim()))
 					{
-						if (String.IsNullOrEmpty(ins)) continue;
+						if (String.IsNullOrEmpty(ins))
+						{
+							continue;
+						}
+
 						if (String.Equals(ins, "GO", StringComparison.CurrentCultureIgnoreCase))
 						{
-							if (!String.IsNullOrEmpty(last)) sqls.Add(last.Trim());
+							if (!String.IsNullOrEmpty(last))
+							{
+								sqls.Add(last.Trim());
+							}
+
 							last = String.Empty;
 						}
-						else last += ins + Environment.NewLine;
+						else
+						{
+							last += ins + Environment.NewLine;
+						}
 					}
-					if (!String.IsNullOrEmpty(last)) sqls.Add(last.Trim());
+
+					if (!String.IsNullOrEmpty(last))
+					{
+						sqls.Add(last.Trim());
+					}
+
 					return base.ExecuteNonQuery(sqls.ToArray());
 				}
 			}
+
 			return base.ExecuteNonQuery(commandTexts);
 		}
 

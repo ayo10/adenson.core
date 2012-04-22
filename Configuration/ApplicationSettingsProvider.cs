@@ -1,7 +1,7 @@
-﻿using System;
+using System;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using System.Configuration;
 
 namespace Adenson.Configuration
 {
@@ -13,7 +13,7 @@ namespace Adenson.Configuration
 		#region Constructor
 
 		/// <summary>
-		/// Initializes an instance of the SettingsProvider class.
+		/// Initializes a new instance of the ApplicationSettingsProvider class.
 		/// </summary>
 		protected ApplicationSettingsProvider()
 		{
@@ -27,23 +27,25 @@ namespace Adenson.Configuration
 		#region Properties
 
 		/// <summary>
-		/// Gets the current entry assembly's company name
+		/// Gets or sets the current entry assembly's company name
 		/// </summary>
 		public string CompanyName
 		{
 			get;
 			protected set;
 		}
+
 		/// <summary>
-		/// Gets the current entry assembly's product name
+		/// Gets or sets the current entry assembly's product name
 		/// </summary>
 		public string ProductName
 		{
 			get;
 			protected set;
 		}
+
 		/// <summary>
-		/// Gets the current entry assembly's version
+		/// Gets or sets the current entry assembly's version
 		/// </summary>
 		public Version Version
 		{
@@ -61,11 +63,13 @@ namespace Adenson.Configuration
 		/// <param name="property">The SettingsProperty whose value is to be returned.</param>
 		/// <returns> A SettingsPropertyValue containing the value of thes pecified property setting as it was last set in the previous version of the application; or null if the setting cannot be found.</returns>
 		public abstract SettingsPropertyValue GetPreviousVersion(SettingsContext context, SettingsProperty property);
+		
 		/// <summary>
 		///  Resets the application settings associated with the specified application to their default values.
 		/// </summary>
 		/// <param name="context">A SettingsContext describing the current application usage.</param>
 		public abstract void Reset(SettingsContext context);
+		
 		/// <summary>
 		/// Indicates to the provider that the application has been upgraded. This offers the provider an opportunity to upgrade its stored settings as appropriate.
 		/// </summary>
@@ -83,7 +87,11 @@ namespace Adenson.Configuration
 			string groupName = (string)context["GroupName"];
 			string settingsKey = (string)context["SettingsKey"];
 			string name = groupName;
-			if (!String.IsNullOrEmpty(settingsKey)) name = StringUtil.Format("{0}.{1}", new object[] { name, settingsKey });
+			if (!String.IsNullOrEmpty(settingsKey))
+			{
+				name = StringUtil.Format("{0}.{1}", new object[] { name, settingsKey });
+			}
+
 			return System.Xml.XmlConvert.EncodeLocalName(name);
 		}
 
