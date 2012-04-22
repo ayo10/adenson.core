@@ -190,6 +190,9 @@ namespace Adenson.Cryptography
 				case HashAlgorithmType.HMAC:
 					algorithm = HMAC.Create();
 					break;
+				case HashAlgorithmType.HMACRIPEMD160:
+					algorithm = HMACRIPEMD160.Create();
+					break;
 				case HashAlgorithmType.MACTripleDES:
 					algorithm = MACTripleDES.Create();
 					break;
