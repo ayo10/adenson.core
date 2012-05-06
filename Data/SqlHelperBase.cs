@@ -68,9 +68,9 @@ namespace Adenson.Data
 		/// Gets or sets the wait time (in seconds) before terminating the attempt to execute a command and generating an error (default 30).
 		/// </summary>
 		/// <exception cref="ArgumentException">The property value assigned is less than 0.</exception>
-		public int CommandTimeout
+		public virtual int CommandTimeout
 		{
-			get 
+			get
 			{ 
 				return _commandTimeout; 
 			}
@@ -88,7 +88,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Gets the connection string to use
 		/// </summary>
-		public string ConnectionString
+		public virtual string ConnectionString
 		{
 			get;
 			private set;
@@ -97,7 +97,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Gets the current connection object in use (if OpenConnection was invoked)
 		/// </summary>
-		public IDbConnection CurrentConnection
+		public virtual IDbConnection CurrentConnection
 		{
 			get { return this.Manager.Connection; }
 		}
@@ -105,7 +105,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Gets or sets a value indicating whether to use transactions if a method that doesn't take a <see cref="IDbTransaction"/> object is called, defaults to true.
 		/// </summary>
-		public bool UseTransactionAlways
+		public virtual bool UseTransactionAlways
 		{
 			get { return _useTransactionAlways; }
 			set { _useTransactionAlways = value; }
@@ -282,24 +282,21 @@ namespace Adenson.Data
 				throw new ArgumentNullException("command");
 			}
 
-			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
-			this.Manager.Open();
-			
-			IDbDataAdapter dataAdapter = this.CreateAdapter(command);
-			DataSet dataset = new DataSet();
-			dataset.Locale = System.Globalization.CultureInfo.CurrentCulture;
-			dataAdapter.Fill(dataset);
-			
-			this.Manager.Close();
-			
-			IDisposable d = dataAdapter as IDisposable;
-			if (d != null)
+			using (var cw = this.Manager.Open(this, command))
 			{
-				d.Dispose();
+				IDbDataAdapter dataAdapter = this.CreateAdapter(command);
+				DataSet dataset = new DataSet();
+				dataset.Locale = System.Globalization.CultureInfo.CurrentCulture;
+				dataAdapter.Fill(dataset);
+
+				IDisposable d = dataAdapter as IDisposable;
+				if (d != null)
+				{
+					d.Dispose();
+				}
+
+				return dataset;
 			}
-			
-			return dataset;
 		}
 		
 		/// <summary>
@@ -449,10 +446,11 @@ namespace Adenson.Data
 
 			command.Connection = this.Manager.Connection;
 			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
-			this.Manager.Open();
-			int result = command.ExecuteNonQuery();
-			this.Manager.Close();
-			return result;
+			using (var cw = this.Manager.Open(this, command))
+			{
+				int result = command.ExecuteNonQuery();
+				return result;
+			}
 		}
 		
 		/// <summary>
@@ -594,11 +592,11 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
-			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
-			this.Manager.Open();
-			IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
-			return result;
+			using (IDisposable d = this.Manager.Open(this, command))
+			{
+				IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
+				return result;
+			}
 		}
 		
 		/// <summary>
@@ -614,12 +612,10 @@ namespace Adenson.Data
 				throw new ArgumentNullException("command");
 			}
 
-			command.Connection = this.Manager.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
-			this.Manager.Open();
-			object result = command.ExecuteScalar();
-			this.Manager.Close();
-			return result;
+			using (var cw = this.Manager.Open(this, command))
+			{
+				return command.ExecuteScalar();
+			}
 		}
 		
 		/// <summary>

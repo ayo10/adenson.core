@@ -67,6 +67,7 @@
     <Compile Include="Coordinate.cs" />
     <Compile Include="Cryptography\EncryptorBase.cs" />
     <Compile Include="Cryptography\HashAlgorithmType.cs" />
+    <Compile Include="Data\CommandWrapper.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
     <Compile Include="Data\ConnectionManager.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
@@ -127,6 +128,7 @@
     <None Include="AdensonCore.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
