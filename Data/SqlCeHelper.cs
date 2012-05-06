@@ -44,6 +44,30 @@ namespace Adenson.Data
 		}
 
 		#endregion
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets the wait time, will always return zero, <see cref="System.Data.SqlServerCe.SqlCeCommand.CommandTimeout"/>.
+		/// </summary>
+		/// <exception cref="ArgumentException">The property value assigned is set to anything except 0.</exception>
+		public override int CommandTimeout
+		{
+			get
+			{
+				return 0;
+			}
+			set
+			{
+				if (value != 0)
+				{
+					throw new ArgumentException("System.Data.SqlServerCe 4 does not support any command timeout other than zero");
+				}
+
+				base.CommandTimeout = 0;
+			}
+		}
+
+		#endregion
 		#region Methods
 
 		/// <summary>

@@ -42,6 +42,17 @@ namespace Adenson.Data
 			}
 		}
 
+		public IDisposable Open(SqlHelperBase helper, IDbCommand command)
+		{
+			CommandWrapper cw = new CommandWrapper(this);
+			command.Connection = this.Connection;
+			int timeout = Math.Max(command.CommandTimeout, helper.CommandTimeout);
+			command.CommandTimeout = timeout;
+
+			this.Open();
+			return cw;
+		}
+
 		public void Close()
 		{
 			if (this.AllowClose && this.Connection.State != ConnectionState.Closed)
