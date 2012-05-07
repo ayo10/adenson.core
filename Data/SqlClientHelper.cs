@@ -109,7 +109,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, "SELECT * FROM sys.databases WHERE Name = {0}", database);
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("SELECT * FROM sys.databases WHERE Name = '{0}'", database));
 				cmd.Connection = connection;
 				using (IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
 				{

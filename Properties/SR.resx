@@ -124,6 +124,6 @@
     <value>START</value>
   </data>
   <data name="ProfilerStop" xml:space="preserve">
-    <value>STOP</value>
+    <value>FINISH</value>
   </data>
 </root>
