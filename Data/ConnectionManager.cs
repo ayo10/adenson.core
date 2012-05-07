@@ -7,13 +7,15 @@ namespace Adenson.Data
 	internal sealed class ConnectionManager : IDisposable
 	{
 		#region Variables
+		private SqlHelperBase _helper;
 		private bool _allowClose = true;
 		#endregion
 		#region Constructor
 
-		internal ConnectionManager(IDbConnection connection)
+		internal ConnectionManager(SqlHelperBase helper)
 		{
-			this.Connection = connection;
+			_helper = helper;
+			this.Connection = helper.CreateConnection();
 		}
 
 		#endregion
@@ -42,13 +44,11 @@ namespace Adenson.Data
 			}
 		}
 
-		public IDisposable Open(SqlHelperBase helper, IDbCommand command)
+		public IDisposable Open(IDbCommand command)
 		{
-			CommandWrapper cw = new CommandWrapper(this);
+			ConnectionManagerCloser cw = new ConnectionManagerCloser(this);
 			command.Connection = this.Connection;
-			int timeout = Math.Max(command.CommandTimeout, helper.CommandTimeout);
-			command.CommandTimeout = timeout;
-
+			command.CommandTimeout = Math.Max(command.CommandTimeout, _helper.CommandTimeout);
 			this.Open();
 			return cw;
 		}
@@ -68,6 +68,24 @@ namespace Adenson.Data
 			if (this.Connection != null)
 			{
 				this.Connection.Dispose();
+			}
+		}
+
+		#endregion
+		#region Inner Class
+
+		private sealed class ConnectionManagerCloser : IDisposable
+		{
+			private ConnectionManager _connectionManager;
+
+			public ConnectionManagerCloser(ConnectionManager connectionManager)
+			{
+				_connectionManager = connectionManager;
+			}
+
+			public void Dispose()
+			{
+				_connectionManager.Close();
 			}
 		}
 
