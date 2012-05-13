@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Wierra.Annotations
+namespace Adenson.ComponentModel.DataAnnotations
 {
 	/// <summary>
 	/// Specifies the minimum and maximum length of characters that are allowed in a password data field.
