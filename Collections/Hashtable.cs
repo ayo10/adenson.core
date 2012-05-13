@@ -27,7 +27,7 @@ namespace Adenson.Collections
 		{
 			dick = new Dictionary<K, V>();
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the Hashtable class with specified capacity
 		/// </summary>
@@ -39,7 +39,7 @@ namespace Adenson.Collections
 
 		#endregion
 		#region Properties
-		
+
 		/// <summary>
 		/// Gets the number of items in the dictionary
 		/// </summary>
@@ -56,7 +56,7 @@ namespace Adenson.Collections
 			get;
 			internal set;
 		}
-		
+
 		/// <summary>
 		/// Gets all the keys in the hashtable
 		/// </summary>
@@ -64,7 +64,7 @@ namespace Adenson.Collections
 		{
 			get { return dick.Keys; }
 		}
-		
+
 		/// <summary>
 		/// Gets all the values in the hashtable
 		/// </summary>
@@ -124,7 +124,7 @@ namespace Adenson.Collections
 
 			dick.Add(key, value);
 		}
-		
+
 		/// <summary>
 		/// Removes all items
 		/// </summary>
@@ -137,7 +137,7 @@ namespace Adenson.Collections
 
 			dick.Clear();
 		}
-		
+
 		/// <summary>
 		/// Copies the elements of the hashtable to the specified array, starting at the specified index.
 		/// </summary>
@@ -147,7 +147,7 @@ namespace Adenson.Collections
 		{
 			dick.CopyTo(array, arrayIndex);
 		}
-		
+
 		/// <summary>
 		/// Determines whether the hashtable contains the specified item.
 		/// </summary>
@@ -157,7 +157,7 @@ namespace Adenson.Collections
 		{
 			return dick.Contains(item);
 		}
-		
+
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
 		/// </summary>
@@ -167,7 +167,7 @@ namespace Adenson.Collections
 		{
 			return dick.ContainsKey(key);
 		}
-		
+
 		/// <summary>
 		/// Determines whether the dictionary contains a specific value.
 		/// </summary>
@@ -177,7 +177,7 @@ namespace Adenson.Collections
 		{
 			return dick.Values.Contains(value);
 		}
-		
+
 		/// <summary>
 		/// Returns an enumerator that iterates through the dictionary
 		/// </summary>
@@ -186,7 +186,7 @@ namespace Adenson.Collections
 		{
 			return dick.GetEnumerator();
 		}
-		
+
 		/// <summary>
 		/// Removes the value with the specified key from the dictionary
 		/// </summary>
@@ -202,7 +202,7 @@ namespace Adenson.Collections
 			bool result = dick.Remove(key);
 			return result;
 		}
-		
+
 		/// <summary>
 		/// Gets the value associated with the specified key.
 		/// </summary>
@@ -213,7 +213,7 @@ namespace Adenson.Collections
 		{
 			return dick.TryGetValue(key, out value);
 		}
-		
+
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return dick.GetEnumerator();

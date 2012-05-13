@@ -13,14 +13,14 @@ namespace Adenson.Data
 	public sealed class SqlClientHelper : SqlHelperBase
 	{
 		#region Constructors
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
 		/// </summary>
 		public SqlClientHelper() : base()
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
 		/// </summary>
@@ -30,19 +30,20 @@ namespace Adenson.Data
 		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
 		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
-		public SqlClientHelper(string keyOrConnectionString) : base(keyOrConnectionString)
+		public SqlClientHelper(string keyOrConnectionString)
+			: base(keyOrConnectionString)
 		{
 		}
 
 		#endregion
 		#region Methods
-		
+
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
@@ -134,7 +135,7 @@ namespace Adenson.Data
 				cmd.ExecuteNonQuery();
 			}
 		}
-		
+
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>

@@ -55,15 +55,15 @@ namespace Adenson.Data
 			{
 				throw new ArgumentNullException("keyOrConnectionString");
 			}
-			
+
 			var cs = ConfigurationManager.ConnectionStrings[keyOrConnectionString];
 			this.ConnectionString = cs == null ? keyOrConnectionString : cs.ConnectionString;
 			this.UseTransactionAlways = true;
 		}
-		
+
 		#endregion
 		#region Properties
-		
+
 		/// <summary>
 		/// Gets or sets the wait time (in seconds) before terminating the attempt to execute a command and generating an error (default 30).
 		/// </summary>
@@ -71,8 +71,8 @@ namespace Adenson.Data
 		public virtual int CommandTimeout
 		{
 			get
-			{ 
-				return _commandTimeout; 
+			{
+				return _commandTimeout;
 			}
 			set
 			{
@@ -84,7 +84,7 @@ namespace Adenson.Data
 				_commandTimeout = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Gets the connection string to use
 		/// </summary>
@@ -292,7 +292,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteDataSet(this.CreateCommand(type, null, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command text using specified transaction
 		/// </summary>
@@ -313,7 +313,7 @@ namespace Adenson.Data
 
 			return this.ExecuteDataSet(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command
 		/// </summary>
@@ -343,7 +343,7 @@ namespace Adenson.Data
 				return dataset;
 			}
 		}
-		
+
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -398,7 +398,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
-		
+
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
@@ -504,7 +504,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
-		
+
 		#endregion
 		#region ExecuteNonQuery
 
@@ -540,7 +540,7 @@ namespace Adenson.Data
 
 			return this.ExecuteNonQuery(this.CreateCommand(transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the specified command text and returns the number of rows affected.
 		/// </summary>
@@ -554,7 +554,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteNonQuery(this.CreateCommand(type, null, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the specified command text using specified transaction and returns the number of rows affected.
 		/// </summary>
@@ -575,7 +575,7 @@ namespace Adenson.Data
 
 			return this.ExecuteNonQuery(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the command and returns the number of rows affected.
 		/// </summary>
@@ -595,7 +595,7 @@ namespace Adenson.Data
 				return result;
 			}
 		}
-		
+
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -756,7 +756,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
-		
+
 		#endregion
 		#region ExecuteReader
 
@@ -792,7 +792,7 @@ namespace Adenson.Data
 
 			return this.ExecuteReader(this.CreateCommand(transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the specified command text and builds an System.Data.IDataReader.
 		/// </summary>
@@ -806,7 +806,7 @@ namespace Adenson.Data
 		{
 			return this.ExecuteReader(this.CreateCommand(type, null, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
 		/// </summary>
@@ -827,7 +827,7 @@ namespace Adenson.Data
 
 			return this.ExecuteReader(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataReader.
 		/// </summary>
@@ -841,7 +841,7 @@ namespace Adenson.Data
 				return result;
 			}
 		}
-		
+
 		#endregion
 		#region ExecuteScalar
 
@@ -912,7 +912,7 @@ namespace Adenson.Data
 
 			return this.ExecuteScalar(this.CreateCommand(type, transaction, commandText, parameterValues));
 		}
-		
+
 		/// <summary>
 		/// Executes the command returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
@@ -931,7 +931,7 @@ namespace Adenson.Data
 				return command.ExecuteScalar();
 			}
 		}
-		
+
 		/// <summary>
 		/// Executes the commands in a batched mode with a transaction
 		/// </summary>
@@ -986,7 +986,7 @@ namespace Adenson.Data
 
 			return list.ToArray();
 		}
-		
+
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
@@ -1104,25 +1104,25 @@ namespace Adenson.Data
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="IDbDataAdapter"/> adapter</returns>
 		public abstract IDbDataAdapter CreateAdapter(IDbCommand command);
-		
+
 		/// <summary>
 		/// Creates a new command object for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		public abstract IDbCommand CreateCommand();
-		
+
 		/// <summary>
 		/// Creates a new database connection for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="IDbConnection"/> object</returns>
 		public abstract IDbConnection CreateConnection();
-		
+
 		/// <summary>
 		/// Creates a new data parametr for use in running commands
 		/// </summary>
 		/// <returns>New <see cref="IDataParameter"/> object</returns>
 		public abstract IDbDataParameter CreateParameter();
-		
+
 		/// <summary>
 		/// Runs a check for the existence of database specified in the connectionstring
 		/// </summary>
@@ -1131,7 +1131,7 @@ namespace Adenson.Data
 
 		#endregion
 		#region Protected Methods
-		
+
 		/// <summary>
 		/// Creates a new CommandType.Text command object of specified type using specified <paramref name="parameterValues"/>
 		/// </summary>
@@ -1212,7 +1212,7 @@ namespace Adenson.Data
 				{
 					// Cheap way of throwing a FormatException, if the commandText is invalid.-or- The index of a parameterValues item is less than zero, or greater than or equal to the length of the args array.
 					String.Format(commandText, parameterValues);
-					
+
 					for (var i = 0; i < parameterValues.Length; i++)
 					{
 						string name = "@param" + i;

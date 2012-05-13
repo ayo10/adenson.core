@@ -37,10 +37,10 @@ namespace System.Threading
 		{
 			get { return thread.IsAlive; }
 		}
-		
+
 		#endregion
 		#region Methods
-		
+
 		/// <summary>
 		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
 		/// </summary>

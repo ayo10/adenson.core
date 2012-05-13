@@ -34,7 +34,7 @@ namespace Adenson.Log
 
 		#endregion
 		#region Properties
-	
+
 		/// <summary>
 		/// Gets the type form which this instance is forged from
 		/// </summary>
@@ -45,7 +45,7 @@ namespace Adenson.Log
 
 		#endregion
 		#region Methods
-		
+
 		/// <summary>
 		/// Log debug messages, converting the specified value to string.
 		/// </summary>>
@@ -54,7 +54,7 @@ namespace Adenson.Log
 		{
 			this.Debug(StringUtil.ToString(value));
 		}
-		
+
 		/// <summary>
 		/// Log debug message
 		/// </summary>
@@ -151,7 +151,7 @@ namespace Adenson.Log
 
 			return profiler;
 		}
-		
+
 		/// <summary>
 		/// Log warning message, converting the specified value to string.
 		/// </summary>
@@ -160,7 +160,7 @@ namespace Adenson.Log
 		{
 			this.Warn(StringUtil.ToString(value));
 		}
-		
+
 		/// <summary>
 		/// Log warning message
 		/// </summary>
@@ -176,7 +176,7 @@ namespace Adenson.Log
 
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
-		
+
 		internal void ProfilerStop(Guid uid)
 		{
 			lock (profilers)
@@ -371,7 +371,7 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Warn(value);
 		}
-		
+
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(string, object[])"/>
 		/// </summary>
@@ -382,7 +382,7 @@ namespace Adenson.Log
 		{
 			Logger.GetLogger(type).Warn(message, arguments);
 		}
-		
+
 		private static void OutWriteLine(LogEntry entry)
 		{
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
@@ -399,7 +399,7 @@ namespace Adenson.Log
 			{
 				Logger.SaveToDatabase(entry);
 			}
-			
+
 			if ((entry.LogType & LogTypes.Email) != LogTypes.None && !defaultSettings.EmailInfo.IsEmpty())
 			{
 				SmtpUtil.TrySend(defaultSettings.EmailInfo.From, defaultSettings.EmailInfo.To, defaultSettings.EmailInfo.Subject, entry.ToString(), false);

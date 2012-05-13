@@ -19,7 +19,7 @@ namespace System
 		/// Occurs when a property value changes.
 		/// </summary>
 		public event PropertyChangedEventHandler PropertyChanged;
-		
+
 		/// <summary>
 		/// Occurs when a property value is changing.
 		/// </summary>
