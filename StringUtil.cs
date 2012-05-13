@@ -32,7 +32,7 @@ namespace System
 				var str = value;
 				for (int i = 0; i < args.Length; i++)
 				{
-					str = str.Replace("{" + i + "}", (args[i] == null ? "null" : StringUtil.ToString(args[i])));
+					str = str.Replace("{" + i + "}", args[i] == null ? "null" : StringUtil.ToString(args[i]));
 				}
 
 				return str;
@@ -61,7 +61,7 @@ namespace System
 
 			return result;
 		}
-		
+
 		/// <summary>
 		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.
 		/// </summary>
@@ -76,7 +76,7 @@ namespace System
 			return String.IsNullOrWhiteSpace(value);
 			#endif
 		}
-		
+
 		/// <summary>
 		/// Converts the specified byte array to its equivalent string representation in Base64, minus the slashes and equal signs
 		/// </summary>
@@ -92,7 +92,7 @@ namespace System
 			var base64 = System.Convert.ToBase64String(buffer);
 			return base64.Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
 		}
-		
+
 		/// <summary>
 		/// Converts the value of the specified object to its equivalent string representation.
 		/// </summary>
@@ -105,7 +105,7 @@ namespace System
 			{
 				return null;
 			}
-			
+
 			byte[] arr = value as byte[];
 			if (arr != null)
 			{

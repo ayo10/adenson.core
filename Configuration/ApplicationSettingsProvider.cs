@@ -63,13 +63,13 @@ namespace Adenson.Configuration
 		/// <param name="property">The SettingsProperty whose value is to be returned.</param>
 		/// <returns> A SettingsPropertyValue containing the value of thes pecified property setting as it was last set in the previous version of the application; or null if the setting cannot be found.</returns>
 		public abstract SettingsPropertyValue GetPreviousVersion(SettingsContext context, SettingsProperty property);
-		
+
 		/// <summary>
 		///  Resets the application settings associated with the specified application to their default values.
 		/// </summary>
 		/// <param name="context">A SettingsContext describing the current application usage.</param>
 		public abstract void Reset(SettingsContext context);
-		
+
 		/// <summary>
 		/// Indicates to the provider that the application has been upgraded. This offers the provider an opportunity to upgrade its stored settings as appropriate.
 		/// </summary>

@@ -62,10 +62,10 @@ namespace System
 			{
 				throw new ArgumentNullException("value");
 			}
-			
+
 			return source.IndexOf(value, comparisonType) > -1;
 		}
-		
+
 		/// <summary>
 		/// Rounds a double-precision floating-point value to a specified number of fractional digits.
 		/// </summary>
@@ -78,7 +78,7 @@ namespace System
 		{
 			return Math.Round(value, digits);
 		}
-		
+
 		/// <summary>
 		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
 		/// </summary>
@@ -93,7 +93,7 @@ namespace System
 
 			return BitConverter.ToString(buffer).Replace("-", String.Empty);
 		}
-		
+
 		/// <summary>
 		/// Converts specified integer value to roman numeral
 		/// </summary>

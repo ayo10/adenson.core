@@ -29,7 +29,7 @@ namespace Adenson.Collections
 		public ObservableCollection() : base()
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the ObservableCollection class that contains elements copied from the specified collection.
 		/// </summary>
@@ -43,14 +43,15 @@ namespace Adenson.Collections
 				obs.CollectionChanged += this.OnSourceCollectionChanged;
 			}
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the ObservableCollection class that contains elements copied from the specified collection.
 		/// </summary>
 		/// <param name="list">The collection from which the elements are copied.</param>
 		/// <exception cref="ArgumentNullException">The list parameter cannot be null.</exception>
 		[SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Someone tell microsoft that")]
-		public ObservableCollection(List<T> list) : base(list)
+		public ObservableCollection(List<T> list)
+			: base(list)
 		{
 		}
 
@@ -61,7 +62,7 @@ namespace Adenson.Collections
 		/// Occurs when an item is about to be added, removed, changed, or moved.
 		/// </summary>
 		public event EventHandler<CollectionChangingEventArgs<T>> CollectionChanging;
-		
+
 		/// <summary>
 		/// Occurs when an item is added, removed, changed, moved, or the entire list is refreshed.
 		/// </summary>

@@ -106,9 +106,9 @@ namespace Adenson.Data
 					}
 
 					return (SqlHelperBase)assembly.CreateInstance("Adenson.Data.SqlCeHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
-				case "System.Data.OracleClient": 
+				case "System.Data.OracleClient":
 					throw new NotSupportedException(connectionString.ProviderName);
-				default: 
+				default:
 					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
 			}
 		}

@@ -25,7 +25,7 @@ namespace Adenson.Log
 
 		#endregion
 		#region Properties
-		
+
 		/// <summary>
 		/// Gets the elapsed time between when the object was initialzied and this property is called.
 		/// </summary>
@@ -59,7 +59,7 @@ namespace Adenson.Log
 			get;
 			private set;
 		}
-	
+
 		/// <summary>
 		/// Gets the parent <see cref="Logger"/> object
 		/// </summary>
@@ -104,7 +104,7 @@ namespace Adenson.Log
 		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.ToString("0.000000", System.Globalization.CultureInfo.CurrentCulture), this.Identifier, (message == null ? String.Empty : StringUtil.Format(message, arguments)));
+			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", this.Elapsed.TotalSeconds.ToString("0.000000", System.Globalization.CultureInfo.CurrentCulture), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
 		}
 
 		/// <summary>

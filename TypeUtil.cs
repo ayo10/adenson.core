@@ -20,7 +20,7 @@ namespace System
 		{
 			return Activator.CreateInstance<T>();
 		}
-		
+
 		/// <summary>
 		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
 		/// </summary>
@@ -43,7 +43,7 @@ namespace System
 
 			return (T)Activator.CreateInstance(type);
 		}
-		
+
 		/// <summary>
 		/// Creates an instance of the specified type using that type's default constructor.
 		/// </summary>
@@ -61,7 +61,7 @@ namespace System
 
 			return (T)Activator.CreateInstance(type);
 		}
-		
+
 		/// <summary>
 		/// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object. (Case insensitive).
 		/// </summary>
@@ -81,7 +81,7 @@ namespace System
 
 			return (T)Enum.Parse(typeof(T), value, true);
 		}
-		
+
 		/// <summary>
 		/// Gets the System.Type with the specified name.
 		/// </summary>
@@ -108,7 +108,7 @@ namespace System
 
 			return type;
 		}
-		
+
 		/// <summary>
 		/// Tries to convert the specified value
 		/// </summary>
@@ -131,7 +131,7 @@ namespace System
 
 			return converted;
 		}
-		
+
 		/// <summary>
 		/// Tries to convert the specified value
 		/// </summary>

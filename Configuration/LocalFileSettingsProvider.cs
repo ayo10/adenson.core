@@ -218,7 +218,7 @@ namespace Adenson.Configuration
 			string configFilePath = Path.Combine(Path.Combine(applicationDataPath, this.CompanyName), this.ProductName);
 			if (!this.IgnoreVersion)
 			{
-				configFilePath = Path.Combine(configFilePath, (this.Version.Major + "." + this.Version.Minor));
+				configFilePath = Path.Combine(configFilePath, this.Version.Major + "." + this.Version.Minor);
 			}
 
 			ExeConfigurationFileMap filemap = new ExeConfigurationFileMap();

@@ -32,7 +32,7 @@ namespace System
 			get;
 			private set;
 		}
-		
+
 		/// <summary>
 		/// Gets the right side of the pair
 		/// </summary>
@@ -41,7 +41,7 @@ namespace System
 			get;
 			private set;
 		}
-		
+
 		/// <summary>
 		/// Gets a value indicating whether the pair is empty, i.e, a pair that was instantiated with an empty constructor
 		/// </summary>

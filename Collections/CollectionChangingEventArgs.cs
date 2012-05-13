@@ -78,7 +78,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Gets the list of new items involved in the change.
 		/// </summary>
-		public new IList<T> NewItems 
+		public new IList<T> NewItems
 		{
 			get { return base.NewItems.Cast<T>().ToList(); }
 		}

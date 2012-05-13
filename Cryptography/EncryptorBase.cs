@@ -39,7 +39,7 @@ namespace Adenson.Cryptography
 		/// Gets the algorithm the encryptor is based on
 		/// </summary>
 		public abstract SymmetricAlgorithm Algorithm
-		{ 
+		{
 			get;
 		}
 
