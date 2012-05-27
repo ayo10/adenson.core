@@ -142,9 +142,9 @@ namespace Adenson.Configuration
 					}
 					else if (setting.PropertyValue != null)
 					{
-						if (typeConverter.CanConvertTo(typeof(String)))
+						if (typeConverter.CanConvertTo(typeof(string)))
 						{
-							registryValue = typeConverter.ConvertTo(setting.PropertyValue, typeof(String));
+							registryValue = typeConverter.ConvertTo(setting.PropertyValue, typeof(string));
 						}
 					}
 				}

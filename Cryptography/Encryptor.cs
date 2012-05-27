@@ -229,7 +229,7 @@ namespace Adenson.Cryptography
 		/// <remarks>Calls Encryptor.GetHash(toEncrypt, HashAlgorithmType, Encoding.Default).</remarks>
 		public static byte[] GetHash(string toEncrypt)
 		{
-			return Encryptor.GetHash(toEncrypt, HashAlgorithmType.SHA512);
+			return Encryptor.GetHash(toEncrypt, HashAlgorithmType.SHA512, Encoding.Default);
 		}
 
 		/// <summary>

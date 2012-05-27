@@ -257,7 +257,7 @@ namespace Adenson.Collections
 					}
 					else if (syncInvoker != null)
 					{
-						syncInvoker.Invoke(del, new Object[] { this, e });
+						syncInvoker.Invoke(del, new object[] { this, e });
 					}
 					else
 					{

@@ -23,14 +23,6 @@ namespace Adenson.Log
 		}
 
 		#endregion
-		#region Methods
-
-		public override string ToString()
-		{
-			return String.Concat("[", this.Value, "]").PadRight(9);
-		}
-
-		#endregion
 		#region Operators
 
 		public static implicit operator LogSeverity(LogSeverityInternal value)
@@ -46,6 +38,14 @@ namespace Adenson.Log
 		public static implicit operator LogSeverityInternal(LogSeverity value)
 		{
 			return new LogSeverityInternal { Severity = value };
+		}
+
+		#endregion
+		#region Methods
+
+		public override string ToString()
+		{
+			return String.Concat("[", this.Value, "]").PadRight(9);
 		}
 
 		#endregion

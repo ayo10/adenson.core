@@ -39,8 +39,6 @@ namespace Adenson.Log.Config
 			{
 				var listeners = new List<TraceListener>();
 
-				#region File Listener
-
 				if ((this.Types & LogTypes.File) != LogTypes.None)
 				{
 					string filePath = this.FileName;
@@ -81,15 +79,10 @@ namespace Adenson.Log.Config
 					}
 				}
 
-				#endregion
-				#region EventLog Listener
-
 				if ((this.Types & LogTypes.EventLog) != LogTypes.None)
 				{
 					listeners.Add(new EventLogTraceListener());
 				}
-
-				#endregion
 
 				foreach (var listener in listeners)
 				{

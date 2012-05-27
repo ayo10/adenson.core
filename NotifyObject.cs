@@ -33,7 +33,7 @@ namespace System
 		/// </summary>
 		/// <param name="key">The key of the value</param>
 		/// <returns>The found value, default of T otherwise</returns>
-		protected object GetValue(String key)
+		protected object GetValue(string key)
 		{
 			return this.GetValue(key, null);
 		}
@@ -44,7 +44,7 @@ namespace System
 		/// <param name="key">The key of the value</param>
 		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
-		protected object GetValue(String key, object defaultValue)
+		protected object GetValue(string key, object defaultValue)
 		{
 			return keyValues.ContainsKey(key) ? keyValues[key] : defaultValue;
 		}
@@ -54,7 +54,7 @@ namespace System
 		/// </summary>
 		/// <param name="key">The key</param>
 		/// <param name="value">The value</param>
-		protected void SetValue(String key, object value)
+		protected void SetValue(string key, object value)
 		{
 			if (Object.Equals(keyValues[key], value))
 			{
@@ -70,7 +70,7 @@ namespace System
 		/// Called after the property has changed.
 		/// </summary>
 		/// <param name="key">The value's key</param>
-		protected void OnPropertyChanged(String key)
+		protected void OnPropertyChanged(string key)
 		{
 			PropertyChangedEventArgs e = new PropertyChangedEventArgs(key);
 			if (this.PropertyChanged != null)
@@ -83,7 +83,7 @@ namespace System
 		/// Called before the property's value changes.
 		/// </summary>
 		/// <param name="key">The value's key</param>
-		protected void OnPropertyChanging(String key)
+		protected void OnPropertyChanging(string key)
 		{
 			if (this.PropertyChanging != null)
 			{

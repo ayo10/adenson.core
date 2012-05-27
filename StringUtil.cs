@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 namespace System
 {
@@ -75,6 +76,32 @@ namespace System
 			#else
 			return String.IsNullOrWhiteSpace(value);
 			#endif
+		}
+
+		/// <summary>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// </summary>
+		/// <param name="value">The string</param>
+		/// <returns>byte array, or null if string is null</returns>
+		public static byte[] ToBytes(string value)
+		{
+			return StringUtil.ToBytes(value, Encoding.Default);
+		}
+
+		/// <summary>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// </summary>
+		/// <param name="value">The string</param>
+		/// <param name="encoding">The encoding to use</param>
+		/// <returns>byte array, or null if string is null</returns>
+		public static byte[] ToBytes(string value, Encoding encoding)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+
+			return encoding.GetBytes(value);
 		}
 
 		/// <summary>

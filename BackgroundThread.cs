@@ -42,44 +42,6 @@ namespace System.Threading
 		#region Methods
 
 		/// <summary>
-		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
-		/// </summary>
-		public void Start()
-		{
-			thread.Start();
-		}
-
-		/// <summary>
-		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
-		/// </summary>
-		/// <param name="parameter">An object that contains data to be used by the method the thread executes.</param>
-		public void Start(object parameter)
-		{
-			thread.Start(parameter);
-		}
-
-		/// <summary>
-		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
-		/// </summary>
-		public void Abort()
-		{
-			thread.Abort();
-			if (this.Aborted != null)
-			{
-				this.Aborted(this, EventArgs.Empty);
-			}
-		}
-
-		/// <summary>
-		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
-		/// </summary>
-		/// <param name="stateInfo">An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
-		public void Abort(object stateInfo)
-		{
-			thread.Abort(stateInfo);
-		}
-
-		/// <summary>
 		/// Creates a new <see cref="BackgroundThread"/> class.
 		/// </summary>
 		/// <param name="threadStart">A <see cref="ThreadStart"/> delegate that represents the methods to be invoked when the thread begins executing.</param>
@@ -129,6 +91,44 @@ namespace System.Threading
 					th.Abort(stateInfo);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
+		/// </summary>
+		public void Start()
+		{
+			thread.Start();
+		}
+
+		/// <summary>
+		/// Causes the operating system to change the state of the <see cref="ThreadState"/> used to start the BackgroundThread object.
+		/// </summary>
+		/// <param name="parameter">An object that contains data to be used by the method the thread executes.</param>
+		public void Start(object parameter)
+		{
+			thread.Start(parameter);
+		}
+
+		/// <summary>
+		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
+		/// </summary>
+		public void Abort()
+		{
+			thread.Abort();
+			if (this.Aborted != null)
+			{
+				this.Aborted(this, EventArgs.Empty);
+			}
+		}
+
+		/// <summary>
+		/// Aborts this thread by raising a <see cref="ThreadAbortException"/> in the thread on which it is invoked, to begin the process of terminating the thread. Calling this method usually terminates the thread.
+		/// </summary>
+		/// <param name="stateInfo">An object that contains application-specific information, such as state, which can be used by the thread being aborted.</param>
+		public void Abort(object stateInfo)
+		{
+			thread.Abort(stateInfo);
 		}
 
 		#endregion

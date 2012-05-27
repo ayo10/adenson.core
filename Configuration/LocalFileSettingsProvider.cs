@@ -207,6 +207,34 @@ namespace Adenson.Configuration
 			throw new NotImplementedException();
 		}
 
+		private static XmlNode ConvertToXmlElement(SettingsProperty setting, SettingsPropertyValue value)
+		{
+			XmlElement element = new XmlDocument().CreateElement("value");
+			string serializedValue = value.SerializedValue as string;
+			if ((serializedValue == null) && (setting.SerializeAs == SettingsSerializeAs.Binary))
+			{
+				byte[] inArray = value.SerializedValue as byte[];
+				if (inArray != null)
+				{
+					serializedValue = Convert.ToBase64String(inArray);
+				}
+			}
+
+			if (serializedValue == null)
+			{
+				serializedValue = String.Empty;
+			}
+
+			element.InnerXml = serializedValue;
+			XmlNode declaration = element.ChildNodes.Cast<XmlNode>().FirstOrDefault(x => x.NodeType == XmlNodeType.XmlDeclaration);
+			if (declaration != null)
+			{
+				element.RemoveChild(declaration);
+			}
+
+			return element;
+		}
+
 		private System.Configuration.Configuration GetConfiguration(SettingsContext context)
 		{
 			return this.GetConfiguration(context, false);
@@ -242,34 +270,6 @@ namespace Adenson.Configuration
 			}
 
 			return config;
-		}
-
-		private static XmlNode ConvertToXmlElement(SettingsProperty setting, SettingsPropertyValue value)
-		{
-			XmlElement element = new XmlDocument().CreateElement("value");
-			string serializedValue = value.SerializedValue as string;
-			if ((serializedValue == null) && (setting.SerializeAs == SettingsSerializeAs.Binary))
-			{
-				byte[] inArray = value.SerializedValue as byte[];
-				if (inArray != null)
-				{
-					serializedValue = Convert.ToBase64String(inArray);
-				}
-			}
-
-			if (serializedValue == null)
-			{
-				serializedValue = String.Empty;
-			}
-
-			element.InnerXml = serializedValue;
-			XmlNode declaration = element.ChildNodes.Cast<XmlNode>().FirstOrDefault(x => x.NodeType == XmlNodeType.XmlDeclaration);
-			if (declaration != null)
-			{
-				element.RemoveChild(declaration);
-			}
-
-			return element;
 		}
 
 		#endregion
