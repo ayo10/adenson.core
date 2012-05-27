@@ -89,7 +89,7 @@ namespace Adenson.Configuration
 			else if (!String.IsNullOrEmpty(value))
 			{
 				TypeConverter typeConverter = TypeDescriptor.GetConverter(typeof(T));
-				if (typeConverter.CanConvertFrom(typeof(String)))
+				if (typeConverter.CanConvertFrom(typeof(string)))
 				{
 					result = (T)typeConverter.ConvertFrom(value);
 				}

@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Linq;
+using System.Text;
 
 namespace System
 {
@@ -40,7 +36,7 @@ namespace System
 				index++;
 			}
 
-			return new String(result);
+			return new string(result);
 		}
 
 		/// <summary>
@@ -436,6 +432,21 @@ namespace System.IO
 			}
 
 			return FileUtil.ReadStream(stream);
+		}
+		
+		/// <summary>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// </summary>
+		/// <param name="value">The string</param>
+		/// <returns>byte array, or null if string is null</returns>
+		public static byte[] ToBytes(this string value)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+
+			return Encoding.Default.GetBytes(value);
 		}
 	}
 }

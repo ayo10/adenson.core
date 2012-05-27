@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using Adenson.Collections;
-using Adenson.Cryptography;
 
 namespace System.IO
 {
@@ -146,7 +144,7 @@ namespace System.IO
 				foreach (char c in intersect)
 				{
 					char replaceChar = fileInvalidCharsReplacements[c];
-					result = result.Replace(c.ToString(), replaceChar == Char.MinValue ? "_" : replaceChar.ToString());
+					result = result.Replace(c.ToString(), replaceChar == char.MinValue ? "_" : replaceChar.ToString());
 				}
 
 				return result;

@@ -44,175 +44,7 @@ namespace Adenson.Log
 		}
 
 		#endregion
-		#region Methods
-
-		/// <summary>
-		/// Log debug messages, converting the specified value to string.
-		/// </summary>>
-		/// <param name="value">The value</param>
-		public void Debug(object value)
-		{
-			this.Debug(StringUtil.ToString(value));
-		}
-
-		/// <summary>
-		/// Log debug message
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
-		public void Debug(string message, params object[] arguments)
-		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
-			{
-				return;
-			}
-
-			this.Write(LogSeverity.Debug, message, arguments);
-		}
-
-		/// <summary>
-		/// Log error message, converting the specified value to string.
-		/// </summary>
-		/// <param name="value">The value</param>
-		public void Error(object value)
-		{
-			this.Error(StringUtil.ToString(value));
-		}
-
-		/// <summary>
-		/// Log error message
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
-		public void Error(string message, params object[] arguments)
-		{
-			this.Write(LogSeverity.Error, message, arguments);
-		}
-
-		/// <summary>
-		/// Log exception
-		/// </summary>
-		/// <param name="ex">The Exception object to log</param>
-		public void Error(Exception ex)
-		{
-			string message = Logger.ToString(ex);
-			this.Write(LogSeverity.Error, message);
-
-			if (ex is OutOfMemoryException)
-			{
-				Thread.CurrentThread.Abort();
-			}
-		}
-
-		/// <summary>
-		/// Log debug message, converting the specified value to string.
-		/// </summary>
-		/// <param name="value">The value</param>
-		public void Info(object value)
-		{
-			this.Info(StringUtil.ToString(value));
-		}
-
-		/// <summary>
-		/// Log information message
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
-		public void Info(string message, params object[] arguments)
-		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
-			{
-				return;
-			}
-
-			this.Write(LogSeverity.Info, message, arguments);
-		}
-
-		/// <summary>
-		/// Starts a execution duration profiler
-		/// </summary>
-		/// <param name="identifier">Some kind of identifier</param>
-		/// <returns>A profiler object</returns>
-		public LogProfiler ProfilerStart(string identifier)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier))
-			{
-				throw new ArgumentNullException("identifier");
-			}
-
-			LogProfiler profiler = new LogProfiler(this, identifier);
-			lock (profilers)
-			{
-				profilers.Add(profiler);
-			}
-
-			return profiler;
-		}
-
-		/// <summary>
-		/// Log warning message, converting the specified value to string.
-		/// </summary>
-		/// <param name="value">The value</param>
-		public void Warn(object value)
-		{
-			this.Warn(StringUtil.ToString(value));
-		}
-
-		/// <summary>
-		/// Log warning message
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
-		public void Warn(string message, params object[] arguments)
-		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Warn)
-			{
-				return;
-			}
-
-			this.Write(LogSeverity.Warn, message, arguments);
-		}
-
-		internal void ProfilerStop(Guid uid)
-		{
-			lock (profilers)
-			{
-				profilers.Remove(profilers.First(p => p.Uid == uid));
-			}
-		}
-
-		internal void Write(LogSeverityInternal severity, string message, params object[] arguments)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(message))
-			{
-				throw new ArgumentNullException("message");
-			}
-
-			LogEntry entry = new LogEntry();
-			entry.Severity = severity;
-			entry.TypeName = this.ClassType.Name;
-			entry.Source = defaultSettings.Source;
-			entry.Date = DateTime.Now;
-			entry.LogType = defaultSettings.Types;
-
-			if (arguments == null || arguments.Length == 0)
-			{
-				entry.Message = message;
-			}
-			else
-			{
-				entry.Message = StringUtil.Format(message, arguments);
-			}
-
-			Logger.OutWriteLine(entry);
-		}
-
-		#endregion
-		#region Static Methods
+		#region Public Static Methods
 
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Debug(string, object[])"/>
@@ -381,6 +213,174 @@ namespace Adenson.Log
 		public static void Warn(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Warn(message, arguments);
+		}
+
+		#endregion
+		#region Methods
+
+		/// <summary>
+		/// Log debug messages, converting the specified value to string.
+		/// </summary>>
+		/// <param name="value">The value</param>
+		public void Debug(object value)
+		{
+			this.Debug(StringUtil.ToString(value));
+		}
+
+		/// <summary>
+		/// Log debug message
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		public void Debug(string message, params object[] arguments)
+		{
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
+			{
+				return;
+			}
+
+			this.Write(LogSeverity.Debug, message, arguments);
+		}
+
+		/// <summary>
+		/// Log error message, converting the specified value to string.
+		/// </summary>
+		/// <param name="value">The value</param>
+		public void Error(object value)
+		{
+			this.Error(StringUtil.ToString(value));
+		}
+
+		/// <summary>
+		/// Log error message
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		public void Error(string message, params object[] arguments)
+		{
+			this.Write(LogSeverity.Error, message, arguments);
+		}
+
+		/// <summary>
+		/// Log exception
+		/// </summary>
+		/// <param name="ex">The Exception object to log</param>
+		public void Error(Exception ex)
+		{
+			string message = Logger.ToString(ex);
+			this.Write(LogSeverity.Error, message);
+
+			if (ex is OutOfMemoryException)
+			{
+				Thread.CurrentThread.Abort();
+			}
+		}
+
+		/// <summary>
+		/// Log debug message, converting the specified value to string.
+		/// </summary>
+		/// <param name="value">The value</param>
+		public void Info(object value)
+		{
+			this.Info(StringUtil.ToString(value));
+		}
+
+		/// <summary>
+		/// Log information message
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		public void Info(string message, params object[] arguments)
+		{
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
+			{
+				return;
+			}
+
+			this.Write(LogSeverity.Info, message, arguments);
+		}
+
+		/// <summary>
+		/// Starts a execution duration profiler
+		/// </summary>
+		/// <param name="identifier">Some kind of identifier</param>
+		/// <returns>A profiler object</returns>
+		public LogProfiler ProfilerStart(string identifier)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier))
+			{
+				throw new ArgumentNullException("identifier");
+			}
+
+			LogProfiler profiler = new LogProfiler(this, identifier);
+			lock (profilers)
+			{
+				profilers.Add(profiler);
+			}
+
+			return profiler;
+		}
+
+		/// <summary>
+		/// Log warning message, converting the specified value to string.
+		/// </summary>
+		/// <param name="value">The value</param>
+		public void Warn(object value)
+		{
+			this.Warn(StringUtil.ToString(value));
+		}
+
+		/// <summary>
+		/// Log warning message
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		public void Warn(string message, params object[] arguments)
+		{
+			if ((int)defaultSettings.Severity > (int)LogSeverity.Warn)
+			{
+				return;
+			}
+
+			this.Write(LogSeverity.Warn, message, arguments);
+		}
+
+		internal void ProfilerStop(Guid uid)
+		{
+			lock (profilers)
+			{
+				profilers.Remove(profilers.First(p => p.Uid == uid));
+			}
+		}
+
+		internal void Write(LogSeverityInternal severity, string message, params object[] arguments)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(message))
+			{
+				throw new ArgumentNullException("message");
+			}
+
+			LogEntry entry = new LogEntry();
+			entry.Severity = severity;
+			entry.TypeName = this.ClassType.Name;
+			entry.Source = defaultSettings.Source;
+			entry.Date = DateTime.Now;
+			entry.LogType = defaultSettings.Types;
+
+			if (arguments == null || arguments.Length == 0)
+			{
+				entry.Message = message;
+			}
+			else
+			{
+				entry.Message = StringUtil.Format(message, arguments);
+			}
+
+			Logger.OutWriteLine(entry);
 		}
 
 		private static void OutWriteLine(LogEntry entry)

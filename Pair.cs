@@ -51,6 +51,31 @@ namespace System
 		}
 
 		#endregion
+		#region Operators
+
+		/// <summary>
+		/// Checks the equality of the two specified pairs
+		/// </summary>
+		/// <param name="pair1">The first</param>
+		/// <param name="pair2">The second</param>
+		/// <returns>True, if they are equal, false otherwise</returns>
+		public static bool operator ==(Pair<T> pair1, Pair<T> pair2)
+		{
+			return pair1.Equals(pair2);
+		}
+
+		/// <summary>
+		/// Checks the inequality of the two specified pairs
+		/// </summary>
+		/// <param name="pair1">The first</param>
+		/// <param name="pair2">The second</param>
+		/// <returns>True, if they are not equal, false otherwise</returns>
+		public static bool operator !=(Pair<T> pair1, Pair<T> pair2)
+		{
+			return !pair1.Equals(pair2);
+		}
+
+		#endregion
 		#region Methods
 
 		/// <summary>
@@ -148,31 +173,6 @@ namespace System
 			{
 				return String.Concat(this.Left, ", ", this.Right);
 			}
-		}
-
-		#endregion
-		#region Operators
-
-		/// <summary>
-		/// Checks the equality of the two specified pairs
-		/// </summary>
-		/// <param name="pair1">The first</param>
-		/// <param name="pair2">The second</param>
-		/// <returns>True, if they are equal, false otherwise</returns>
-		public static bool operator ==(Pair<T> pair1, Pair<T> pair2)
-		{
-			return pair1.Equals(pair2);
-		}
-
-		/// <summary>
-		/// Checks the inequality of the two specified pairs
-		/// </summary>
-		/// <param name="pair1">The first</param>
-		/// <param name="pair2">The second</param>
-		/// <returns>True, if they are not equal, false otherwise</returns>
-		public static bool operator !=(Pair<T> pair1, Pair<T> pair2)
-		{
-			return !pair1.Equals(pair2);
 		}
 
 		#endregion
