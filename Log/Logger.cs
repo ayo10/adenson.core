@@ -349,6 +349,11 @@ namespace Adenson.Log
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
 
+		internal static string Round(double seconds)
+		{
+			return seconds.ToString("0.000000", System.Globalization.CultureInfo.CurrentCulture);
+		}
+
 		internal void ProfilerStop(Guid uid)
 		{
 			lock (profilers)
