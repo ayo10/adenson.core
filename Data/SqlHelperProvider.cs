@@ -36,7 +36,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="connectionKey">Connection key that the new instance should use.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
-		/// <exception cref="ArgumentNullException">if 'connectionKey' is null or empty.</exception>
+		/// <exception cref="ArgumentNullException">If 'connectionKey' is null or empty.</exception>
 		public static SqlHelperBase Create(string connectionKey)
 		{
 			if (String.IsNullOrEmpty(connectionKey))
@@ -52,8 +52,8 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="connectionString">Connection string.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
-		/// <exception cref="ArgumentNullException">if 'connectionString' is null or its 'ConnectionString' property is null.</exception>
-		/// <exception cref="NotSupportedException">if unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
+		/// <exception cref="ArgumentNullException">If 'connectionString' is null or its 'ConnectionString' property is null.</exception>
+		/// <exception cref="NotSupportedException">If unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
 		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
 			if (connectionString == null)

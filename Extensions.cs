@@ -11,8 +11,8 @@ namespace System
 		/// <summary>
 		/// Capitalizes the specified string.
 		/// </summary>
-		/// <example>"SOME WORDS" returns "Some Words"</example>
-		/// <example>"some words" returns "Some Words", etc.</example>
+		/// <example>Phrase "SOME WORDS" returns "Some Words"</example>
+		/// <example>Phrase "some words" returns "Some Words", etc.</example>
 		/// <param name="value">The value to capitalize</param>
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
 		public static string Capitalize(this string value)
@@ -69,7 +69,7 @@ namespace System
 		/// <param name="value">A double-precision floating-point number to be rounded.</param>
 		/// <param name="digits">The number of fractional digits in the return value.</param>
 		/// <returns>The number nearest to value that contains a number of fractional digits equal to digits.</returns>
-		/// <exception cref="ArgumentOutOfRangeException">digits is less than 0 or greater than 15.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="digits"/> is less than 0 or greater than 15.</exception>
 		public static double Round(this double value, int digits)
 		{
 			return Math.Round(value, digits);
@@ -276,6 +276,26 @@ namespace System.Collections.Generic
 	public static class Extensions
 	{
 		/// <summary>
+		/// Adds the value with the specified key if the key exists already in the dictionary, else replaces the key's current value with the specified <paramref name="value"/>
+		/// </summary>
+		/// <typeparam name="K">The type of key</typeparam>
+		/// <typeparam name="V">The type of value</typeparam>
+		/// <param name="dictionary">The dictionary to parse</param>
+		/// <param name="key">The key to find</param>
+		/// <param name="value">The value to set</param>
+		public static void AddOrSet<K, V>(this IDictionary<K, V> dictionary, K key, V value)
+		{
+			if (dictionary.ContainsKey(key))
+			{
+				dictionary[key] = value;
+			}
+			else
+			{
+				dictionary.Add(key, value);
+			}
+		}
+
+		/// <summary>
 		/// Determines whether the dictionary contains the specified key, using the comparism rule
 		/// </summary>
 		/// <typeparam name="T">The type</typeparam>
@@ -283,7 +303,7 @@ namespace System.Collections.Generic
 		/// <param name="key">The key to find</param>
 		/// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
 		/// <returns>true if the value of the value parameter is the same as this string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">if <paramref name="key"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is null.</exception>
 		public static bool ContainsKey<T>(this IDictionary<string, T> dictionary, string key, StringComparison comparison)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(key))
@@ -338,7 +358,7 @@ namespace System.Collections.Generic
 		/// <param name="array2">The second array</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if array1 is null or array2 is null and they are both not null.</exception>
+		/// <exception cref="ArgumentNullException">If array1 is null or array2 is null and they are both not null.</exception>
 		public static bool EqualsTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
 		{
 			if (Object.ReferenceEquals(array1, array2))
@@ -420,10 +440,10 @@ namespace System.IO
 	public static class Extensions
 	{
 		/// <summary>
-		/// Converts specified stream to a byte array
+		/// Converts specified stream to a byte array.
 		/// </summary>
-		/// <param name="stream">The stream</param>
-		/// <returns>byte array, or null if stream is null</returns>
+		/// <param name="stream">The stream.</param>
+		/// <returns>A byte array, or null if stream is null.</returns>
 		public static byte[] ToBytes(this Stream stream)
 		{
 			if (stream == null)
@@ -433,12 +453,12 @@ namespace System.IO
 
 			return FileUtil.ReadStream(stream);
 		}
-		
+
 		/// <summary>
-		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>.
 		/// </summary>
-		/// <param name="value">The string</param>
-		/// <returns>byte array, or null if string is null</returns>
+		/// <param name="value">The string.</param>
+		/// <returns>A byte array, or null if string is null.</returns>
 		public static byte[] ToBytes(this string value)
 		{
 			if (value == null)
@@ -465,7 +485,7 @@ namespace System.Xml.Linq
 		/// <param name="name">The <see cref="XName"/> to match.</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>A <see cref="XElement"/> that matches the specified<see cref="XName"/>, or null.</returns>
-		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static XElement Element(this XContainer source, XName name, StringComparison comparisonType)
 		{
 			if (source == null)
@@ -488,7 +508,7 @@ namespace System.Xml.Linq
 		/// <param name="source">The <see cref="XElement"/> to look into</param>
 		/// <param name="name">The <see cref="XName"/> to match.</param>
 		/// <returns>Found value of any, default of T otherwise</returns>
-		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static T GetValue<T>(this XElement source, XName name)
 		{
 			if (source == null)
@@ -542,7 +562,7 @@ namespace System.Xml.Linq
 		/// <param name="source">The element to look into</param>
 		/// <param name="name">The key to look for</param>
 		/// <returns>True if an element with specified key is found, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static bool HasElement(this XContainer source, XName name)
 		{
 			if (source == null)
@@ -565,7 +585,7 @@ namespace System.Xml.Linq
 		/// <param name="name">The key to look for</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>True if an element with specified key is found, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if source is null, OR name is null or name.LocalName is whitespace</exception>
+		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static bool HasElement(this XContainer source, XName name, StringComparison comparisonType)
 		{
 			if (source == null)

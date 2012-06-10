@@ -42,31 +42,6 @@ namespace System
 		}
 
 		#endregion
-		#region Operators
-
-		/// <summary>
-		/// Checks the equality of the two specified objects.
-		/// </summary>
-		/// <param name="value1">The first</param>
-		/// <param name="value2">The second</param>
-		/// <returns>True, if they are equal, false otherwise</returns>
-		public static bool operator ==(Coordinate value1, Coordinate value2)
-		{
-			return value1.Equals(value2);
-		}
-
-		/// <summary>
-		/// Checks the inequality of the two specified objects.
-		/// </summary>
-		/// <param name="value1">The first</param>
-		/// <param name="value2">The second</param>
-		/// <returns>True, if they are not equal, false otherwise</returns>
-		public static bool operator !=(Coordinate value1, Coordinate value2)
-		{
-			return !value1.Equals(value2);
-		}
-
-		#endregion
 		#region Methods
 
 		/// <summary>
@@ -96,6 +71,31 @@ namespace System
 		public override int GetHashCode()
 		{
 			return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
+		}
+
+		#endregion
+		#region Operators
+
+		/// <summary>
+		/// Checks the equality of the two specified objects.
+		/// </summary>
+		/// <param name="value1">The first</param>
+		/// <param name="value2">The second</param>
+		/// <returns>True, if they are equal, false otherwise</returns>
+		public static bool operator ==(Coordinate value1, Coordinate value2)
+		{
+			return value1.Equals(value2);
+		}
+
+		/// <summary>
+		/// Checks the inequality of the two specified objects.
+		/// </summary>
+		/// <param name="value1">The first</param>
+		/// <param name="value2">The second</param>
+		/// <returns>True, if they are not equal, false otherwise</returns>
+		public static bool operator !=(Coordinate value1, Coordinate value2)
+		{
+			return !value1.Equals(value2);
 		}
 
 		#endregion

@@ -55,8 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentModel\DataAnnotations\EmailAttribute.cs" />
-    <Compile Include="ComponentModel\DataAnnotations\PasswordStringLengthAttribute.cs" />
-    <Compile Include="ComponentModel\DataAnnotations\UniqueAttribute.cs" />
     <Compile Include="BackgroundThread.cs" />
     <Compile Include="Collections\CollectionChangingEventArgs.cs" />
     <Compile Include="Collections\Hashtable.cs" />

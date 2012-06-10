@@ -23,8 +23,8 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string object to use to initialize the helper</param>
-		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
-		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
+		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
+		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		public OdbcSqlHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -33,7 +33,7 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
-		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
 		public OdbcSqlHelper(string keyOrConnectionString) : base(keyOrConnectionString)
 		{
 		}
@@ -44,8 +44,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Runs a query to see if the specified column in the specified table (Not supported)
 		/// </summary>
-		/// <param name="tableName">the table name</param>
-		/// <param name="columnName">the column name</param>
+		/// <param name="tableName">The table name</param>
+		/// <param name="columnName">The column name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
 		public override bool ColumnExists(string tableName, string columnName)
 		{
@@ -101,7 +101,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Runs a query to see if the specified table exists (Not supported)
 		/// </summary>
-		/// <param name="tableName">the table name</param>
+		/// <param name="tableName">The table name</param>
 		/// <returns>True if the table exists, false otherwise</returns>
 		public override bool TableExists(string tableName)
 		{

@@ -25,8 +25,8 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string settings object to use</param>
-		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
-		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
+		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
+		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -35,7 +35,7 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
-		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
 		public SqlClientHelper(string keyOrConnectionString)
 			: base(keyOrConnectionString)
 		{
@@ -140,9 +140,9 @@ namespace Adenson.Data
 		/// Executes the command texts in a batched mode with a transaction
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>the result of each ExecuteNonQuery run on each command text</returns>
-		/// <exception cref="ArgumentNullException">if any of the items in <paramref name="commandTexts"/> is null</exception>
-		/// <exception cref="ArgumentException">if <paramref name="commandTexts"/> is empty</exception>
+		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
+		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
+		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		public override int[] ExecuteNonQuery(params string[] commandTexts)
 		{
 			if (commandTexts.Length == 1)

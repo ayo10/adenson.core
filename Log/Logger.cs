@@ -232,7 +232,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
@@ -257,7 +257,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Error(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Error, message, arguments);
@@ -292,7 +292,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
@@ -338,7 +338,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Warn(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Warn)

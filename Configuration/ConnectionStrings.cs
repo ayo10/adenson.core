@@ -35,7 +35,7 @@ namespace Adenson.Configuration
 		/// </summary>
 		/// <param name="key">The lookup key for the connection string!</param>
 		/// <returns>A connection string</returns>
-		/// <remarks>calls GetCS(key, true)</remarks>
+		/// <remarks>Calls GetCS(key, true)</remarks>
 		public static ConnectionStringSettings Get(string key)
 		{
 			return Get(key, true);
@@ -47,8 +47,8 @@ namespace Adenson.Configuration
 		/// <param name="key">Key to use to do a lookup</param>
 		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true</param>
 		/// <returns>A connection string</returns>
-		/// <exception cref="ArgumentNullException">if key is null or empty</exception>
-		/// <exception cref="ArgumentOutOfRangeException">if no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>
+		/// <exception cref="ArgumentNullException">If key is null or empty</exception>
+		/// <exception cref="ArgumentOutOfRangeException">If no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>
 		public static ConnectionStringSettings Get(string key, bool useDefaultIfNull)
 		{
 			if (String.IsNullOrEmpty(key))

@@ -18,7 +18,7 @@ namespace System.Net.Mail
 		/// Sends an email using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
 		/// <param name="message">MailMessage to send</param>
-		/// <exception cref="ArgumentNullException">if message is null</exception>
+		/// <exception cref="ArgumentNullException">If message is null</exception>
 		public static void Send(MailMessage message)
 		{
 			if (message == null)
@@ -34,7 +34,7 @@ namespace System.Net.Mail
 		/// </summary>
 		/// <param name="smtpHost">The smtp host address to use</param>
 		/// <param name="message">MailMessage to send</param>
-		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR message is null</exception>
+		/// <exception cref="ArgumentNullException">If smtpHost is null or whitespace, OR message is null</exception>
 		public static void Send(string smtpHost, MailMessage message)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
@@ -58,9 +58,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="from"/> is null, OR <paramref name="to"/> is null.</exception>
+		/// <exception cref="ArgumentException"><paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty.</exception>
+		/// <exception cref="FormatException"><paramref name="from"/>, OR <paramref name="to"/> is malformed.</exception>
 		public static void Send(string from, string to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
@@ -74,9 +74,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null, OR any item in to is null</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
+		/// <exception cref="ArgumentNullException"><paramref name="from"/> is null, OR <paramref name="to"/> is null.</exception>
+		/// <exception cref="ArgumentException"><paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty.</exception>
+		/// <exception cref="FormatException"><paramref name="from"/>, OR <paramref name="to"/> is malformed.</exception>
 		public static void Send(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);
@@ -91,9 +91,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="smtpHost"/> is null or whitespace, OR <paramref name="from"/> is null, OR <paramref name="to"/> is null.</exception>
+		/// <exception cref="ArgumentException"><paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty.</exception>
+		/// <exception cref="FormatException"><paramref name="from"/>, OR <paramref name="to"/> is malformed.</exception>
 		public static void Send(string smtpHost, string from, string to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
@@ -108,7 +108,7 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR from is null, OR to is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentNullException">If smtpHost is null or whitespace, OR from is null, OR to is null, OR any item in to is null</exception>
 		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
 		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
 		public static void Send(string smtpHost, string from, string[] to, string subject, string message, bool isHtml)
@@ -119,8 +119,8 @@ namespace System.Net.Mail
 		/// <summary>
 		/// Sends email asynchronously, using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
-		/// <param name="message">MailMessage to send</param>
-		/// <exception cref="ArgumentNullException">if message is null</exception>
+		/// <param name="message">MailMessage to send.</param>
+		/// <exception cref="ArgumentNullException">If message is null.</exception>
 		public static void SendAsync(MailMessage message)
 		{
 			SmtpUtil.Send(null, message, true);
@@ -131,7 +131,7 @@ namespace System.Net.Mail
 		/// </summary>
 		/// <param name="smtpHost">The smtp host address to use</param>
 		/// <param name="message">MailMessage Object to use</param>
-		/// <exception cref="ArgumentNullException">if smtpHost is null or whitespace, OR message is null</exception>
+		/// <exception cref="ArgumentNullException">If smtpHost is null or whitespace, OR message is null</exception>
 		public static void SendAsync(string smtpHost, MailMessage message)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(smtpHost))
@@ -150,9 +150,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static void SendAsync(string from, string to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), true);
@@ -166,9 +166,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null, OR any item in to is null</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static void SendAsync(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), true);
@@ -183,9 +183,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static void SendAsync(string smtpHost, string from, string to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), true);
@@ -200,9 +200,9 @@ namespace System.Net.Mail
 		/// <param name="subject">The email subject</param>
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null, OR any item in to is null</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="smtpHost"/>, <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static void SendAsync(string smtpHost, string from, string[] to, string subject, string message, bool isHtml)
 		{
 			SmtpUtil.Send(smtpHost, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), true);
@@ -211,9 +211,9 @@ namespace System.Net.Mail
 		/// <summary>
 		/// Tries to send an email using configuration file settings <see cref="System.Net.Mail.SmtpClient()"/>.
 		/// </summary>
-		/// <param name="message">MailMessage Object to use</param>
-		/// <returns>True if there were no exceptions, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">if message is null</exception>
+		/// <param name="message">MailMessage Object to use.</param>
+		/// <returns>True if there were no exceptions, false otherwise.</returns>
+		/// <exception cref="ArgumentNullException">If message is null.</exception>
 		public static bool TrySend(MailMessage message)
 		{
 			return SmtpUtil.TrySend(null, message, true);
@@ -244,9 +244,9 @@ namespace System.Net.Mail
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		/// <returns>True if there were no exceptions, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static bool TrySend(string from, string to, string subject, string message, bool isHtml)
 		{
 			return SmtpUtil.TrySend(null, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
@@ -261,9 +261,9 @@ namespace System.Net.Mail
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		/// <returns>True if there were no exceptions, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null, OR any item in to is null</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static bool TrySend(string from, string[] to, string subject, string message, bool isHtml)
 		{
 			return SmtpUtil.TrySend(null, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);
@@ -279,9 +279,9 @@ namespace System.Net.Mail
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		/// <returns>True if there were no exceptions, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null.</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static bool TrySend(string smtpHost, string from, string to, string subject, string message, bool isHtml)
 		{
 			return SmtpUtil.TrySend(smtpHost, SmtpUtil.ComposelMessage(from, new string[] { to }, subject, message, isHtml), false);
@@ -297,9 +297,9 @@ namespace System.Net.Mail
 		/// <param name="message">The email body</param>
 		/// <param name="isHtml">If email body is in HTML format, or not.</param>
 		/// <returns>True if there were no exceptions, false otherwise</returns>
-		/// <exception cref="ArgumentNullException">from is null, OR to is null, OR any item in to is null</exception>
-		/// <exception cref="ArgumentException">from is String.Empty, OR to is String.Empty, OR any item in to is null.</exception>
-		/// <exception cref="FormatException">from, OR to is malformed, OR any item in to is malformed.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="from"/> is null, OR <paramref name="to"/> is null, OR any item in to is null</exception>
+		/// <exception cref="ArgumentException">Either <paramref name="from"/> is String.Empty, OR <paramref name="to"/> is String.Empty, OR any item in to is null.</exception>
+		/// <exception cref="FormatException">Either <paramref name="from"/>, OR <paramref name="to"/> is malformed, OR any item in to is malformed.</exception>
 		public static bool TrySend(string smtpHost, string from, string[] to, string subject, string message, bool isHtml)
 		{
 			return SmtpUtil.TrySend(smtpHost, SmtpUtil.ComposelMessage(from, to, subject, message, isHtml), false);

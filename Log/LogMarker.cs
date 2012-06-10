@@ -6,7 +6,7 @@ using System.Text;
 namespace Adenson.Log
 {
 	/// <summary>
-	/// TODO: Update summary.
+	/// Represents a log marker
 	/// </summary>
 	public sealed class LogMarker : IDisposable
 	{
@@ -27,19 +27,20 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Records the time between when the last mark was called and this one
+		/// Records the time between when the last mark was called and this one.
 		/// </summary>
-		/// <remarks>The name of the method MIGHT change</remarks>
+		/// <remarks>The name of the method MIGHT change.</remarks>
 		public void Mark()
 		{
 			this.Mark(null);
 		}
 
 		/// <summary>
-		/// Records the time between when the last mark was called and this one
+		/// Records the time between when the last mark was called and this one.
 		/// </summary>
-		/// <remarks>The name of the method MIGHT change</remarks>
-		/// <param name="message">A message to display</param>
+		/// <remarks>The name of the method MIGHT change.</remarks>
+		/// <param name="message">A message to display.</param>
+		/// <param name="args">The arguments to pass along with message.</param>
 		public void Mark(string message, params object[] args)
 		{
 			double key = DateTime.Now.TimeOfDay.Subtract(lastmark.Value).TotalSeconds;
@@ -50,7 +51,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Effectively ends the marker
+		/// Effectively ends the marker.
 		/// </summary>
 		public void Dispose()
 		{

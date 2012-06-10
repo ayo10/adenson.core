@@ -12,9 +12,9 @@ namespace Adenson.Collections
 {
 	/// <summary>
 	/// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.<br/>
-	/// Portions of, from http://shevaspace.spaces.live.com/blog/cns!FD9A0F1F8DD06954!547.entry
+	/// Portions of, from http://shevaspace.spaces.live.com/blog/cns!FD9A0F1F8DD06954!547.entry.
 	/// </summary>
-	/// <typeparam name="T">The type of items</typeparam>
+	/// <typeparam name="T">The type of items.</typeparam>
 	public class ObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>
 	{
 		#region Variables

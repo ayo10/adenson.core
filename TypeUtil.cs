@@ -47,7 +47,7 @@ namespace System
 		/// <summary>
 		/// Creates an instance of the specified type using that type's default constructor.
 		/// </summary>
-		/// <remarks>calls (T)Activator.CreateInstance(type).</remarks>
+		/// <remarks>Calls (T)Activator.CreateInstance(type).</remarks>
 		/// <typeparam name="T">The type of instance to return</typeparam>
 		/// <param name="type">The type</param>
 		/// <returns>Created instance</returns>
@@ -65,13 +65,13 @@ namespace System
 		/// <summary>
 		/// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object. (Case insensitive).
 		/// </summary>
-		/// <remarks>calls Enum.Parse(typeof(T), value, true)</remarks>
+		/// <remarks>Calls Enum.Parse(typeof(T), value, true)</remarks>
 		/// <typeparam name="T">The type of enum to return</typeparam>
-		/// <param name="value"> A string containing the name or value to convert.</param>
+		/// <param name="value">A string containing the name or value to convert.</param>
 		/// <returns>An object of type enumType whose value is represented by value.</returns>
 		/// <exception cref="ArgumentNullException">If value is null or whitespace</exception>
-		/// <exception cref="ArgumentException">enumType is not an System.Enum.-or- value is either an empty string ("") or only contains white space.-or- value is a name, but not one of the named constants defined for the enumeration.</exception>
-		/// <exception cref="OverflowException">value is outside the range of the underlying type of enumType.</exception>
+		/// <exception cref="ArgumentException">The type is not an System.Enum.-or- value is either an empty string ("") or only contains white space.-or- value is a name, but not one of the named constants defined for the enumeration.</exception>
+		/// <exception cref="OverflowException">If <paramref name="value"/> is outside the range of the underlying type of enumType.</exception>
 		public static T EnumParse<T>(string value)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(value))
@@ -110,12 +110,12 @@ namespace System
 		}
 
 		/// <summary>
-		/// Tries to convert the specified value
+		/// Tries to convert the specified value.
 		/// </summary>
-		/// <typeparam name="T">The type of the object we need to convert</typeparam>
-		/// <param name="value">the value to convert</param>
-		/// <param name="result">the output of the result</param>
-		/// <returns>true if conversion happened correctly, false otherwise</returns>
+		/// <typeparam name="T">The type of the object we need to convert.</typeparam>
+		/// <param name="value">The value to convert.</param>
+		/// <param name="result">The output of the result.</param>
+		/// <returns>Returns true if conversion happened correctly, false otherwise.</returns>
 		public static bool TryConvert<T>(object value, out T result)
 		{
 			object output;
@@ -136,9 +136,9 @@ namespace System
 		/// Tries to convert the specified value
 		/// </summary>
 		/// <param name="type">The type of the object we need to convert</param>
-		/// <param name="value">the value to convert</param>
-		/// <param name="output">the output of the conversion</param>
-		/// <returns>true if conversion happened correctly, false otherwise</returns>
+		/// <param name="value">The value to convert</param>
+		/// <param name="output">The output of the conversion</param>
+		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
 		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "Method either succeeds, or fails")]
 		public static bool TryConvert(Type type, object value, out object output)
 		{
