@@ -103,7 +103,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">if message is null or whitespace</exception>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Debug(string message, params object[] arguments)
 		{
 			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
@@ -120,7 +120,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Starts a new log marker (measures the length of time between <see cref="LogMarker.Mark"/> calls, and on dispose, averages and displays them (along with longest and shortest run.
+		/// Starts a new log marker (measures the length of time between <see cref="LogMarker.Mark()"/> calls, and on dispose, averages and displays them (along with longest and shortest run.
 		/// </summary>
 		/// <remarks>Timer starts when the method is invoked</remarks>
 		/// <remarks>The name of the method MIGHT change</remarks>

@@ -225,7 +225,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="toEncrypt">The string to hash</param>
 		/// <returns>Hashed version of string</returns>
-		/// <exception cref="ArgumentNullException">if encoding is null</exception>
+		/// <exception cref="ArgumentNullException">If encoding is null</exception>
 		/// <remarks>Calls Encryptor.GetHash(toEncrypt, HashAlgorithmType, Encoding.Default).</remarks>
 		public static byte[] GetHash(string toEncrypt)
 		{
@@ -238,7 +238,7 @@ namespace Adenson.Cryptography
 		/// <param name="toEncrypt">The string to hash</param>
 		/// <param name="hashAlgorithmType">The hash algorithm to use.</param>
 		/// <returns>Hashed version of string</returns>
-		/// <exception cref="ArgumentNullException">if encoding is null</exception>
+		/// <exception cref="ArgumentNullException">If encoding is null</exception>
 		/// <remarks>Calls Encryptor.GetHash(toEncrypt, hashAlgorithmType, Encoding.Default"/>.</remarks>
 		public static byte[] GetHash(string toEncrypt, HashAlgorithmType hashAlgorithmType)
 		{

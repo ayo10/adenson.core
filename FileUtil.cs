@@ -22,9 +22,9 @@ namespace System.IO
 		/// <param name="hexValue">The string to convert</param>
 		/// <returns>Created byte array</returns>
 		/// <remarks>Borrowed from http://www.codeproject.com/KB/recipes/hexencoding.aspx?msg=2494780 </remarks>
-		/// <exception cref="NotSupportedException">if the length of the string is not a multiple of zero</exception>
-		/// <exception cref="FormatException">value contains a character that is not a valid digit in the 16 base. The exception message indicates that there are no digits to convert if the first character in value is invalid; otherwise, the message indicates that value contains invalid trailing characters</exception>
-		/// <exception cref="OverflowException">value, which represents a base 10 unsigned number, is prefixed with a negative  sign.  -or- The return value is less than System.Byte.MinValue or larger than System.Byte.MaxValue.</exception>
+		/// <exception cref="NotSupportedException">If the length of the string is not a multiple of zero</exception>
+		/// <exception cref="FormatException"><paramref name="hexValue"/> contains a character that is not a valid digit in the 16 base. The exception message indicates that there are no digits to convert if the first character in value is invalid; otherwise, the message indicates that value contains invalid trailing characters</exception>
+		/// <exception cref="OverflowException"><paramref name="hexValue"/>, which represents a base 10 unsigned number, is prefixed with a negative  sign.  -or- The return value is less than System.Byte.MinValue or larger than System.Byte.MaxValue.</exception>
 		public static byte[] GetBytes(string hexValue)
 		{
 			if (hexValue == null)
@@ -91,7 +91,7 @@ namespace System.IO
 		/// <param name="directory">The directory to search.</param>
 		/// <param name="extensions">The list of extensions to match against the names of files in directory</param>
 		/// <returns> A String array containing the names of files in the specified directory that match the specified search pattern. File names include the full path.</returns>
-		/// <exception cref="ArgumentNullException">if directory is null or empty or is just white space</exception>
+		/// <exception cref="ArgumentNullException">If directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(directory))
@@ -113,7 +113,7 @@ namespace System.IO
 		/// </summary>
 		/// <param name="fullPath">The path</param>
 		/// <returns>true if directory, false other wise</returns>
-		/// <exception cref="ArgumentNullException">if fullPath is null or empty or is just white space</exception>
+		/// <exception cref="ArgumentNullException">If fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(fullPath))
@@ -157,9 +157,9 @@ namespace System.IO
 		/// Creates a byte array, by reading the response stream of the specified url 
 		/// </summary>
 		/// <param name="filePath">The path and name of the file to create.</param>
-		/// <returns>byte array, or null if stream is null</returns>
-		/// <exception cref="ArgumentNullException">if filePath is null or empty or is just white space</exception>
-		/// <exception cref="FileNotFoundException">if the specified filePath does not exist</exception>
+		/// <returns>A byte array, or null if stream is null</returns>
+		/// <exception cref="ArgumentNullException">If filePath is null or empty or is just white space</exception>
+		/// <exception cref="FileNotFoundException">If the specified filePath does not exist</exception>
 		public static byte[] ReadStream(string filePath)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(filePath))
@@ -179,8 +179,8 @@ namespace System.IO
 		/// Creates a byte array, by reading the response stream of the specified url
 		/// </summary>
 		/// <param name="url">The url</param>
-		/// <returns>byte array, or null if resulting stream is null</returns>
-		/// <exception cref="ArgumentNullException">if url is null</exception>
+		/// <returns>A byte array, or null if resulting stream is null</returns>
+		/// <exception cref="ArgumentNullException">If url is null</exception>
 		public static byte[] ReadStream(Uri url)
 		{
 			if (url == null)
@@ -206,9 +206,9 @@ namespace System.IO
 		/// Creates a byte array, by reading the specified stream
 		/// </summary>
 		/// <param name="stream">The stream</param>
-		/// <returns>byte array, or null if resulting stream is null</returns>
-		/// <exception cref="ArgumentNullException">if stream is null</exception>
-		/// <exception cref="NotSupportedException">if stream does not support reading</exception>
+		/// <returns>A byte array, or null if resulting stream is null</returns>
+		/// <exception cref="ArgumentNullException">If stream is null</exception>
+		/// <exception cref="NotSupportedException">If stream does not support reading</exception>
 		public static byte[] ReadStream(Stream stream)
 		{
 			if (stream == null)

@@ -53,9 +53,9 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
-		/// Checks equality of name and value of the other
+		/// Checks equality of name and value of the other.
 		/// </summary>
-		/// <param name="other">The other dude</param>
+		/// <param name="other">The other.</param>
 		/// <returns>true, or false, i dont know</returns>
 		public bool Equals(Parameter other)
 		{
@@ -68,10 +68,10 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// if obj is Parameter, does this.Equals((Parameter)obj), else does the base equality check
+		/// Checks equality of name and value of the other.
 		/// </summary>
-		/// <param name="obj">The other dude</param>
-		/// <returns>true, or false, i dont know</returns>
+		/// <param name="obj">The other.</param>
+		/// <returns>Returns true if they are the same reference, false otherwise.</returns>
 		public override bool Equals(object obj)
 		{
 			var other = obj as Parameter;

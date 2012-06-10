@@ -5,7 +5,7 @@ using System.Linq;
 namespace Adenson.Collections
 {
 	/// <summary>
-	/// Events for collection value changing/setting that is cancellable
+	/// Events for collection value changing/setting that is cancellable.
 	/// </summary>
 	/// <typeparam name="T">The type of argument</typeparam>
 	public class CollectionChangingEventArgs<T> : NotifyCollectionChangedEventArgs

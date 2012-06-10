@@ -50,11 +50,40 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets the value matching the specified key.
+		/// </summary>
+		/// <typeparam name="T">The value type to return</typeparam>
+		/// <param name="key">The key of the value</param>
+		/// <returns>The found value, default of T otherwise</returns>
+		protected T GetValue<T>(string key)
+		{
+			return this.GetValue<T>(key, default(T));
+		}
+
+		/// <summary>
+		/// Gets the value matching the specified key, or <paramref name="defaultValue"/> if none is found.
+		/// </summary>
+		/// <typeparam name="T">The value type to return</typeparam>
+		/// <param name="key">The key of the value</param>
+		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
+		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
+		protected T GetValue<T>(string key, T defaultValue)
+		{
+			if (keyValues.ContainsKey(key))
+			{
+				return (T)keyValues[key];
+			}
+
+			return defaultValue;
+		}
+
+		/// <summary>
 		/// Sets the value with the specified key
 		/// </summary>
+		/// <typeparam name="T">The value type to return</typeparam>
 		/// <param name="key">The key</param>
 		/// <param name="value">The value</param>
-		protected void SetValue(string key, object value)
+		protected void SetValue<T>(string key, T value)
 		{
 			if (Object.Equals(keyValues[key], value))
 			{

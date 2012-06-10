@@ -7,12 +7,12 @@ namespace Adenson.ComponentModel.DataAnnotations
 	/// Borrowed from http://www.pagedesigners.co.nz/2011/02/asp-net-mvc-3-email-validation-with-unobtrusive-jquery-validation/
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
-	public sealed class EmailAttribute : RegularExpressionAttribute
+	public sealed class EmailValidAttribute : RegularExpressionAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the EmailAttribute class.
+		/// Initializes a new instance of the EmailValidAttribute class.
 		/// </summary>
-		public EmailAttribute() : base(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")
+		public EmailValidAttribute() : base(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")
 		{
 			this.ErrorMessage = "Invalid email. Must be in the form of person@host.part";
 		}

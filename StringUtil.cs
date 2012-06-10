@@ -16,7 +16,7 @@ namespace System
 		/// <param name="value">A composite format string.</param>
 		/// <param name="args">An object array that contains zero or more objects to format.</param>
 		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
-		/// <exception cref="ArgumentNullException">format or args is null.</exception>
+		/// <exception cref="ArgumentNullException">Either <paramref name="value"/> or <paramref name="args"/> is null.</exception>
 		public static string Format(string value, params object[] args)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(value))
@@ -45,7 +45,7 @@ namespace System
 		/// </summary>
 		/// <param name="length">Max length of string to generate</param>
 		/// <returns>String generated</returns>
-		/// <exception cref="ArgumentOutOfRangeException">if <paramref name="length"/> is less or equal to 0.</exception>
+		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is less or equal to 0.</exception>
 		public static string GenerateRandomString(int length)
 		{
 			if (length <= 0)
@@ -82,7 +82,7 @@ namespace System
 		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
 		/// </summary>
 		/// <param name="value">The string</param>
-		/// <returns>byte array, or null if string is null</returns>
+		/// <returns>A byte array, or null if string is null</returns>
 		public static byte[] ToBytes(string value)
 		{
 			return StringUtil.ToBytes(value, Encoding.Default);
@@ -93,7 +93,7 @@ namespace System
 		/// </summary>
 		/// <param name="value">The string</param>
 		/// <param name="encoding">The encoding to use</param>
-		/// <returns>byte array, or null if string is null</returns>
+		/// <returns>A byte array, or null if string is null</returns>
 		public static byte[] ToBytes(string value, Encoding encoding)
 		{
 			if (value == null)
@@ -123,7 +123,7 @@ namespace System
 		/// <summary>
 		/// Converts the value of the specified object to its equivalent string representation.
 		/// </summary>
-		/// <remarks>calls Convert.ToString(value)</remarks>
+		/// <remarks>Calls Convert.ToString(value)</remarks>
 		/// <param name="value">An object that supplies the value to convert, or null.</param>
 		/// <returns>The string representation of value, or System.String.Empty if value is null.</returns>
 		public static string ToString(object value)
