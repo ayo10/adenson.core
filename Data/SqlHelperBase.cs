@@ -13,10 +13,9 @@ namespace Adenson.Data
 	public abstract class SqlHelperBase : IDisposable
 	{
 		#region Variables
-		private bool mustCloseConnection = true;
-		private ConnectionManager _connectionManager;
-		private bool _useTransactionAlways = true;
+		private IDbConnection _connection;
 		private int _commandTimeout = 30;
+		private Stack<IDbTransaction> transactions = new Stack<IDbTransaction>();
 		#endregion
 		#region Constructors
 
@@ -41,7 +40,6 @@ namespace Adenson.Data
 			}
 
 			this.ConnectionString = connectionStringSettings.ConnectionString;
-			this.UseTransactionAlways = true;
 		}
 
 		/// <summary>
@@ -58,7 +56,6 @@ namespace Adenson.Data
 
 			var cs = ConfigurationManager.ConnectionStrings[keyOrConnectionString];
 			this.ConnectionString = cs == null ? keyOrConnectionString : cs.ConnectionString;
-			this.UseTransactionAlways = true;
 		}
 
 		#endregion
@@ -97,41 +94,21 @@ namespace Adenson.Data
 		/// <summary>
 		/// Gets the current connection object in use (if OpenConnection was invoked)
 		/// </summary>
-		public virtual IDbConnection CurrentConnection
+		public virtual IDbConnection Connection
 		{
-			get { return this.Manager.Connection; }
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether to use transactions if a method that doesn't take a <see cref="IDbTransaction"/> object is called, defaults to true.
-		/// </summary>
-		public virtual bool UseTransactionAlways
-		{
-			get { return _useTransactionAlways; }
-			set { _useTransactionAlways = value; }
-		}
-
-		/// <summary>
-		/// Gets the connection manager
-		/// </summary>
-		internal ConnectionManager Manager
-		{
-			get
+			get 
 			{
-				if (_connectionManager == null || _connectionManager.Connection == null)
+				if (_connection == null)
 				{
-					_connectionManager = new ConnectionManager(this);
-					_connectionManager.AllowClose = mustCloseConnection;
+					_connection = this.CreateConnection();
 				}
 
-				return _connectionManager;
+				return _connection; 
 			}
 		}
 
 		#endregion
 		#region Methods
-
-		#region Base Methods
 
 		/// <summary>
 		/// Runs a system check for the existence of specified column in the specified table using TSQL INFORMATION_SCHEMA.
@@ -159,21 +136,11 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Closes the connection opened by OpenConnection, then, lets CreateConnection know to always create new connections henceforth.
-		/// </summary>
-		/// <exception cref="InvalidOperationException">If the method was called out of sequence, i.e., OpenConnection was never called, or called once and CloseConnection called multiple times.</exception>
-		public virtual void CloseConnection()
-		{
-			this.Manager.AllowClose = true;
-			this.Manager.Close();
-		}
-
-		/// <summary>
 		/// Creates a new database using information from the connection string.
 		/// </summary>
 		public virtual void CreateDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("CREATE DATABASE [{0}]", this.Manager.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("CREATE DATABASE [{0}]", this.Connection.Database));
 		}
 
 		/// <summary>
@@ -193,6 +160,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Disposes the object
 		/// </summary>
+		/// <exception cref="InvalidOperationException">If there are any transactions left in the stack.</exception>
 		public void Dispose()
 		{
 			this.Dispose(true);
@@ -204,31 +172,46 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual void DropDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("DROP DATABASE [{0}]", this.Manager.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("DROP DATABASE [{0}]", this.Connection.Database));
 		}
 
 		/// <summary>
-		/// Uses CreateConnection() to get a new connection, and until CloseConnection is closed, uses that connection object
+		/// Starts a new transaction, and pushes it to the top of the transactions stack, causing every Execute* method invoked after to run with the topmost transaction <see cref="EndTransaction"/> is called.
 		/// </summary>
-		/// <returns>The IDbConnection connection that will be used until CloseConnection is called.</returns>
-		/// <exception cref="InvalidOperationException">If the method has been called already.</exception>
-		public virtual IDbConnection OpenConnection()
+		/// <returns>The current number of open transactions in the stack.</returns>
+		public virtual int BeginTransaction()
 		{
-			if (!this.Manager.AllowClose)
+			if (this.Connection.State != ConnectionState.Open)
 			{
-				throw new InvalidOperationException("OpenConnection has already been closed, call CloseConnection first");
+				this.Connection.Open();
 			}
 
-			this.Manager.AllowClose = false;
-			this.Manager.Open();
-			return this.Manager.Connection;
+			transactions.Push(this.Connection.BeginTransaction());
+			return transactions.Count;
+		}
+
+		/// <summary>
+		/// Pops out the last (topmost) transaction from the stack and invokes Commit on it.
+		/// </summary>
+		/// <returns>The current number of open transactions.</returns>
+		/// <exception cref="InvalidOperationException">If there are no transactions in the stack.</exception>
+		public virtual int EndTransaction()
+		{
+			if (transactions.Count == 0)
+			{
+				throw new InvalidOperationException(Exceptions.NoOpenTransactions);
+			}
+
+			IDbTransaction transaction = transactions.Pop();
+			transaction.Commit();
+			return transactions.Count;
 		}
 
 		/// <summary>
 		/// Runs a query to determine if the specified table exists using TSQL INFORMATION_SCHEMA.
 		/// </summary>
-		/// <param name="tableName">The table name.</param>
-		/// <returns>True if the table exists, false otherwise.</returns>
+		/// <param name="tableName">The table name</param>
+		/// <returns>True if the table exists, false otherwise</returns>
 		public virtual bool TableExists(string tableName)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(tableName))
@@ -242,42 +225,20 @@ namespace Adenson.Data
 			}
 		}
 
-		#endregion
-		#region Execute Methods
-
 		#region ExecuteDataSet
-
-		/// <summary>
-		/// Executes and returns a new DataSet from specified command text
-		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>A new DataSet object</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual DataSet ExecuteDataSet(string commandText, params object[] parameterValues)
-		{
-			return this.ExecuteDataSet(this.CreateCommand(null, commandText, parameterValues));
-		}
 
 		/// <summary>
 		/// Executes and returns a new DataSet from specified command text using specified transaction
 		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>A new DataSet object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual DataSet ExecuteDataSet(IDbTransaction transaction, string commandText, params object[] parameterValues)
+		public virtual DataSet ExecuteDataSet(string commandText, params object[] parameterValues)
 		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteDataSet(this.CreateCommand(transaction, commandText, parameterValues));
+			return this.ExecuteDataSet(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -290,28 +251,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteDataSet(this.CreateCommand(type, null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes and returns a new DataSet from specified command text using specified transaction
-		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>A new DataSet object</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual DataSet ExecuteDataSet(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteDataSet(this.CreateCommand(type, transaction, commandText, parameterValues));
+			return this.ExecuteDataSet(this.CreateCommand(type, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -327,21 +267,20 @@ namespace Adenson.Data
 				throw new ArgumentNullException("command");
 			}
 
-			using (this.Manager.Open(command))
+			this.PrepCommand(command);
+
+			IDbDataAdapter dataAdapter = this.CreateAdapter(command);
+			DataSet dataset = new DataSet();
+			dataset.Locale = System.Globalization.CultureInfo.CurrentCulture;
+			dataAdapter.Fill(dataset);
+
+			IDisposable d = dataAdapter as IDisposable;
+			if (d != null)
 			{
-				IDbDataAdapter dataAdapter = this.CreateAdapter(command);
-				DataSet dataset = new DataSet();
-				dataset.Locale = System.Globalization.CultureInfo.CurrentCulture;
-				dataAdapter.Fill(dataset);
-
-				IDisposable d = dataAdapter as IDisposable;
-				if (d != null)
-				{
-					d.Dispose();
-				}
-
-				return dataset;
+				d.Dispose();
 			}
+
+			return dataset;
 		}
 
 		/// <summary>
@@ -353,50 +292,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual DataSet[] ExecuteDataSet(params IDbCommand[] commands)
 		{
-			if (commands.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
-			}
-
-			if (commands.Any(c => c == null))
-			{
-				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
-			}
-
-			List<DataSet> list = new List<DataSet>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (IDbCommand command in commands)
-				{
-					if (transaction != null)
-					{
-						command.Transaction = transaction;
-					}
-
-					list.Add(this.ExecuteDataSet(command));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<DataSet>("dataset", commands);
 		}
 
 		/// <summary>
@@ -408,101 +304,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		public virtual DataSet[] ExecuteDataSet(params string[] commandTexts)
 		{
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<DataSet> list = new List<DataSet>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteDataSet(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
-		}
-
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>The result of each ExecuteDataSet run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		public virtual DataSet[] ExecuteDataSet(IDbTransaction transaction, params string[] commandTexts)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<DataSet> list = new List<DataSet>();
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteDataSet(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<DataSet>("dataset", commandTexts);
 		}
 
 		#endregion
@@ -518,27 +320,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual int ExecuteNonQuery(string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteNonQuery(this.CreateCommand(null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes the specified command text using specified transaction and returns the number of rows affected.
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>The number of rows affected.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual int ExecuteNonQuery(IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteNonQuery(this.CreateCommand(transaction, commandText, parameterValues));
+			return this.ExecuteNonQuery(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -552,28 +334,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual int ExecuteNonQuery(CommandType type, string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteNonQuery(this.CreateCommand(type, null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes the specified command text using specified transaction and returns the number of rows affected.
-		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>The number of rows affected.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual int ExecuteNonQuery(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteNonQuery(this.CreateCommand(type, transaction, commandText, parameterValues));
+			return this.ExecuteNonQuery(this.CreateCommand(type, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -589,11 +350,8 @@ namespace Adenson.Data
 				throw new ArgumentNullException("command");
 			}
 
-			using (this.Manager.Open(command))
-			{
-				int result = command.ExecuteNonQuery();
-				return result;
-			}
+			this.PrepCommand(command);
+			return command.ExecuteNonQuery();
 		}
 
 		/// <summary>
@@ -605,51 +363,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual int[] ExecuteNonQuery(params IDbCommand[] commands)
 		{
-			if (commands.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
-			}
-
-			if (commands.Any(c => c == null))
-			{
-				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
-			}
-
-			List<int> list = new List<int>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (IDbCommand command in commands)
-				{
-					if (transaction != null)
-					{
-						command.Transaction = transaction;
-					}
-
-					list.Add(this.ExecuteNonQuery(command));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				list.Clear();
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<int>("nonquery", commands);
 		}
 
 		/// <summary>
@@ -661,100 +375,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		public virtual int[] ExecuteNonQuery(params string[] commandTexts)
 		{
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<int> list = new List<int>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteNonQuery(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
-		}
-
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual int[] ExecuteNonQuery(IDbTransaction transaction, params string[] commandTexts)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<int> list = new List<int>();
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteNonQuery(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<int>("nonquery", commandTexts);
 		}
 
 		#endregion
@@ -770,27 +391,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual IDataReader ExecuteReader(string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteReader(this.CreateCommand(null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>An System.Data.IDataReader object.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual IDataReader ExecuteReader(IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteReader(this.CreateCommand(transaction, commandText, parameterValues));
+			return this.ExecuteReader(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -804,28 +405,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual IDataReader ExecuteReader(CommandType type, string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteReader(this.CreateCommand(type, null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes the specified command text using the specified transaction and builds an System.Data.IDataReader.
-		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>An System.Data.IDataReader object.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual IDataReader ExecuteReader(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteReader(this.CreateCommand(type, transaction, commandText, parameterValues));
+			return this.ExecuteReader(this.CreateCommand(type, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -835,11 +415,8 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
-			using (this.Manager.Open(command))
-			{
-				IDataReader result = command.ExecuteReader(this.Manager.AllowClose ? CommandBehavior.CloseConnection : CommandBehavior.Default);
-				return result;
-			}
+			this.PrepCommand(command);
+			return command.ExecuteReader();
 		}
 
 		#endregion
@@ -855,7 +432,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual object ExecuteScalar(string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteScalar(this.CreateCommand(null, commandText, parameterValues));
+			return this.ExecuteScalar(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -875,7 +452,7 @@ namespace Adenson.Data
 				throw new ArgumentNullException("transaction");
 			}
 
-			return this.ExecuteScalar(this.CreateCommand(transaction, commandText, parameterValues));
+			return this.ExecuteScalar(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -889,28 +466,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual object ExecuteScalar(CommandType type, string commandText, params object[] parameterValues)
 		{
-			return this.ExecuteScalar(this.CreateCommand(type, null, commandText, parameterValues));
-		}
-
-		/// <summary>
-		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
-		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
-		/// <returns>The first column of the first row in the resultset.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
-		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
-		public virtual object ExecuteScalar(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			return this.ExecuteScalar(this.CreateCommand(type, transaction, commandText, parameterValues));
+			return this.ExecuteScalar(this.CreateCommand(type, commandText, parameterValues));
 		}
 
 		/// <summary>
@@ -926,10 +482,8 @@ namespace Adenson.Data
 				throw new ArgumentNullException("command");
 			}
 
-			using (this.Manager.Open(command))
-			{
-				return command.ExecuteScalar();
-			}
+			this.PrepCommand(command);
+			return command.ExecuteScalar();
 		}
 
 		/// <summary>
@@ -941,50 +495,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual object[] ExecuteScalar(params IDbCommand[] commands)
 		{
-			if (commands.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
-			}
-
-			if (commands.Any(c => c == null))
-			{
-				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
-			}
-
-			List<object> list = new List<object>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (IDbCommand command in commands)
-				{
-					if (transaction != null)
-					{
-						command.Transaction = transaction;
-					}
-
-					list.Add(this.ExecuteScalar(command));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<object>("scalar", commands);
 		}
 
 		/// <summary>
@@ -996,104 +507,8 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		public virtual object[] ExecuteScalar(params string[] commandTexts)
 		{
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<object> list = new List<object>();
-			IDbTransaction transaction = this.UseTransactionAlways ? this.OpenConnection().BeginTransaction() : null;
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteScalar(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
+			return this.Execute<object>("scalar", commandTexts);
 		}
-
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>The result of each ExecuteScalar run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual object[] ExecuteScalar(IDbTransaction transaction, params string[] commandTexts)
-		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
-			if (commandTexts.Any(t => String.IsNullOrEmpty(t)))
-			{
-				throw new ArgumentNullException("commandTexts", Exceptions.ArgumentInListNull);
-			}
-
-			if (commandTexts.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commandTexts");
-			}
-
-			List<object> list = new List<object>();
-			try
-			{
-				foreach (string commandText in commandTexts)
-				{
-					list.Add(this.ExecuteScalar(CommandType.Text, transaction, commandText));
-				}
-
-				if (transaction != null)
-				{
-					transaction.Commit();
-				}
-			}
-			catch
-			{
-				if (transaction != null)
-				{
-					transaction.Rollback();
-				}
-
-				throw;
-			}
-			finally
-			{
-				this.CloseConnection();
-			}
-
-			return list.ToArray();
-		}
-
-		#endregion
 
 		#endregion
 		#region Abstract Methods
@@ -1130,31 +545,16 @@ namespace Adenson.Data
 		public abstract bool DatabaseExists();
 
 		#endregion
-		#region Protected Methods
-
-		/// <summary>
-		/// Creates a new CommandType.Text command object of specified type using specified <paramref name="parameterValues"/>
-		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command text</param>
-		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
-		/// <returns>New <see cref="IDbCommand"/> object</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
-		protected virtual IDbCommand CreateCommand(IDbTransaction transaction, string commandText, params object[] parameterValues)
-		{
-			return this.CreateCommand(CommandType.Text, transaction, commandText, parameterValues);
-		}
 
 		/// <summary>
 		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>
 		/// </summary>
 		/// <param name="type">The type of command</param>
-		/// <param name="transaction">The transaction to use</param>
 		/// <param name="commandText">The command text</param>
 		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
-		protected virtual IDbCommand CreateCommand(CommandType type, IDbTransaction transaction, string commandText, params object[] parameterValues)
+		protected virtual IDbCommand CreateCommand(CommandType type, string commandText, params object[] parameterValues)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(commandText))
 			{
@@ -1256,14 +656,15 @@ namespace Adenson.Data
 			IDbCommand command = this.CreateCommand();
 			command.CommandText = commandText;
 			command.CommandType = type;
-			if (transaction != null)
-			{
-				command.Transaction = transaction;
-			}
 
 			foreach (var p in parameters)
 			{
 				command.Parameters.Add(p);
+			}
+
+			if (transactions.Count > 0)
+			{
+				command.Transaction = transactions.Peek();
 			}
 
 			return command;
@@ -1275,13 +676,85 @@ namespace Adenson.Data
 		/// <param name="disposing">If the object is being disposed or not.</param>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_connectionManager != null)
+			List<string> errors = new List<string>();
+
+			if (transactions.Count > 0)
 			{
-				_connectionManager.Dispose();
+				throw new InvalidOperationException(Exceptions.CannotDisposeWithArgOpenTransactions);
+			}
+
+			if (_connection != null)
+			{
+				_connection.Dispose();
+			}
+		}
+		
+		private void PrepCommand(IDbCommand command)
+		{
+			if (command != null)
+			{
+				command.Connection = this.Connection;
+				command.CommandTimeout = Math.Max(command.CommandTimeout, this.CommandTimeout);
+			}
+
+			if (this.Connection.State != ConnectionState.Open)
+			{
+				this.Connection.Open();
 			}
 		}
 
-		#endregion
+		private T[] Execute<T>(string type, params object[] commands)
+		{
+			if (commands.Length == 0)
+			{
+				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
+			}
+
+			if (commands.Any(c => c == null || (c is string && StringUtil.IsNullOrWhiteSpace((string)c))))
+			{
+				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
+			}
+
+			List<T> list = new List<T>();
+
+			try
+			{
+				foreach (object c in commands)
+				{
+					IDbCommand command = c as IDbCommand;
+					if (command == null)
+					{
+						command = this.CreateCommand(CommandType.Text, (string)c);
+					}
+
+					switch (type)
+					{
+						case "dataset":
+							list.Add((T)(object)this.ExecuteDataSet(command));
+							break;
+						case "nonquery":
+							list.Add((T)(object)this.ExecuteNonQuery(command));
+							break;
+						case "scalar":
+							list.Add((T)this.ExecuteScalar(command));
+							break;
+						default:
+							throw new NotSupportedException();
+					}
+				}
+			}
+			catch
+			{
+				if (transactions.Count > 0)
+				{
+					transactions.Peek().Rollback();
+				}
+
+				throw;
+			}
+
+			return list.ToArray();
+		}
 
 		#endregion
 	}

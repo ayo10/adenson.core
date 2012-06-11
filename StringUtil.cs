@@ -142,7 +142,7 @@ namespace System
 			Exception ex = value as Exception;
 			if (ex != null)
 			{
-				return Adenson.Log.Logger.ToString(ex, true);
+				return Adenson.Log.Logger.ToString(ex);
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);

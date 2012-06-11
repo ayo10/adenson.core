@@ -14,12 +14,6 @@ namespace Adenson.CoreTest.Data
 		#region Tests
 
 		[TestMethod]
-		public void CloseConnectionTest()
-		{
-			target.CloseConnection();
-		}
-
-		[TestMethod]
 		public void ColumnExistsTest()
 		{
 			string tableName = string.Empty; // TODO: Initialize to an appropriate value
@@ -118,19 +112,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[TestMethod]
-		public void ExecuteDataSetTest2()
-		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
-			IDbTransaction transaction = null; // TODO: Initialize to an appropriate value
-			string commandText = string.Empty; // TODO: Initialize to an appropriate value
-			object[] parameterValues = null; // TODO: Initialize to an appropriate value
-			DataSet expected = null; // TODO: Initialize to an appropriate value
-			DataSet actual;
-			actual = target.ExecuteDataSet(type, transaction, commandText, parameterValues);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
 		public void ExecuteDataSetTest3()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
@@ -183,38 +164,12 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[TestMethod]
-		public void ExecuteNonQueryTest3()
-		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
-			IDbTransaction transaction = null; // TODO: Initialize to an appropriate value
-			string commandText = string.Empty; // TODO: Initialize to an appropriate value
-			object[] parameterValues = null; // TODO: Initialize to an appropriate value
-			int expected = 0; // TODO: Initialize to an appropriate value
-			int actual;
-			actual = target.ExecuteNonQuery(type, transaction, commandText, parameterValues);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
 		public void ExecuteNonQueryTest4()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
 			int[] actual;
 			actual = target.ExecuteNonQuery(commandTexts);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
-		public void ExecuteReaderTest()
-		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
-			IDbTransaction transaction = null; // TODO: Initialize to an appropriate value
-			string commandText = string.Empty; // TODO: Initialize to an appropriate value
-			object[] parameterValues = null; // TODO: Initialize to an appropriate value
-			IDataReader expected = null; // TODO: Initialize to an appropriate value
-			IDataReader actual;
-			actual = target.ExecuteReader(type, transaction, commandText, parameterValues);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -251,19 +206,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[TestMethod]
-		public void ExecuteScalarTest1()
-		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
-			IDbTransaction transaction = null; // TODO: Initialize to an appropriate value
-			string commandText = string.Empty; // TODO: Initialize to an appropriate value
-			object[] parameterValues = null; // TODO: Initialize to an appropriate value
-			object expected = null; // TODO: Initialize to an appropriate value
-			object actual;
-			actual = target.ExecuteScalar(type, transaction, commandText, parameterValues);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
 		public void ExecuteScalarTest2()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
@@ -296,15 +238,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[TestMethod]
-		public void OpenConnectionTest()
-		{
-			IDbConnection expected = null; // TODO: Initialize to an appropriate value
-			IDbConnection actual;
-			actual = target.OpenConnection();
-			Assert.AreEqual(expected, actual);
-		}
-
-		[TestMethod]
 		public void TableExistsTest()
 		{
 			string tableName = string.Empty; // TODO: Initialize to an appropriate value
@@ -318,17 +251,7 @@ namespace Adenson.CoreTest.Data
 		public void CurrentConnectionTest()
 		{
 			IDbConnection actual;
-			actual = target.CurrentConnection;
-		}
-
-		[TestMethod]
-		public void UseTransactionAlwaysTest()
-		{
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			target.UseTransactionAlways = expected;
-			actual = target.UseTransactionAlways;
-			Assert.AreEqual(expected, actual);
+			actual = target.Connection;
 		}
 
 		#endregion
