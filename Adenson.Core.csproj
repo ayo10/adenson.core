@@ -70,7 +70,6 @@
     <Compile Include="Cryptography\EncryptorBase.cs" />
     <Compile Include="Cryptography\HashAlgorithmType.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
-    <Compile Include="Data\ConnectionManager.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
     <Compile Include="Data\Parameter.cs" />
     <Compile Include="Data\SqlClientHelper.cs" />

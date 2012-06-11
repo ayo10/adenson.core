@@ -43,11 +43,14 @@ namespace Adenson.Log
 		/// <param name="args">The arguments to pass along with message.</param>
 		public void Mark(string message, params object[] args)
 		{
-			double key = DateTime.Now.TimeOfDay.Subtract(lastmark.Value).TotalSeconds;
-			string value = StringUtil.Format(message, args);
-			KeyValuePair<double, string> kv = new KeyValuePair<double, string>(key, value);
-			marks.Add(kv);
-			lastmark = DateTime.Now.TimeOfDay;
+			lock (marks)
+			{
+				double key = DateTime.Now.TimeOfDay.Subtract(lastmark.Value).TotalSeconds;
+				string value = StringUtil.Format(message, args);
+				KeyValuePair<double, string> kv = new KeyValuePair<double, string>(key, value);
+				marks.Add(kv);
+				lastmark = DateTime.Now.TimeOfDay;
+			}
 		}
 
 		/// <summary>
@@ -55,23 +58,26 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			if (marks.Count > 0)
+			lock (marks)
 			{
-				var e = marks.Select(s => s.Key).OrderBy(s => s).ToList();
-				double avg = e.Average();
-				double min = e.First();
-				double max = e.Last();
-				string ns = marks.Where(k => k.Key == min).First().Value;
-				string xs = marks.Where(k => k.Key == max).First().Value;
+				if (marks.Count > 0)
+				{
+					var e = marks.Select(s => s.Key).OrderBy(s => s).ToList();
+					double avg = e.Average();
+					double min = e.First();
+					double max = e.Last();
+					string ns = marks.Where(k => k.Key == min).First().Value;
+					string xs = marks.Where(k => k.Key == max).First().Value;
 
-				_profiler.Debug("Markers:");
-				_profiler.Debug("\tAvg: {0}s, Count: {1}", Logger.Round(avg), marks.Count);
-				_profiler.Debug("\tMax: {0}s, {1}", Logger.Round(max), ns ?? "--");
-				_profiler.Debug("\tMin: {0}s, {1}", Logger.Round(min), xs ?? "--");
-			}
-			else
-			{
-				_profiler.Debug("No Markers");
+					_profiler.Debug("Markers:");
+					_profiler.Debug("\tAvg: {0}s, Count: {1}", Logger.Round(avg), marks.Count);
+					_profiler.Debug("\tMax: {0}s, {1}", Logger.Round(max), ns ?? "--");
+					_profiler.Debug("\tMin: {0}s, {1}", Logger.Round(min), xs ?? "--");
+				}
+				else
+				{
+					_profiler.Debug("No Markers");
+				}
 			}
 		}
 

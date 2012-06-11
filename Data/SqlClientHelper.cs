@@ -35,9 +35,8 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
-		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
-		public SqlClientHelper(string keyOrConnectionString)
-			: base(keyOrConnectionString)
+		/// <exception cref="ArgumentException">If specified connection string is invalid.</exception>
+		public SqlClientHelper(string keyOrConnectionString) : base(keyOrConnectionString)
 		{
 		}
 
@@ -83,7 +82,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("CREATE DATABASE [{0}]", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, StringUtil.Format("CREATE DATABASE [{0}]", database));
 				cmd.Connection = connection;
 				cmd.ExecuteNonQuery();
 			}
@@ -110,7 +109,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("SELECT * FROM sys.databases WHERE Name = '{0}'", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, StringUtil.Format("SELECT * FROM sys.databases WHERE Name = '{0}'", database));
 				cmd.Connection = connection;
 				using (IDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
 				{
@@ -130,7 +129,7 @@ namespace Adenson.Data
 			using (var connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, null, StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
 				cmd.Connection = connection;
 				cmd.ExecuteNonQuery();
 			}

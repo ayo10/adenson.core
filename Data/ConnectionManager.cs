@@ -38,19 +38,21 @@ namespace Adenson.Data
 
 		public void Open()
 		{
+			this.Open(null);
+		}
+
+		public void Open(IDbCommand command)
+		{
+			if (command != null)
+			{
+				command.Connection = this.Connection;
+				command.CommandTimeout = Math.Max(command.CommandTimeout, _helper.CommandTimeout);
+			}
+
 			if (this.Connection.State != ConnectionState.Open)
 			{
 				this.Connection.Open();
 			}
-		}
-
-		public IDisposable Open(IDbCommand command)
-		{
-			ConnectionManagerCloser cw = new ConnectionManagerCloser(this);
-			command.Connection = this.Connection;
-			command.CommandTimeout = Math.Max(command.CommandTimeout, _helper.CommandTimeout);
-			this.Open();
-			return cw;
 		}
 
 		public void Close()
@@ -58,8 +60,6 @@ namespace Adenson.Data
 			if (this.AllowClose && this.Connection.State != ConnectionState.Closed)
 			{
 				this.Connection.Close();
-				this.Connection.Dispose();
-				this.Connection = null;
 			}
 		}
 
@@ -68,24 +68,6 @@ namespace Adenson.Data
 			if (this.Connection != null)
 			{
 				this.Connection.Dispose();
-			}
-		}
-
-		#endregion
-		#region Inner Class
-
-		private sealed class ConnectionManagerCloser : IDisposable
-		{
-			private ConnectionManager _connectionManager;
-
-			public ConnectionManagerCloser(ConnectionManager connectionManager)
-			{
-				_connectionManager = connectionManager;
-			}
-
-			public void Dispose()
-			{
-				_connectionManager.Close();
 			}
 		}
 
