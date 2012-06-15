@@ -13,6 +13,9 @@ namespace System
 	/// </summary>
 	public static class TypeUtil
 	{
+		#region Variables
+		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
+		#endregion
 		#region Methods
 
 		/// <summary>
@@ -106,28 +109,6 @@ namespace System
 
 			object source;
 			return TypeUtil.GetPropertyDescriptor(item, propertyName, out source);
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(item)[propertyName];
-			if (pd == null)
-			{
-				string[] splits = propertyName.Split('.');
-				object subitem = item;
-				for (int i = 0; i < splits.Length; i++)
-				{
-					pd = TypeDescriptor.GetProperties(subitem)[splits[i]];
-					if (pd == null)
-					{
-						return null;
-					}
-
-					subitem = pd.GetValue(subitem);
-					if (subitem == null)
-					{
-						return null;
-					}
-				}
-			}
-
-			return pd;
 		}
 
 		/// <summary>
@@ -345,13 +326,13 @@ namespace System
 		{
 			source = item;
 
-			PropertyDescriptor pd = TypeDescriptor.GetProperties(item)[propertyName];
+			PropertyDescriptor pd = TypeUtil.GetDescriptors(item.GetType())[propertyName];
 			if (pd == null)
 			{
 				string[] splits = propertyName.Split('.');
 				for (int i = 0; i < splits.Length; i++)
 				{
-					pd = TypeDescriptor.GetProperties(source)[splits[i]];
+					pd = TypeUtil.GetDescriptors(source.GetType())[splits[i]];
 					if (pd == null)
 					{
 						return null;
@@ -369,6 +350,16 @@ namespace System
 			}
 
 			return pd;
+		}
+
+		private static PropertyDescriptorCollection GetDescriptors(Type type)
+		{
+			if (!typeDescriptorCache.ContainsKey(type))
+			{
+				typeDescriptorCache.Add(type, TypeDescriptor.GetProperties(type));
+			}
+
+			return typeDescriptorCache[type];
 		}
 
 		#endregion

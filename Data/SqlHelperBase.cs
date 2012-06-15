@@ -308,6 +308,64 @@ namespace Adenson.Data
 		}
 
 		#endregion
+		#if !NET35
+		#region ExecuteDynamic
+
+		/// <summary>
+		/// Executes the specified command text, runs as a System.Data.IDataReader, reads the result into a dynamic object.
+		/// </summary>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>An System.Data.IDataDynamic object.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
+		public virtual IEnumerable<dynamic> ExecuteDynamic(string commandText, params object[] parameterValues)
+		{
+			return this.ExecuteDynamic(this.CreateCommand(CommandType.Text, commandText, parameterValues));
+		}
+
+		/// <summary>
+		/// Executes the specified command text and builds an System.Data.IDataDynamic.
+		/// </summary>
+		/// <param name="type">The command type</param>
+		/// <param name="commandText">The command to execute</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <returns>An System.Data.IDataDynamic object.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
+		public virtual IEnumerable<dynamic> ExecuteDynamic(CommandType type, string commandText, params object[] parameterValues)
+		{
+			return this.ExecuteDynamic(this.CreateCommand(type, commandText, parameterValues));
+		}
+
+		/// <summary>
+		/// Executes the command and builds an System.Data.IDataDynamic.
+		/// </summary>
+		/// <param name="command">The command</param>
+		/// <returns>An System.Data.IDataDynamic object.</returns>
+		public virtual IEnumerable<dynamic> ExecuteDynamic(IDbCommand command)
+		{
+			this.PrepCommand(command);
+			List<dynamic> result = new List<dynamic>();
+			using (IDataReader r = command.ExecuteReader())
+			{
+				dynamic d = new object();
+				while (r.Read())
+				{
+					for (var i = 0; i < r.FieldCount; i++)
+					{
+						d[r.GetName(i)] = r.GetValue(i);
+					}
+
+					result.Add(d);
+				}
+			}
+
+			return result;
+		}
+
+		#endregion
+		#endif
 		#region ExecuteNonQuery
 
 		/// <summary>
