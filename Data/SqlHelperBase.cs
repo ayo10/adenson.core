@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Dynamic;
 using System.Linq;
 
 namespace Adenson.Data
@@ -349,7 +350,7 @@ namespace Adenson.Data
 			List<dynamic> result = new List<dynamic>();
 			using (IDataReader r = command.ExecuteReader())
 			{
-				dynamic d = new object();
+				dynamic d = new ExpandoObject();
 				while (r.Read())
 				{
 					for (var i = 0; i < r.FieldCount; i++)
