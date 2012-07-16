@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Adenson.Data
 {
@@ -126,67 +128,84 @@ namespace Adenson.Data
 			var ssb = new SqlConnectionStringBuilder(this.ConnectionString);
 			var database = ssb.InitialCatalog;
 			ssb.InitialCatalog = "master";
-			using (var connection = new SqlConnection(ssb.ToString()))
+			using (SqlConnection connection = new SqlConnection(ssb.ToString()))
 			{
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine(StringUtil.Format("alter database [{0}] set single_user with rollback immediate", database));
+				sb.AppendLine(StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'", database));
+				sb.AppendLine(StringUtil.Format("DROP DATABASE [{0}]", database));
+
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'\r\nDROP DATABASE [{0}]", database));
+				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, sb.ToString());
 				cmd.Connection = connection;
 				cmd.ExecuteNonQuery();
 			}
 		}
 
 		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
+		/// Reads the specified stream split into strings (delimiting using <see cref="Environment.NewLine"/> and "GO"), and runs them in batched mode.
 		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public override int[] ExecuteNonQuery(params string[] commandTexts)
+		/// <param name="stream">The stream containing the commmand text to run.</param>
+		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
+		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		public override int[] ExecuteNonQuery(StreamReader stream)
 		{
-			if (commandTexts.Length == 1)
+			if (stream == null)
 			{
-				string str = commandTexts[0];
-				string[] splits = str.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-				if (splits.Any(s => String.Equals(s, "GO", StringComparison.CurrentCultureIgnoreCase)))
-				{
-					// doing the following below for some odd reason changes the order of strings
-					////splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
-
-					List<string> sqls = new List<string>();
-					string last = String.Empty;
-					foreach (string ins in splits.Select(s => s.Trim()))
-					{
-						if (String.IsNullOrEmpty(ins))
-						{
-							continue;
-						}
-
-						if (String.Equals(ins, "GO", StringComparison.CurrentCultureIgnoreCase))
-						{
-							if (!String.IsNullOrEmpty(last))
-							{
-								sqls.Add(last.Trim());
-							}
-
-							last = String.Empty;
-						}
-						else
-						{
-							last += ins + Environment.NewLine;
-						}
-					}
-
-					if (!String.IsNullOrEmpty(last))
-					{
-						sqls.Add(last.Trim());
-					}
-
-					return base.ExecuteNonQuery(sqls.ToArray());
-				}
+				throw new ArgumentNullException("stream");
 			}
 
-			return base.ExecuteNonQuery(commandTexts);
+			string text = stream.ReadToEnd();
+			string[] splits = text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			if (splits.Any(s => String.Equals(s, "GO", StringComparison.CurrentCultureIgnoreCase)))
+			{
+				// doing the following below for some odd reason changes the order of strings
+				// splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+
+				List<string> sqls = new List<string>();
+				string last = String.Empty;
+				foreach (string ins in splits.Select(s => s.Trim()))
+				{
+					if (String.IsNullOrEmpty(ins))
+					{
+						continue;
+					}
+
+					if (String.Equals(ins, "GO", StringComparison.CurrentCultureIgnoreCase))
+					{
+						if (!String.IsNullOrEmpty(last))
+						{
+							sqls.Add(last.Trim());
+						}
+
+						last = String.Empty;
+					}
+					else
+					{
+						last += ins + Environment.NewLine;
+					}
+				}
+
+				if (!String.IsNullOrEmpty(last))
+				{
+					sqls.Add(last.Trim());
+				}
+
+				return base.ExecuteNonQuery(sqls.ToArray());
+			}
+
+			return new int[] { this.ExecuteNonQuery(text) };
+		}
+
+		/// <summary>
+		/// Calls <see cref="base.Dispose"/>, then empties the connection pool.
+		/// </summary>
+		/// <param name="disposing">If the object is being disposed or not.</param>
+		/// <exception cref="InvalidOperationException">If there are open transactions.</exception>
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
+			SqlConnection.ClearAllPools();
 		}
 
 		#endregion

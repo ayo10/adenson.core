@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Adenson.Data
 {
@@ -293,7 +295,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual DataSet[] ExecuteDataSet(params IDbCommand[] commands)
 		{
-			return this.Execute<DataSet>("dataset", commands);
+			return this.Execute<DataSet>(ExecuteType.Dataset, commands);
 		}
 
 		/// <summary>
@@ -305,7 +307,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		public virtual DataSet[] ExecuteDataSet(params string[] commandTexts)
 		{
-			return this.Execute<DataSet>("dataset", commandTexts);
+			return this.Execute<DataSet>(ExecuteType.Dataset, commandTexts);
 		}
 
 		#endregion
@@ -422,11 +424,11 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual int[] ExecuteNonQuery(params IDbCommand[] commands)
 		{
-			return this.Execute<int>("nonquery", commands);
+			return this.Execute<int>(ExecuteType.NonQuery, commands);
 		}
 
 		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
+		/// Executes the command texts in a batched mode with a transaction.
 		/// </summary>
 		/// <param name="commandTexts">1 or more command texts</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
@@ -434,7 +436,36 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		public virtual int[] ExecuteNonQuery(params string[] commandTexts)
 		{
-			return this.Execute<int>("nonquery", commandTexts);
+			return this.Execute<int>(ExecuteType.NonQuery, commandTexts);
+		}
+
+		/// <summary>
+		/// Reads the specified stream split into strings (delimiting using <see cref="Environment.NewLine"/>), and runs them in batched mode.
+		/// </summary>
+		/// <param name="stream">The stream containing the commmand text to run.</param>
+		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
+		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		public virtual int[] ExecuteNonQuery(StreamReader stream)
+		{
+			return this.ExecuteNonQuery(stream, Environment.NewLine);
+		}
+
+		/// <summary>
+		/// Reads the specified stream split into strings (using specified delimiter), and runs them in batched mode.
+		/// </summary>
+		/// <param name="stream">The stream containing the commmand text to run.</param>
+		/// <param name="delimiter">The delimiter to use.</param>
+		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
+		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		public virtual int[] ExecuteNonQuery(StreamReader stream, string delimiter)
+		{
+			if (stream == null)
+			{
+				throw new ArgumentNullException("stream");
+			}
+
+			string[] scripts = stream.ReadToEnd().Split(new string[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
+			return this.ExecuteNonQuery(scripts);
 		}
 
 		#endregion
@@ -554,7 +585,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
 		public virtual object[] ExecuteScalar(params IDbCommand[] commands)
 		{
-			return this.Execute<object>("scalar", commands);
+			return this.Execute<object>(ExecuteType.Scalar, commands);
 		}
 
 		/// <summary>
@@ -566,7 +597,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		public virtual object[] ExecuteScalar(params string[] commandTexts)
 		{
-			return this.Execute<object>("scalar", commandTexts);
+			return this.Execute<object>(ExecuteType.Scalar, commandTexts);
 		}
 
 		#endregion
@@ -730,9 +761,10 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Disposes the helper class
+		/// Disposes the connection in use, there by freeing resources in use.
 		/// </summary>
 		/// <param name="disposing">If the object is being disposed or not.</param>
+		/// <exception cref="InvalidOperationException">If there are open transactions.</exception>
 		protected virtual void Dispose(bool disposing)
 		{
 			List<string> errors = new List<string>();
@@ -748,7 +780,11 @@ namespace Adenson.Data
 			}
 		}
 		
-		private void PrepCommand(IDbCommand command)
+		/// <summary>
+		/// Prepares the command for execution. (Sets connection, timeout and opens connection if needed);
+		/// </summary>
+		/// <param name="command">The command to prep.</param>
+		protected virtual void PrepCommand(IDbCommand command)
 		{
 			if (command != null)
 			{
@@ -762,7 +798,7 @@ namespace Adenson.Data
 			}
 		}
 
-		private T[] Execute<T>(string type, params object[] commands)
+		private T[] Execute<T>(ExecuteType type, params object[] commands)
 		{
 			if (commands.Length == 0)
 			{
@@ -788,13 +824,13 @@ namespace Adenson.Data
 
 					switch (type)
 					{
-						case "dataset":
+						case ExecuteType.Dataset:
 							list.Add((T)(object)this.ExecuteDataSet(command));
 							break;
-						case "nonquery":
+						case ExecuteType.NonQuery:
 							list.Add((T)(object)this.ExecuteNonQuery(command));
 							break;
-						case "scalar":
+						case ExecuteType.Scalar:
 							list.Add((T)this.ExecuteScalar(command));
 							break;
 						default:
@@ -813,6 +849,16 @@ namespace Adenson.Data
 			}
 
 			return list.ToArray();
+		}
+
+		#endregion
+		#region ExecuteType Enum
+
+		private enum ExecuteType
+		{
+			Dataset,
+			NonQuery,
+			Scalar
 		}
 
 		#endregion
