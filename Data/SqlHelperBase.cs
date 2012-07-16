@@ -811,12 +811,13 @@ namespace Adenson.Data
 			}
 
 			List<T> list = new List<T>();
+			IDbCommand command = null;
 
 			try
 			{
 				foreach (object c in commands)
 				{
-					IDbCommand command = c as IDbCommand;
+					command = c as IDbCommand;
 					if (command == null)
 					{
 						command = this.CreateCommand(CommandType.Text, (string)c);
@@ -840,6 +841,11 @@ namespace Adenson.Data
 			}
 			catch
 			{
+				if (command != null)
+				{
+					Log.Logger.GetLogger(this.GetType()).Debug(Exceptions.ErrantCommandArg, command.CommandText);
+				}
+
 				if (transactions.Count > 0)
 				{
 					transactions.Peek().Rollback();

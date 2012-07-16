@@ -168,4 +168,8 @@
   <data name="PropertyOrFieldNotFound" xml:space="preserve">
     <value>A field or property with the name '{0}' was not found on the provided data item.</value>
   </data>
+  <data name="ErrantCommandArg" xml:space="preserve">
+    <value>Errant command:
+{0}</value>
+  </data>
 </root>
