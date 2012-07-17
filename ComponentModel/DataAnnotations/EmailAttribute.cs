@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Adenson.ComponentModel.DataAnnotations
+namespace System.ComponentModel.DataAnnotations
 {
 	/// <summary>
 	/// Borrowed from http://www.pagedesigners.co.nz/2011/02/asp-net-mvc-3-email-validation-with-unobtrusive-jquery-validation/

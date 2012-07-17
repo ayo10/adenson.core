@@ -60,6 +60,7 @@
     <Compile Include="Collections\CollectionChangingEventArgs.cs" />
     <Compile Include="Collections\Hashtable.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="ComponentModel\NotifyObject.cs" />
     <Compile Include="Configuration\ConfigHelper.cs" />
     <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
     <Compile Include="Configuration\ConnectionStrings.cs" />
@@ -91,7 +92,6 @@
     <Compile Include="Log\LogMarker.cs" />
     <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogSeverityInternal.cs" />
-    <Compile Include="NotifyObject.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>
