@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Adenson.Collections;
 
-namespace System
+namespace System.ComponentModel
 {
 	/// <summary>
 	/// Object that fires <see cref="INotifyPropertyChanged.PropertyChanged"/> and <see cref="INotifyPropertyChanging.PropertyChanging"/> events
@@ -67,7 +67,7 @@ namespace System
 		/// <param name="key">The key of the value</param>
 		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
-		protected T GetValue<T>(string key, T defaultValue)
+		protected virtual T GetValue<T>(string key, T defaultValue)
 		{
 			if (keyValues.ContainsKey(key))
 			{
@@ -83,7 +83,7 @@ namespace System
 		/// <typeparam name="T">The value type to return</typeparam>
 		/// <param name="key">The key</param>
 		/// <param name="value">The value</param>
-		protected void SetValue<T>(string key, T value)
+		protected virtual void SetValue<T>(string key, T value)
 		{
 			if (Object.Equals(keyValues[key], value))
 			{
