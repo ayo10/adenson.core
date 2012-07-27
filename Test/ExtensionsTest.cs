@@ -42,9 +42,9 @@ namespace Adenson.CoreTest
 			IEnumerable<string> array2 = new string[] { "one", "TWO", "three" };
 			IEnumerable<string> array3 = new string[] { "ONE", "TWO", "THREE" };
 
-			Assert.IsTrue(array1.EqualsTo(array2, StringComparison.CurrentCulture));
-			Assert.IsFalse(array1.EqualsTo(array3, StringComparison.CurrentCulture));
-			Assert.IsTrue(array1.EqualsTo(array3, StringComparison.CurrentCultureIgnoreCase));
+			Assert.IsTrue(array1.SameAs(array2, StringComparison.CurrentCulture));
+			Assert.IsFalse(array1.SameAs(array3, StringComparison.CurrentCulture));
+			Assert.IsTrue(array1.SameAs(array3, StringComparison.CurrentCultureIgnoreCase));
 		}
 
 		[TestMethod]
@@ -131,7 +131,7 @@ namespace Adenson.CoreTest
 		{
 			byte[] buffer = new byte[] { 1, 2, 3 };
 			Stream stream = new MemoryStream(buffer);
-			Assert.IsTrue(buffer.EqualsTo(stream.ToBytes()));
+			Assert.IsTrue(buffer.SameAs(stream.ToBytes()));
 		}
 
 		[TestMethod]
@@ -217,14 +217,14 @@ namespace Adenson.CoreTest
 			IEnumerable<T> array1 = new List<T>(items);
 			IEnumerable<T> array2 = new List<T>(items);
 
-			Assert.IsTrue(array1.EqualsTo(array2));
-			Assert.IsTrue(array2.EqualsTo(array1));
+			Assert.IsTrue(array1.SameAs(array2));
+			Assert.IsTrue(array2.SameAs(array1));
 
 			List<T> array3 = new List<T>(items);
 			array3.Add(default(T));
 
-			Assert.IsFalse(array1.EqualsTo(array3));
-			Assert.IsFalse(array3.EqualsTo(array1));
+			Assert.IsFalse(array1.SameAs(array3));
+			Assert.IsFalse(array3.SameAs(array1));
 		}
 	}
 }

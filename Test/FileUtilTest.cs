@@ -19,7 +19,7 @@ namespace Adenson.CoreTest
 			Assert.IsTrue(File.Exists(actual));
 			Assert.AreEqual(filePath, actual);
 			byte[] bytes = FileUtil.ReadStream(filePath);
-			buffer.EqualsTo(bytes);
+			buffer.SameAs(bytes);
 		}
 
 		[TestMethod]

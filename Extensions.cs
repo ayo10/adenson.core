@@ -322,7 +322,7 @@ namespace System.Collections.Generic
 		/// <param name="array1">The frst array</param>
 		/// <param name="array2">The second array</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool EqualsTo<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
+		public static bool SameAs<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
 		{
 			if (Object.ReferenceEquals(array1, array2))
 			{
@@ -360,7 +360,7 @@ namespace System.Collections.Generic
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
 		/// <exception cref="ArgumentNullException">If array1 is null or array2 is null and they are both not null.</exception>
-		public static bool EqualsTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
+		public static bool SameAs(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
 		{
 			if (Object.ReferenceEquals(array1, array2))
 			{
