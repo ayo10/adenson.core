@@ -291,19 +291,20 @@ namespace System
 					}
 					else
 					{
-						var valueAsString = value as string;
+						string valueAsString = value as string;
 						if ((typeConverter is EnumConverter) && valueAsString != null)
 						{
 							try
 							{
-								var splits = valueAsString.Split('|');
-								var intValue = 0;
+								string[] splits = valueAsString.Split('|');
+								int pipedValue = 0;
 								foreach (var str in splits)
 								{
-									intValue += (int)Enum.Parse(type, str);
+									int parse = (int)Enum.Parse(type, str);
+									pipedValue = pipedValue == 0 ? parse : pipedValue | parse;
 								}
 
-								output = Enum.Parse(type, intValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
+								output = Enum.Parse(type, pipedValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
 								result = true;
 							}
 							catch (ArgumentException)
