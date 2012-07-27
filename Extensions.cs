@@ -297,10 +297,10 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Determines whether the dictionary contains the specified key, using the comparism rule
+		/// Determines whether the dictionary contains the specified key, using the specified comparism rule.
 		/// </summary>
-		/// <typeparam name="T">The type</typeparam>
-		/// <param name="dictionary">The dictionary to parse</param>
+		/// <typeparam name="T">The type.</typeparam>
+		/// <param name="dictionary">The dictionary to parse.</param>
 		/// <param name="key">The key to find</param>
 		/// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
 		/// <returns>true if the value of the value parameter is the same as this string; otherwise, false.</returns>
@@ -316,7 +316,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
+		/// Determines all the items in array1 and array2 are both equal (same instance at the same index).
 		/// </summary>
 		/// <typeparam name="T">The type of items</typeparam>
 		/// <param name="array1">The frst array</param>
@@ -353,7 +353,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Determines all the strings in array1 and array2 are both equal (same instance @ same index) using the specified comparison type.
+		/// Determines all the strings in array1 and array2 are both equal (same instance at the same index) using the specified comparison type.
 		/// </summary>
 		/// <param name="array1">The frst array</param>
 		/// <param name="array2">The second array</param>
@@ -379,14 +379,7 @@ namespace System.Collections.Generic
 
 			for (int i = 0; i < array1.Count(); i++)
 			{
-				string e1 = array1.ElementAt(i);
-				string e2 = array2.ElementAt(i);
-				if ((e1 == null && e2 != null) || (e1 != null && e2 == null))
-				{
-					return false;
-				}
-
-				if (!e1.Equals(e2, comparisonType))
+				if (!String.Equals(array1.ElementAt(i), array2.ElementAt(i), comparisonType))
 				{
 					return false;
 				}
