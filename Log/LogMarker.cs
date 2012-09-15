@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -41,6 +42,7 @@ namespace Adenson.Log
 		/// <remarks>The name of the method MIGHT change.</remarks>
 		/// <param name="message">A message to display.</param>
 		/// <param name="args">The arguments to pass along with message.</param>
+		[Conditional("DEBUG")]
 		public void Mark(string message, params object[] args)
 		{
 			lock (marks)
