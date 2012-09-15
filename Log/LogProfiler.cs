@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Log
@@ -104,6 +105,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
 			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));

@@ -222,6 +222,7 @@ namespace Adenson.Log
 		/// Log debug messages, converting the specified value to string.
 		/// </summary>>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG")]
 		public void Debug(object value)
 		{
 			this.Debug(StringUtil.ToString(value));
@@ -233,6 +234,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
@@ -258,6 +260,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Error(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Error, message, arguments);
@@ -267,6 +270,7 @@ namespace Adenson.Log
 		/// Log exception
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
+		[Conditional("DEBUG")]
 		public void Error(Exception ex)
 		{
 			string message = Logger.ToString(ex);
@@ -282,6 +286,7 @@ namespace Adenson.Log
 		/// Log debug message, converting the specified value to string.
 		/// </summary>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG")]
 		public void Info(object value)
 		{
 			this.Info(StringUtil.ToString(value));
@@ -293,6 +298,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
