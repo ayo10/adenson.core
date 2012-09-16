@@ -8,6 +8,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represetns a log profiler object, active only when the parent Logger object's severity is Debug or lower
 	/// </summary>
+	[DebuggerStepThrough]
 	public sealed class LogProfiler : IDisposable
 	{
 		#region Variables

@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 
 namespace Adenson.Log
 {
+	[DebuggerStepThrough]
 	internal struct LogSeverityInternal
 	{
 		#region Variables

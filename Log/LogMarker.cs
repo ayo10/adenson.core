@@ -9,6 +9,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represents a log marker
 	/// </summary>
+	[DebuggerStepThrough]
 	public sealed class LogMarker : IDisposable
 	{
 		#region Variables

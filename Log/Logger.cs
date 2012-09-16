@@ -12,6 +12,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Logger of .... well, logs
 	/// </summary>
+	[DebuggerStepThrough]
 	public sealed class Logger
 	{
 		#region Variables
