@@ -24,7 +24,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Debug(SR.ProfilerStart);
+			this.Write(SR.ProfilerStart);
 		}
 
 		#endregion
@@ -101,15 +101,14 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Called to log errors of type Debug
+		/// Called to log errors of type Debug. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
+			this.Write(message, arguments);
 		}
 
 		/// <summary>
@@ -117,7 +116,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Debug(SR.ProfilerStop);
+			this.Write(SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
@@ -137,6 +136,11 @@ namespace Adenson.Log
 			}
 
 			return marker;
+		}
+
+		private void Write(string message, params object[] arguments)
+		{
+			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
 		}
 
 		#endregion

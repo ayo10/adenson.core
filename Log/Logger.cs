@@ -220,22 +220,20 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Log debug messages, converting the specified value to string.
+		/// Log debug messages, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>>
 		/// <param name="value">The value</param>
-		[Conditional("DEBUG")]
 		public void Debug(object value)
 		{
 			this.Debug(StringUtil.ToString(value));
 		}
 
 		/// <summary>
-		/// Log debug message
+		/// Log debug message. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
@@ -256,22 +254,20 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log error message
+		/// Log error message.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
 		public void Error(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Error, message, arguments);
 		}
 
 		/// <summary>
-		/// Log exception
+		/// Log exception.
 		/// </summary>
 		/// <param name="ex">The Exception object to log</param>
-		[Conditional("DEBUG")]
 		public void Error(Exception ex)
 		{
 			string message = Logger.ToString(ex);
@@ -284,22 +280,20 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log debug message, converting the specified value to string.
+		/// Log debug message, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
-		[Conditional("DEBUG")]
 		public void Info(object value)
 		{
 			this.Info(StringUtil.ToString(value));
 		}
 
 		/// <summary>
-		/// Log information message
+		/// Log information message. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
 		public void Info(string message, params object[] arguments)
 		{
 			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
@@ -332,7 +326,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log warning message, converting the specified value to string.
+		/// Log warning message, converting the specified value to string. Executes if DEBUG or TRACE is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
 		public void Warn(object value)
@@ -341,7 +335,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log warning message
+		/// Log warning message. Executes if DEBUG or TRACE is defined.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
