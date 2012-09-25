@@ -20,7 +20,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets or sets the severity
 		/// </summary>
-		public LogSeverityInternal Severity
+		public LogSeverity Severity
 		{
 			get;
 			set;

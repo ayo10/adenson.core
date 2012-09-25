@@ -35,7 +35,7 @@ namespace Adenson.Log.Config
 
 			this.Types = types;
 
-			if (this.Severity != LogSeverity.None)
+			if (this.Severity != LogSeverity.None && this.Types != LogTypes.None)
 			{
 				var listeners = new List<TraceListener>();
 

@@ -26,7 +26,7 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Adenson.Core.xml</DocumentationFile>
@@ -92,7 +92,6 @@
     <Compile Include="Log\Config\LoggerSettings.cs" />
     <Compile Include="Log\LogMarker.cs" />
     <Compile Include="Log\LogProfiler.cs" />
-    <Compile Include="Log\LogSeverityInternal.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Properties\Exceptions.Designer.cs">
       <AutoGen>True</AutoGen>

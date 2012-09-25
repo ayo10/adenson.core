@@ -5,7 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Log Severity Enums
 	/// </summary>
-	public enum LogSeverity : int
+	internal enum LogSeverity : int
 	{
 		/// <summary>
 		/// Indicates no log is saved
@@ -23,13 +23,18 @@ namespace Adenson.Log
 		Debug = 2,
 
 		/// <summary>
+		/// Only messages called with Profiler, Warning and Error are logged
+		/// </summary>
+		Profiler = 3,
+
+		/// <summary>
 		/// Only messages called with Warning and Error are logged
 		/// </summary>
-		Warn = 3,
+		Warn = 4,
 
 		/// <summary>
 		/// Only messages called with Error are logged
 		/// </summary>
-		Error = 4
+		Error = 5,
 	}
 }
