@@ -53,6 +53,7 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		[Conditional("DEBUG")]
 		public static void Debug(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Debug(message, arguments);
@@ -116,6 +117,7 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		[Conditional("DEBUG")]
 		public static void Info(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Info(message, arguments);
@@ -200,6 +202,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG"), Conditional("TRACE")]
 		public static void Warn(Type type, object value)
 		{
 			Logger.GetLogger(type).Warn(value);
@@ -211,6 +214,7 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
+		[Conditional("DEBUG"), Conditional("TRACE")]
 		public static void Warn(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Warn(message, arguments);
@@ -223,6 +227,7 @@ namespace Adenson.Log
 		/// Log debug messages, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG")]
 		public void Debug(object value)
 		{
 			this.Debug(StringUtil.ToString(value));
@@ -234,13 +239,9 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Debug)
-			{
-				return;
-			}
-
 			this.Write(LogSeverity.Debug, message, arguments);
 		}
 
@@ -283,6 +284,7 @@ namespace Adenson.Log
 		/// Log debug message, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG")]
 		public void Info(object value)
 		{
 			this.Info(StringUtil.ToString(value));
@@ -294,13 +296,9 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Info(string message, params object[] arguments)
 		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Info)
-			{
-				return;
-			}
-
 			this.Write(LogSeverity.Info, message, arguments);
 		}
 
@@ -329,6 +327,7 @@ namespace Adenson.Log
 		/// Log warning message, converting the specified value to string. Executes if DEBUG or TRACE is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
+		[Conditional("DEBUG"), Conditional("TRACE")]
 		public void Warn(object value)
 		{
 			this.Warn(StringUtil.ToString(value));
@@ -340,13 +339,9 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG"), Conditional("TRACE")]
 		public void Warn(string message, params object[] arguments)
 		{
-			if ((int)defaultSettings.Severity > (int)LogSeverity.Warn)
-			{
-				return;
-			}
-
 			this.Write(LogSeverity.Warn, message, arguments);
 		}
 
@@ -363,11 +358,21 @@ namespace Adenson.Log
 			}
 		}
 
-		internal void Write(LogSeverityInternal severity, string message, params object[] arguments)
+		internal void Write(LogSeverity severity, string message, params object[] arguments)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(message))
 			{
 				throw new ArgumentNullException("message");
+			}
+
+			if (defaultSettings.Types == LogTypes.None)
+			{
+				return;
+			}
+
+			if ((int)defaultSettings.Severity > (int)severity)
+			{
+				return;
 			}
 
 			LogEntry entry = new LogEntry();
@@ -394,6 +399,11 @@ namespace Adenson.Log
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
 				Console.WriteLine(entry);
+			}
+
+			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
+			{
+				System.Diagnostics.Debug.WriteLine(entry);
 			}
 
 			if ((entry.LogType & LogTypes.Trace) != LogTypes.None)

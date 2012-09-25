@@ -24,7 +24,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(SR.ProfilerStart);
+			this.Write(LogSeverity.Profiler, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -101,14 +101,27 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Called to log errors of type Debug. Executes if DEBUG is defined.
+		/// Called to log errors of type Info.
 		/// </summary>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
+		public void Info(string message, params object[] arguments)
+		{
+			this.Write(LogSeverity.Info, message, arguments);
+		}
+
+		/// <summary>
+		/// Called to log errors of type Debug.
+		/// </summary>
+		/// <param name="message">Message to log</param>
+		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Write(message, arguments);
+			this.Write(LogSeverity.Profiler, message, arguments);
 		}
 
 		/// <summary>
@@ -116,7 +129,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(SR.ProfilerStop);
+			this.Write(LogSeverity.Profiler, SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
@@ -138,9 +151,9 @@ namespace Adenson.Log
 			return marker;
 		}
 
-		private void Write(string message, params object[] arguments)
+		private void Write(LogSeverity severity, string message, params object[] arguments)
 		{
-			this.Parent.Write(LogSeverityInternal.Profiler, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
+			this.Parent.Write(severity, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
 		}
 
 		#endregion
