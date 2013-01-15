@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Adenson.Collections
+namespace System.Collections.Generic
 {
 	/// <summary>
 	/// Represents a collection of keys and values.
@@ -10,13 +10,13 @@ namespace Adenson.Collections
 	/// <remarks>
 	/// Behaves like System.Collections.Hashtable of old.
 	/// </remarks>
-	/// <typeparam name="K">The type of keys in the dictionary.</typeparam>
-	/// <typeparam name="V">The type of values in the dictionary.</typeparam>
+	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
+	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
 	[SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix", Justification = "No, I want the name Hashtable, NOT WhateverDictionary")]
-	public class Hashtable<K, V> : IDictionary<K, V>
+	public class Hashtable<TKey, TValue> : IDictionary<TKey, TValue>
 	{
 		#region Variables
-		private IDictionary<K, V> dick;
+		private IDictionary<TKey, TValue> dick;
 		#endregion
 		#region Constructors
 
@@ -25,7 +25,7 @@ namespace Adenson.Collections
 		/// </summary>
 		public Hashtable()
 		{
-			dick = new Dictionary<K, V>();
+			dick = new Dictionary<TKey, TValue>();
 		}
 
 		/// <summary>
@@ -34,7 +34,7 @@ namespace Adenson.Collections
 		/// <param name="capacity">The initial number of elements that the dictionary can contain.</param>
 		public Hashtable(int capacity)
 		{
-			dick = new Dictionary<K, V>(capacity);
+			dick = new Dictionary<TKey, TValue>(capacity);
 		}
 
 		#endregion
@@ -60,7 +60,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Gets all the keys in the hashtable
 		/// </summary>
-		public ICollection<K> Keys
+		public ICollection<TKey> Keys
 		{
 			get { return dick.Keys; }
 		}
@@ -68,7 +68,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Gets all the values in the hashtable
 		/// </summary>
-		public ICollection<V> Values
+		public ICollection<TValue> Values
 		{
 			get { return dick.Values; }
 		}
@@ -78,7 +78,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The key</param>
 		/// <returns>Found value</returns>
-		public V this[K key]
+		public TValue this[TKey key]
 		{
 			get
 			{
@@ -87,13 +87,13 @@ namespace Adenson.Collections
 					return dick[key];
 				}
 
-				return default(V);
+				return default(TValue);
 			}
 			set
 			{
 				if (this.IsReadOnly)
 				{
-					throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+					throw new InvalidOperationException(Adenson.Exceptions.ReadOnlyInstance);
 				}
 
 				if (dick.ContainsKey(key))
@@ -115,11 +115,11 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The object to use as the key of the element to add.</param>
 		/// <param name="value">The object to use as the value</param>
-		public void Add(K key, V value)
+		public void Add(TKey key, TValue value)
 		{
 			if (this.IsReadOnly)
 			{
-				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+				throw new InvalidOperationException(Adenson.Exceptions.ReadOnlyInstance);
 			}
 
 			dick.Add(key, value);
@@ -132,7 +132,7 @@ namespace Adenson.Collections
 		{
 			if (this.IsReadOnly)
 			{
-				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+				throw new InvalidOperationException(Adenson.Exceptions.ReadOnlyInstance);
 			}
 
 			dick.Clear();
@@ -143,7 +143,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="array">The one-dimensional System.Array that is the destination of the elements.</param>
 		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
-		public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex)
+		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
 		{
 			dick.CopyTo(array, arrayIndex);
 		}
@@ -153,7 +153,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="item">The object to locate.</param>
 		/// <returns>true if item is found; otherwise, false.</returns>
-		public bool Contains(KeyValuePair<K, V> item)
+		public bool Contains(KeyValuePair<TKey, TValue> item)
 		{
 			return dick.Contains(item);
 		}
@@ -163,7 +163,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The key to locate</param>
 		/// <returns>true if the hashtable contains an element with the key; otherwise, false.</returns>
-		public bool ContainsKey(K key)
+		public bool ContainsKey(TKey key)
 		{
 			return dick.ContainsKey(key);
 		}
@@ -173,7 +173,7 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="value">The value</param>
 		/// <returns>true if the hashtable contains an element with the value; otherwise, false.</returns>
-		public bool ContainsValue(V value)
+		public bool ContainsValue(TValue value)
 		{
 			return dick.Values.Contains(value);
 		}
@@ -182,7 +182,7 @@ namespace Adenson.Collections
 		/// Returns an enumerator that iterates through the dictionary
 		/// </summary>
 		/// <returns>The enumerator</returns>
-		public IEnumerator<KeyValuePair<K, V>> GetEnumerator()
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
 			return dick.GetEnumerator();
 		}
@@ -192,11 +192,11 @@ namespace Adenson.Collections
 		/// </summary>
 		/// <param name="key">The key to locate</param>
 		/// <returns>true if the item was removed, false otherwise.</returns>
-		public bool Remove(K key)
+		public bool Remove(TKey key)
 		{
 			if (this.IsReadOnly)
 			{
-				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
+				throw new InvalidOperationException(Adenson.Exceptions.ReadOnlyInstance);
 			}
 
 			bool result = dick.Remove(key);
@@ -209,7 +209,7 @@ namespace Adenson.Collections
 		/// <param name="key">The key</param>
 		/// <param name="value">The value found if any</param>
 		/// <returns>true, or false</returns>
-		public bool TryGetValue(K key, out V value)
+		public bool TryGetValue(TKey key, out TValue value)
 		{
 			return dick.TryGetValue(key, out value);
 		}
@@ -219,17 +219,17 @@ namespace Adenson.Collections
 			return dick.GetEnumerator();
 		}
 
-		void ICollection<KeyValuePair<K, V>>.Add(KeyValuePair<K, V> item)
+		void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
 		{
 			this.Add(item.Key, item.Value);
 		}
 
-		void ICollection<KeyValuePair<K, V>>.Clear()
+		void ICollection<KeyValuePair<TKey, TValue>>.Clear()
 		{
 			this.Clear();
 		}
 
-		bool ICollection<KeyValuePair<K, V>>.Remove(KeyValuePair<K, V> item)
+		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
 		{
 			return this.Remove(item.Key);
 		}

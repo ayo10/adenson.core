@@ -378,7 +378,6 @@ namespace Adenson.Log
 			LogEntry entry = new LogEntry();
 			entry.Severity = severity;
 			entry.TypeName = this.ClassType.Name;
-			entry.Source = defaultSettings.Source;
 			entry.Date = DateTime.Now;
 			entry.LogType = defaultSettings.Types;
 

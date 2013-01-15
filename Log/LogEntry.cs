@@ -36,15 +36,6 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets or sets the source
-		/// </summary>
-		public string Source
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
 		/// Gets or sets the date
 		/// </summary>
 		public DateTime Date
@@ -78,7 +69,7 @@ namespace Adenson.Log
 		{
 			var format = "{0}\t{1}\t[{2}]\t {3}";
 			var date = this.Date.ToString("H:mm:ss.fff", CultureInfo.CurrentCulture);
-			return StringUtil.Format(format, this.Severity.ToString(), date, this.TypeName, this.Message);
+			return StringUtil.Format(format, String.Concat("[", this.Severity.ToString().ToUpper(CultureInfo.CurrentCulture), "]").PadRight(9), date, this.TypeName, this.Message);
 		}
 
 		#endregion

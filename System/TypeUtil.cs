@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -131,7 +132,7 @@ namespace System
 				return di[propertyName];
 			}
 
-			if (propertyName.IndexOf("[") > -1 && propertyName.EndsWith("]"))
+			if (propertyName.IndexOf("[", StringComparison.Ordinal) > -1 && propertyName.EndsWith("]", StringComparison.Ordinal))
 			{
 				string[] splits = propertyName.Split('[');
 				if (splits.Length >= 2)
@@ -157,7 +158,7 @@ namespace System
 							if (pi != null)
 							{
 								ParameterInfo[] parms = pi.GetIndexParameters();
-								object x = System.Convert.ChangeType(indexName, parms[0].ParameterType);
+								object x = System.Convert.ChangeType(indexName, parms[0].ParameterType, CultureInfo.InvariantCulture);
 								item = pi.GetValue(item, new object[] { x });
 							}
 						}
@@ -199,7 +200,7 @@ namespace System
 			for (int i = 0; i < propertyNames.Length; i++)
 			{
 				string val = propertyNames[i].Trim();
-				if (val != string.Empty)
+				if (!String.IsNullOrEmpty(val))
 				{
 					list.Add(TypeUtil.GetPropertyValue(item, val));
 				}

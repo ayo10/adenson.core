@@ -31,6 +31,15 @@ namespace Adenson.Log
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets a value indicating whether to append the identifier to the log.
+		/// </summary>
+		public bool AppendIdentifier
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Gets the elapsed time between when the object was initialzied and this property is called.
 		/// </summary>
 		public TimeSpan Elapsed

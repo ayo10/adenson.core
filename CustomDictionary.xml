@@ -18,6 +18,7 @@
             <Acronym>MAC</Acronym>
             <Acronym>RIPEMD</Acronym>
             <Acronym>SHA</Acronym>
+            <Acronym>HMACRIPEMD</Acronym>
          </CasingExceptions>
       </Acronyms>
 </Dictionary>
