@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
@@ -12,11 +13,10 @@ namespace Adenson.Log.Config
 	{
 		#region Constructor
 
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Null should be returned, regardless of what exception was thrown during deserialization.")]
 		public LoggerSettings(XElement element) : base(element)
 		{
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
-			this.Source = this.GetValue("Source", "Logger");
-			this.DateTimeFormat = this.GetValue("DateTimeFormat", "HH:mm:ss:fff");
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
 
 			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
@@ -52,23 +52,17 @@ namespace Adenson.Log.Config
 
 					if (Directory.Exists(folder))
 					{
-						try
+						DateTime lastWriteTime = File.GetLastWriteTime(filePath);
+						if (File.Exists(filePath) && lastWriteTime.Date < DateTime.Now.AddDays(-1))
 						{
-							var lastWriteTime = File.GetLastWriteTime(filePath);
-							if (File.Exists(filePath) && lastWriteTime.Date < DateTime.Now.AddDays(-1))
+							string fileName = Path.GetFileNameWithoutExtension(filePath);
+							string extension = Path.GetExtension(filePath);
+							string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), extension);
+							string oldNewFilePath = Path.Combine(folder, oldNewFileName);
+							if (!File.Exists(oldNewFilePath))
 							{
-								string fileName = Path.GetFileNameWithoutExtension(filePath);
-								string extension = Path.GetExtension(filePath);
-								string oldNewFileName = String.Concat(fileName, lastWriteTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), extension);
-								string oldNewFilePath = Path.Combine(folder, oldNewFileName);
-								if (!File.Exists(oldNewFilePath))
-								{
-									File.Move(fileName, oldNewFilePath);
-								}
+								File.Move(fileName, oldNewFilePath);
 							}
-						}
-						catch
-						{
 						}
 
 						listeners.Add(new TextWriterTraceListener(filePath));
@@ -102,18 +96,6 @@ namespace Adenson.Log.Config
 		}
 
 		public LogTypes Types
-		{
-			get;
-			set;
-		}
-
-		public string Source
-		{
-			get;
-			set;
-		}
-
-		public string DateTimeFormat
 		{
 			get;
 			set;

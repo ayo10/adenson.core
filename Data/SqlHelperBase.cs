@@ -132,7 +132,7 @@ namespace Adenson.Data
 				throw new ArgumentNullException("columnName");
 			}
 
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, String.Format("SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'", tableName, columnName)))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @p0 AND COLUMN_NAME = @p1',N'@p0 nvarchar(max),@p1 nvarchar(max)',@p0=N'{0}',@p1=N'{1}'", tableName, columnName)))
 			{
 				return r.Read();
 			}
@@ -222,7 +222,7 @@ namespace Adenson.Data
 				throw new ArgumentNullException("tableName");
 			}
 
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, String.Format("SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName)))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @p0',N'@p0 nvarchar(max)',@p0=N'{0}'", tableName)))
 			{
 				return r.Read();
 			}
@@ -236,7 +236,6 @@ namespace Adenson.Data
 		/// <param name="commandText">The command to execute</param>
 		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
 		/// <returns>A new DataSet object</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual DataSet ExecuteDataSet(string commandText, params object[] parameterValues)
@@ -444,7 +443,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="stream">The stream containing the commmand text to run.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
 		public virtual int[] ExecuteNonQuery(StreamReader stream)
 		{
 			return this.ExecuteNonQuery(stream, Environment.NewLine);
@@ -456,7 +455,7 @@ namespace Adenson.Data
 		/// <param name="stream">The stream containing the commmand text to run.</param>
 		/// <param name="delimiter">The delimiter to use.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
 		public virtual int[] ExecuteNonQuery(StreamReader stream, string delimiter)
 		{
 			if (stream == null)
@@ -700,9 +699,6 @@ namespace Adenson.Data
 				}
 				else
 				{
-					// Cheap way of throwing a FormatException, if the commandText is invalid.-or- The index of a parameterValues item is less than zero, or greater than or equal to the length of the args array.
-					String.Format(commandText, parameterValues);
-
 					for (var i = 0; i < parameterValues.Length; i++)
 					{
 						string name = "@param" + i;
@@ -767,13 +763,6 @@ namespace Adenson.Data
 		/// <exception cref="InvalidOperationException">If there are open transactions.</exception>
 		protected virtual void Dispose(bool disposing)
 		{
-			List<string> errors = new List<string>();
-
-			if (transactions.Count > 0)
-			{
-				throw new InvalidOperationException(Exceptions.CannotDisposeWithArgOpenTransactions);
-			}
-
 			if (_connection != null)
 			{
 				_connection.Dispose();
@@ -805,7 +794,7 @@ namespace Adenson.Data
 				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
 			}
 
-			if (commands.Any(c => c == null || (c is string && StringUtil.IsNullOrWhiteSpace((string)c))))
+			if (commands.Any(c => c == null))
 			{
 				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
 			}
@@ -855,16 +844,6 @@ namespace Adenson.Data
 			}
 
 			return list.ToArray();
-		}
-
-		#endregion
-		#region ExecuteType Enum
-
-		private enum ExecuteType
-		{
-			Dataset,
-			NonQuery,
-			Scalar
 		}
 
 		#endregion

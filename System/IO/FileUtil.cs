@@ -12,7 +12,7 @@ namespace System.IO
 	public static class FileUtil
 	{
 		#region Variables
-		private static readonly Hashtable<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
+		private static Hashtable<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
 		#endregion
 		#region Methods
 

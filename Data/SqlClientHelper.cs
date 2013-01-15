@@ -147,7 +147,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="stream">The stream containing the commmand text to run.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null.</exception>
+		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
 		public override int[] ExecuteNonQuery(StreamReader stream)
 		{
 			if (stream == null)
@@ -161,7 +161,6 @@ namespace Adenson.Data
 			{
 				// doing the following below for some odd reason changes the order of strings
 				// splits = str.Split(new string[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
-
 				List<string> sqls = new List<string>();
 				string last = String.Empty;
 				foreach (string ins in splits.Select(s => s.Trim()))
@@ -198,7 +197,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Calls <see cref="base.Dispose"/>, then empties the connection pool.
+		/// Calls Dispose(), then empties the connection pool.
 		/// </summary>
 		/// <param name="disposing">If the object is being disposed or not.</param>
 		/// <exception cref="InvalidOperationException">If there are open transactions.</exception>
