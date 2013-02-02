@@ -18,22 +18,9 @@ namespace Adenson.Log.Config
 		{
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
-
+			this.Types = this.GetValue("Types", LogTypes.Trace);
 			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
 			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
-
-			var types = this.GetValue("Types", LogTypes.None);
-			if (types == LogTypes.None)
-			{
-				types = this.GetValue("Type", LogTypes.None);
-			}
-
-			if (types == LogTypes.None)
-			{
-				types = LogTypes.Trace;
-			}
-
-			this.Types = types;
 
 			if (this.Severity != LogSeverity.None && this.Types != LogTypes.None)
 			{
