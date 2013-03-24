@@ -24,8 +24,6 @@ namespace Adenson.Log.Config
 
 			if (this.Severity != LogSeverity.None && this.Types != LogTypes.None)
 			{
-				var listeners = new List<TraceListener>();
-
 				if ((this.Types & LogTypes.File) != LogTypes.None)
 				{
 					string filePath = this.FileName;
@@ -52,7 +50,8 @@ namespace Adenson.Log.Config
 							}
 						}
 
-						listeners.Add(new TextWriterTraceListener(filePath));
+						TextWriter writer = new StreamWriter(filePath);
+						Logger.SetWriter(writer);
 					}
 					else
 					{
@@ -62,12 +61,8 @@ namespace Adenson.Log.Config
 
 				if ((this.Types & LogTypes.EventLog) != LogTypes.None)
 				{
-					listeners.Add(new EventLogTraceListener());
-				}
-
-				foreach (var listener in listeners)
-				{
-					listener.Filter = new LogFilter();
+					EventLogTraceListener listener = new EventLogTraceListener();
+					Debug.Listeners.Add(listener);
 					Trace.Listeners.Add(listener);
 				}
 			}

@@ -59,18 +59,18 @@ namespace Adenson.CoreTest
 		public void GetValueTest1()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.AreEqual(1, dic.GetValue("ONE", StringComparison.CurrentCultureIgnoreCase));
-			Assert.AreEqual(2, dic.GetValue("two", StringComparison.CurrentCultureIgnoreCase));
-			Assert.IsNull(dic.GetValue("ONE", StringComparison.CurrentCulture));
-			Assert.IsNull(dic.GetValue("two", StringComparison.CurrentCulture));
+			Assert.AreEqual(1, dic.Get("ONE", StringComparison.CurrentCultureIgnoreCase));
+			Assert.AreEqual(2, dic.Get("two", StringComparison.CurrentCultureIgnoreCase));
+			Assert.IsNull(dic.Get("ONE", StringComparison.CurrentCulture));
+			Assert.IsNull(dic.Get("two", StringComparison.CurrentCulture));
 		}
 
 		[TestMethod, ExpectedException(typeof(KeyNotFoundException))]
 		public void GetValueFailTest()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.IsNull(dic.GetValue("ONE", StringComparison.CurrentCulture));
-			Assert.IsNull(dic.GetValue("two", StringComparison.CurrentCulture));
+			Assert.IsNull(dic.Get("ONE", StringComparison.CurrentCulture));
+			Assert.IsNull(dic.Get("two", StringComparison.CurrentCulture));
 		}
 
 		[TestMethod]

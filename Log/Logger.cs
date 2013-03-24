@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -117,7 +118,7 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		[Conditional("DEBUG")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Info(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Info(message, arguments);
@@ -132,6 +133,26 @@ namespace Adenson.Log
 		public static LogProfiler ProfilerStart(Type type, string identifier)
 		{
 			return Logger.GetLogger(type).ProfilerStart(identifier);
+		}
+		
+		/// <summary>
+		/// Sets the standard error and standard output stream to the specified <see cref="TextWriter"/> object.
+		/// </summary>
+		/// <param name="writer">A stream that is the new standard output.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="writer"/> is null.</exception>
+		public static void SetWriter(TextWriter writer)
+		{
+			if (writer == null)
+			{
+				throw new ArgumentNullException("writer");
+			}
+
+			Console.SetOut(writer);
+			Console.SetError(writer);
+			TextWriterTraceListener listener = new TextWriterTraceListener(writer);
+			listener.Filter = new LogFilter();
+			System.Diagnostics.Debug.Listeners.Add(listener);
+			System.Diagnostics.Trace.Listeners.Add(listener);
 		}
 
 		/// <summary>
@@ -202,7 +223,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="value">The value</param>
-		[Conditional("DEBUG"), Conditional("TRACE")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, object value)
 		{
 			Logger.GetLogger(type).Warn(value);
@@ -214,7 +235,7 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on</param>
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
-		[Conditional("DEBUG"), Conditional("TRACE")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Warn(message, arguments);
@@ -284,7 +305,7 @@ namespace Adenson.Log
 		/// Log debug message, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
-		[Conditional("DEBUG")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Info(object value)
 		{
 			this.Info(StringUtil.ToString(value));
@@ -296,7 +317,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Info(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Info, message, arguments);
@@ -327,7 +348,7 @@ namespace Adenson.Log
 		/// Log warning message, converting the specified value to string. Executes if DEBUG or TRACE is defined.
 		/// </summary>
 		/// <param name="value">The value</param>
-		[Conditional("DEBUG"), Conditional("TRACE")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Warn(object value)
 		{
 			this.Warn(StringUtil.ToString(value));
@@ -339,7 +360,7 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG"), Conditional("TRACE")]
+		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Warn(string message, params object[] arguments)
 		{
 			this.Write(LogSeverity.Warn, message, arguments);
@@ -389,15 +410,21 @@ namespace Adenson.Log
 			{
 				entry.Message = StringUtil.Format(message, arguments);
 			}
-
-			Logger.OutWriteLine(entry);
-		}
-
-		private static void OutWriteLine(LogEntry entry)
-		{
+	
 			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
 			{
+				ConsoleColor forecolor = Console.ForegroundColor;
+				if (entry.Severity == LogSeverity.Warn)
+				{
+					Console.ForegroundColor = ConsoleColor.DarkYellow;
+				}
+				else if (entry.Severity == LogSeverity.Error)
+				{
+					Console.ForegroundColor = ConsoleColor.DarkRed;
+				}
+
 				Console.WriteLine(entry);
+				Console.ForegroundColor = forecolor;
 			}
 
 			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)

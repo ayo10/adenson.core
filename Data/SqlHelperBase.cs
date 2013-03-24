@@ -351,15 +351,17 @@ namespace Adenson.Data
 			List<dynamic> result = new List<dynamic>();
 			using (IDataReader r = command.ExecuteReader())
 			{
-				dynamic d = new ExpandoObject();
 				while (r.Read())
 				{
+					dynamic dyna = new ExpandoObject();
+					IDictionary<string, object> dynadic = dyna as IDictionary<string, object>;
+
 					for (var i = 0; i < r.FieldCount; i++)
 					{
-						d[r.GetName(i)] = r.GetValue(i);
+						dynadic["_Item" + i] = dynadic[r.GetName(i)] = r.GetValue(i);
 					}
 
-					result.Add(d);
+					result.Add(dyna);
 				}
 			}
 

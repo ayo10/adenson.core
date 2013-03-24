@@ -13,27 +13,27 @@ namespace Adenson.Log
 		None = 0,
 
 		/// <summary>
-		/// Only messages called with Debug, Warning and Error are logged
+		/// Only messages called with <see cref="Debug"/>, <see cref="Warn"/> and <see cref="Error"/> are logged
 		/// </summary>
 		Debug = 1,
 
 		/// <summary>
-		/// Only messages called with Info, Debug and Error are logged (in this case, all messages)
+		/// Only messages called with Info, <see cref="Debug"/> and <see cref="Error"/> are logged (in this case, all messages)
 		/// </summary>
 		Info = 2,
 
 		/// <summary>
-		/// Only messages called with Profiler, Warning and Error are logged
+		/// Only messages called with <see cref="Profiler"/>, <see cref="Warn"/> and <see cref="Error"/> are logged
 		/// </summary>
 		Profiler = 3,
 
 		/// <summary>
-		/// Only messages called with Warning and Error are logged
+		/// Only messages called with <see cref="Warn"/> and <see cref="Error"/> are logged
 		/// </summary>
 		Warn = 4,
 
 		/// <summary>
-		/// Only messages called with Error are logged
+		/// Only messages called with <see cref="Error"/> are logged
 		/// </summary>
 		Error = 5,
 	}

@@ -28,8 +28,8 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string settings object to use</param>
-		/// <exception cref="ArgumentNullException">if specified connection string null</exception>
-		/// <exception cref="ArgumentException">if specified connection string object has an invalid connection string</exception>
+		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
+		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
 		{
 		}
@@ -38,7 +38,7 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection string setting object
 		/// </summary>
 		/// <param name="connectionString">The connection string to use</param>
-		/// <exception cref="ArgumentException">if specified connection string is invalid</exception>
+		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
 		public SqlCeHelper(string connectionString) : base(connectionString)
 		{
 		}
