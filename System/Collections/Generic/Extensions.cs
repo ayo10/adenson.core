@@ -9,13 +9,13 @@ namespace System.Collections.Generic
 	public static class Extensions
 	{
 		/// <summary>
-		/// Adds the value with the specified key if the key exists already in the dictionary, else replaces the key's current value with the specified <paramref name="value"/>
+		/// Adds the value with the specified key if the key exists already in the dictionary, else replaces the key's current value with the specified <paramref name="value"/>.
 		/// </summary>
-		/// <typeparam name="TKey">The type of key</typeparam>
-		/// <typeparam name="TValue">The type of value</typeparam>
-		/// <param name="dictionary">The dictionary to parse</param>
-		/// <param name="key">The key to find</param>
-		/// <param name="value">The value to set</param>
+		/// <typeparam name="TKey">The type of key.</typeparam>
+		/// <typeparam name="TValue">The type of value.</typeparam>
+		/// <param name="dictionary">The dictionary to parse.</param>
+		/// <param name="key">The key to find.</param>
+		/// <param name="value">The value to set.</param>
 		public static void AddOrSet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
 		{
 			if (dictionary.ContainsKey(key))
@@ -26,6 +26,49 @@ namespace System.Collections.Generic
 			{
 				dictionary.Add(key, value);
 			}
+		}
+
+		/// <summary>
+		/// Gets the element with the specified string key, using specified comparison type.
+		/// </summary>
+		/// <typeparam name="TValue">The type.</typeparam>
+		/// <param name="dictionary">The dictionary to parse.</param>
+		/// <param name="key">The key to find.</param>
+		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
+		/// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a System.Collections.Generic.KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
+		/// <exception cref="KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
+		public static TValue Get<TValue>(this IDictionary<string, TValue> dictionary, string key, StringComparison comparisonType)
+		{
+			if (key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, comparisonType));
+			if (actualKey == null)
+			{
+				throw new KeyNotFoundException(key);
+			}
+
+			return dictionary[actualKey];
+		}
+
+		/// <summary>
+		/// Gets the element with the specified key, else returns the default of <typeparamref name="TValue"/>.
+		/// </summary>
+		/// <typeparam name="TKey">The type of key.</typeparam>
+		/// <typeparam name="TValue">The type of value.</typeparam>
+		/// <param name="dictionary">The dictionary to read.</param>
+		/// <param name="key">The key to find.</param>
+		/// <returns>Found value if any, else default of <typeparamref name="TValue"/>.</returns>
+		public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+		{
+			if (dictionary.ContainsKey(key))
+			{
+				return dictionary[key];
+			}
+
+			return default(TValue);
 		}
 
 		/// <summary>
@@ -118,31 +161,6 @@ namespace System.Collections.Generic
 			}
 
 			return true;
-		}
-
-		/// <summary>
-		/// Gets the element with the specified string key, using specified comparison type
-		/// </summary>
-		/// <typeparam name="T">The type</typeparam>
-		/// <param name="dictionary">The dictionary to parse</param>
-		/// <param name="key">The key to find</param>
-		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
-		/// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a System.Collections.Generic.KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
-		/// <exception cref="KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
-		public static T GetValue<T>(this IDictionary<string, T> dictionary, string key, StringComparison comparisonType)
-		{
-			if (key == null)
-			{
-				throw new ArgumentNullException("key");
-			}
-
-			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, comparisonType));
-			if (actualKey == null)
-			{
-				throw new KeyNotFoundException(key);
-			}
-
-			return dictionary[actualKey];
 		}
 
 		/// <summary>
