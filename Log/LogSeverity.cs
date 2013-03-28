@@ -23,9 +23,9 @@ namespace Adenson.Log
 		Info = 2,
 
 		/// <summary>
-		/// Only messages called with <see cref="Profiler"/>, <see cref="Warn"/> and <see cref="Error"/> are logged
+		/// Only messages called with <see cref="Profile"/>, <see cref="Warn"/> and <see cref="Error"/> are logged
 		/// </summary>
-		Profiler = 3,
+		Profile = 3,
 
 		/// <summary>
 		/// Only messages called with <see cref="Warn"/> and <see cref="Error"/> are logged

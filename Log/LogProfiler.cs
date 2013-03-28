@@ -24,7 +24,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(LogSeverity.Profiler, SR.ProfilerStart);
+			this.Write(LogSeverity.Profile, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -130,7 +130,7 @@ namespace Adenson.Log
 		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Profiler, message, arguments);
+			this.Write(LogSeverity.Profile, message, arguments);
 		}
 
 		/// <summary>
@@ -138,7 +138,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(LogSeverity.Profiler, SR.ProfilerStop);
+			this.Write(LogSeverity.Profile, SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
