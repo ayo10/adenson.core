@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Adenson.Log.Config;
 
 namespace Adenson.Log
 {
@@ -67,9 +68,12 @@ namespace Adenson.Log
 
 		public override string ToString()
 		{
-			var format = "{0}\t{1}\t[{2}]\t {3}";
-			var date = this.Date.ToString("H:mm:ss.fff", CultureInfo.CurrentCulture);
-			return StringUtil.Format(format, String.Concat("[", this.Severity.ToString().ToUpper(CultureInfo.CurrentCulture), "]").PadRight(9), date, this.TypeName, this.Message);
+			return this.ToString(LoggerSettings.Default.Format);
+		}
+
+		public string ToString(string format)
+		{
+			return StringUtil.Format(format, this.Severity.ToString().ToUpper(CultureInfo.CurrentCulture), this.Date, this.TypeName, this.Message);
 		}
 
 		#endregion

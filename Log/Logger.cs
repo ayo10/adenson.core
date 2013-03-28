@@ -18,7 +18,7 @@ namespace Adenson.Log
 	{
 		#region Variables
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
-		private static LoggerSettings defaultSettings = LoggerSettings.ReadSettings();
+		private static LoggerSettings defaultSettings = LoggerSettings.Default;
 		private Type _classType;
 		private List<LogProfiler> profilers = new List<LogProfiler>();
 		#endregion

@@ -11,11 +11,15 @@ namespace Adenson.Log.Config
 {
 	internal sealed class LoggerSettings : XElementSettingBase
 	{
+		#region Variables
+		private static LoggerSettings _defaultSettings = LoggerSettings.ReadSettings();
+		#endregion
 		#region Constructor
 
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Null should be returned, regardless of what exception was thrown during deserialization.")]
 		public LoggerSettings(XElement element) : base(element)
 		{
+			this.Format = this.GetFormat();
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
 			this.Types = this.GetValue("Types", LogTypes.Trace);
@@ -71,6 +75,12 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Properties
 
+		public string Format
+		{
+			get;
+			set;
+		}
+
 		public LogSeverity Severity
 		{
 			get;
@@ -101,13 +111,27 @@ namespace Adenson.Log.Config
 			set;
 		}
 
+		internal static LoggerSettings Default
+		{
+			get { return _defaultSettings; }
+		}
+
 		#endregion
 		#region Methods
 
 		internal static LoggerSettings ReadSettings()
 		{
-			var section = ConfigHelper.GetSection<XDocument>("adenson", "loggerSettings");
+			XDocument section = ConfigHelper.GetSection<XDocument>("adenson", "loggerSettings");
 			return new LoggerSettings((section != null) ? section.Root : null);
+		}
+
+		private string GetFormat()
+		{
+			return this.GetValue("Format", "{Date:H:mm:ss.fff} [{Severity,5}]\t{TypeName:15} {Message}")
+									.Replace("{Severity", "{0")
+									.Replace("{Date", "{1")
+									.Replace("{TypeName", "{2")
+									.Replace("{Message", "{3");
 		}
 
 		#endregion

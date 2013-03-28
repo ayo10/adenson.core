@@ -20,6 +20,65 @@ namespace System
 		#region Methods
 
 		/// <summary>
+		/// Converts the specified value to the specified type.
+		/// </summary>
+		/// <typeparam name="T">The type of the object we need to convert.</typeparam>
+		/// <param name="value">The value to convert.</param>
+		/// <returns>The converted value.</returns>
+		public static T Convert<T>(object value)
+		{
+			return (T)TypeUtil.Convert(typeof(T), value);
+		}
+
+		/// <summary>
+		/// Converts the specified value to the specified type.
+		/// </summary>
+		/// <param name="type">The type of the object we need to convert.</param>
+		/// <param name="value">The value to convert.</param>
+		/// <returns>The converted value.</returns>
+		/// <exception cref="NotSupportedException">The conversion cannot be performed.</exception>
+		public static object Convert(Type type, object value)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+			else if (value != null && type == value.GetType())
+			{
+				return value;
+			}
+			else
+			{
+				TypeConverter typeConverter = TypeDescriptor.GetConverter(type);
+				if (typeConverter != null && typeConverter.CanConvertFrom(value.GetType()))
+				{
+					if (typeConverter.IsValid(value))
+					{
+						return typeConverter.ConvertFrom(value);
+					}
+					else
+					{
+						string valueAsString = value as string;
+						if ((typeConverter is EnumConverter) && valueAsString != null)
+						{
+							string[] splits = valueAsString.Split('|');
+							int pipedValue = 0;
+							foreach (var str in splits)
+							{
+								int parse = (int)Enum.Parse(type, str);
+								pipedValue = pipedValue == 0 ? parse : pipedValue | parse;
+							}
+
+							return Enum.Parse(type, pipedValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
+						}
+					}
+				}
+			}
+
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
 		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
 		/// </summary>
 		/// <typeparam name="T">The type of instance to return</typeparam>
@@ -210,18 +269,42 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets the <see cref="Type"/> with the specified name.
+		/// </summary>
+		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
+		/// <returns>The type with the specified name, and if not found, returns null.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="typeDescription"/> is null.</exception>
+		public static Type GetType(string typeDescription)
+		{
+			return TypeUtil.GetType(typeDescription, false);
+		}
+
+		/// <summary>
 		/// Gets the System.Type with the specified name.
 		/// </summary>
 		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
-		/// <returns>The type with the specified name.</returns>
-		public static Type GetType(string typeDescription)
+		/// <param name="throwOnError">True to throw an exception if the type cannot be found; false to return null.</param>
+		/// <returns>The type with the specified description.</returns>
+		/// <exception cref="ArgumentNullException">Argument <paramref name="typeDescription"/> is null.</exception>
+		/// <exception cref="System.Reflection.TargetInvocationException">A class initializer is invoked and throws an exception.</exception>
+		/// <exception cref="TypeLoadException">
+		///	Argument <paramref name="throwOnError"/> is true and the type is not found. 
+		///	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> contains invalid characters, such as an embedded tab.
+		///	-or- <paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> is an empty string.
+		///	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> represents an array type with an invalid size. -or-<paramref name="typeDescription"/> represents an array of <see cref="TypedReference"/>.
+		///	</exception>
+		/// <exception cref="ArgumentException">throwOnError is true and typeName contains invalid syntax.</exception>
+		/// <exception cref="System.IO.FileNotFoundException"><paramref name="throwOnError"/> is true and the assembly or one of its dependencies was not found.</exception>
+		/// <exception cref="System.IO.FileLoadException">The assembly or one of its dependencies was found, but could not be loaded.</exception>
+		/// <exception cref="BadImageFormatException">The assembly or one of its dependencies is not valid.</exception>
+		public static Type GetType(string typeDescription, bool throwOnError)
 		{
 			if (StringUtil.IsNullOrWhiteSpace(typeDescription))
 			{
 				throw new ArgumentNullException("typeDescription");
 			}
 
-			Type type = Type.GetType(typeDescription, false, true);
+			Type type = Type.GetType(typeDescription, throwOnError, true);
 			if (type == null)
 			{
 				string[] splits = typeDescription.Split(';');
@@ -230,7 +313,7 @@ namespace System
 					string assemblyName = splits[0].Trim();
 					string typeName = splits[1].Trim();
 
-					type = Type.GetType(typeName + ", " + assemblyName, false, true);
+					type = Type.GetType(typeName + ", " + assemblyName, throwOnError, true);
 				}
 			}
 
@@ -269,59 +352,24 @@ namespace System
 		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
 		public static bool TryConvert(Type type, object value, out object output)
 		{
-			var result = false;
-			if (value == null)
+			output = null;
+			try
 			{
-				output = null;
+				output = TypeUtil.Convert(type, value);
+				return true;
 			}
-			else if (value != null && type == value.GetType())
+			catch (ArgumentException)
 			{
-				output = value;
-				result = true;
+				return false;
 			}
-			else
+			catch (OverflowException)
 			{
-				output = null;
-				TypeConverter typeConverter = TypeDescriptor.GetConverter(type);
-				if (typeConverter != null && typeConverter.CanConvertFrom(value.GetType()))
-				{
-					if (typeConverter.IsValid(value))
-					{
-						output = typeConverter.ConvertFrom(value);
-						result = true;
-					}
-					else
-					{
-						string valueAsString = value as string;
-						if ((typeConverter is EnumConverter) && valueAsString != null)
-						{
-							try
-							{
-								string[] splits = valueAsString.Split('|');
-								int pipedValue = 0;
-								foreach (var str in splits)
-								{
-									int parse = (int)Enum.Parse(type, str);
-									pipedValue = pipedValue == 0 ? parse : pipedValue | parse;
-								}
-
-								output = Enum.Parse(type, pipedValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
-								result = true;
-							}
-							catch (ArgumentException)
-							{
-								result = false;
-							}
-							catch (OverflowException)
-							{
-								result = false;
-							}
-						}
-					}
-				}
+				return false;
 			}
-
-			return result;
+			catch (NotSupportedException)
+			{
+				return false;
+			}
 		}
 
 		private static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName, out object source)
