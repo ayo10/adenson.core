@@ -7,25 +7,32 @@ using System.IO;
 using System.Xml.Linq;
 using Adenson.Configuration;
 
-namespace Adenson.Log.Config
+namespace Adenson.Log
 {
-	internal sealed class LoggerSettings : XElementSettingBase
+	/// <summary>
+	/// Represents the <see cref="Logger"/> default settings.
+	/// </summary>
+	public sealed class LoggerSettings : XElementSettingBase
 	{
 		#region Variables
 		private static LoggerSettings _defaultSettings = LoggerSettings.ReadSettings();
 		#endregion
 		#region Constructor
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LoggerSettings"/> class.
+		/// </summary>
+		/// <param name="element">The element to initialize the class with.</param>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Null should be returned, regardless of what exception was thrown during deserialization.")]
-		public LoggerSettings(XElement element) : base(element)
+		internal LoggerSettings(XElement element) : base(element)
 		{
 			this.EventLogSource = this.GetValue("EventLogSource", "Logger");
 			this.Format = this.GetFormat();
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
 			this.Types = this.GetValue("Types", LogTypes.Trace);
-			this.EmailInfo = new LoggerSettingEmailInfo(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
-			this.DatabaseInfo = new LoggerSettingDatabaseInfo(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
+			this.Email = new EmailSettings(element == null ? null : element.Element("EmailInfo", StringComparison.OrdinalIgnoreCase));
+			this.Database = new DatabaseSettings(element == null ? null : element.Element("DatabaseInfo", StringComparison.OrdinalIgnoreCase));
 
 			if (this.Severity != LogSeverity.None && this.Types != LogTypes.None)
 			{
@@ -76,46 +83,67 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Properties
 
+		/// <summary>
+		/// Gets or sets the event log source name.
+		/// </summary>
 		public string EventLogSource
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the format name.
+		/// </summary>
 		public string Format
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the severity.
+		/// </summary>
 		public LogSeverity Severity
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the log types.
+		/// </summary>
 		public LogTypes Types
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the name of the file to log into.
+		/// </summary>
 		public string FileName
 		{
 			get;
 			set;
 		}
 
-		public LoggerSettingDatabaseInfo DatabaseInfo
+		/// <summary>
+		/// Gets the database settings.
+		/// </summary>
+		public DatabaseSettings Database
 		{
 			get;
-			set;
+			private set;
 		}
 
-		public LoggerSettingEmailInfo EmailInfo
+		/// <summary>
+		/// Gets the email settings.
+		/// </summary>
+		public EmailSettings Email
 		{
 			get;
-			set;
+			private set;
 		}
 
 		internal static LoggerSettings Default

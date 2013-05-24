@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Adenson.Core" Description="Adenson.Core ruleset" ToolsVersion="10.0">
+<RuleSet Name="Adenson.Core" Description="Adenson.Core ruleset" ToolsVersion="11.0">
   <RuleHintPaths>
     <Path>%ProgramFiles%\Microsoft Fxcop 10.0\Rules</Path>
   </RuleHintPaths>
@@ -92,7 +92,6 @@
     <Rule Id="CA1700" Action="Warning" />
     <Rule Id="CA1701" Action="Warning" />
     <Rule Id="CA1702" Action="Warning" />
-    <Rule Id="CA1703" Action="Warning" />
     <Rule Id="CA1704" Action="Warning" />
     <Rule Id="CA1707" Action="Warning" />
     <Rule Id="CA1708" Action="Warning" />

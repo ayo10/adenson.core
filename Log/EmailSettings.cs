@@ -2,13 +2,20 @@ using System;
 using System.Xml.Linq;
 using Adenson.Configuration;
 
-namespace Adenson.Log.Config
+namespace Adenson.Log
 {
-	internal sealed class LoggerSettingEmailInfo : XElementSettingBase
+	/// <summary>
+	/// Logger email settings.
+	/// </summary>
+	public sealed class EmailSettings : XElementSettingBase
 	{
 		#region Constructor
 
-		public LoggerSettingEmailInfo(XElement element) : base(element)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EmailSettings"/> class.
+		/// </summary>
+		/// <param name="element">The element to initialize the class with.</param>
+		internal EmailSettings(XElement element) : base(element)
 		{
 			this.From = this.GetValue("From", "errors@Adenson.Log.Logger");
 			this.Subject = this.GetValue("Subject", "Adenson.Log.Logger");
@@ -18,18 +25,27 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Properties
 
+		/// <summary>
+		/// Gets or sets the from.
+		/// </summary>
 		public string From
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the subject.
+		/// </summary>
 		public string Subject
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the to.
+		/// </summary>
 		public string To
 		{
 			get;

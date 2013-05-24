@@ -61,11 +61,11 @@ namespace Adenson {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured when trying to create event log with source &apos;{0}&apos;. Defaulting to &apos;Application&apos;. Error is &apos;{1}&apos;. See http://msdn.microsoft.com/en-us/library/6s7642se.aspx for a solution, the short of it being you will need to give the running user rights to be able to read the registry key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Security..
+        ///   Looks up a localized string similar to An error occured when trying to create a Event Log with source &apos;{0}&apos;. Defaulting to &apos;Application&apos;. Error is &apos;{1}&apos;. See http://msdn.microsoft.com/en-us/library/6s7642se.aspx for a solution, the short of it being you will need to give the running user rights to be able to read the registry key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Security..
         /// </summary>
-        internal static string EventLoggerWarning {
+        internal static string EventLogWarning {
             get {
-                return ResourceManager.GetString("EventLoggerWarning", resourceCulture);
+                return ResourceManager.GetString("EventLogWarning", resourceCulture);
             }
         }
         

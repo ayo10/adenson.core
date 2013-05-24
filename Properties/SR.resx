@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EventLoggerWarning" xml:space="preserve">
-    <value>An error occured when trying to create event log with source '{0}'. Defaulting to 'Application'. Error is '{1}'. See http://msdn.microsoft.com/en-us/library/6s7642se.aspx for a solution, the short of it being you will need to give the running user rights to be able to read the registry key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Security.</value>
+  <data name="EventLogWarning" xml:space="preserve">
+    <value>An error occured when trying to create a Event Log with source '{0}'. Defaulting to 'Application'. Error is '{1}'. See http://msdn.microsoft.com/en-us/library/6s7642se.aspx for a solution, the short of it being you will need to give the running user rights to be able to read the registry key HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Eventlog\Security.</value>
   </data>
   <data name="MsgExMinLogBatchSize" xml:space="preserve">
     <value>The minimum value for 'LogBatchSize' is 1.</value>
