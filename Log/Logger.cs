@@ -7,7 +7,6 @@ using System.Net.Mail;
 using System.Security;
 using System.Text;
 using System.Threading;
-using Adenson.Log.Config;
 
 namespace Adenson.Log
 {
@@ -20,9 +19,9 @@ namespace Adenson.Log
 		#region Variables
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
 		private static LoggerSettings defaultSettings = LoggerSettings.Default;
-		private List<LogProfiler> profilers = new List<LogProfiler>();
 		private static Action<LogEntry> globalBeforelog;
 		private static bool eventSecurityWarned;
+		private List<LogProfiler> profilers = new List<LogProfiler>();
 		#endregion
 		#region Constructors
 
@@ -61,7 +60,7 @@ namespace Adenson.Log
 		#region Static Methods
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Critical(Object)"/>
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Critical(Object, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
@@ -184,7 +183,7 @@ namespace Adenson.Log
 		/// Sets the before log predicate on *ALL* loggers, both present and future.
 		/// </summary>
 		/// <param name="predicate">The before log predicate.</param>
-		/// <remarks>Setting <paramref name="type"/> to null will cause the predicate to be set on ALL types.</remarks>
+		/// <remarks>Setting <paramref name="predicate"/> to null will cause the predicate to be set on ALL types.</remarks>
 		public static void SetBeforeLog(Action<LogEntry> predicate)
 		{
 			globalBeforelog = predicate;
@@ -485,15 +484,15 @@ namespace Adenson.Log
 				Logger.SaveToEventLog(entry);
 			}
 
-			if ((entry.LogTypes & LogTypes.Email) != LogTypes.None && !defaultSettings.EmailInfo.IsEmpty())
+			if ((entry.LogTypes & LogTypes.Email) != LogTypes.None && !defaultSettings.Email.IsEmpty())
 			{
-				SmtpUtil.TrySend(defaultSettings.EmailInfo.From, defaultSettings.EmailInfo.To, defaultSettings.EmailInfo.Subject, entry.ToString(), false);
+				SmtpUtil.TrySend(defaultSettings.Email.From, defaultSettings.Email.To, defaultSettings.Email.Subject, entry.ToString(), false);
 			}
 		}
 
 		private static bool SaveToDatabase(LogEntry entry)
 		{
-			return defaultSettings.DatabaseInfo.Save(entry);
+			return defaultSettings.Database.Save(entry);
 		}
 
 		private static void SaveToEventLog(LogEntry entry)
@@ -510,7 +509,7 @@ namespace Adenson.Log
 			{
 				if (!eventSecurityWarned)
 				{
-					System.Diagnostics.Debug.WriteLine(SR.EventLoggerWarning, source, e.Message);
+					System.Diagnostics.Debug.WriteLine(SR.EventLogWarning, source, e.Message);
 					eventSecurityWarned = true;
 				}
 

@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Adenson.Log.Config;
 
 namespace Adenson.Log
 {
