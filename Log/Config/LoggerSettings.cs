@@ -19,6 +19,7 @@ namespace Adenson.Log.Config
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Null should be returned, regardless of what exception was thrown during deserialization.")]
 		public LoggerSettings(XElement element) : base(element)
 		{
+			this.EventLogSource = this.GetValue("EventLogSource", "Logger");
 			this.Format = this.GetFormat();
 			this.Severity = this.GetValue("Severity", LogSeverity.Error);
 			this.FileName = this.GetValue("FileName", "eventlogger.log");
@@ -75,6 +76,12 @@ namespace Adenson.Log.Config
 		#endregion
 		#region Properties
 
+		public string EventLogSource
+		{
+			get;
+			set;
+		}
+
 		public string Format
 		{
 			get;
@@ -127,11 +134,12 @@ namespace Adenson.Log.Config
 
 		private string GetFormat()
 		{
-			return this.GetValue("Format", "{Date:H:mm:ss.fff} [{Severity,5}]\t{TypeName:15} {Message}")
+			return this.GetValue("Format", "{Date:H:mm:ss.fff} [{Severity,5}]\t{TypeName:15} {Message}{Addendum}")
 									.Replace("{Severity", "{0")
 									.Replace("{Date", "{1")
 									.Replace("{TypeName", "{2")
-									.Replace("{Message", "{3");
+									.Replace("{Message", "{3")
+									.Replace("{Addendum", "{4");
 		}
 
 		#endregion

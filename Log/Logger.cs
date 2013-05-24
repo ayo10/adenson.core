@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Security;
 using System.Text;
 using System.Threading;
 using Adenson.Log.Config;
@@ -19,8 +20,9 @@ namespace Adenson.Log
 		#region Variables
 		private static Dictionary<Type, Logger> staticLoggers = new Dictionary<Type, Logger>();
 		private static LoggerSettings defaultSettings = LoggerSettings.Default;
-		private Type _classType;
 		private List<LogProfiler> profilers = new List<LogProfiler>();
+		private static Action<LogEntry> globalBeforelog;
+		private static bool eventSecurityWarned;
 		#endregion
 		#region Constructors
 
@@ -31,7 +33,7 @@ namespace Adenson.Log
 				throw new ArgumentNullException("classType");
 			}
 
-			_classType = classType;
+			this.ClassType = classType;
 		}
 
 		#endregion
@@ -42,18 +44,39 @@ namespace Adenson.Log
 		/// </summary>
 		public Type ClassType
 		{
-			get { return _classType; }
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Gets or sets the action that is invoked before the log is saved.
+		/// </summary>
+		public Action<LogEntry> BeforeLog
+		{
+			get;
+			set;
 		}
 
 		#endregion
-		#region Public Static Methods
+		#region Static Methods
+
+		/// <summary>
+		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Critical(Object)"/>
+		/// </summary>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="message">The message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
+		public static void Critical(Type type, object message, params object[] arguments)
+		{
+			Logger.GetLogger(type).Critical(message, arguments);
+		}
 
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Debug(string, object[])"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		[Conditional("DEBUG")]
 		public static void Debug(Type type, string message, params object[] arguments)
 		{
@@ -63,9 +86,9 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Error(string, object[])"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		public static void Error(Type type, string message, params object[] arguments)
 		{
 			Logger.GetLogger(type).Error(message, arguments);
@@ -74,8 +97,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Error(Exception)"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="ex">The Exception object to log</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="ex">The Exception object to log.</param>
 		public static void Error(Type type, Exception ex)
 		{
 			Logger.GetLogger(type).Error(ex);
@@ -92,7 +115,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets a pre initialized (or new) Logger for specified type
 		/// </summary>
-		/// <param name="type">The type</param>
+		/// <param name="type">The type.</param>
 		/// <returns>Existing, or newly minted logger</returns>
 		public static Logger GetLogger(Type type)
 		{
@@ -105,7 +128,9 @@ namespace Adenson.Log
 			{
 				if (!staticLoggers.ContainsKey(type))
 				{
-					staticLoggers.Add(type, new Logger(type));
+					var logger = new Logger(type);
+					logger.BeforeLog = globalBeforelog;
+					staticLoggers.Add(type, logger);
 				}
 
 				return staticLoggers[type];
@@ -115,9 +140,9 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Info(string, object[])"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Info(Type type, string message, params object[] arguments)
 		{
@@ -127,8 +152,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="identifier">Some kind of identifier</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A disposable profiler object</returns>
 		public static LogProfiler ProfilerStart(Type type, string identifier)
 		{
@@ -156,14 +181,33 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
+		/// Sets the before log predicate on *ALL* loggers, both present and future.
+		/// </summary>
+		/// <param name="predicate">The before log predicate.</param>
+		/// <remarks>Setting <paramref name="type"/> to null will cause the predicate to be set on ALL types.</remarks>
+		public static void SetBeforeLog(Action<LogEntry> predicate)
+		{
+			globalBeforelog = predicate;
+
+			lock (staticLoggers)
+			{
+				foreach (Logger logger in staticLoggers.Values)
+				{
+					logger.BeforeLog = predicate;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null
 		/// </summary>
 		/// <param name="exception">The Exception object to convert</param>
 		/// <returns>String of the exception</returns>
 		/// <remarks>Calls <see cref="ToString(Exception, bool)"/>, with messageOnly = false</remarks>
+		[Obsolete("Use StringUtil.ToString(Exception)")]
 		public static string ToString(Exception exception)
 		{
-			return Logger.ToString(exception, false);
+			return StringUtil.ToString(exception, false);
 		}
 
 		/// <summary>
@@ -172,57 +216,28 @@ namespace Adenson.Log
 		/// <param name="exception">The Exception object to convert</param>
 		/// <param name="messageOnly">If to return the message portions only</param>
 		/// <returns>The string</returns>
+		[Obsolete("Use StringUtil.ToString(Exception, bool)")]
 		public static string ToString(Exception exception, bool messageOnly)
 		{
-			if (exception == null)
-			{
-				throw new ArgumentNullException("exception");
-			}
+			return StringUtil.ToString(exception, messageOnly);
+		}
 
-			StringBuilder message = new StringBuilder();
-			Exception ex = exception;
-			while (ex != null)
-			{
-				if (message.Length != 0)
-				{
-					if (messageOnly)
-					{
-						message.Append(" ");
-					}
-					else
-					{
-						message.Append(String.Empty.PadRight(20, '-'));
-						message.Append(Environment.NewLine);
-					}
-				}
-
-				if (messageOnly)
-				{
-					message.Append(ex.Message);
-					message.Append(".");
-				}
-				else
-				{
-					message.Append(ex.GetType().FullName);
-					message.Append(": ");
-					message.AppendLine(ex.Message);
-					if (ex.StackTrace != null)
-					{
-						message.AppendLine(ex.StackTrace);
-					}
-				}
-
-				ex = ex.InnerException;
-			}
-
-			return message.ToString();
+		/// <summary>
+		/// Sets the before log predicate on the logger registered to the specified type.
+		/// </summary>
+		/// <param name="type">The type of logger.</param>
+		/// <param name="predicate">The before log predicate.</param>
+		/// <remarks>Setting <paramref name="type"/> to null will cause the predicate to be set on ALL types.</remarks>
+		public static void SetBeforeLog(Type type, Action<LogEntry> predicate)
+		{
+			Logger.GetLogger(type).BeforeLog = predicate;
 		}
 
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(object)"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="value">The value</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="value">The value.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, object value)
 		{
@@ -232,9 +247,9 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(string, object[])"/>
 		/// </summary>
-		/// <param name="type">Type where Logger is being called on</param>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="type">Type where Logger is being called on.</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, string message, params object[] arguments)
 		{
@@ -245,9 +260,20 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
+		/// Log critical message, converting the specified value to string.
+		/// </summary>
+		/// <param name="message">The message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
+		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
+		public void Critical(object message, params object[] arguments)
+		{
+			this.Write(LogSeverity.Critical, StringUtil.ToString(message), arguments);
+		}
+
+		/// <summary>
 		/// Log debug messages, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>>
-		/// <param name="value">The value</param>
+		/// <param name="value">The value.</param>
 		[Conditional("DEBUG")]
 		public void Debug(object value)
 		{
@@ -257,8 +283,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log debug message. Executes if DEBUG is defined.
 		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
@@ -269,7 +295,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log error message, converting the specified value to string.
 		/// </summary>
-		/// <param name="value">The value</param>
+		/// <param name="value">The value.</param>
 		public void Error(object value)
 		{
 			this.Error(StringUtil.ToString(value));
@@ -278,8 +304,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log error message.
 		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		public void Error(string message, params object[] arguments)
 		{
@@ -289,10 +315,10 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log exception.
 		/// </summary>
-		/// <param name="ex">The Exception object to log</param>
+		/// <param name="ex">The Exception object to log.</param>
 		public void Error(Exception ex)
 		{
-			string message = Logger.ToString(ex);
+			string message = StringUtil.ToString(ex, false);
 			this.Write(LogSeverity.Error, message);
 
 			if (ex is OutOfMemoryException)
@@ -304,7 +330,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log debug message, converting the specified value to string. Executes if DEBUG is defined.
 		/// </summary>
-		/// <param name="value">The value</param>
+		/// <param name="value">The value.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Info(object value)
 		{
@@ -314,8 +340,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log information message. Executes if DEBUG is defined.
 		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Info(string message, params object[] arguments)
@@ -326,7 +352,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Starts a execution duration profiler
 		/// </summary>
-		/// <param name="identifier">Some kind of identifier</param>
+		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A profiler object</returns>
 		public LogProfiler ProfilerStart(string identifier)
 		{
@@ -347,7 +373,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log warning message, converting the specified value to string. Executes if DEBUG or TRACE is defined.
 		/// </summary>
-		/// <param name="value">The value</param>
+		/// <param name="value">The value.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Warn(object value)
 		{
@@ -357,8 +383,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Log warning message. Executes if DEBUG or TRACE is defined.
 		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public void Warn(string message, params object[] arguments)
@@ -400,7 +426,7 @@ namespace Adenson.Log
 			entry.Severity = severity;
 			entry.TypeName = this.ClassType.Name;
 			entry.Date = DateTime.Now;
-			entry.LogType = defaultSettings.Types;
+			entry.LogTypes = defaultSettings.Types;
 
 			if (arguments == null || arguments.Length == 0)
 			{
@@ -410,39 +436,56 @@ namespace Adenson.Log
 			{
 				entry.Message = StringUtil.Format(message, arguments);
 			}
-	
-			if ((entry.LogType & LogTypes.Console) != LogTypes.None)
-			{
-				ConsoleColor forecolor = Console.ForegroundColor;
-				if (entry.Severity == LogSeverity.Warn)
-				{
-					Console.ForegroundColor = ConsoleColor.DarkYellow;
-				}
-				else if (entry.Severity == LogSeverity.Error)
-				{
-					Console.ForegroundColor = ConsoleColor.DarkRed;
-				}
 
-				Console.WriteLine(entry);
-				Console.ForegroundColor = forecolor;
+			if (this.BeforeLog != null)
+			{
+				this.BeforeLog(entry);
 			}
 
-			if ((entry.LogType & LogTypes.Debug) != LogTypes.None)
+			if ((entry.LogTypes & LogTypes.Console) != LogTypes.None)
+			{
+				switch (entry.Severity)
+				{
+					case LogSeverity.Critical:
+						Console2.WriteCritical(entry.ToString());
+						break;
+					case LogSeverity.Debug:
+					case LogSeverity.Profile:
+						Console2.WriteDebug(entry.ToString());
+						break;
+					case LogSeverity.Error:
+						Console2.WriteError(entry.ToString());
+						break;
+					case LogSeverity.Info:
+						Console2.WriteInfo(entry.ToString());
+						break;
+					case LogSeverity.Warn:
+						Console2.WriteWarning(entry.ToString());
+						break;
+				}
+			}
+
+			if ((entry.LogTypes & LogTypes.Debug) != LogTypes.None)
 			{
 				System.Diagnostics.Debug.WriteLine(entry);
 			}
 
-			if ((entry.LogType & LogTypes.Trace) != LogTypes.None)
+			if ((entry.LogTypes & LogTypes.Trace) != LogTypes.None)
 			{
 				Trace.WriteLine(entry);
 			}
 
-			if ((entry.LogType & LogTypes.Database) != LogTypes.None)
+			if ((entry.LogTypes & LogTypes.Database) != LogTypes.None)
 			{
 				Logger.SaveToDatabase(entry);
 			}
 
-			if ((entry.LogType & LogTypes.Email) != LogTypes.None && !defaultSettings.EmailInfo.IsEmpty())
+			if ((entry.LogTypes & LogTypes.EventLog) != LogTypes.None)
+			{
+				Logger.SaveToEventLog(entry);
+			}
+
+			if ((entry.LogTypes & LogTypes.Email) != LogTypes.None && !defaultSettings.EmailInfo.IsEmpty())
 			{
 				SmtpUtil.TrySend(defaultSettings.EmailInfo.From, defaultSettings.EmailInfo.To, defaultSettings.EmailInfo.Subject, entry.ToString(), false);
 			}
@@ -451,6 +494,45 @@ namespace Adenson.Log
 		private static bool SaveToDatabase(LogEntry entry)
 		{
 			return defaultSettings.DatabaseInfo.Save(entry);
+		}
+
+		private static void SaveToEventLog(LogEntry entry)
+		{
+			string source = defaultSettings.EventLogSource;
+			try
+			{
+				if (!EventLog.SourceExists(source))
+				{
+					EventLog.CreateEventSource(source, entry.TypeName);
+				}
+			}
+			catch (SecurityException e)
+			{
+				if (!eventSecurityWarned)
+				{
+					System.Diagnostics.Debug.WriteLine(SR.EventLoggerWarning, source, e.Message);
+					eventSecurityWarned = true;
+				}
+
+				source = "Application";
+			}
+			
+			EventLogEntryType eventLogType;
+			switch (entry.Severity)
+			{
+				case LogSeverity.Critical:
+				case LogSeverity.Error:
+					eventLogType = EventLogEntryType.Error;
+					break;
+				case LogSeverity.Warn:
+					eventLogType = EventLogEntryType.Warning;
+					break;
+				default:
+					eventLogType = EventLogEntryType.Information;
+					break;
+			}
+
+			EventLog.WriteEntry(source, entry.ToString(), eventLogType);
 		}
 
 		#endregion
