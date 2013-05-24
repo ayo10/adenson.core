@@ -142,10 +142,73 @@ namespace System
 			Exception ex = value as Exception;
 			if (ex != null)
 			{
-				return Adenson.Log.Logger.ToString(ex);
+				return StringUtil.ToString(ex);
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
+		}
+
+		/// <summary>
+		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message until InnerException becomes null.
+		/// </summary>
+		/// <param name="exception">The Exception object to convert.</param>
+		/// <returns>String of the exception</returns>
+		/// <remarks>Calls <see cref="ToString(Exception, bool)"/>, with messageOnly = false</remarks>
+		public static string ToString(Exception exception)
+		{
+			return StringUtil.ToString(exception, true);
+		}
+
+		/// <summary>
+		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null.
+		/// </summary>
+		/// <param name="exception">The Exception object to convert.</param>
+		/// <param name="messageOnly">If to return the message portions only.</param>
+		/// <returns>The string</returns>
+		public static string ToString(Exception exception, bool messageOnly)
+		{
+			if (exception == null)
+			{
+				throw new ArgumentNullException("exception");
+			}
+
+			StringBuilder message = new StringBuilder();
+			Exception ex = exception;
+			while (ex != null)
+			{
+				if (message.Length != 0)
+				{
+					if (messageOnly)
+					{
+						message.Append(" ");
+					}
+					else
+					{
+						message.Append(String.Empty.PadRight(20, '-'));
+						message.Append(Environment.NewLine);
+					}
+				}
+
+				if (messageOnly)
+				{
+					message.Append(ex.Message);
+					message.Append(".");
+				}
+				else
+				{
+					message.Append(ex.GetType().FullName);
+					message.Append(": ");
+					message.AppendLine(ex.Message);
+					if (ex.StackTrace != null)
+					{
+						message.AppendLine(ex.StackTrace);
+					}
+				}
+
+				ex = ex.InnerException;
+			}
+
+			return message.ToString();
 		}
 
 		#endregion

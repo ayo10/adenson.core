@@ -86,6 +86,7 @@
     <Compile Include="Log\Logger.cs" />
     <Compile Include="Log\LogSeverity.cs" />
     <Compile Include="Log\LogType.cs" />
+    <Compile Include="System\Console2.cs" />
     <Compile Include="System\Coordinate.cs" />
     <Compile Include="System\Extensions.cs" />
     <Compile Include="System\Pair.cs" />

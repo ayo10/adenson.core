@@ -96,7 +96,7 @@ namespace Adenson.Log.Config
 			catch (Exception ex)
 			{
 				System.Diagnostics.Debug.WriteLine("Unable to log to DB");
-				System.Diagnostics.Debug.WriteLine(Logger.ToString(ex));
+				System.Diagnostics.Debug.WriteLine(StringUtil.ToString(ex, false));
 				return false;
 			}
 

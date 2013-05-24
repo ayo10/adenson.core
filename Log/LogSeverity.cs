@@ -5,7 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Log Severity Enums
 	/// </summary>
-	internal enum LogSeverity : int
+	public enum LogSeverity : int
 	{
 		/// <summary>
 		/// Indicates no log is saved
@@ -36,5 +36,10 @@ namespace Adenson.Log
 		/// Only messages called with <see cref="Error"/> are logged
 		/// </summary>
 		Error = 5,
+
+		/// <summary>
+		/// Only messages called with <see cref="Critical"/> are logged
+		/// </summary>
+		Critical = 6,
 	}
 }
