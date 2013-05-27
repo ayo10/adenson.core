@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 
 namespace Adenson.Log
 {
@@ -20,7 +19,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the severity of the message.
 		/// </summary>
-		public LogSeverity Severity
+		public Severity Severity
 		{
 			get;
 			internal set;
@@ -45,53 +44,12 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the type name.
+		/// Gets the class type name the logger was created with.
 		/// </summary>
 		public string TypeName
 		{
 			get;
 			internal set;
-		}
-
-		/// <summary>
-		/// Gets or sets additional information to add to the end of the log.
-		/// </summary>
-		public string Addendum
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the log type
-		/// </summary>
-		internal LogTypes LogTypes
-		{
-			get;
-			set;
-		}
-
-		#endregion
-		#region Methods
-
-		/// <summary>
-		/// Gets a string representation of the log entry object.
-		/// </summary>
-		/// <returns>A string that represents the current object.</returns>
-		public override string ToString()
-		{
-			return this.ToString(LoggerSettings.Default.Format);
-		}
-
-		/// <summary>
-		/// Gets a string representation of the log entry object.
-		/// </summary>
-		/// <param name="format">The format to use.</param>
-		/// <returns>A string that represents the current object.</returns>
-		public string ToString(string format)
-		{
-			base.ToString();
-			return StringUtil.Format(format, this.Severity.ToString().ToUpper(CultureInfo.CurrentCulture), this.Date, this.TypeName, this.Message, this.Addendum);
 		}
 
 		#endregion

@@ -24,6 +24,11 @@ namespace System
 				return String.Empty;
 			}
 
+			if (args == null)
+			{
+				throw new ArgumentNullException("args");
+			}
+
 			try
 			{
 				return String.Format(System.Globalization.CultureInfo.CurrentCulture, value, args);
@@ -99,6 +104,11 @@ namespace System
 			if (value == null)
 			{
 				return null;
+			}
+
+			if (encoding == null)
+			{
+				throw new ArgumentNullException("encoding");
 			}
 
 			return encoding.GetBytes(value);

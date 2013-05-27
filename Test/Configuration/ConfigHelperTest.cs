@@ -1,37 +1,37 @@
 using System;
 using System.Xml.Linq;
 using Adenson.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest.Configuration
 {
-	[TestClass]
+	[TestFixture]
 	public class ConfigHelperTest
 	{
-		[TestMethod]
+		[Test]
 		public void GetSectionTest1()
 		{
-			var section = ConfigHelper.GetSection<XDocument>("adenson/loggerSettings");
+			var section = ConfigHelper.GetSection<XDocument>("adenson/testSettings");
 			Assert.IsNotNull(section);
-			Assert.AreEqual("<loggerSettings />", section.Root.ToString());
+			Assert.AreEqual("<testSettings />", section.Root.ToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetSectionTest2()
 		{
-			var section = ConfigHelper.GetSection<XDocument>("adenson", "loggerSettings");
+			var section = ConfigHelper.GetSection<XDocument>("adenson", "testSettings");
 			Assert.IsNotNull(section);
-			Assert.AreEqual("<loggerSettings />", section.Root.ToString());
+			Assert.AreEqual("<testSettings />", section.Root.ToString());
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetValueTest1()
 		{
 			Assert.AreEqual("Test1", ConfigHelper.GetValue<string>("Test1"));
 			Assert.AreEqual(2, ConfigHelper.GetValue<int>("Test2"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetValueTest2()
 		{
 			Assert.AreEqual("Test1", ConfigHelper.GetValue<string>("Test1", "Woot"));

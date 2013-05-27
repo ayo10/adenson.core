@@ -79,6 +79,11 @@ namespace Adenson.Configuration
 		/// <returns>A System.Configuration.SettingsPropertyValueCollection containing the values for the specified settings property group.</returns>
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException("collection");
+			}
+
 			var config = this.GetConfiguration(context);
 			var sectionName = LocalFileSettingsProvider.GetSectionName(context);
 			ClientSettingsSection userSettings = config.GetSection("userSettings/" + sectionName) as ClientSettingsSection;
@@ -160,6 +165,11 @@ namespace Adenson.Configuration
 		/// <param name="collection">A System.Configuration.SettingsPropertyValueCollection representing the group of property settings to set.</param>
 		public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
 		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException("collection");
+			}
+
 			var config = this.GetConfiguration(context, true);
 			var sectionName = LocalFileSettingsProvider.GetSectionName(context);
 			ClientSettingsSection userSettings = config.GetSection("userSettings/" + sectionName) as ClientSettingsSection;

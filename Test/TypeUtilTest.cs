@@ -1,53 +1,53 @@
 using System;
 using Adenson.Log;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest
 {
-	[TestClass]
+	[TestFixture]
 	public class TypeUtilTest
 	{
-		[TestMethod]
+		[Test]
 		public void CreateInstanceTest1()
 		{
-			var result = TypeUtil.CreateInstance<GenericParameterHelper>();
+			var result = TypeUtil.CreateInstance<TestClass>();
 			Assert.IsNotNull(result);
-			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
+			Assert.IsInstanceOf(typeof(TestClass), result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateInstanceTest2()
 		{
-			var typeName = typeof(GenericParameterHelper).AssemblyQualifiedName;
-			var result = TypeUtil.CreateInstance<GenericParameterHelper>(typeName);
+			var typeName = typeof(TestClass).AssemblyQualifiedName;
+			var result = TypeUtil.CreateInstance<TestClass>(typeName);
 			Assert.IsNotNull(result);
-			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
+			Assert.IsInstanceOf(typeof(TestClass), result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateInstanceTest3()
 		{
-			var type = typeof(GenericParameterHelper);
-			var result = TypeUtil.CreateInstance<GenericParameterHelper>(type);
+			var type = typeof(TestClass);
+			var result = TypeUtil.CreateInstance<TestClass>(type);
 			Assert.IsNotNull(result);
-			Assert.IsInstanceOfType(result, typeof(GenericParameterHelper));
+			Assert.IsInstanceOf(typeof(TestClass), result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EnumParseTest()
 		{
-			Assert.AreEqual(DataAccessMethod.Random, TypeUtil.EnumParse<DataAccessMethod>(DataAccessMethod.Random.ToString()));
+			Assert.AreEqual(TestEnum.Enum1, TypeUtil.EnumParse<TestEnum>(TestEnum.Enum1.ToString()));
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetTypeTest()
 		{
-			var type = typeof(GenericParameterHelper);
+			var type = typeof(TestClass);
 			Assert.AreEqual(type, TypeUtil.GetType(type.AssemblyQualifiedName));
 			Assert.AreEqual(type, TypeUtil.GetType(String.Format("{0};{1}", type.Assembly.GetName().Name, type.FullName)));
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetPropertyDescriptorTest()
 		{
 			var anon1 = new { Prop1 = "Test" };
@@ -69,7 +69,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual("Prop1", descriptor.Name);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetPropertyValueTest()
 		{
 			var anon1 = new { Prop1 = "Test1" };
@@ -91,39 +91,54 @@ namespace Adenson.CoreTest
 			Assert.AreEqual("Test1", value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetPropertyValuesTest()
 		{
 		}
 
-		[TestMethod]
+		[Test]
 		public void TryConvertTest()
 		{
 			object output = null;
 			Assert.IsTrue(TypeUtil.TryConvert(typeof(int), "1", out output));
 			Assert.AreEqual(1, output);
 
-			Assert.IsTrue(TypeUtil.TryConvert(typeof(DataAccessMethod), DataAccessMethod.Random.ToString(), out output));
-			Assert.AreEqual(DataAccessMethod.Random, output);
+			Assert.IsTrue(TypeUtil.TryConvert(typeof(TestEnum), TestEnum.Enum1.ToString(), out output));
+			Assert.AreEqual(TestEnum.Enum1, output);
 
-			Assert.IsTrue(TypeUtil.TryConvert(typeof(LogTypes), "Database | File | EventLog | Trace | Email", out output));
-			Assert.AreEqual(LogTypes.All, output);
+			Assert.IsTrue(TypeUtil.TryConvert(typeof(TestEnum), "Enum1 | Enum2 | Enum4 | Enum16", out output));
+			Assert.AreEqual(TestEnum.All, output);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TryConvertTest1()
 		{
 			int intResult = 1;
 			Assert.IsTrue(TypeUtil.TryConvert<int>("1", out intResult));
 			Assert.AreEqual(1, intResult);
 
-			DataAccessMethod damResult;
-			Assert.IsTrue(TypeUtil.TryConvert<DataAccessMethod>(DataAccessMethod.Random.ToString(), out damResult));
-			Assert.AreEqual(DataAccessMethod.Random, damResult);
+			TestEnum damResult;
+			Assert.IsTrue(TypeUtil.TryConvert<TestEnum>(TestEnum.Enum1.ToString(), out damResult));
+			Assert.AreEqual(TestEnum.Enum1, damResult);
 
-			LogTypes ltResult;
-			Assert.IsTrue(TypeUtil.TryConvert<LogTypes>("Database | File | EventLog | Trace | Email", out ltResult));
-			Assert.AreEqual(LogTypes.All, ltResult);
+			TestEnum ltResult;
+			Assert.IsTrue(TypeUtil.TryConvert<TestEnum>("Enum1 | Enum2 | Enum4 | Enum16", out ltResult));
+			Assert.AreEqual(TestEnum.All, ltResult);
+		}
+
+		[Flags]
+		public enum TestEnum
+		{
+			None = 0,
+			Enum1 = 1,
+			Enum2 = 2,
+			Enum4 = 4,
+			Enum16 = 16,
+			All = Enum1 | Enum2 | Enum4 | Enum16
+		}
+
+		public class TestClass
+		{
 		}
 	}
 }

@@ -19,13 +19,13 @@ namespace System
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
 		public static string Capitalize(this string value)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(value))
+			if (String.IsNullOrWhiteSpace(value))
 			{
 				return value;
 			}
 
-			var result = value.ToLower(CultureInfo.CurrentUICulture).ToCharArray();
-			var index = 0;
+			char[] result = value.ToLower(CultureInfo.CurrentUICulture).ToCharArray();
+			int index = 0;
 			while (index < value.Length)
 			{
 				var c = value[index];
