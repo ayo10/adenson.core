@@ -108,7 +108,7 @@ namespace System
 				throw new TypeLoadException(StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
 			}
 
-			return (T)Activator.CreateInstance(type);
+			return TypeUtil.CreateInstance<T>(type);
 		}
 
 		/// <summary>
@@ -185,6 +185,11 @@ namespace System
 				return null;
 			}
 
+			if (String.IsNullOrEmpty(propertyName))
+			{
+				throw new ArgumentNullException("propertyName");
+			}
+
 			IDictionary di = item as IDictionary;
 			if (di != null)
 			{
@@ -255,6 +260,11 @@ namespace System
 				return null;
 			}
 
+			if (propertyNames == null)
+			{
+				throw new ArgumentNullException("propertyNames");
+			}
+
 			List<object> list = new List<object>();
 			for (int i = 0; i < propertyNames.Length; i++)
 			{
@@ -299,7 +309,7 @@ namespace System
 		/// <exception cref="BadImageFormatException">The assembly or one of its dependencies is not valid.</exception>
 		public static Type GetType(string typeDescription, bool throwOnError)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(typeDescription))
+			if (String.IsNullOrWhiteSpace(typeDescription))
 			{
 				throw new ArgumentNullException("typeDescription");
 			}
@@ -350,6 +360,7 @@ namespace System
 		/// <param name="value">The value to convert</param>
 		/// <param name="output">The output of the conversion</param>
 		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
+		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "It is not all instances that you can use generics.")]
 		public static bool TryConvert(Type type, object value, out object output)
 		{
 			output = null;

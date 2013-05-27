@@ -129,8 +129,8 @@
   <data name="ConnectionStringWithKeyArgNotFound" xml:space="preserve">
     <value>No connection string with specified key '{0}' could be found. Check to make sure you have a connection string section in your configuration file with the specified key.</value>
   </data>
-  <data name="EmailAddressInvalid" xml:space="preserve">
-    <value>To email address cannot be null or empty.</value>
+  <data name="EmailToAddressInvalid" xml:space="preserve">
+    <value>To email address must be set, and cannot be empty.</value>
   </data>
   <data name="EventLogTypeWithSourceNull" xml:space="preserve">
     <value>Source cannot be null or empty if LogType contains LogType.EventLog.</value>
@@ -171,5 +171,8 @@
   <data name="ErrantCommandArg" xml:space="preserve">
     <value>Errant command:
 {0}</value>
+  </data>
+  <data name="CustomHandlerTypeTypeMustBeSpecified" xml:space="preserve">
+    <value>Type must be set for custom log handler.</value>
   </data>
 </root>

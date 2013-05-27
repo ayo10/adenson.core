@@ -1,23 +1,46 @@
 using System;
 using System.Collections.Generic;
 using Adenson.Log;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest.Log
 {
-	[TestClass]
+	[TestFixture]
 	public class LogProfilerTest
 	{
-		[TestMethod]
-		public void DebugTest()
+		private TestHandler handler = new TestHandler();
+		
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
 		{
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
-			{
-				prf.Debug("Test {0}", "test");
-			}
+			Logger.Settings.Severity = Severity.Debug;
+			Logger.Settings.Handlers.Add(handler);
 		}
 
-		[TestMethod]
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			Logger.Settings.Severity = Severity.Error;
+			Logger.Settings.Handlers.Remove(handler);
+		}
+
+		[Test]
+		public void DebugTest()
+		{
+			handler.Entries.Clear();
+			Guid guid = Guid.NewGuid();
+			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			{
+				prf.Debug("Test {0}", guid);
+			}
+
+			Assert.AreEqual(3, handler.Entries.Count);
+			Assert.IsTrue(handler.Entries[0].Message.EndsWith("s] Test START"));
+			Assert.IsTrue(handler.Entries[1].Message.EndsWith(String.Format("s] Test Test {0}", guid)));
+			Assert.IsTrue(handler.Entries[2].Message.EndsWith("s] Test FINISH"));
+		}
+
+		[Test]
 		public void DisposeTest()
 		{
 			LogProfiler prf;
@@ -29,7 +52,7 @@ namespace Adenson.CoreTest.Log
 			Assert.IsTrue(prf.IsDisposed);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ElapsedTimeTest()
 		{
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
@@ -42,7 +65,7 @@ namespace Adenson.CoreTest.Log
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void IdentifierTest()
 		{
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
@@ -51,7 +74,7 @@ namespace Adenson.CoreTest.Log
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void IsDisposedTest()
 		{
 			LogProfiler prf;
@@ -63,7 +86,7 @@ namespace Adenson.CoreTest.Log
 			Assert.IsTrue(prf.IsDisposed);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ParentTest()
 		{
 			var logger = Logger.GetLogger(this.GetType());
@@ -73,17 +96,18 @@ namespace Adenson.CoreTest.Log
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void TotalMemoryTest()
 		{
 			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
 			{
 				byte[] buffer = new byte[1000000];
 				Assert.IsTrue(prf.TotalMemory > 0);
+				buffer = null;
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public void UidTest()
 		{
 			var uids = new List<Guid>();

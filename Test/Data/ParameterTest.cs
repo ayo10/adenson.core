@@ -1,13 +1,13 @@
 using Adenson.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 
 namespace Adenson.CoreTest.Data
 {
-	[TestClass]
+	[TestFixture]
 	public class ParameterTest
 	{
-		[TestMethod]
+		[Test]
 		public void ParameterConstructorTest()
 		{
 			string name = "Name";
@@ -17,7 +17,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(value, target.Value);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EqualsTest1()
 		{
 			string name = string.Empty; // TODO: Initialize to an appropriate value
@@ -30,7 +30,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EqualsTest2()
 		{
 			string name = string.Empty; // TODO: Initialize to an appropriate value
@@ -43,7 +43,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetHashCodeTest()
 		{
 			string name = string.Empty; // TODO: Initialize to an appropriate value

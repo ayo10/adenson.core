@@ -1,13 +1,13 @@
 using System;
 using System.Net.Mail;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest
 {
-	[TestClass]
+	[TestFixture]
 	public class SmtpUtilTest
 	{
-		[TestMethod]
+		[Test]
 		public void SendTest()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -23,7 +23,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for Send
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendTest1()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -39,7 +39,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for Send
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendTest3()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -51,7 +51,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for Send
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendTest4()
 		{
 			MailMessage message = null; // TODO: Initialize to an appropriate value
@@ -62,7 +62,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for Send
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendTest5()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value
@@ -77,7 +77,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for Send
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendTest6()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value
@@ -92,7 +92,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -108,7 +108,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest1()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -124,7 +124,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest2()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -136,7 +136,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest3()
 		{
 			MailMessage message = null; // TODO: Initialize to an appropriate value
@@ -147,7 +147,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest4()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value
@@ -162,7 +162,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for SendAsync
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void SendAsyncTest5()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value
@@ -177,7 +177,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -196,7 +196,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest2()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -215,7 +215,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest3()
 		{
 			string smtpHost = string.Empty; // TODO: Initialize to an appropriate value
@@ -230,7 +230,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest4()
 		{
 			MailMessage message = null; // TODO: Initialize to an appropriate value
@@ -244,7 +244,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest5()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value
@@ -262,7 +262,7 @@ namespace Adenson.CoreTest
 		/// <summary>
 		///A test for TrySend
 		///</summary>
-		[TestMethod]
+		[Test]
 		public void TrySendTest6()
 		{
 			string from = string.Empty; // TODO: Initialize to an appropriate value

@@ -109,7 +109,7 @@ namespace Adenson.Data
 				case "System.Data.OracleClient":
 					throw new NotSupportedException(connectionString.ProviderName);
 				default:
-					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringSettings object");
+					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringsSettings object");
 			}
 		}
 

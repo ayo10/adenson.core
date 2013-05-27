@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest
 {
-	[TestClass]
+	[TestFixture]
 	public class ExtensionsTest
 	{
-		[TestMethod]
+		[Test]
 		public void ContainsKeyTest()
 		{
 			Dictionary<string, int> dictionary = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
@@ -19,7 +19,7 @@ namespace Adenson.CoreTest
 			Assert.IsFalse(dictionary.ContainsKey("tHREe", StringComparison.CurrentCultureIgnoreCase));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ContainsTest()
 		{
 			string source = "TestOneTwoThree";
@@ -28,14 +28,14 @@ namespace Adenson.CoreTest
 			Assert.IsFalse(source.Contains("Four", StringComparison.CurrentCultureIgnoreCase));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ElementTest()
 		{
 			XContainer source = XDocument.Parse("<eLem>1</eLem>");
 			Assert.AreEqual("eLem", source.Element("ELEM", StringComparison.CurrentCultureIgnoreCase).Name);
 		}
 
-		[TestMethod]
+		[Test]
 		public void EqualsToTest1()
 		{
 			IEnumerable<string> array1 = new string[] { "one", "TWO", "three" };
@@ -47,7 +47,7 @@ namespace Adenson.CoreTest
 			Assert.IsTrue(array1.SameAs(array3, StringComparison.CurrentCultureIgnoreCase));
 		}
 
-		[TestMethod]
+		[Test]
 		public void EqualsToTest2()
 		{
 			EqualsTest2Helper<byte>(1, 2, 3);
@@ -55,7 +55,7 @@ namespace Adenson.CoreTest
 			EqualsTest2Helper<int>(1, 2, 3);
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetValueTest1()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
@@ -65,7 +65,7 @@ namespace Adenson.CoreTest
 			Assert.IsNull(dic.Get("two", StringComparison.CurrentCulture));
 		}
 
-		[TestMethod, ExpectedException(typeof(KeyNotFoundException))]
+		[Test, ExpectedException(typeof(KeyNotFoundException))]
 		public void GetValueFailTest()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
@@ -73,7 +73,7 @@ namespace Adenson.CoreTest
 			Assert.IsNull(dic.Get("two", StringComparison.CurrentCulture));
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetValueTest2()
 		{
 			XElement source = XDocument.Parse("<root><elem>1</elem></root>").Root;
@@ -86,7 +86,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual(1, source.GetValue<int>("attribute"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void HasElementTest1()
 		{
 			XContainer source = XDocument.Parse("<elem>1</elem>");
@@ -94,7 +94,7 @@ namespace Adenson.CoreTest
 			Assert.IsFalse(source.HasElement("ELEM"));
 		}
 
-		[TestMethod]
+		[Test]
 		public void HasElementTest2()
 		{
 			XContainer source = XDocument.Parse("<elem>1</elem>");
@@ -103,7 +103,7 @@ namespace Adenson.CoreTest
 			Assert.IsFalse(source.HasElement("ELEM", StringComparison.CurrentCulture));
 		}
 
-		[TestMethod]
+		[Test]
 		public void IsNullOrEmptyTest()
 		{
 			IEnumerable<int> values = null;
@@ -116,7 +116,7 @@ namespace Adenson.CoreTest
 			Assert.IsFalse(values.IsNullOrEmpty());
 		}
 
-		[TestMethod]
+		[Test]
 		public void RoundTest()
 		{
 			double value = 9.00233;
@@ -126,7 +126,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual(Math.Round(value, 3), value.Round(3));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToBytesTest()
 		{
 			byte[] buffer = new byte[] { 1, 2, 3 };
@@ -134,7 +134,7 @@ namespace Adenson.CoreTest
 			Assert.IsTrue(buffer.SameAs(stream.ToBytes()));
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToHexTest()
 		{
 			byte[] buffer = new byte[] { 1, 2, 3 };
@@ -142,7 +142,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual(expected, buffer.ToHex());
 		}
 
-		[TestMethod]
+		[Test]
 		public void ToRomanTest()
 		{
 			Assert.AreEqual("", 0.ToRoman());
@@ -178,7 +178,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual("¯V", 5000.ToRoman());
 		}
 
-		[TestMethod]
+		[Test]
 		public void Trim1()
 		{
 			DateTime date = new DateTime(2011, 1, 1, 1, 1, 1, 1);
@@ -187,7 +187,7 @@ namespace Adenson.CoreTest
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Trim2()
 		{
 			DateTime date = new DateTime(2011, 1, 1, 1, 1, 1, 1);

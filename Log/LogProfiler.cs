@@ -8,7 +8,9 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represetns a log profiler object, active only when the parent Logger object's severity is Debug or lower
 	/// </summary>
+	#if !DEBUG
 	[DebuggerStepThrough]
+	#endif
 	public sealed class LogProfiler : IDisposable
 	{
 		#region Variables
@@ -24,7 +26,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(LogSeverity.Profile, SR.ProfilerStart);
+			this.Write(Severity.Profile, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -118,7 +120,7 @@ namespace Adenson.Log
 		[Conditional("DEBUG"), Conditional("INFO")]
 		public void Info(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Info, message, arguments);
+			this.Write(Severity.Info, message, arguments);
 		}
 
 		/// <summary>
@@ -130,7 +132,7 @@ namespace Adenson.Log
 		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
 		{
-			this.Write(LogSeverity.Profile, message, arguments);
+			this.Write(Severity.Profile, message, arguments);
 		}
 
 		/// <summary>
@@ -138,7 +140,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(LogSeverity.Profile, SR.ProfilerStop);
+			this.Write(Severity.Profile, SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
@@ -160,7 +162,7 @@ namespace Adenson.Log
 			return marker;
 		}
 
-		private void Write(LogSeverity severity, string message, params object[] arguments)
+		private void Write(Severity severity, string message, params object[] arguments)
 		{
 			this.Parent.Write(severity, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
 		}

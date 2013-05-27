@@ -84,6 +84,11 @@ namespace Adenson.Configuration
 		/// <returns>The found section name.</returns>
 		protected static string GetSectionName(SettingsContext context)
 		{
+			if (context == null)
+			{
+				throw new ArgumentNullException("context");
+			}
+
 			string groupName = (string)context["GroupName"];
 			string settingsKey = (string)context["SettingsKey"];
 			string name = groupName;

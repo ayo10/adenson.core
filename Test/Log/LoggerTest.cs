@@ -1,48 +1,137 @@
 using System;
+using System.Linq;
 using Adenson.Log;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest.Log
 {
-	[TestClass]
+	[TestFixture]
 	public class LoggerTest
 	{
-		[TestMethod]
-		public void ConvertToStringTest1()
+		#region Variables
+		private TestHandler handler = new TestHandler();
+		private Logger testLogger = Logger.GetLogger(typeof(LoggerTest));
+		#endregion
+		#region Init
+
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
 		{
-			Exception exception = new Exception("Test1", new Exception("Test2"));
-			string expected = "Test1. Test2.";
-			string actual = Logger.ToString(exception, true);
-			Assert.AreEqual(expected, actual);
+			Logger.Settings.Handlers.Add(handler);
 		}
 
-		[TestMethod]
-		public void ConvertToStringTest2a()
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
 		{
-			Exception exception = new Exception("Test1", new Exception("Test2"));
-			string expected = "System.Exception: Test1\r\n--------------------\r\nSystem.Exception: Test2\r\n";
-			string actual = Logger.ToString(exception);
-			Assert.AreEqual(expected, actual);
+			Logger.Settings.Severity = Severity.Error;
+			Logger.Settings.Handlers.Remove(handler);
+		}
+		
+		#endregion
+		#region Tests
+
+		[Test]
+		public void GetLoggerTest()
+		{
+			Logger logger1 = Logger.GetLogger(this.GetType());
+			Assert.IsNotNull(logger1);
+			Assert.AreEqual(logger1.ClassType, typeof(LoggerTest));
+
+			Logger logger2 = Logger.GetLogger(this.GetType());
+			Assert.IsNotNull(logger2);
+			Assert.AreSame(logger1, logger2, "GetLogger should always return the same object per type");
+			Assert.AreEqual(logger2.ClassType, typeof(LoggerTest));
+
+			Logger logger3 = Logger.GetLogger(typeof(LogProfilerTest));
+			Assert.IsNotNull(logger3);
+			Assert.AreNotSame(logger1, logger3, "GetLogger should return a different logger per type.");
+			Assert.AreEqual(logger3.ClassType, typeof(LogProfilerTest));
 		}
 
-		[TestMethod]
-		public void ConvertToStringTest2b()
+		[Test]
+		public void CriticalTest()
 		{
-			Exception exception1 = new Exception("Test1");
-			Exception exception2;
-			try
+			this.Log(Severity.Critical);
+		}
+
+		[Test]
+		public void DebugTest()
+		{
+			this.Log(Severity.Debug);
+		}
+
+		[Test]
+		public void ErrorTest()
+		{
+			this.Log(Severity.Error);
+		}
+
+		[Test]
+		public void InfoTest()
+		{
+			this.Log(Severity.Info);
+		}
+
+		[Test]
+		public void WarnTest()
+		{
+			this.Log(Severity.Warn);
+		}
+
+		#endregion
+		#region Methods
+
+		private void Log(Severity severity)
+		{
+			Logger.Settings.Severity = severity;
+			int count = handler.Entries.Count;
+			int s = (int)severity;
+			for (int i = 6; i > 0; i--)
 			{
-				throw exception1;//<==This line number should be the same as line number below for this unit test to pass.
-			}
+				switch (i)
+				{
+					case 1:
+						testLogger.Debug("This is a {0} message", (Severity)i);
+						break;
+					case 2:
+						testLogger.Info("This is a {0} message", (Severity)i);
+						break;
+					case 3:
+						testLogger.Info("This is a {0} message", (Severity)i);
+						break;
+					case 4:
+						testLogger.Warn("This is a {0} message", (Severity)i);
+						break;
+					case 5:
+						testLogger.Error("This is a {0} message", (Severity)i);
+						break;
+					case 6:
+						testLogger.Critical("This is a {0} message", (Severity)i);
+						break;
+				}
 
-			catch (Exception ex)
-			{
-				exception2 = new Exception("Test2", ex);
+				if (i >= (int)severity)
+				{
+					count++;
+					Assert.AreEqual(count, handler.Entries.Count);
+					if (i == (int)severity)
+					{
+						LogEntry log = handler.Entries.Last();
+						DateTime dt1 = DateTime.Now;
+						DateTime dt2 = log.Date;
+						Assert.AreEqual(String.Format("This is a {0} message", severity), log.Message);
+						Assert.AreEqual(new DateTime(dt1.Year, dt1.Month, dt1.Day, dt1.Hour, dt1.Minute, dt1.Second), new DateTime(dt2.Year, dt2.Month, dt2.Day, dt2.Hour, dt2.Minute, dt2.Second));
+						Assert.AreEqual(severity, log.Severity);
+						Assert.AreEqual(typeof(LoggerTest).Name, log.TypeName);
+					}
+				}
+				else
+				{
+					Assert.AreEqual(count, handler.Entries.Count, "No change in entries, higher severity");
+				}
 			}
-
-			string expected = "System.Exception: Test1\r\n   at Adenson.CoreTest.Log.LoggerTest.ConvertToStringTest2b() in C:\\Projects\\Adenson\\Adenson.Core\\Test\\Log\\LoggerTest.cs:line 35\r\n";
-			string actual = Logger.ToString(exception1, false);
-			Assert.AreEqual(expected, actual);
 		}
+
+		#endregion
 	}
 }

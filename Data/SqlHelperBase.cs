@@ -347,6 +347,11 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataDynamic object.</returns>
 		public virtual IEnumerable<dynamic> ExecuteDynamic(IDbCommand command)
 		{
+			if (command == null)
+			{
+				throw new ArgumentNullException("command");
+			}
+
 			this.PrepCommand(command);
 			List<dynamic> result = new List<dynamic>();
 			using (IDataReader r = command.ExecuteReader())
@@ -506,6 +511,11 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
+			if (command == null)
+			{
+				throw new ArgumentNullException("command");
+			}
+
 			this.PrepCommand(command);
 			return command.ExecuteReader();
 		}
@@ -647,12 +657,12 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
 		protected virtual IDbCommand CreateCommand(CommandType type, string commandText, params object[] parameterValues)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(commandText))
+			if (String.IsNullOrWhiteSpace(commandText))
 			{
 				throw new ArgumentNullException("commandText");
 			}
 
-			if (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null))
+			if (parameterValues == null || (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)))
 			{
 				throw new ArgumentNullException("parameterValues");
 			}

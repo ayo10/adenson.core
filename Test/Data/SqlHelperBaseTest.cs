@@ -1,11 +1,11 @@
 using Adenson.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Data;
 
 namespace Adenson.CoreTest.Data
 {
-	[TestClass]
+	[TestFixture]
 	public abstract class SqlHelperBaseTest<T> where T : SqlHelperBase
 	{
 		#region Variables
@@ -13,7 +13,7 @@ namespace Adenson.CoreTest.Data
 		#endregion
 		#region Tests
 
-		[TestMethod]
+		[Test]
 		public void ColumnExistsTest()
 		{
 			string tableName = string.Empty; // TODO: Initialize to an appropriate value
@@ -24,7 +24,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateAdapterTest()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
@@ -34,7 +34,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateCommandTest()
 		{
 			IDbCommand expected = null; // TODO: Initialize to an appropriate value
@@ -43,7 +43,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateConnectionTest()
 		{
 			IDbConnection expected = null; // TODO: Initialize to an appropriate value
@@ -52,7 +52,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public virtual void CreateExistDropDatabaseTest()
 		{
 			var target = this.CreateTarget("Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;");
@@ -63,7 +63,7 @@ namespace Adenson.CoreTest.Data
 			Assert.IsFalse(target.DatabaseExists());
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateParameterTest()
 		{
 			string name = string.Empty; // TODO: Initialize to an appropriate value
@@ -74,7 +74,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CreateParameterTest1()
 		{
 			IDbDataParameter expected = null; // TODO: Initialize to an appropriate value
@@ -83,13 +83,13 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void DisposeTest()
 		{
 			target.Dispose();
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteDataSetTest()
 		{
 			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
@@ -101,7 +101,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteDataSetTest1()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
@@ -111,7 +111,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteDataSetTest3()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
@@ -121,7 +121,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteDataSetTest4()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
@@ -131,7 +131,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteNonQueryTest()
 		{
 			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
@@ -143,7 +143,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteNonQueryTest1()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
@@ -153,7 +153,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteNonQueryTest2()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
@@ -163,7 +163,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteNonQueryTest4()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
@@ -173,7 +173,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteReaderTest1()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
@@ -183,7 +183,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteReaderTest2()
 		{
 			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
@@ -195,7 +195,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteScalarTest()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
@@ -205,7 +205,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteScalarTest2()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
@@ -215,7 +215,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteScalarTest3()
 		{
 			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
@@ -227,7 +227,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void ExecuteScalarTest4()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
@@ -237,7 +237,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TableExistsTest()
 		{
 			string tableName = string.Empty; // TODO: Initialize to an appropriate value
@@ -247,7 +247,7 @@ namespace Adenson.CoreTest.Data
 			Assert.AreEqual(expected, actual);
 		}
 
-		[TestMethod]
+		[Test]
 		public void CurrentConnectionTest()
 		{
 			IDbConnection actual;

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Adenson.CoreTest
 {
-	[TestClass]
+	[TestFixture]
 	public class FileUtilTest
 	{
-		[TestMethod]
+		[Test]
 		public void CreateFileTest()
 		{
 			string filePath = Path.GetTempFileName();
@@ -22,7 +22,7 @@ namespace Adenson.CoreTest
 			buffer.SameAs(bytes);
 		}
 
-		[TestMethod]
+		[Test]
 		public void FixFileNameTest()
 		{
 			string path = string.Empty; // TODO: Initialize to an appropriate value
@@ -33,7 +33,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetBytesTest()
 		{
 			string hexValue = string.Empty; // TODO: Initialize to an appropriate value
@@ -44,7 +44,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetFilesTest()
 		{
 			string directory = string.Empty; // TODO: Initialize to an appropriate value
@@ -56,7 +56,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void GetIsDirectoryTest()
 		{
 			string fullPath = string.Empty; // TODO: Initialize to an appropriate value
@@ -67,7 +67,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void ReadStreamTest1()
 		{
 			Uri url = null; // TODO: Initialize to an appropriate value
@@ -78,7 +78,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void ReadStreamTest2()
 		{
 			Stream stream = null; // TODO: Initialize to an appropriate value
@@ -89,7 +89,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void ReadStreamTest3()
 		{
 			string filePath = string.Empty; // TODO: Initialize to an appropriate value
@@ -100,7 +100,7 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		[TestMethod]
+		[Test]
 		public void TryGetBytesTest()
 		{
 			string hexValue = string.Empty; // TODO: Initialize to an appropriate value

@@ -13,22 +13,11 @@ namespace Adenson.Configuration
 
 		object IConfigurationSectionHandler.Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
-			return XDocument.Parse(section.OuterXml);
-		}
+			if (section == null)
+			{
+				throw new ArgumentNullException("section");
+			}
 
-		#endregion
-	}
-
-	/// <summary>
-	/// Obsolete, Use XDocumentSectionHandler
-	/// </summary>
-	[Obsolete("Use XDocumentSectionHandler")]
-	public sealed class XmlSectionHandler : IConfigurationSectionHandler
-	{
-		#region Methods
-
-		object IConfigurationSectionHandler.Create(object parent, object configContext, System.Xml.XmlNode section)
-		{
 			return XDocument.Parse(section.OuterXml);
 		}
 

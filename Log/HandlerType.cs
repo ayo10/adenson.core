@@ -5,8 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Enumeration of log types
 	/// </summary>
-	[Flags]
-	public enum LogTypes
+	public enum HandlerType
 	{
 		/// <summary>
 		/// No logs
@@ -31,31 +30,31 @@ namespace Adenson.Log
 		/// <summary>
 		/// Logs via System.Diagnostics.Debug.WriteLine
 		/// </summary>
-		Debug = 4,
+		Debug = 3,
 
 		/// <summary>
 		/// Logs via System.Diagnostics.Trace.WriteLine
 		/// </summary>
-		Trace = 8,
+		Trace = 4,
 
 		/// <summary>
-		/// Logs via email (expects config setting adenson/loggerSettings/emailInfo[from, to] to be set
+		/// Logs via email (expects config setting adenson/logSettings/emailInfo[from, to] to be set
 		/// </summary>
-		Email = 16,
+		Email = 5,
 
 		/// <summary>
 		/// Logs into Windows Event Log
 		/// </summary>
-		EventLog = 32,
+		EventLog = 6,
 
 		/// <summary>
-		/// Logs into a database (expects config setting adenson/loggerSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set
+		/// Logs into a database (expects config setting adenson/logSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set
 		/// </summary>
-		Database = 64,
+		Database = 7,
 
 		/// <summary>
-		/// DataBase | File | EventLog | Console | Debug | Email
+		/// Custom log handler.
 		/// </summary>
-		All = Database | File | EventLog | Trace | Email
+		Custom = 8
 	}
 }

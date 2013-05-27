@@ -99,6 +99,11 @@ namespace System.IO
 				throw new ArgumentNullException("directory");
 			}
 
+			if (extensions == null)
+			{
+				throw new ArgumentNullException("extensions");
+			}
+
 			List<string> filesToProcess = new List<string>();
 			foreach (string ext in extensions)
 			{
@@ -131,7 +136,7 @@ namespace System.IO
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(fileName))
+			if (String.IsNullOrWhiteSpace(fileName))
 			{
 				throw new ArgumentNullException("fileName");
 			}

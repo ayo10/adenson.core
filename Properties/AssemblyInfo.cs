@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Adenson.Core")]
@@ -11,8 +12,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("\x00a9 Adenson.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.6.61.*")]
-[assembly: AssemblyFileVersion("1.6.61.0")]
+[assembly: AssemblyVersion("1.7.0.*")]
+[assembly: AssemblyFileVersion("1.7.0.0")]
 [assembly: AssemblyDelaySign(false)]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]

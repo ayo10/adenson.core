@@ -76,6 +76,11 @@ namespace Adenson.Configuration
 		/// <returns>A System.Configuration.SettingsPropertyValueCollection containing the values for the specified settings property group.</returns>
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException("collection");
+			}
+
 			SettingsPropertyValueCollection settingValues = new SettingsPropertyValueCollection();
 			foreach (SettingsProperty setting in collection)
 			{
@@ -116,6 +121,11 @@ namespace Adenson.Configuration
 		/// <param name="collection">A System.Configuration.SettingsPropertyValueCollection representing the group of property settings to set.</param>
 		public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
 		{
+			if (collection == null)
+			{
+				throw new ArgumentNullException("collection");
+			}
+
 			foreach (SettingsPropertyValue setting in collection)
 			{
 				bool isApplicationScoped = setting.Property.Attributes.Values.OfType<ApplicationScopedSettingAttribute>().Count() > 0;

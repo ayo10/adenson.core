@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Adenson.Core" Description="Adenson.Core ruleset" ToolsVersion="11.0">
-  <RuleHintPaths>
-    <Path>%ProgramFiles%\Microsoft Fxcop 10.0\Rules</Path>
-  </RuleHintPaths>
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1000" Action="Warning" />
     <Rule Id="CA1001" Action="Warning" />
@@ -11,6 +8,7 @@
     <Rule Id="CA1004" Action="Warning" />
     <Rule Id="CA1005" Action="Warning" />
     <Rule Id="CA1006" Action="Warning" />
+    <Rule Id="CA1007" Action="Warning" />
     <Rule Id="CA1008" Action="Warning" />
     <Rule Id="CA1009" Action="Warning" />
     <Rule Id="CA1010" Action="Warning" />
@@ -59,6 +57,7 @@
     <Rule Id="CA1059" Action="Warning" />
     <Rule Id="CA1060" Action="Warning" />
     <Rule Id="CA1061" Action="Warning" />
+    <Rule Id="CA1062" Action="Warning" />
     <Rule Id="CA1063" Action="Warning" />
     <Rule Id="CA1064" Action="Warning" />
     <Rule Id="CA1065" Action="Warning" />
@@ -175,6 +174,7 @@
     <Rule Id="CA2146" Action="Warning" />
     <Rule Id="CA2147" Action="Warning" />
     <Rule Id="CA2149" Action="Warning" />
+    <Rule Id="CA2151" Action="Warning" />
     <Rule Id="CA2200" Action="Warning" />
     <Rule Id="CA2201" Action="Warning" />
     <Rule Id="CA2205" Action="Warning" />
@@ -185,6 +185,7 @@
     <Rule Id="CA2212" Action="Warning" />
     <Rule Id="CA2213" Action="Warning" />
     <Rule Id="CA2214" Action="Warning" />
+    <Rule Id="CA2215" Action="Warning" />
     <Rule Id="CA2216" Action="Warning" />
     <Rule Id="CA2217" Action="Warning" />
     <Rule Id="CA2218" Action="Warning" />
@@ -210,7 +211,9 @@
     <Rule Id="CA2238" Action="Warning" />
     <Rule Id="CA2239" Action="Warning" />
     <Rule Id="CA2240" Action="Warning" />
+    <Rule Id="CA2241" Action="Warning" />
     <Rule Id="CA2242" Action="Warning" />
     <Rule Id="CA2243" Action="Warning" />
+    <Rule Id="CA5122" Action="Warning" />
   </Rules>
 </RuleSet>

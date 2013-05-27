@@ -5,7 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Log Severity Enums
 	/// </summary>
-	public enum LogSeverity : int
+	public enum Severity : int
 	{
 		/// <summary>
 		/// Indicates no log is saved

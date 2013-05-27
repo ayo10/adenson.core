@@ -309,12 +309,12 @@ namespace System.Net.Mail
 		{
 			if (to == null || to.Length == 0)
 			{
-				throw new ArgumentNullException("to", Adenson.Exceptions.EmailAddressInvalid);
+				throw new ArgumentNullException("to", Adenson.Exceptions.EmailToAddressInvalid);
 			}
 
 			if (to.Any(s => StringUtil.IsNullOrWhiteSpace(s)))
 			{
-				throw new ArgumentException(Adenson.Exceptions.EmailAddressInvalid, "to");
+				throw new ArgumentException(Adenson.Exceptions.EmailToAddressInvalid, "to");
 			}
 
 			MailMessage mailMessage = new MailMessage();

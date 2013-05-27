@@ -18,6 +18,11 @@ namespace System.Collections.Generic
 		/// <param name="value">The value to set.</param>
 		public static void AddOrSet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
 		{
+			if (dictionary == null)
+			{
+				throw new ArgumentNullException("dictionary");
+			}
+
 			if (dictionary.ContainsKey(key))
 			{
 				dictionary[key] = value;
@@ -39,6 +44,11 @@ namespace System.Collections.Generic
 		/// <exception cref="KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
 		public static TValue Get<TValue>(this IDictionary<string, TValue> dictionary, string key, StringComparison comparisonType)
 		{
+			if (dictionary == null)
+			{
+				throw new ArgumentNullException("dictionary");
+			}
+
 			if (key == null)
 			{
 				throw new ArgumentNullException("key");
@@ -63,6 +73,11 @@ namespace System.Collections.Generic
 		/// <returns>Found value if any, else default of <typeparamref name="TValue"/>.</returns>
 		public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
 		{
+			if (dictionary == null)
+			{
+				throw new ArgumentNullException("dictionary");
+			}
+
 			if (dictionary.ContainsKey(key))
 			{
 				return dictionary[key];
@@ -82,6 +97,11 @@ namespace System.Collections.Generic
 		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is null.</exception>
 		public static bool ContainsKey<T>(this IDictionary<string, T> dictionary, string key, StringComparison comparison)
 		{
+			if (dictionary == null)
+			{
+				throw new ArgumentNullException("dictionary");
+			}
+
 			if (StringUtil.IsNullOrWhiteSpace(key))
 			{
 				throw new ArgumentNullException("key");

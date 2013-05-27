@@ -59,6 +59,11 @@ namespace Adenson.Data
 		/// <returns>true, or false, i dont know</returns>
 		public bool Equals(Parameter other)
 		{
+			if (other == null)
+			{
+				return false;
+			}
+
 			if (Object.ReferenceEquals(this, other))
 			{
 				return true;
