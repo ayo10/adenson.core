@@ -14,7 +14,7 @@ namespace Adenson.Log
 	{
 		#region Constructor
 
-		internal EventLogHandler(Configuration.HandlerElement element) : base()
+		internal EventLogHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
 			this.Source = element.GetValue("source", "Application");
 		}

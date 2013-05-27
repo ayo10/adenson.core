@@ -14,7 +14,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represents the <see cref="Logger"/> default settings.
 	/// </summary>
-	internal sealed class Configuration : ConfigurationSection
+	internal sealed class SettingsConfiguration : ConfigurationSection
 	{
 		#region Properties
 

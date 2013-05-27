@@ -1,12 +1,6 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.IO;
-using System.Xml.Linq;
-using Adenson.Configuration;
 
 namespace Adenson.Log
 {
@@ -17,6 +11,17 @@ namespace Adenson.Log
 	{
 		#region Variables
 		private BaseFormatter _formatter;
+		#endregion
+		#region Constructor
+
+		internal Settings()
+		{
+			this.Formatter = new DefaultFormatter();
+			this.Severity = Severity.Error;
+			this.Handlers = new HandlerCollection(this);
+			this.Handlers.Add(new TraceHandler());
+		}
+
 		#endregion
 		#region Properties
 
@@ -43,7 +48,6 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets or sets the severity.
 		/// </summary>
-		[ConfigurationProperty("severity", DefaultValue = Severity.Error)]
 		public Severity Severity
 		{
 			get;
@@ -63,17 +67,21 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Instantiates a new instance of the <see cref="Settings"/> class from the config object.
+		/// Instantiates a new instance of the <see cref="Settings"/> class from the config object. If config is null, creates a default settings object.
 		/// </summary>
 		/// <param name="section">The configuration object.</param>
 		/// <returns>Created settings object.</returns>
 		public static Settings FromConfig(ConfigurationSection section)
 		{
-			Configuration config = (Configuration)section;
+			SettingsConfiguration config = section as SettingsConfiguration;
 			Settings settings = new Settings();
-			settings.Severity = config.Severity;
-			settings.Formatter = String.IsNullOrWhiteSpace(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
-			settings.Handlers = HandlerCollection.FromConfig(settings, config.Handlers);
+			if (config != null)
+			{
+				settings.Severity = config.Severity;
+				settings.Formatter = String.IsNullOrWhiteSpace(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
+				settings.Handlers = HandlerCollection.FromConfig(settings, config.Handlers);
+			}
+
 			return settings;
 		}
 

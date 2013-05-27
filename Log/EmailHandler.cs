@@ -17,7 +17,7 @@ namespace Adenson.Log
 		/// Initializes a new instance of the <see cref="EmailHandler"/> class.
 		/// </summary>
 		/// <param name="element">The element to initialize the class with.</param>
-		internal EmailHandler(Configuration.HandlerElement element) : base()
+		internal EmailHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
 			this.From = element.GetValue("From", "errors@Logger");
 			this.Subject = element.GetValue("Subject", "Adenson.Log.Logger");
