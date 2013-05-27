@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
-    <Compile Include="Log\Configuration.cs" />
+    <Compile Include="Log\SettingsConfiguration.cs" />
     <Compile Include="Log\ConsoleHandler.cs" />
     <Compile Include="Log\DebugHandler.cs" />
     <Compile Include="Log\DatabaseHandler.cs" />

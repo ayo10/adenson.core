@@ -360,7 +360,7 @@ namespace Adenson.Log
 
 		private static Settings ReadSettings()
 		{
-			Configuration config = (Configuration)ConfigurationManager.GetSection("adenson/logSettings");
+			SettingsConfiguration config = (SettingsConfiguration)ConfigurationManager.GetSection("adenson/logSettings");
 			return Settings.FromConfig(config);
 		}
 

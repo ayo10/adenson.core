@@ -23,7 +23,7 @@ namespace Adenson.Log
 		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
 		/// </summary>
 		/// <param name="element">The element to initialize the class with.</param>
-		internal DatabaseHandler(Configuration.HandlerElement element) : base()
+		internal DatabaseHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
 			this.TableName = element.GetValue("tableName", "EventLog");
 			this.SeverityColumn = element.GetValue("severityColumn", "Severity");

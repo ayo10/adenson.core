@@ -18,7 +18,7 @@ namespace Adenson.Log
 		#endregion
 		#region Constructor
 
-		internal FileHandler(Configuration.HandlerElement element) : base()
+		internal FileHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
 			this.FileName = element.GetValue("fileName", "eventlogger.log");
 			string filePath = this.FileName;

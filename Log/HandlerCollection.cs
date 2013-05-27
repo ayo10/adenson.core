@@ -15,7 +15,7 @@ namespace Adenson.Log
 			_settings = settings;
 		}
 
-		internal static HandlerCollection FromConfig(Settings settings, Configuration.HandlerElementCollection handlers)
+		internal static HandlerCollection FromConfig(Settings settings, SettingsConfiguration.HandlerElementCollection handlers)
 		{
 			HandlerCollection result = new HandlerCollection(settings);
 			if (handlers == null || handlers.Count == 0)
@@ -24,7 +24,7 @@ namespace Adenson.Log
 			}
 			else
 			{
-				foreach (Configuration.HandlerElement element in handlers)
+				foreach (SettingsConfiguration.HandlerElement element in handlers)
 				{
 					BaseHandler handler = null;
 					switch (element.Handler)
