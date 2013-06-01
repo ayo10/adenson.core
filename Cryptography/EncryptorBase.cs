@@ -58,20 +58,18 @@ namespace Adenson.Cryptography
 				return null;
 			}
 
-			using (ICryptoTransform transform = this.CreateEncryptor())
-			{
-				using (MemoryStream ms = new MemoryStream())
-				{
-					using (CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write))
-					{
-						using (BinaryWriter sw = new BinaryWriter(cs))
-						{
-							sw.Write(toEncrypt);
-							return ms.GetBuffer();
-						}
-					}
-				}
-			}
+			ICryptoTransform transform = this.CreateEncryptor();
+			MemoryStream ms = new MemoryStream();
+			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write);
+			BinaryWriter sw = new BinaryWriter(cs);
+			sw.Write(toEncrypt);
+			sw.Flush();
+			cs.Dispose();
+
+			var result = ms.GetBuffer();
+			ms.Dispose();
+			ms.Flush();
+			return result;
 		}
 
 		/// <summary>
@@ -88,20 +86,17 @@ namespace Adenson.Cryptography
 
 			ICryptoTransform transform = this.CreateEncryptor();
 
-			using (MemoryStream ms = new MemoryStream())
-			{
-				using (CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write))
-				{
-					using (StreamWriter sw = new StreamWriter(cs))
-					{
-						sw.Write(toEncrypt);
-						sw.Flush();
+			MemoryStream ms = new MemoryStream();
+			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write);
+			StreamWriter sw = new StreamWriter(cs);
+			sw.Write(toEncrypt);
+			sw.Flush();
+			cs.Dispose();
 
-						byte[] result = ms.GetBuffer();
-						return Convert.ToBase64String(result, 0, result.Length);
-					}
-				}
-			}
+			var result = ms.GetBuffer();
+			ms.Dispose();
+			ms.Flush();
+			return Convert.ToBase64String(result, 0, result.Length);
 		}
 
 		/// <summary>
@@ -114,16 +109,12 @@ namespace Adenson.Cryptography
 			ICryptoTransform transform = this.CreateDecryptor();
 
 			byte[] buffer = Convert.FromBase64String(toDecrypt);
-			using (MemoryStream ms = new MemoryStream(buffer))
-			{
-				using (CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Read))
-				{
-					using (StreamReader sr = new StreamReader(cs))
-					{
-						return sr.ReadToEnd();
-					}
-				}
-			}
+			MemoryStream ms = new MemoryStream(buffer);
+			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Read);
+			StreamReader sr = new StreamReader(cs);
+			var result = sr.ReadToEnd();
+			sr.Dispose();
+			return result;
 		}
 
 		/// <summary>
@@ -135,15 +126,13 @@ namespace Adenson.Cryptography
 		{
 			ICryptoTransform transform = this.CreateDecryptor();
 
-			using (MemoryStream ms = new MemoryStream(toDecrypt))
-			{
-				using (CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Read))
-				{
-					byte[] buffer = new byte[cs.Length];
-					cs.Write(buffer, 0, buffer.Length);
-					return buffer;
-				}
-			}
+			MemoryStream ms = new MemoryStream(toDecrypt);
+			CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Read);
+
+			byte[] buffer = new byte[cs.Length];
+			cs.Write(buffer, 0, buffer.Length);
+			cs.Dispose();
+			return buffer;
 		}
 
 		/// <summary>
