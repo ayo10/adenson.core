@@ -221,30 +221,26 @@ namespace System.IO
 				throw new ArgumentNullException("stream");
 			}
 
-			MemoryStream ms = stream as MemoryStream;
-			bool ours = false;
-			if (ms == null)
+			MemoryStream memoryStream = stream as MemoryStream;
+			if (memoryStream == null)
 			{
-				ms = new MemoryStream();
-				ours = true;
-				stream.Seek(0, SeekOrigin.Begin);
-				byte[] buffer = new byte[1024];
-				int len;
-				while ((len = stream.Read(buffer, 0, 1024)) > 0)
+				using (memoryStream = new MemoryStream())
 				{
-					ms.Write(buffer, 0, len);
+					long position = stream.Position;
+					byte[] buffer = new byte[1024];
+					int len;
+					while ((len = stream.Read(buffer, 0, 1024)) > 0)
+					{
+						memoryStream.Write(buffer, 0, len);
+					}
+
+					return memoryStream.ToArray();
 				}
-
-				stream.Close();
 			}
-
-			var result = ms.ToArray();
-			if (ours)
+			else
 			{
-				ms.Dispose();
+				return memoryStream.ToArray();
 			}
-
-			return result;
 		}
 
 		/// <summary>

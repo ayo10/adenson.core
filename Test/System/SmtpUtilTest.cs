@@ -2,7 +2,7 @@ using System;
 using System.Net.Mail;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest
+namespace Adenson.CoreTest.Sys
 {
 	[TestFixture]
 	public class SmtpUtilTest
@@ -20,9 +20,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for Send
-		///</summary>
 		[Test]
 		public void SendTest1()
 		{
@@ -36,9 +33,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for Send
-		///</summary>
 		[Test]
 		public void SendTest3()
 		{
@@ -48,9 +42,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for Send
-		///</summary>
 		[Test]
 		public void SendTest4()
 		{
@@ -59,9 +50,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for Send
-		///</summary>
 		[Test]
 		public void SendTest5()
 		{
@@ -74,9 +62,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for Send
-		///</summary>
 		[Test]
 		public void SendTest6()
 		{
@@ -89,9 +74,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest()
 		{
@@ -105,9 +87,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest1()
 		{
@@ -121,9 +100,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest2()
 		{
@@ -133,9 +109,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest3()
 		{
@@ -144,9 +117,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest4()
 		{
@@ -159,9 +129,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for SendAsync
-		///</summary>
 		[Test]
 		public void SendAsyncTest5()
 		{
@@ -174,9 +141,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("A method that does not return a value cannot be verified.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest()
 		{
@@ -193,9 +157,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest2()
 		{
@@ -212,9 +173,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest3()
 		{
@@ -227,9 +185,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest4()
 		{
@@ -241,9 +196,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest5()
 		{
@@ -259,9 +211,6 @@ namespace Adenson.CoreTest
 			Assert.Inconclusive("Verify the correctness of this test method.");
 		}
 
-		/// <summary>
-		///A test for TrySend
-		///</summary>
 		[Test]
 		public void TrySendTest6()
 		{

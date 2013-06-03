@@ -8,6 +8,8 @@ namespace System.Collections.Generic
 	/// </summary>
 	public static class Extensions
 	{
+		#region Methods
+
 		/// <summary>
 		/// Adds the value with the specified key if the key exists already in the dictionary, else replaces the key's current value with the specified <paramref name="value"/>.
 		/// </summary>
@@ -117,7 +119,7 @@ namespace System.Collections.Generic
 		/// <param name="array1">The frst array</param>
 		/// <param name="array2">The second array</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool SameAs<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
+		public static bool IsEquivalentTo<T>(this IEnumerable<T> array1, IEnumerable<T> array2)
 		{
 			if (Object.ReferenceEquals(array1, array2))
 			{
@@ -155,7 +157,7 @@ namespace System.Collections.Generic
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
 		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
 		/// <exception cref="ArgumentNullException">If array1 is null or array2 is null and they are both not null.</exception>
-		public static bool SameAs(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
+		public static bool IsEquivalentTo(this IEnumerable<string> array1, IEnumerable<string> array2, StringComparison comparisonType)
 		{
 			if (Object.ReferenceEquals(array1, array2))
 			{
@@ -193,5 +195,64 @@ namespace System.Collections.Generic
 		{
 			return (values == null) || (values.Count() == 0);
 		}
+
+		/// <summary>
+		/// Merges the content of <paramref name="value"/> with the contents of <paramref name="other"/>, returning a new <see cref="IEnumerable"/> instance.
+		/// </summary>
+		/// <param name="value">The value to merge.</param>
+		/// <param name="other">The other value to merge.</param>
+		/// <returns>A new <see cref="IEnumerable"/> instance containing contents of <paramref name="value"/> and <paramref name="other"/>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
+		public static T[] MergeWith<T>(this T[] value, T[] other)
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			if (other == null)
+			{
+				throw new ArgumentNullException("other");
+			}
+
+			T[] result = new T[value.Length + other.Length];
+			value.CopyTo(result, 0);
+			other.CopyTo(result, value.Length);
+			return result;
+		}
+
+		/// <summary>
+		/// Merges the content of <paramref name="value"/> with the contents of <paramref name="other"/>, returning a new <see cref="IEnumerable"/> instance.
+		/// </summary>
+		/// <param name="value">The value to merge.</param>
+		/// <param name="other">The other value to merge.</param>
+		/// <returns>A new <see cref="IEnumerable"/> instance containing contents of <paramref name="value"/> and <paramref name="other"/>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
+		public static IEnumerable<T> MergeWith<T>(this IEnumerable<T> value, IEnumerable<T> other)
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			if (other == null)
+			{
+				throw new ArgumentNullException("other");
+			}
+
+			MergeEnumerable<T> list = new MergeEnumerable<T>();
+			list.AddRange(value);
+			list.AddRange(other);
+			return list;
+		}
+
+		#endregion
+		#region Inner Class
+
+		private class MergeEnumerable<T> : List<T>
+		{
+		}
+
+		#endregion
 	}
 }

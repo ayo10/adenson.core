@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Adenson.Cryptography
@@ -6,15 +7,17 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Triple Data Encryption Standard algorithm.
 	/// </summary>
-	public sealed class TripleDES : EncryptorBase
+	public sealed class TripleDes : BaseCrypt
 	{
 		#region Constructor
 
 		/// <summary>
 		/// Initializes a new instance of the TripleDES class
 		/// </summary>
-		public TripleDES() : base()
+		public TripleDes() : base()
 		{
+			this.IV = this.IV.ToList().Take(8).ToArray();
+			this.Key = this.Key.ToList().Take(24).ToArray();
 		}
 
 		/// <summary>
@@ -22,7 +25,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		public TripleDES(byte[] key, byte[] iv) : base(key, iv)
+		public TripleDes(byte[] key, byte[] iv) : base(key, iv)
 		{
 		}
 

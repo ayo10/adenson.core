@@ -59,7 +59,7 @@ namespace Adenson.CoreTest.Log
 			{
 				var els = prf.Elapsed;
 				Assert.IsTrue(els.TotalSeconds >= 0 && els.TotalSeconds <= 1);
-				System.Threading.Thread.Sleep(1000);
+				global::System.Threading.Thread.Sleep(1000);
 				els = prf.Elapsed;
 				Assert.IsTrue(els.TotalSeconds > 1 && els.TotalSeconds <= 2);
 			}

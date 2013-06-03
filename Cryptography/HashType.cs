@@ -5,7 +5,7 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Types of hash algorithms to use
 	/// </summary>
-	public enum HashAlgorithmType
+	public enum HashType
 	{
 		/// <summary>
 		/// Perform no hash
@@ -53,8 +53,7 @@ namespace Adenson.Cryptography
 		HMACRIPEMD160,
 
 		/// <summary>
-		/// Implements password-based key derivation functionality, PBKDF2, by using a pseudo-random number generator based on HMACSHA1. WARNING! If a salt is not passed,
-		/// <see cref="Encryptor"/> use a random salt generated using <see cref="RNGCryptoServiceProvider"/> that will change everytime the appdomain the application is running in changes.
+		/// Implements password-based key derivation functionality, PBKDF2, by using a pseudo-random number generator based on HMACSHA1.
 		/// </summary>
 		PBKDF2
 	}

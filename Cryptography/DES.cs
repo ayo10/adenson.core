@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace Adenson.Cryptography
@@ -6,15 +7,17 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Data Encryption Standard (DES) algorithm.
 	/// </summary>
-	public sealed class DES : EncryptorBase
+	public sealed class Des : BaseCrypt
 	{
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the DES class
+		/// Initializes a new instance of the DES class.
 		/// </summary>
-		public DES() : base()
+		public Des() : base()
 		{
+			this.IV = this.IV.ToList().Take(8).ToArray();
+			this.Key = this.Key.ToList().Take(8).ToArray();
 		}
 
 		/// <summary>
@@ -22,7 +25,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		public DES(byte[] key, byte[] iv) : base(key, iv)
+		public Des(byte[] key, byte[] iv) : base(key, iv)
 		{
 		}
 

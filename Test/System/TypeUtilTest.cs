@@ -2,7 +2,7 @@ using System;
 using Adenson.Log;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest
+namespace Adenson.CoreTest.Sys
 {
 	[TestFixture]
 	public class TypeUtilTest

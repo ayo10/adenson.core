@@ -6,3 +6,4 @@ obj
 *.cache
 *.Cache
 *VisualState.xml
+Test/TestResult.xml

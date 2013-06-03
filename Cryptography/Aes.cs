@@ -4,16 +4,19 @@ using System.Security.Cryptography;
 namespace Adenson.Cryptography
 {
 	/// <summary>
-	/// Represents the for the BaseEncryptor implementation of the Rijndael (AES) algorithm.
+	/// Represents the for the BaseEncryptor implementation of the AES algorithm.
 	/// </summary>
-	public sealed class Rijndael : BaseCrypt
+	public sealed class Aes : BaseCrypt
 	{
+		#region Variables
+		private System.Security.Cryptography.Aes _algorithm;
+		#endregion
 		#region Constructor
 
 		/// <summary>
 		/// Initializes a new instance of the Rijndael class
 		/// </summary>
-		public Rijndael() : base()
+		public Aes() : base()
 		{
 		}
 
@@ -22,7 +25,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		public Rijndael(byte[] key, byte[] iv) : base(key, iv)
+		public Aes(byte[] key, byte[] iv) : base(key, iv)
 		{
 		}
 
@@ -34,7 +37,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		public override SymmetricAlgorithm Algorithm
 		{
-			get { return System.Security.Cryptography.Rijndael.Create(); }
+			get { return _algorithm ?? (_algorithm = System.Security.Cryptography.Aes.Create()); }
 		}
 
 		#endregion

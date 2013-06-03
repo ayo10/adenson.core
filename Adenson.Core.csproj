@@ -50,6 +50,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cryptography\Aes.cs" />
+    <Compile Include="Cryptography\CryptUtil.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
     <Compile Include="Log\SettingsConfiguration.cs" />
@@ -77,8 +79,8 @@
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XDocumentSectionHandler.cs" />
     <Compile Include="Configuration\XElementSettingBase.cs" />
-    <Compile Include="Cryptography\EncryptorBase.cs" />
-    <Compile Include="Cryptography\HashAlgorithmType.cs" />
+    <Compile Include="Cryptography\BaseCrypt.cs" />
+    <Compile Include="Cryptography\HashType.cs" />
     <Compile Include="Data\Internal.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
     <Compile Include="Data\OleDbSqlHelper.cs" />
@@ -86,12 +88,10 @@
     <Compile Include="Data\SqlClientHelper.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />
-    <Compile Include="Cryptography\DES.cs" />
-    <Compile Include="Cryptography\EncryptionType.cs" />
-    <Compile Include="Cryptography\Encryptor.cs" />
+    <Compile Include="Cryptography\Des.cs" />
     <Compile Include="Cryptography\KeyFormat.cs" />
     <Compile Include="Cryptography\Rijndael.cs" />
-    <Compile Include="Cryptography\TripleDES.cs" />
+    <Compile Include="Cryptography\TripleDes.cs" />
     <Compile Include="Log\LogMarker.cs" />
     <Compile Include="Log\LogProfiler.cs" />
     <Compile Include="Log\LogEntry.cs" />
