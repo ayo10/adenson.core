@@ -175,4 +175,10 @@
   <data name="CustomHandlerTypeTypeMustBeSpecified" xml:space="preserve">
     <value>Type must be set for custom log handler.</value>
   </data>
+  <data name="GetHashPBKDF2NotSupported" xml:space="preserve">
+    <value>Getting a PBKDF2 hash using this method is unsupported. Use a salt supported version, i.e. GetHash(HashType,byte[],byte[]) instead.</value>
+  </data>
+  <data name="SizeLessOrEqualToZero" xml:space="preserve">
+    <value>The specified size is invalid, must be greater than zero.</value>
+  </data>
 </root>

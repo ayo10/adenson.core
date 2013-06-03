@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest
+namespace Adenson.CoreTest.Sys
 {
 	[TestFixture]
 	public class StringUtilTest

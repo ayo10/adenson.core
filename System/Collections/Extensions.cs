@@ -8,13 +8,15 @@ namespace System.Collections
 	/// </summary>
 	public static class Extensions
 	{
+		#region Methods
+
 		/// <summary>
-		/// Does equality comparism of both arrays, if not same instance, then item by item comparism
+		/// Does equality comparism of both arrays, first by instance, then item by item comparism.
 		/// </summary>
-		/// <param name="array1">The frst array</param>
-		/// <param name="array2">The second array</param>
-		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise</returns>
-		public static bool EqualsTo(this IEnumerable array1, IEnumerable array2)
+		/// <param name="array1">The frst array.</param>
+		/// <param name="array2">The second array.</param>
+		/// <returns>true if elements in array1 are equal and at the same index as elements in array2, false otherwise.</returns>
+		public static bool IsEquivalentTo(this IEnumerable array1, IEnumerable array2)
 		{
 			if (Object.ReferenceEquals(array1, array2))
 			{
@@ -55,5 +57,47 @@ namespace System.Collections
 		{
 			return (values == null) || (values.Cast<object>().Count() == 0);
 		}
+
+		/// <summary>
+		/// Merges the content of <paramref name="value"/> with the contents of <paramref name="other"/>, returning a new <see cref="IEnumerable"/> instance.
+		/// </summary>
+		/// <param name="value">The value to merge.</param>
+		/// <param name="other">The other value to merge.</param>
+		/// <returns>A new <see cref="IEnumerable"/> instance containing contents of <paramref name="value"/> and <paramref name="other"/>.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
+		public static IEnumerable MergeWith(this IEnumerable value, IEnumerable other)
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			if (other == null)
+			{
+				throw new ArgumentNullException("other");
+			}
+
+			MergeEnumerable list = new MergeEnumerable();
+			foreach (object item in value)
+			{
+				list.Add(item);
+			}
+
+			foreach (object item in other)
+			{
+				list.Add(item);
+			}
+
+			return list;
+		}
+
+		#endregion
+		#region Inner Class
+
+		private class MergeEnumerable : ArrayList
+		{
+		}
+
+		#endregion
 	}
 }

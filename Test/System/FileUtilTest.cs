@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest
+namespace Adenson.CoreTest.Sys
 {
 	[TestFixture]
 	public class FileUtilTest
@@ -19,7 +19,7 @@ namespace Adenson.CoreTest
 			Assert.IsTrue(File.Exists(actual));
 			Assert.AreEqual(filePath, actual);
 			byte[] bytes = FileUtil.ReadStream(filePath);
-			buffer.SameAs(bytes);
+			buffer.IsEquivalentTo(bytes);
 		}
 
 		[Test]

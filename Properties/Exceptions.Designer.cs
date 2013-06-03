@@ -143,6 +143,15 @@ namespace Adenson {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Getting a PBKDF2 hash using this method is unsupported. Use a salt supported version, i.e. GetHash(HashType,byte[],byte[]) instead..
+        /// </summary>
+        internal static string GetHashPBKDF2NotSupported {
+            get {
+                return ResourceManager.GetString("GetHashPBKDF2NotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No encryptor with that key exists..
         /// </summary>
         internal static string NoEncryptorExists {
@@ -211,6 +220,15 @@ namespace Adenson {
         internal static string SectionNotDictionarySection {
             get {
                 return ResourceManager.GetString("SectionNotDictionarySection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified size is invalid, must be greater than zero..
+        /// </summary>
+        internal static string SizeLessOrEqualToZero {
+            get {
+                return ResourceManager.GetString("SizeLessOrEqualToZero", resourceCulture);
             }
         }
         
