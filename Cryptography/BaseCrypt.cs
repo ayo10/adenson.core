@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -16,14 +17,14 @@ namespace Adenson.Cryptography
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the EncryptorBase class.
+		/// Initializes a new instance of the <see cref="BaseCrypt"/> class using fixed key and iv (not a good idea, you should provide your own).
 		/// </summary>
 		protected BaseCrypt()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the EncryptorBase class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
+		/// Initializes a new instance of the <see cref="BaseCrypt"/> class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
@@ -45,8 +46,9 @@ namespace Adenson.Cryptography
 		}
 		
 		/// <summary>
-		/// Gets the initialization vector.
+		/// Gets or sets the initialization vector.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "In this case, yes, this should return an array")]
 		public byte[] IV
 		{
 			get { return _iv; }
@@ -54,8 +56,9 @@ namespace Adenson.Cryptography
 		}
 
 		/// <summary>
-		/// Gets the secret key.
+		/// Gets or sets the secret key.
 		/// </summary>
+		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "In this case, yes, this should return an array")]
 		public byte[] Key
 		{
 			get { return _key; }
@@ -68,7 +71,7 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Encrypts the specified byte array
 		/// </summary>
-		/// <param name="toEncrypt">The byte array to encrypt</param>
+		/// <param name="value">The byte array to encrypt</param>
 		/// <returns>The encrypted value</returns>
 		public byte[] Encrypt(byte[] value)
 		{
@@ -78,54 +81,52 @@ namespace Adenson.Cryptography
 			}
 
 			ICryptoTransform transform = this.CreateTransform(true);
-			using (MemoryStream msEncrypt = new MemoryStream())
+			using (MemoryStream msout = new MemoryStream())
 			{
-				using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, transform, CryptoStreamMode.Write))
+				using (CryptoStream cs = new CryptoStream(msout, transform, CryptoStreamMode.Write))
 				{
-					using (BinaryWriter swEncrypt = new System.IO.BinaryWriter(csEncrypt))
+					using (BinaryWriter bw = new BinaryWriter(cs))
 					{
-						swEncrypt.Write(value);
+						bw.Write(value);
 					}
 
-					return msEncrypt.ToArray();
+					return msout.ToArray();
 				}
 			}
 		}
 
 		/// <summary>
-		/// Decrypts specified encrypted byte array
+		/// Decrypts specified encrypted byte array.
 		/// </summary>
-		/// <param name="toDecrypt">The byte array to decrypt</param>
-		/// <returns>Decrypted byte array</returns>
+		/// <param name="value">The byte array to decrypt.</param>
+		/// <returns>Decrypted byte array.</returns>
 		public byte[] Decrypt(byte[] value)
 		{
 			ICryptoTransform transform = this.CreateTransform(false);
 
-			using (MemoryStream msDecrypt = new MemoryStream(value))
+			using (MemoryStream msin = new MemoryStream(value))
 			{
-				using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, transform, CryptoStreamMode.Read))
+				using (CryptoStream cs = new CryptoStream(msin, transform, CryptoStreamMode.Read))
 				{
-					using (MemoryStream output = new MemoryStream())
-					{
-						var buffer = new byte[1024];
-						var read = csDecrypt.Read(buffer, 0, buffer.Length);
-						while (read > 0)
-						{
-							output.Write(buffer, 0, read);
-							read = csDecrypt.Read(buffer, 0, buffer.Length);
-						}
-
-						csDecrypt.Flush();
-						return output.ToArray();
-					}
+					return FileUtil.ReadStream(cs);
 				}
 			}
 		}
 
 		/// <summary>
-		/// 
+		/// Disposes <see cref="Algorithm"/>.
 		/// </summary>
 		public void Dispose()
+		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+		
+		/// <summary>
+		/// Disposes <see cref="Algorithm"/>.
+		/// </summary>
+		/// <param name="disposing">Doesn't matter.</param>
+		protected virtual void Dispose(bool disposing)
 		{
 			if (this.Algorithm != null)
 			{

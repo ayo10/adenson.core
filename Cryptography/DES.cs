@@ -12,7 +12,7 @@ namespace Adenson.Cryptography
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the DES class.
+		/// Initializes a new instance of the <see cref="Des"/> class using fixed key and iv (not a good idea, you should provide your own).
 		/// </summary>
 		public Des() : base()
 		{
@@ -21,7 +21,7 @@ namespace Adenson.Cryptography
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the DES class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
+		/// Initializes a new instance of the <see cref="Des"/> class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
