@@ -199,6 +199,7 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Merges the content of <paramref name="value"/> with the contents of <paramref name="other"/>, returning a new <see cref="IEnumerable"/> instance.
 		/// </summary>
+		/// <typeparam name="T">The type of items.</typeparam>
 		/// <param name="value">The value to merge.</param>
 		/// <param name="other">The other value to merge.</param>
 		/// <returns>A new <see cref="IEnumerable"/> instance containing contents of <paramref name="value"/> and <paramref name="other"/>.</returns>
@@ -224,6 +225,7 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Merges the content of <paramref name="value"/> with the contents of <paramref name="other"/>, returning a new <see cref="IEnumerable"/> instance.
 		/// </summary>
+		/// <typeparam name="T">The type of items.</typeparam>
 		/// <param name="value">The value to merge.</param>
 		/// <param name="other">The other value to merge.</param>
 		/// <returns>A new <see cref="IEnumerable"/> instance containing contents of <paramref name="value"/> and <paramref name="other"/>.</returns>

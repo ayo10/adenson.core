@@ -19,6 +19,7 @@
             <Acronym>RIPEMD</Acronym>
             <Acronym>SHA</Acronym>
             <Acronym>HMACRIPEMD</Acronym>
-         </CasingExceptions>
+			<Acronym>PBKDF</Acronym>
+		 </CasingExceptions>
       </Acronyms>
 </Dictionary>

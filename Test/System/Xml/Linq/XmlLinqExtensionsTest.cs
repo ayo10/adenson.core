@@ -11,7 +11,7 @@ namespace Adenson.CoreTest.System.Xml.Linq
 		public void ElementTest()
 		{
 			XContainer source = XDocument.Parse("<eLem>1</eLem>");
-			Assert.AreEqual("eLem", source.Element("ELEM", StringComparison.CurrentCultureIgnoreCase).Name);
+			Assert.AreEqual("eLem", source.Element("ELEM", StringComparison.CurrentCultureIgnoreCase).Name.LocalName);
 		}
 
 		[Test]
@@ -20,11 +20,12 @@ namespace Adenson.CoreTest.System.Xml.Linq
 			XElement source = XDocument.Parse("<root><elem>1</elem></root>").Root;
 			Assert.AreEqual(1, source.GetValue<int>("elem"));
 
-			source = XDocument.Parse("<elem>1</elem>").Root;
+			source = XDocument.Parse("<root><elem>1</elem></root>").Root;
 			Assert.AreEqual(1, source.GetValue<int>("elem"));
 
-			source = XDocument.Parse("<elem attribute=\"1\" />").Root;
-			Assert.AreEqual(1, source.GetValue<int>("attribute"));
+			source = XDocument.Parse("<elem attrib1=\"1\" attrib2=\"some string\" />").Root;
+			Assert.AreEqual(1, source.GetValue<int>("attrib1"));
+			Assert.AreEqual("some string", source.GetValue("attrib2"));
 		}
 
 		[Test]
