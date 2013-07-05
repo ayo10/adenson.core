@@ -11,7 +11,6 @@ namespace Adenson.Log
 	public sealed class FileHandler : BaseHandler, IDisposable
 	{
 		#region Variables
-		private bool allowWrite = true;
 		private string folder;
 		private StreamWriter writer;
 		private DateTime fileDate = DateTime.Now;
@@ -20,8 +19,7 @@ namespace Adenson.Log
 
 		internal FileHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
-			this.FileName = element.GetValue("fileName", "eventlogger.log");
-			string filePath = this.FileName;
+			string filePath = element.GetValue("fileName", "eventlogger.log");
 			if (!Path.IsPathRooted(filePath))
 			{
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
@@ -30,8 +28,11 @@ namespace Adenson.Log
 			folder = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(folder))
 			{
-				allowWrite = false;
 				Trace.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
+			}
+			else
+			{
+				this.FilePath = filePath;
 			}
 		}
 
@@ -39,9 +40,9 @@ namespace Adenson.Log
 		#region Properties
 
 		/// <summary>
-		/// Gets the file name used to log.
+		/// Gets the full file name of the file into which the log will be written into.
 		/// </summary>
-		public string FileName
+		public string FilePath
 		{ 
 			get; 
 			private set; 
@@ -57,7 +58,7 @@ namespace Adenson.Log
 		/// <returns>True if the log was written successfully, false otherwise.</returns>
 		public override bool Write(LogEntry entry)
 		{
-			if (!allowWrite)
+			if (String.IsNullOrEmpty(this.FilePath))
 			{
 				return false;
 			}
@@ -70,8 +71,8 @@ namespace Adenson.Log
 					writer.Flush();
 					writer.Close();
 
-					string fileName = Path.GetFileNameWithoutExtension(this.FileName);
-					string extension = Path.GetExtension(this.FileName);
+					string fileName = Path.GetFileNameWithoutExtension(this.FilePath);
+					string extension = Path.GetExtension(this.FilePath);
 					string oldNewFileName = String.Concat(fileName, "-", fileDate.ToString("yyyyMMdd", CultureInfo.CurrentCulture), extension);
 					string oldNewFilePath = Path.Combine(folder, oldNewFileName);
 					if (!File.Exists(oldNewFilePath))
@@ -80,7 +81,7 @@ namespace Adenson.Log
 					}
 				}
 
-				writer = new StreamWriter(this.FileName);
+				writer = new StreamWriter(this.FilePath);
 			}
 
 			writer.WriteLine(this.Formatter.Format(entry));
