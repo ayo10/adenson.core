@@ -10,10 +10,6 @@ namespace Adenson.Cryptography
 	/// </summary>
 	public static class CryptUtil
 	{
-		#region Variables
-		private static byte[] randomBytes = GenerateRandomBytes(32);
-		private static byte[] fixedBytes24 = new byte[] { 82, 204, 235, 105, 52, 160, 47, 204, 213, 109, 114, 52, 186, 53, 87, 5, 138, 42, 144, 193, 177, 172, 227, 21 };
-		#endregion
 		#region Methods
 
 		/// <summary>
@@ -33,16 +29,18 @@ namespace Adenson.Cryptography
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
 		/// <returns>Decrypted array.</returns>
+		/// <exception cref="CryptographicException">When <paramref name="key"/> and/or <paramref name="iv"/> are not the same that were used to encrypt the value -OR- the value is not an encrypted value to begin with.</exception>
 		public static byte[] Decrypt(byte[] value, byte[] key, byte[] iv)
 		{
 			return new Rijndael(key, iv).Decrypt(value);
 		}
 
 		/// <summary>
-		/// Encrypts the specified byte array using AES.
+		/// Encrypts the specified byte array using AES (using built-in key and iv values).
 		/// </summary>
 		/// <param name="value">The byte array to encrypt.</param>
 		/// <returns>Encrypted array.</returns>
+		/// <remarks>You should be calling <see cref="Encrypt(byte[], byte[], byte[])"/> suppling your own secret key and iv.</remarks>
 		public static byte[] Encrypt(byte[] value)
 		{
 			return new Rijndael().Encrypt(value);
@@ -93,9 +91,10 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Gets the hash of specified bit array using specified hash algorithm type.
 		/// </summary>
-		/// <param name="value">The bit array to hash.</param>
 		/// <param name="hashType">The hash algorithm to use.</param>
+		/// <param name="value">The bit array to hash.</param>
 		/// <returns>The bit array hash.</returns>
+		/// <exception cref="ArgumentException">If <paramref name="hashType"/> is either <see cref="HashType.HMACRIPEMD160"/>, <see cref="HashType.MACTripleDES"/> or <see cref="HashType.PBKDF2"/>.</exception>
 		public static byte[] GetHash(HashType hashType, byte[] value)
 		{
 			if (value == null)
@@ -108,20 +107,18 @@ namespace Adenson.Cryptography
 				return value;
 			}
 
-			System.Security.Cryptography.HashAlgorithm algorithm = null;
+			HashAlgorithm algorithm = null;
 			switch (hashType)
 			{
 				case HashType.HMACRIPEMD160:
-					algorithm = new HMACRIPEMD160(fixedBytes24);
-					break;
+					throw new ArgumentException(StringUtil.Format(Exceptions.GetHashArgNotSupported, hashType), "hashType");
 				case HashType.MACTripleDES:
-					algorithm = new MACTripleDES(fixedBytes24);
-					break;
+					throw new ArgumentException(StringUtil.Format(Exceptions.GetHashArgNotSupported, hashType), "hashType");
 				case HashType.MD5:
 					algorithm = MD5.Create();
 					break;
 				case HashType.PBKDF2:
-					throw new ArgumentException(Exceptions.GetHashPBKDF2NotSupported, "hashAlgorithm");
+					throw new ArgumentException(StringUtil.Format(Exceptions.GetHashArgNotSupported, hashType), "hashType");
 				case HashType.RIPEMD160:
 					algorithm = RIPEMD160.Create();
 					break;
@@ -150,10 +147,11 @@ namespace Adenson.Cryptography
 		/// <summary>
 		/// Gets the hash of specified bit array using specified hash algorithm type and salt.
 		/// </summary>
+		/// <param name="hashType">The hash algorithm to use.</param>
 		/// <param name="value">The bit array to hash.</param>
 		/// <param name="salt">The salt.</param>
-		/// <param name="hashType">The hash algorithm to use.</param>
 		/// <returns>The bit array hash.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="salt"/> is null.</exception>
 		public static byte[] GetHash(HashType hashType, byte[] value, byte[] salt)
 		{
 			if (value == null)
@@ -170,18 +168,30 @@ namespace Adenson.Cryptography
 			{
 				return value;
 			}
-
-			switch (hashType)
+			else if (hashType == HashType.PBKDF2)
 			{
-				case HashType.None:
-					return value;
-				case HashType.PBKDF2:
-					using (var g = new Rfc2898DeriveBytes(value, salt, 1000))
-					{
-						return g.GetBytes(32);
-					}
-				default:
-					return CryptUtil.GetHash(hashType, value.MergeWith(salt));
+				using (var g = new Rfc2898DeriveBytes(value, salt, 5000))
+				{
+					return g.GetBytes(32);
+				}
+			}
+			else if (hashType == HashType.HMACRIPEMD160)
+			{
+				using (var g = new HMACRIPEMD160(salt))
+				{
+					return g.ComputeHash(value);
+				}
+			}
+			else if (hashType == HashType.MACTripleDES)
+			{
+				using (var g = new MACTripleDES(salt))
+				{
+					return g.ComputeHash(value);
+				}
+			}
+			else
+			{
+				return CryptUtil.GetHash(hashType, value.MergeWith(salt));
 			}
 		}
 

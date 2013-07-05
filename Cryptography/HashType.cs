@@ -8,43 +8,44 @@ namespace Adenson.Cryptography
 	public enum HashType
 	{
 		/// <summary>
-		/// Perform no hash
+		/// Performs no hash.
 		/// </summary>
 		None,
 
 		/// <summary>
-		/// Message-Digest algorithm 5 (NOT RECOMMENDED FOR password hashing)
+		/// Message-Digest algorithm 5.
 		/// </summary>
 		MD5,
 
 		/// <summary>
-		/// Secure Hash Algorithm 1 (NOT RECOMMENDED FOR password hashing)
+		/// Secure Hash Algorithm 1.
 		/// </summary>
 		SHA1,
 
 		/// <summary>
-		/// Computes a hash using the Secure Hash Algorithm 256
+		/// Computes a hash using the Secure Hash Algorithm 256.
 		/// </summary>
 		SHA256,
 
 		/// <summary>
-		/// Computes a hash using the Secure Hash Algorithm 384
+		/// Computes a hash using the Secure Hash Algorithm 384.
 		/// </summary>
 		SHA384,
 
 		/// <summary>
-		/// Computes a hash using the Secure Hash Algorithm 512
+		/// Computes a hash using the Secure Hash Algorithm 512.
 		/// </summary>
 		SHA512,
 
 		/// <summary>
-		/// Computes a hash using the RACE Integrity Primitives Evaluation Message Digest 160
+		/// Computes a hash using the RACE Integrity Primitives Evaluation Message Digest 160.
 		/// </summary>
 		RIPEMD160,
 
 		/// <summary>
 		/// Computes a Message Authentication Code (MAC) using TripleDES.
 		/// </summary>
+		/// <remarks>Use a byte array of at least length of 16.</remarks>
 		MACTripleDES,
 
 		/// <summary>
@@ -53,7 +54,7 @@ namespace Adenson.Cryptography
 		HMACRIPEMD160,
 
 		/// <summary>
-		/// Implements password-based key derivation functionality, PBKDF2, by using a pseudo-random number generator based on HMACSHA1.
+		/// Implements password-based key derivation functionality, PBKDF2, by using a pseudo-random number generator based on HMACSHA1 and interations of 5000.
 		/// </summary>
 		PBKDF2
 	}
