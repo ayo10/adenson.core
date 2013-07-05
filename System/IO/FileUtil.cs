@@ -226,7 +226,6 @@ namespace System.IO
 			{
 				using (memoryStream = new MemoryStream())
 				{
-					long position = stream.Position;
 					byte[] buffer = new byte[1024];
 					int len;
 					while ((len = stream.Read(buffer, 0, 1024)) > 0)

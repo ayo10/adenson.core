@@ -9,11 +9,18 @@ namespace Adenson.Log
 	/// </summary>
 	public sealed class HandlerCollection : Collection<BaseHandler>
 	{
+		#region Variables
 		private Settings _settings;
+		#endregion
+		#region Constructor
+
 		internal HandlerCollection(Settings settings)
 		{
 			_settings = settings;
 		}
+
+		#endregion
+		#region Methods
 
 		internal static HandlerCollection FromConfig(Settings settings, SettingsConfiguration.HandlerElementCollection handlers)
 		{
@@ -54,7 +61,7 @@ namespace Adenson.Log
 							handler = TypeUtil.CreateInstance<BaseHandler>(element.CustomType);
 							break;
 					}
-;
+
 					if (!String.IsNullOrWhiteSpace(element.Formatter))
 					{
 						handler.Formatter = TypeUtil.CreateInstance<BaseFormatter>(element.Formatter);
@@ -98,5 +105,7 @@ namespace Adenson.Log
 			item.Settings = _settings;
 			base.SetItem(index, item);
 		}
+
+		#endregion
 	}
 }
