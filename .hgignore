@@ -1,0 +1,9 @@
+syntax: glob
+bin
+obj
+*.suo
+*.user
+*.cache
+*.Cache
+*VisualState.xml
+Test/TestResult.xml
