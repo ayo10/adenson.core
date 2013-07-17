@@ -62,6 +62,7 @@ namespace Adenson.Log
 							break;
 					}
 
+					handler.Severity = element.Severity;
 					if (!String.IsNullOrWhiteSpace(element.Formatter))
 					{
 						handler.Formatter = TypeUtil.CreateInstance<BaseFormatter>(element.Formatter);

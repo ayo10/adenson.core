@@ -76,6 +76,15 @@ namespace Adenson.Log
 			/// <summary>
 			/// Gets the value.
 			/// </summary>
+			[ConfigurationProperty("severity", IsRequired = false, IsKey = false)]
+			public Severity Severity
+			{
+				get { return (Severity)this["severity"]; }
+			}
+
+			/// <summary>
+			/// Gets the value.
+			/// </summary>
 			[ConfigurationProperty("customType", IsRequired = false, IsKey = true)]
 			public string CustomType
 			{

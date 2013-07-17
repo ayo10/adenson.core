@@ -144,12 +144,6 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\FxCop\FxCop.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
+  <Import Project="$(MSBuildExtensionsPath32)\FxCop\FxCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
 </Project>
