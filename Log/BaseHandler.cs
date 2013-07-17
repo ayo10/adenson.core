@@ -9,6 +9,7 @@ namespace Adenson.Log
 	{
 		#region Variables
 		private BaseFormatter _formatter;
+		private Severity? _severity;
 		#endregion
 		#region Constructor
 
@@ -29,6 +30,15 @@ namespace Adenson.Log
 		{
 			get { return _formatter ?? this.Settings.Formatter; }
 			set { _formatter = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the severity at which this handler writes (should be equal or greater than the Logger settings severity).
+		/// </summary>
+		public Severity Severity
+		{
+			get { return _severity ?? this.Settings.Severity; }
+			set { _severity = value; }
 		}
 
 		/// <summary>

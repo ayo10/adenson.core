@@ -354,6 +354,11 @@ namespace Adenson.Log
 
 			foreach (BaseHandler handler in _settings.Handlers)
 			{
+				if ((int)handler.Severity > (int)severity)
+				{
+					continue;
+				}
+
 				handler.Write(entry);
 			}
 		}
