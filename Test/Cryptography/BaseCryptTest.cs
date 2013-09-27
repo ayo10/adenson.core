@@ -30,8 +30,8 @@ namespace Adenson.CoreTest.Cryptography
 		[Test]
 		public void EncryptDecryptWithKeysTest()
 		{
-			byte[] iv = CryptUtil.GenerateRandomBytes(8);
-			byte[] key = CryptUtil.GenerateRandomBytes(16);
+			byte[] iv = CryptUtil.GenerateRandom(8);
+			byte[] key = CryptUtil.GenerateRandom(16);
 			T crypt = this.GetCrypt();
 
 			string expected = "Test test test test";
