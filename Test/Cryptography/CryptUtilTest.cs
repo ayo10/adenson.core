@@ -27,8 +27,8 @@ namespace Adenson.CoreTest.Cryptography
 			string decryptedSting = Encoding.Default.GetString(decrypted);
 			Assert.AreEqual(expected, decryptedSting);
 
-			byte[] iv = CryptUtil.GenerateRandomBytes(16);
-			byte[] key = CryptUtil.GenerateRandomBytes(32);
+			byte[] iv = CryptUtil.GenerateRandom(16);
+			byte[] key = CryptUtil.GenerateRandom(32);
 			byte[] encrypted2 = CryptUtil.Encrypt(value, key, iv);
 			Assert.AreNotEqual(value, encrypted);
 			Assert.AreNotEqual(encrypted2, encrypted, "Different key and iv, different encryption.");
@@ -44,7 +44,7 @@ namespace Adenson.CoreTest.Cryptography
 		public void GenerateRandomBytesTest()
 		{
 			// Uses RNGCryptoServiceProvider which generates random bytes, every single time. Since we have no control over that, all we can do is to tst to make sure we are getting values.
-			byte[] bytes = CryptUtil.GenerateRandomBytes(16);
+			byte[] bytes = CryptUtil.GenerateRandom(16);
 			Assert.IsNotNull(bytes);
 			Assert.AreEqual(16, bytes.Length);
 		}
@@ -100,7 +100,7 @@ namespace Adenson.CoreTest.Cryptography
 		public void GetHashWithSaltTest()
 		{
 			byte[] value = Encoding.Default.GetBytes("Test test test test");
-			byte[] salt = CryptUtil.GenerateRandomBytes(24);
+			byte[] salt = CryptUtil.GenerateRandom(24);
 			byte[] hash = CryptUtil.GetHash(HashType.None, value, salt);
 			Assert.AreEqual(value, hash, "HashType.None should return the value, regardless.");
 
@@ -108,61 +108,61 @@ namespace Adenson.CoreTest.Cryptography
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.HMACRIPEMD160, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.HMACRIPEMD160, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.HMACRIPEMD160, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.MACTripleDES, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.MACTripleDES, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.MACTripleDES, value, CryptUtil.GenerateRandomBytes(16)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.MACTripleDES, value, CryptUtil.GenerateRandom(16)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.MD5, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.MD5, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.MD5, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.MD5, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.MD5, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.PBKDF2, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.PBKDF2, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.PBKDF2, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.PBKDF2, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.RIPEMD160, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.RIPEMD160, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.RIPEMD160, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.RIPEMD160, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.RIPEMD160, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.SHA1, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA1, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.SHA1, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA1, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA1, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.SHA256, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA256, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.SHA256, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA256, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA256, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.SHA384, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA384, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.SHA384, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA384, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA384, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			hash = CryptUtil.GetHash(HashType.SHA512, value, salt);
 			Assert.IsNotNull(hash);
 			Assert.AreNotEqual(value, hash);
 			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA512, value), "Salted and unsalted versions should always return different values.");
 			Assert.AreEqual(hash, CryptUtil.GetHash(HashType.SHA512, value, salt), "Hash should always return the same value");
-			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA512, value, CryptUtil.GenerateRandomBytes(8)), "Different salt, different result.");
+			Assert.AreNotEqual(hash, CryptUtil.GetHash(HashType.SHA512, value, CryptUtil.GenerateRandom(8)), "Different salt, different result.");
 
 			Assert.Throws<ArgumentNullException>(delegate { CryptUtil.GetHash(HashType.HMACRIPEMD160, value, null); }, "Salt is required.");
 		}
