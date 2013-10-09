@@ -74,7 +74,15 @@ namespace Adenson.Log
 					break;
 			}
 
-			EventLog.WriteEntry(this.Source, this.Formatter.Format(entry), eventLogType);
+			try
+			{
+				EventLog.WriteEntry(this.Source, this.Formatter.Format(entry), eventLogType);
+			}
+			catch
+			{
+				return false;
+			}
+
 			return true;
 		}
 
