@@ -331,11 +331,6 @@ namespace Adenson.Log
 
 		internal void Write(Severity severity, string message, params object[] arguments)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(message))
-			{
-				throw new ArgumentNullException("message");
-			}
-
 			if (_settings.Handlers.Count == 0)
 			{
 				return;

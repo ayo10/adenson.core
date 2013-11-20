@@ -6,7 +6,6 @@ using System.Data;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Adenson.Data
 {
@@ -292,7 +291,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteDataSet run on each command</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
-		public virtual DataSet[] ExecuteDataSet(params IDbCommand[] commands)
+		public virtual DataSet[] ExecuteDataSets(params IDbCommand[] commands)
 		{
 			return this.Execute<DataSet>(ExecuteType.Dataset, commands);
 		}
@@ -304,7 +303,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteDataSet run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		public virtual DataSet[] ExecuteDataSet(params string[] commandTexts)
+		public virtual DataSet[] ExecuteDataSets(params string[] commandTexts)
 		{
 			return this.Execute<DataSet>(ExecuteType.Dataset, commandTexts);
 		}
@@ -428,7 +427,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
-		public virtual int[] ExecuteNonQuery(params IDbCommand[] commands)
+		public virtual int[] ExecuteNonQueries(params IDbCommand[] commands)
 		{
 			return this.Execute<int>(ExecuteType.NonQuery, commands);
 		}
@@ -440,7 +439,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual int[] ExecuteNonQuery(params string[] commandTexts)
+		public virtual int[] ExecuteNonQueries(params string[] commandTexts)
 		{
 			return this.Execute<int>(ExecuteType.NonQuery, commandTexts);
 		}
@@ -451,9 +450,9 @@ namespace Adenson.Data
 		/// <param name="stream">The stream containing the commmand text to run.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
-		public virtual int[] ExecuteNonQuery(StreamReader stream)
+		public virtual int[] ExecuteNonQueries(StreamReader stream)
 		{
-			return this.ExecuteNonQuery(stream, Environment.NewLine);
+			return this.ExecuteNonQueries(stream, Environment.NewLine);
 		}
 
 		/// <summary>
@@ -463,7 +462,7 @@ namespace Adenson.Data
 		/// <param name="delimiter">The delimiter to use.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
-		public virtual int[] ExecuteNonQuery(StreamReader stream, string delimiter)
+		public virtual int[] ExecuteNonQueries(StreamReader stream, string delimiter)
 		{
 			if (stream == null)
 			{
@@ -471,7 +470,7 @@ namespace Adenson.Data
 			}
 
 			string[] scripts = stream.ReadToEnd().Split(new string[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
-			return this.ExecuteNonQuery(scripts);
+			return this.ExecuteNonQueries(scripts);
 		}
 
 		#endregion
@@ -594,7 +593,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteScalar run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
-		public virtual object[] ExecuteScalar(params IDbCommand[] commands)
+		public virtual object[] ExecuteScalars(params IDbCommand[] commands)
 		{
 			return this.Execute<object>(ExecuteType.Scalar, commands);
 		}
@@ -606,7 +605,7 @@ namespace Adenson.Data
 		/// <returns>The result of each ExecuteScalar run on each command text</returns>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual object[] ExecuteScalar(params string[] commandTexts)
+		public virtual object[] ExecuteScalars(params string[] commandTexts)
 		{
 			return this.Execute<object>(ExecuteType.Scalar, commandTexts);
 		}

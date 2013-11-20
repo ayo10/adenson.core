@@ -117,7 +117,7 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
 			DataSet[] actual;
-			actual = target.ExecuteDataSet(commandTexts);
+			actual = target.ExecuteDataSets(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -127,7 +127,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
 			DataSet[] actual;
-			actual = target.ExecuteDataSet(commands);
+			actual = target.ExecuteDataSets(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -149,7 +149,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
 			int[] actual;
-			actual = target.ExecuteNonQuery(commands);
+			actual = target.ExecuteNonQueries(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -169,7 +169,7 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
 			int[] actual;
-			actual = target.ExecuteNonQuery(commandTexts);
+			actual = target.ExecuteNonQueries(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -211,7 +211,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			object[] expected = null; // TODO: Initialize to an appropriate value
 			object[] actual;
-			actual = target.ExecuteScalar(commands);
+			actual = target.ExecuteScalars(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -233,7 +233,7 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			object[] expected = null; // TODO: Initialize to an appropriate value
 			object[] actual;
-			actual = target.ExecuteScalar(commandTexts);
+			actual = target.ExecuteScalars(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
