@@ -148,7 +148,7 @@ namespace Adenson.Data
 		/// <param name="stream">The stream containing the commmand text to run.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
-		public override int[] ExecuteNonQuery(StreamReader stream)
+		public override int[] ExecuteNonQueries(StreamReader stream)
 		{
 			if (stream == null)
 			{
@@ -190,7 +190,7 @@ namespace Adenson.Data
 					sqls.Add(last.Trim());
 				}
 
-				return base.ExecuteNonQuery(sqls.ToArray());
+				return base.ExecuteNonQueries(sqls.ToArray());
 			}
 
 			return new int[] { this.ExecuteNonQuery(text) };

@@ -78,7 +78,7 @@ namespace Adenson.CoreTest.Log
 
 			FileHandler fileHandler = settings.Handlers[5] as FileHandler;
 			Assert.IsNotNull(fileHandler);
-			Assert.AreEqual("filename.woot", fileHandler.FileName);
+			Assert.AreEqual("filename.woot", fileHandler.FilePath);
 
 			TraceHandler traceHandler = settings.Handlers[6] as TraceHandler;
 			Assert.IsNotNull(traceHandler);
