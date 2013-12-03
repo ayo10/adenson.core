@@ -18,6 +18,23 @@ namespace Adenson.CoreTest.Sys
 		}
 
 		[Test]
+		public void GetQuarterTest()
+		{
+			Assert.AreEqual(1, new DateTime(2012, 1, 1).GetQuarter());
+			Assert.AreEqual(1, new DateTime(2012, 2, 1).GetQuarter());
+			Assert.AreEqual(1, new DateTime(2012, 3, 1).GetQuarter());
+			Assert.AreEqual(2, new DateTime(2012, 4, 1).GetQuarter());
+			Assert.AreEqual(2, new DateTime(2012, 5, 1).GetQuarter());
+			Assert.AreEqual(2, new DateTime(2012, 6, 1).GetQuarter());
+			Assert.AreEqual(3, new DateTime(2012, 7, 1).GetQuarter());
+			Assert.AreEqual(3, new DateTime(2012, 8, 1).GetQuarter());
+			Assert.AreEqual(3, new DateTime(2012, 9, 1).GetQuarter());
+			Assert.AreEqual(4, new DateTime(2012, 10, 1).GetQuarter());
+			Assert.AreEqual(4, new DateTime(2012, 11, 1).GetQuarter());
+			Assert.AreEqual(4, new DateTime(2012, 12, 1).GetQuarter());
+		}
+
+		[Test]
 		public void RoundTest()
 		{
 			double value = 9.00233;

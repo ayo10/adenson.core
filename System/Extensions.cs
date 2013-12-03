@@ -65,6 +65,31 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets the quarter based on the month.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <returns>Returns the quarter the month belongs to.</returns>
+		public static short GetQuarter(this DateTime date)
+		{
+			var month = date.Month;
+			short quarter = 1;
+			if (month > 3 && month <= 6)
+			{
+				quarter = 2;
+			}
+			else if (month > 6 && month <= 9)
+			{
+				quarter = 3;
+			}
+			else if (month > 9)
+			{
+				quarter = 4;
+			}
+
+			return quarter;
+		}
+
+		/// <summary>
 		/// Rounds a double-precision floating-point value to a specified number of fractional digits.
 		/// </summary>
 		/// <remarks>All it does is to call Math.Round(value, digits)</remarks>
