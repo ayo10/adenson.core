@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
 using Adenson.Configuration;
 using Adenson.Data;
 
@@ -25,6 +24,7 @@ namespace Adenson.Log
 		/// <param name="element">The element to initialize the class with.</param>
 		internal DatabaseHandler(SettingsConfiguration.HandlerElement element) : base()
 		{
+			this.Connection = element.GetValue("connection", "Logger");
 			this.TableName = element.GetValue("tableName", "EventLog");
 			this.SeverityColumn = element.GetValue("severityColumn", "Severity");
 			this.DateColumn = element.GetValue("dateColumn", "Date");
@@ -36,6 +36,15 @@ namespace Adenson.Log
 
 		#endregion
 		#region Properties
+
+		/// <summary>
+		/// Gets or sets the database connection (string or configuration name).
+		/// </summary>
+		public string Connection
+		{
+			get;
+			set;
+		}
 
 		/// <summary>
 		/// Gets or sets the table name.
@@ -98,7 +107,7 @@ namespace Adenson.Log
 				throw new ArgumentNullException("entry");
 			}
 
-			SqlHelperBase sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get("Logger", true));
+			SqlHelperBase sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get(this.Connection, false));
 			if (sqlHelper == null)
 			{
 				return false;

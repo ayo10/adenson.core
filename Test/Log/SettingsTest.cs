@@ -57,6 +57,7 @@ namespace Adenson.CoreTest.Log
 
 			DatabaseHandler databaseHandler = settings.Handlers[1] as DatabaseHandler;
 			Assert.IsNotNull(databaseHandler);
+			Assert.AreEqual("woot", databaseHandler.Connection);
 			Assert.AreEqual("testdate", databaseHandler.DateColumn);
 			Assert.AreEqual("testmessage", databaseHandler.MessageColumn);
 			Assert.AreEqual("testseverity", databaseHandler.SeverityColumn);

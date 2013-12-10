@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigHelperTest.cs" />
+    <Compile Include="Configuration\ConnectionStringsTest.cs" />
     <Compile Include="Cryptography\AesTest.cs" />
     <Compile Include="Cryptography\BaseCryptTest.cs" />
     <Compile Include="Cryptography\TripleDesTest.cs" />

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Security;
-using System.Text;
 
 namespace Adenson.Log
 {
@@ -39,6 +37,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="entry">The entry to write.</param>
 		/// <returns>True if the log was written successfully, false otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Should not fail regardless of any exception.")]
 		public override bool Write(LogEntry entry)
 		{
 			if (entry == null)
@@ -78,8 +77,9 @@ namespace Adenson.Log
 			{
 				EventLog.WriteEntry(this.Source, this.Formatter.Format(entry), eventLogType);
 			}
-			catch
+			catch (Exception ex)
 			{
+				Debug.WriteLine(StringUtil.ToString(ex, false));
 				return false;
 			}
 

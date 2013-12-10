@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace Adenson.Log
 {
 	/// <summary>
 	/// Represents a log marker
 	/// </summary>
-	#if !DEBUG
-	[DebuggerStepThrough]
-	#endif
 	public sealed class LogMarker : IDisposable
 	{
 		#region Variables
@@ -74,9 +69,10 @@ namespace Adenson.Log
 					string xs = marks.Where(k => k.Key == max).First().Value;
 
 					_profiler.Debug("Markers:");
-					_profiler.Debug("\tAvg: {0}s, Count: {1}", Logger.Round(avg), marks.Count);
-					_profiler.Debug("\tMax: {0}s, {1}", Logger.Round(max), ns ?? "--");
-					_profiler.Debug("\tMin: {0}s, {1}", Logger.Round(min), xs ?? "--");
+					_profiler.Debug("  Count: {0}", marks.Count);
+					_profiler.Debug("  Avg: {0}s", Logger.Round(avg));
+					_profiler.Debug("  Max: {0}s, {1}", Logger.Round(max), ns ?? "--");
+					_profiler.Debug("  Min: {0}s, {1}", Logger.Round(min), xs ?? "--");
 				}
 				else
 				{

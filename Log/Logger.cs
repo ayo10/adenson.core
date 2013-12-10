@@ -2,23 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net.Mail;
-using System.Security;
-using System.Text;
 using System.Threading;
-using System.Xml.Linq;
-using Adenson.Configuration;
 
 namespace Adenson.Log
 {
 	/// <summary>
 	/// Logger of .... well, logs
 	/// </summary>
-	#if !DEBUG
-	[DebuggerStepThrough]
-	#endif
 	public sealed class Logger
 	{
 		#region Variables
@@ -103,14 +94,6 @@ namespace Adenson.Log
 		public static void Error(Type type, Exception ex)
 		{
 			Logger.GetLogger(type).Error(ex);
-		}
-
-		/// <summary>
-		/// Flushes the output buffer, and causes buffered data to be written.
-		/// </summary>
-		public static void Flush()
-		{
-			Trace.Flush();
 		}
 
 		/// <summary>

@@ -9,7 +9,7 @@ namespace Adenson.Log
 	public class DefaultFormatter : BaseFormatter
 	{
 		#region Variables
-		private static string format = DefaultFormatter.GetFormat();
+		private static string format = DefaultFormatter.GetDefaultFormat();
 		#endregion
 		#region Methods
 
@@ -25,12 +25,12 @@ namespace Adenson.Log
 				throw new ArgumentNullException("entry");
 			}
 
-			return StringUtil.Format(format, entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture), entry.Date, entry.TypeName, entry.Message);
+			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) + "]", entry.Date, entry.TypeName, entry.Message);
 		}
 
-		private static string GetFormat()
+		private static string GetDefaultFormat()
 		{
-			return "{Date:H:mm:ss.fff} [{Severity,5}]\t{TypeName:15} {Message}"
+			return "{Date:H:mm:ss.fff} {Severity,-8}\t{TypeName,-10} {Message}"
 									.Replace("{Severity", "{0")
 									.Replace("{Date", "{1")
 									.Replace("{TypeName", "{2")
