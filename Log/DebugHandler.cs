@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define DEBUG
+using System;
 using System.Diagnostics;
 
 namespace Adenson.Log

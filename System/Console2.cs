@@ -55,7 +55,7 @@ namespace System
 		/// <param name="arguments"> An array of objects to write using format.</param>
 		public static void WriteWarning(string message, params object[] arguments)
 		{
-			Console2.WriteLine(ConsoleColor.DarkYellow, message, arguments);
+			Console2.WriteLine(ConsoleColor.Yellow, message, arguments);
 		}
 
 		/// <summary>

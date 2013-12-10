@@ -42,7 +42,7 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Gets a connection string using the key
+		/// Gets a connection string using the key.
 		/// </summary>
 		/// <param name="key">Key to use to do a lookup</param>
 		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true</param>
@@ -57,9 +57,16 @@ namespace Adenson.Configuration
 			}
 
 			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
-			if (result == null && useDefaultIfNull)
+			if (result == null)
 			{
-				result = ConnectionStrings.Default;
+				if (useDefaultIfNull)
+				{
+					result = ConnectionStrings.Default;
+				}
+				else
+				{
+					new ConnectionStringSettings { Name = Guid.NewGuid().ToString(), ConnectionString = key };
+				}
 			}
 
 			if (result == null)

@@ -13,8 +13,7 @@ namespace Adenson.CoreTest.Sys
 		{
 			string filePath = Path.GetTempFileName();
 			byte[] buffer = new byte[] { 1, 3, 4, 5 };
-			bool overwrite = false;
-			string actual = FileUtil.CreateFile(filePath, buffer, overwrite);
+			string actual = FileUtil.CreateFile(filePath, buffer);
 
 			Assert.IsTrue(File.Exists(actual));
 			Assert.AreEqual(filePath, actual);

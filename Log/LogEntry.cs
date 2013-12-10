@@ -26,12 +26,12 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the message to log.
+		/// Gets or sets the message to log.
 		/// </summary>
 		public string Message
 		{
 			get;
-			internal set;
+			set;
 		}
 
 		/// <summary>

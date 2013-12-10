@@ -17,6 +17,35 @@ namespace System.IO
 		#region Methods
 
 		/// <summary>
+		/// Creates a new (or overwrites) a file at the specified path using the specified buffer.
+		/// </summary>
+		/// <param name="filePath">The path and name of the file to create.</param>
+		/// <param name="buffer">The buffer containing data to write to the stream.</param>
+		/// <returns>Newly created path.</returns>
+		public static string CreateFile(string filePath, byte[] buffer)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(filePath))
+			{
+				throw new ArgumentNullException("filePath");
+			}
+
+			var directory = Path.GetDirectoryName(filePath);
+			if (!Directory.Exists(directory))
+			{
+				Directory.CreateDirectory(directory);
+			}
+
+			FileStream stream = File.Create(filePath);
+			if (buffer != null)
+			{
+				stream.Write(buffer, 0, buffer.Length);
+				stream.Close();
+			}
+
+			return filePath;
+		}
+
+		/// <summary>
 		/// Converts a hex string to bytes
 		/// </summary>
 		/// <param name="hexValue">The string to convert</param>
@@ -49,40 +78,6 @@ namespace System.IO
 			}
 
 			return buffer;
-		}
-
-		/// <summary>
-		/// Creates a new (or overwrites) a file at the specified path using the specified buffer
-		/// </summary>
-		/// <param name="filePath">The path and name of the file to create.</param>
-		/// <param name="buffer">The buffer containing data to write to the stream.</param>
-		/// <param name="overwrite">If to overwrite the file if it exists</param>
-		/// <returns>Newly created path</returns>
-		public static string CreateFile(string filePath, byte[] buffer, bool overwrite)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentNullException("filePath");
-			}
-
-			if (!File.Exists(filePath) || overwrite)
-			{
-				var directory = Path.GetDirectoryName(filePath);
-				if (!Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
-
-				FileStream stream = File.Create(filePath);
-
-				if (buffer != null)
-				{
-					stream.Write(buffer, 0, buffer.Length);
-					stream.Close();
-				}
-			}
-
-			return filePath;
 		}
 
 		/// <summary>
@@ -226,13 +221,7 @@ namespace System.IO
 			{
 				using (memoryStream = new MemoryStream())
 				{
-					byte[] buffer = new byte[1024];
-					int len;
-					while ((len = stream.Read(buffer, 0, 1024)) > 0)
-					{
-						memoryStream.Write(buffer, 0, len);
-					}
-
+					stream.CopyTo(memoryStream);
 					return memoryStream.ToArray();
 				}
 			}
