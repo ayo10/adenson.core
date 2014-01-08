@@ -74,7 +74,28 @@ namespace Adenson.Log
 				throw new ArgumentNullException("entry");
 			}
 
-			return SmtpUtil.TrySend(this.From, this.To, this.Subject, entry.ToString(), false);
+			using (SmtpClient s = new SmtpClient())
+			{
+				MailMessage m = new MailMessage
+				{
+					From = new MailAddress(this.From),
+					Subject = this.Subject,
+					Body = entry.ToString(),
+					IsBodyHtml = true
+				};
+
+				m.To.Add(this.To);
+				
+				try
+				{
+					s.SendAsync(m, null);
+					return true;
+				}
+				catch
+				{
+					return false;
+				}
+			}
 		}
 
 		#endregion

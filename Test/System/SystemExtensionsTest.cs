@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest.Sys
+namespace Adenson.CoreTest.System
 {
 	[TestFixture]
-	public class SystemExtensionsTest
+	public class ExtensionsTest
 	{
 		[Test]
 		public void ContainsTest()
@@ -33,6 +33,18 @@ namespace Adenson.CoreTest.Sys
 			Assert.AreEqual(4, new DateTime(2012, 10, 1).GetQuarter());
 			Assert.AreEqual(4, new DateTime(2012, 11, 1).GetQuarter());
 			Assert.AreEqual(4, new DateTime(2012, 12, 1).GetQuarter());
+		}
+
+		[Test]
+		public void HasAttributeTest()
+		{
+			Assert.IsTrue(new HasAttributeTestClass1().HasAttribute(typeof(TestAttribute1)));
+			Assert.IsTrue(new HasAttributeTestClass2().HasAttribute(typeof(TestAttribute1)));
+			Assert.IsTrue(new HasAttributeTestClass2().HasAttribute(typeof(TestAttribute2)), "By inherit HasAttributeTestClass1");
+			Assert.IsTrue(typeof(HasAttributeTestClass1).HasAttribute(typeof(TestAttribute1)));
+			Assert.IsTrue(typeof(HasAttributeTestClass2).HasAttribute(typeof(TestAttribute2)));
+			Assert.IsFalse(typeof(HasAttributeTestClass2).HasAttribute(typeof(TestAttribute1)));
+			Assert.IsTrue(typeof(HasAttributeTestClass2).HasAttribute(typeof(TestAttribute1), true));
 		}
 
 		[Test]
@@ -129,6 +141,26 @@ namespace Adenson.CoreTest.Sys
 			expected = date.Subtract(new TimeSpan(0, 0, 0, 0, 0));
 			actual = date.Trim("dd");
 			Assert.AreEqual(expected, actual);
+		}
+
+		[TestAttribute1]
+		private class HasAttributeTestClass1
+		{
+		}
+
+		[TestAttribute2]
+		private class HasAttributeTestClass2 : HasAttributeTestClass1
+		{
+		}
+
+		[AttributeUsage(AttributeTargets.All, Inherited = true)]
+		private class TestAttribute1 : Attribute
+		{
+		}
+
+		[AttributeUsage(AttributeTargets.All, Inherited = false)]
+		private class TestAttribute2 : Attribute
+		{
 		}
 	}
 }

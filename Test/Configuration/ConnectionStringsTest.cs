@@ -17,10 +17,9 @@ namespace Adenson.CoreTest.Configuration
 		[Test]
 		public void GetTest()
 		{
-			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get(ConnectionStrings.DefaultKey));
-			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get("doesnotexist", true));
-			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get("Data Source=(local);Initial Catalog=TEST;", true));
-			Assert.AreEqual("Data Source=(local);Initial Catalog=TEST;", ConnectionStrings.Get("Data Source=(local);Initial Catalog=TEST;", false));
+			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get(ConnectionStrings.DefaultKey).ConnectionString);
+			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get("doesnotexist", true).ConnectionString);
+			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get("Data Source=(local);Initial Catalog=TEST;", true).ConnectionString);
 			Assert.Throws<ConfigurationErrorsException>(delegate { ConnectionStrings.Get("gagagan", false); });
 		}
 	}

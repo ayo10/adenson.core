@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Adenson.CoreTest.System.Xml.Linq
 {
 	[TestFixture]
-	public class XmlLinqExtensionsTest
+	public class ExtensionsTest
 	{
 		[Test]
 		public void ElementTest()

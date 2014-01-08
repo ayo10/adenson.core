@@ -30,7 +30,6 @@ namespace Adenson.Log
 					Console2.WriteCritical(formatted);
 					break;
 				case Severity.Debug:
-				case Severity.Profile:
 					Console2.WriteDebug(formatted);
 					break;
 				case Severity.Error:
