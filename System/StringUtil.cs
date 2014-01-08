@@ -176,13 +176,10 @@ namespace System
 			{
 				if (message.Length != 0)
 				{
-					message.Append(String.Empty.PadRight(20, '-'));
 					message.Append(Environment.NewLine);
 				}
 
-				message.Append(ex.GetType().FullName);
-				message.Append(": ");
-				message.AppendLine(ex.Message);
+				message.AppendFormat("{0}: {1}", ex.GetType().FullName, ex.Message);
 				if (ex.StackTrace != null)
 				{
 					message.AppendLine(ex.StackTrace);

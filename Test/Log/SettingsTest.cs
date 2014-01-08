@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using Adenson.Log;
 using NUnit.Framework;
 
@@ -132,7 +133,7 @@ namespace Adenson.CoreTest.Log
 
 			FileHandler fileHandler = settings.Handlers[5] as FileHandler;
 			Assert.IsNotNull(fileHandler);
-			Assert.AreEqual("filename.woot", fileHandler.FilePath);
+			Assert.AreEqual(Path.Combine(TestContext.CurrentContext.WorkDirectory, "filename.woot"), fileHandler.FilePath);
 
 			TraceHandler traceHandler = settings.Handlers[6] as TraceHandler;
 			Assert.IsNotNull(traceHandler);

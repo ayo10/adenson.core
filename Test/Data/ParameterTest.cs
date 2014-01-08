@@ -20,39 +20,27 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void EqualsTest1()
 		{
-			string name = string.Empty; // TODO: Initialize to an appropriate value
-			object value = null; // TODO: Initialize to an appropriate value
-			Parameter target = new Parameter(name, value); // TODO: Initialize to an appropriate value
-			object obj = null; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.Equals(obj);
-			Assert.AreEqual(expected, actual);
+			Parameter target = new Parameter("name1", "value1");
+			object other = new Parameter("name2", "value2");
+			Assert.IsTrue(target.Equals(target));
+			Assert.IsFalse(target.Equals(other));
 		}
 
 		[Test]
 		public void EqualsTest2()
 		{
-			string name = string.Empty; // TODO: Initialize to an appropriate value
-			object value = null; // TODO: Initialize to an appropriate value
-			Parameter target = new Parameter(name, value); // TODO: Initialize to an appropriate value
-			Parameter other = null; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.Equals(other);
-			Assert.AreEqual(expected, actual);
+			Parameter target = new Parameter("name1", "value1");
+			Parameter other = new Parameter("name2", "value2");
+			Assert.IsTrue(target.Equals(target));
+			Assert.IsFalse(target.Equals(other));
 		}
 
 		[Test]
 		public void GetHashCodeTest()
 		{
-			string name = string.Empty; // TODO: Initialize to an appropriate value
-			object value = null; // TODO: Initialize to an appropriate value
-			Parameter target = new Parameter(name, value); // TODO: Initialize to an appropriate value
-			int expected = 0; // TODO: Initialize to an appropriate value
-			int actual;
-			actual = target.GetHashCode();
-			Assert.AreEqual(expected, actual);
+			Parameter target = new Parameter("name1", "value1");
+			object reference = target;
+			Assert.AreEqual(reference.GetHashCode(), target.GetHashCode());
 		}
 	}
 }

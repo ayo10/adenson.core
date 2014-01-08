@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Adenson.CoreTest.System.Collections
 {
 	[TestFixture]
-	public class CollectionsExtensionsTest
+	public class ExtensionsTest
 	{
 		[Test]
 		public void MergeWithTest()

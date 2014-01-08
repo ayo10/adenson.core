@@ -78,6 +78,34 @@ namespace Adenson.CoreTest.Log
 			this.TestLog(Severity.Warn);
 		}
 
+		[Test]
+		public void ProfilerTest()
+		{
+			Logger.Settings.Severity = Severity.Debug;
+			int count = handler.Entries.Count;
+			var prf = testLogger.ProfilerStart("ProfileTest");
+			Assert.IsNotNull(prf);
+			Assert.AreEqual("ProfileTest", prf.Identifier);
+
+			Assert.AreEqual(++count, handler.Entries.Count);
+			Assert.AreEqual("ProfileTest START", this.Strip(handler.Entries.Last().Message));
+			
+			prf.Debug("Test1");
+			Assert.AreEqual(++count, handler.Entries.Count);
+			Assert.AreEqual("ProfileTest Test1", this.Strip(handler.Entries.Last().Message));
+
+			var lmk = prf.MarkStart();
+			Assert.IsNotNull(lmk);
+
+			prf.Dispose();
+			Assert.AreEqual(++count, handler.Entries.Count);
+			Assert.AreEqual("ProfileTest FINISH", this.Strip(handler.Entries.Last().Message));
+
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(null); });
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(String.Empty); });
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(" "); });
+		}
+
 		#endregion
 		#region Methods
 
@@ -86,7 +114,7 @@ namespace Adenson.CoreTest.Log
 			Logger.Settings.Severity = severity;
 			int count = handler.Entries.Count;
 			int s = (int)severity;
-			for (int i = 6; i > 0; i--)
+			for (int i = 5; i > 0; i--)
 			{
 				switch (i)
 				{
@@ -97,15 +125,12 @@ namespace Adenson.CoreTest.Log
 						testLogger.Info("This is a {0} message", (Severity)i);
 						break;
 					case 3:
-						testLogger.Info("This is a {0} message", (Severity)i);
-						break;
-					case 4:
 						testLogger.Warn("This is a {0} message", (Severity)i);
 						break;
-					case 5:
+					case 4:
 						testLogger.Error("This is a {0} message", (Severity)i);
 						break;
-					case 6:
+					case 5:
 						testLogger.Critical("This is a {0} message", (Severity)i);
 						break;
 				}
@@ -130,6 +155,16 @@ namespace Adenson.CoreTest.Log
 					Assert.AreEqual(count, handler.Entries.Count, "No change in entries, higher severity");
 				}
 			}
+		}
+
+		private string Strip(object message)
+		{
+			var sp = message.ToString().Split('[', ']');
+			Assert.AreEqual(3, sp.Length);
+			Assert.AreEqual(String.Empty, sp[0]);
+			Assert.IsTrue(sp[1].EndsWith("s"));
+			Assert.DoesNotThrow(delegate { Assert.IsTrue(double.Parse(sp[1].Substring(0, sp[1].Length - 1).Trim()) >= 0); });
+			return String.Join(String.Empty, sp.Skip(2).ToArray()).Trim();
 		}
 
 		#endregion

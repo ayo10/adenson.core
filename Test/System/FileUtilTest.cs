@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
-namespace Adenson.CoreTest.Sys
+namespace Adenson.CoreTest.System
 {
 	[TestFixture]
 	public class FileUtilTest
@@ -25,93 +25,81 @@ namespace Adenson.CoreTest.Sys
 		[Test]
 		public void FixFileNameTest()
 		{
-			string path = string.Empty; // TODO: Initialize to an appropriate value
-			string expected = string.Empty; // TODO: Initialize to an appropriate value
-			string actual;
-			actual = FileUtil.FixFileName(path);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			Assert.AreEqual("a b c d e f g h i j k j l-m,n", FileUtil.FixFileName("a\"b<c>d|e\0f\ag\bh\ti\nj\vk\fj\rl:m/n"));
 		}
 
 		[Test]
 		public void GetBytesTest()
 		{
-			string hexValue = string.Empty; // TODO: Initialize to an appropriate value
-			byte[] expected = null; // TODO: Initialize to an appropriate value
-			byte[] actual;
-			actual = FileUtil.GetBytes(hexValue);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			Assert.AreEqual(new byte[] { 170, 171, 170, 187 }, FileUtil.GetBytes("aaAbaaBB"));
 		}
 
 		[Test]
 		public void GetFilesTest()
 		{
-			string directory = string.Empty; // TODO: Initialize to an appropriate value
-			IEnumerable<string> extensions = null; // TODO: Initialize to an appropriate value
-			string[] expected = null; // TODO: Initialize to an appropriate value
-			string[] actual;
-			actual = FileUtil.GetFiles(directory, extensions);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string directory = TestContext.CurrentContext.WorkDirectory;
+			IEnumerable<string> extensions = new string[] { "*.dll", "*.pdb" };
+			string[] expected = Directory.GetFiles(directory, extensions.First(), SearchOption.AllDirectories).Union(Directory.GetFiles(directory, extensions.ElementAt(1), SearchOption.AllDirectories)).ToArray();
+			string[] actual = FileUtil.GetFiles(directory, extensions);
+			CollectionAssert.AreEquivalent(expected, actual);
 		}
 
 		[Test]
 		public void GetIsDirectoryTest()
 		{
-			string fullPath = string.Empty; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = FileUtil.GetIsDirectory(fullPath);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string fullPath = TestContext.CurrentContext.WorkDirectory;
+			Assert.IsTrue(FileUtil.GetIsDirectory(fullPath));
+			Assert.IsFalse(FileUtil.GetIsDirectory(Directory.GetFiles(fullPath, "*.dll", SearchOption.AllDirectories).First()));
 		}
 
 		[Test]
 		public void ReadStreamTest1()
 		{
-			Uri url = null; // TODO: Initialize to an appropriate value
-			byte[] expected = null; // TODO: Initialize to an appropriate value
-			byte[] actual;
-			actual = FileUtil.ReadStream(url);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string path = Path.GetTempFileName();
+			using (var stream = File.CreateText(path))
+			{
+				stream.WriteLine("a");
+			}
+
+			Uri url = new Uri(path);
+			Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(url));
 		}
 
 		[Test]
 		public void ReadStreamTest2()
 		{
-			Stream stream = null; // TODO: Initialize to an appropriate value
-			byte[] expected = null; // TODO: Initialize to an appropriate value
-			byte[] actual;
-			actual = FileUtil.ReadStream(stream);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string path = Path.GetTempFileName();
+			using (var s = File.CreateText(path))
+			{
+				s.WriteLine("a");
+			}
+
+			using (var stream = File.OpenRead(path))
+			{
+				Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(stream));
+			}
 		}
 
 		[Test]
 		public void ReadStreamTest3()
 		{
-			string filePath = string.Empty; // TODO: Initialize to an appropriate value
-			byte[] expected = null; // TODO: Initialize to an appropriate value
-			byte[] actual;
-			actual = FileUtil.ReadStream(filePath);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			string filePath = Path.GetTempFileName();
+			using (var stream = File.CreateText(filePath))
+			{
+				stream.WriteLine("a");
+			}
+
+			Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(filePath));
 		}
 
 		[Test]
 		public void TryGetBytesTest()
 		{
-			string hexValue = string.Empty; // TODO: Initialize to an appropriate value
-			byte[] result = null; // TODO: Initialize to an appropriate value
-			byte[] resultExpected = null; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = FileUtil.TryGetBytes(hexValue, out result);
-			Assert.AreEqual(resultExpected, result);
-			Assert.AreEqual(expected, actual);
-			Assert.Inconclusive("Verify the correctness of this test method.");
+			byte[] result = null;
+			Assert.IsTrue(FileUtil.TryGetBytes("aaAbaaBB", out result));
+			Assert.AreEqual(new byte[] { 170, 171, 170, 187 }, result);
+			
+			Assert.IsFalse(FileUtil.TryGetBytes("aaAbaaB", out result));
 		}
 	}
 }

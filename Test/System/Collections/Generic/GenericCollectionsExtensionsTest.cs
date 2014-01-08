@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Adenson.CoreTest.System.Collections.Generic
 {
 	[TestFixture]
-	public class GenericCollectionsExtensionsTest
+	public class ExtensionsTest
 	{
 		[Test]
 		public void AddOrSetTest()

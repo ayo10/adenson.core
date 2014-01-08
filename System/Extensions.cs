@@ -90,6 +90,50 @@ namespace System
 		}
 
 		/// <summary>
+		/// Gets if the specified type has the specified attribute (by calling <see cref="HasAttribute(Type, Type, bool)"/>, where inherit is false).
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="attributeType">The attribute type.</param>
+		/// <returns>True if the type has the specified attribute, false otherwise.</returns>
+		public static bool HasAttribute(this Type type, Type attributeType)
+		{
+			return type.HasAttribute(attributeType, false);
+		}
+
+		/// <summary>
+		/// Gets if the specified type has the specified attribute (by calling <see cref="System.Reflection.MemberInfo.GetCustomAttributes(Type, bool)"/>).
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="attributeType">The attribute type.</param>
+		/// <param name="inherit">If to search this member's inheritance chain to find the attributes.</param>
+		/// <returns>True if the type has the specified attribute, false otherwise.</returns>
+		public static bool HasAttribute(this Type type, Type attributeType, bool inherit)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			return type.GetCustomAttributes(attributeType, inherit).Any();
+		}
+
+		/// <summary>
+		/// Gets if the specified object's type (or its inheritance chain) has the specified attribute (by calling <see cref="HasAttribute(Type, Type, bool)"/>).
+		/// </summary>
+		/// <param name="value">The object.</param>
+		/// <param name="attributeType">The attribute type.</param>
+		/// <returns>True if the type has the specified attribute, false otherwise.</returns>
+		public static bool HasAttribute(this object value, Type attributeType)
+		{
+			if (value == null)
+			{
+				throw new ArgumentNullException("value");
+			}
+
+			return value.GetType().HasAttribute(attributeType, true);
+		}
+
+		/// <summary>
 		/// Rounds a double-precision floating-point value to a specified number of fractional digits.
 		/// </summary>
 		/// <remarks>All it does is to call Math.Round(value, digits)</remarks>

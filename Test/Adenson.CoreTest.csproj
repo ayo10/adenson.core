@@ -68,7 +68,6 @@
     <Compile Include="Log\TestFormatter.cs" />
     <Compile Include="Log\TestHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System\SmtpUtilTest.cs" />
     <Compile Include="Data\SqlClientHelperTest.cs" />
     <Compile Include="Data\SqlHelperBaseTest.cs" />
     <Compile Include="System\StringUtilTest.cs" />

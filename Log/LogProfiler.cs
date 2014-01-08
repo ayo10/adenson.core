@@ -23,7 +23,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(Severity.Profile, SR.ProfilerStart);
+			this.Write(Severity.Debug, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -109,17 +109,6 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Called to log errors of type Info.
-		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		public void Info(string message, params object[] arguments)
-		{
-			this.Write(Severity.Info, message, arguments);
-		}
-
-		/// <summary>
 		/// Called to log errors of type Debug.
 		/// </summary>
 		/// <param name="message">Message to log</param>
@@ -136,7 +125,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(Severity.Profile, SR.ProfilerStop);
+			this.Write(Severity.Debug, SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
