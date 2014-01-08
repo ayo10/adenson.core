@@ -22,21 +22,30 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the severity.
-		/// </summary>
-		[ConfigurationProperty("severity", DefaultValue = Severity.Error)]
-		public Severity Severity
-		{
-			get { return (Severity)base["severity"]; }
-		}
-
-		/// <summary>
 		/// Gets the different handlers the logger uses.
 		/// </summary>
 		[ConfigurationProperty("handlers", IsDefaultCollection = false)]
 		public HandlerElementCollection Handlers
 		{
 			get { return (HandlerElementCollection)base["handlers"]; }
+		}
+
+		/// <summary>
+		/// Gets the format name.
+		/// </summary>
+		[ConfigurationProperty("secondsFormat")]
+		public string SecondsFormat
+		{
+			get { return (string)base["secondsFormat"]; }
+		}
+
+		/// <summary>
+		/// Gets the severity.
+		/// </summary>
+		[ConfigurationProperty("severity", DefaultValue = Severity.Error)]
+		public Severity Severity
+		{
+			get { return (Severity)base["severity"]; }
 		}
 
 		#endregion
