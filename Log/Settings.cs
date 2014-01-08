@@ -20,6 +20,7 @@ namespace Adenson.Log
 			this.Severity = Severity.Error;
 			this.Handlers = new HandlerCollection(this);
 			this.Handlers.Add(new TraceHandler());
+			this.SecondsFormat = "0.000000";
 		}
 
 		#endregion
@@ -46,6 +47,15 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
+		/// Gets the different handlers the logger uses.
+		/// </summary>
+		public HandlerCollection Handlers
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// Gets or sets the severity.
 		/// </summary>
 		public Severity Severity
@@ -55,12 +65,12 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the different handlers the logger uses.
+		/// Gets or sets the formatting to use for profiler seconds measurement, defaults to '0.000000'.
 		/// </summary>
-		public HandlerCollection Handlers
+		public string SecondsFormat
 		{
 			get;
-			private set;
+			set;
 		}
 
 		#endregion
@@ -78,6 +88,7 @@ namespace Adenson.Log
 			if (config != null)
 			{
 				settings.Severity = config.Severity;
+				settings.SecondsFormat = config.SecondsFormat;
 				settings.Formatter = String.IsNullOrWhiteSpace(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
 				settings.Handlers = HandlerCollection.FromConfig(settings, config.Handlers);
 			}
