@@ -8,6 +8,8 @@ namespace Adenson.CoreTest.Log
 	[TestFixture]
 	public class SettingsTest
 	{
+		#region Tests
+
 		[Test]
 		public void TestCurrentValues()
 		{
@@ -45,6 +47,57 @@ namespace Adenson.CoreTest.Log
 			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/full.config" };
 			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
 			Settings settings = Settings.FromConfig(config.GetSection("adenson/logSettings"));
+			this.TestFullConfig(settings);
+		}
+
+		[Test]
+		public void TestFullNoRootConfig()
+		{
+			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/fullnoroot.config" };
+			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+			Settings settings = Settings.FromConfig(config.GetSection("logSettings"));
+			this.TestFullConfig(settings);
+		}
+
+		[Test]
+		public void TestNoneConfig()
+		{
+			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/none.config" };
+			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+			Settings settings = Settings.FromConfig(config.GetSection("adenson/logSettings"));
+			Assert.IsNotNull(settings);
+			Assert.IsNotNull(settings.Formatter);
+			Assert.IsInstanceOf<DefaultFormatter>(settings.Formatter);
+			Assert.AreEqual(1, settings.Handlers.Count);
+			Assert.IsInstanceOf<TraceHandler>(settings.Handlers[0]);
+			Assert.AreEqual(Severity.Error, settings.Severity);
+
+			Assert.Throws<ArgumentNullException>(delegate { settings.Formatter = null; });
+			Assert.Throws<ArgumentNullException>(delegate { settings.Handlers.Add(null); });
+		}
+
+		[Test]
+		public void TestNullConfig()
+		{
+			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/none.config" };
+			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+			Settings settings = Settings.FromConfig(config.GetSection("adenson/logSettings"));
+			Assert.IsNotNull(settings);
+			Assert.IsNotNull(settings.Formatter);
+			Assert.IsInstanceOf<DefaultFormatter>(settings.Formatter);
+			Assert.AreEqual(1, settings.Handlers.Count);
+			Assert.IsInstanceOf<TraceHandler>(settings.Handlers[0]);
+			Assert.AreEqual(Severity.Error, settings.Severity);
+
+			Assert.Throws<ArgumentNullException>(delegate { settings.Formatter = null; });
+			Assert.Throws<ArgumentNullException>(delegate { settings.Handlers.Add(null); });
+		}
+
+		#endregion
+		#region Methods
+
+		private void TestFullConfig(Settings settings)
+		{
 			Assert.IsNotNull(settings);
 			Assert.IsNotNull(settings.Formatter);
 			Assert.AreEqual(Severity.Debug, settings.Severity);
@@ -92,38 +145,6 @@ namespace Adenson.CoreTest.Log
 			Assert.Throws<ArgumentNullException>(delegate { settings.Handlers.Add(null); });
 		}
 
-		[Test]
-		public void TestNoneConfig()
-		{
-			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/none.config" };
-			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-			Settings settings = Settings.FromConfig(config.GetSection("adenson/logSettings"));
-			Assert.IsNotNull(settings);
-			Assert.IsNotNull(settings.Formatter);
-			Assert.IsInstanceOf<DefaultFormatter>(settings.Formatter);
-			Assert.AreEqual(1, settings.Handlers.Count);
-			Assert.IsInstanceOf<TraceHandler>(settings.Handlers[0]);
-			Assert.AreEqual(Severity.Error, settings.Severity);
-
-			Assert.Throws<ArgumentNullException>(delegate { settings.Formatter = null; });
-			Assert.Throws<ArgumentNullException>(delegate { settings.Handlers.Add(null); });
-		}
-
-		[Test]
-		public void TestNullConfig()
-		{
-			ExeConfigurationFileMap map = new ExeConfigurationFileMap { ExeConfigFilename = "log/none.config" };
-			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
-			Settings settings = Settings.FromConfig(config.GetSection("adenson/logSettings"));
-			Assert.IsNotNull(settings);
-			Assert.IsNotNull(settings.Formatter);
-			Assert.IsInstanceOf<DefaultFormatter>(settings.Formatter);
-			Assert.AreEqual(1, settings.Handlers.Count);
-			Assert.IsInstanceOf<TraceHandler>(settings.Handlers[0]);
-			Assert.AreEqual(Severity.Error, settings.Severity);
-
-			Assert.Throws<ArgumentNullException>(delegate { settings.Formatter = null; });
-			Assert.Throws<ArgumentNullException>(delegate { settings.Handlers.Add(null); });
-		}
+		#endregion
 	}
 }

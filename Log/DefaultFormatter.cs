@@ -25,7 +25,7 @@ namespace Adenson.Log
 				throw new ArgumentNullException("entry");
 			}
 
-			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) + "]", entry.Date, entry.TypeName, entry.Message);
+			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) + "]", entry.Date, entry.TypeName, this.ToString(entry.Message));
 		}
 
 		private static string GetDefaultFormat()

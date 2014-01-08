@@ -51,37 +51,37 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void CriticalTest()
 		{
-			this.Log(Severity.Critical);
+			this.TestLog(Severity.Critical);
 		}
 
 		[Test]
 		public void DebugTest()
 		{
-			this.Log(Severity.Debug);
+			this.TestLog(Severity.Debug);
 		}
 
 		[Test]
 		public void ErrorTest()
 		{
-			this.Log(Severity.Error);
+			this.TestLog(Severity.Error);
 		}
 
 		[Test]
 		public void InfoTest()
 		{
-			this.Log(Severity.Info);
+			this.TestLog(Severity.Info);
 		}
 
 		[Test]
 		public void WarnTest()
 		{
-			this.Log(Severity.Warn);
+			this.TestLog(Severity.Warn);
 		}
 
 		#endregion
 		#region Methods
 
-		private void Log(Severity severity)
+		private void TestLog(Severity severity)
 		{
 			Logger.Settings.Severity = severity;
 			int count = handler.Entries.Count;
