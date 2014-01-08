@@ -20,5 +20,20 @@ namespace Adenson.Log
 		/// <param name="entry">The log entry object to format.</param>
 		/// <returns>The formatted string.</returns>
 		public abstract string Format(LogEntry entry);
+
+		/// <summary>
+		/// Converts the specified object to a string.
+		/// </summary>
+		/// <param name="message">The message object.</param>
+		/// <returns>A string.</returns>
+		public string ToString(object message)
+		{
+			if (message == null)
+			{
+				return "<null>";
+			}
+
+			return StringUtil.ToString(message);
+		}
 	}
 }

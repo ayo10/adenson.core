@@ -114,7 +114,6 @@ namespace Adenson.Log
 		/// <param name="message">Message to log</param>
 		/// <param name="arguments">Arguments, if any to format message</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG"), Conditional("INFO")]
 		public void Info(string message, params object[] arguments)
 		{
 			this.Write(Severity.Info, message, arguments);

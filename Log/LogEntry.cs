@@ -28,7 +28,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets or sets the message to log.
 		/// </summary>
-		public string Message
+		public object Message
 		{
 			get;
 			set;

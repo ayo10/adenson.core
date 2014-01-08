@@ -79,7 +79,7 @@ namespace Adenson.Log
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine(StringUtil.ToString(ex, false));
+				Debug.WriteLine(StringUtil.ToString(ex));
 				return false;
 			}
 
