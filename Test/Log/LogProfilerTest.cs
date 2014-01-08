@@ -35,9 +35,9 @@ namespace Adenson.CoreTest.Log
 			}
 
 			Assert.AreEqual(3, handler.Entries.Count);
-			Assert.IsTrue(handler.Entries[0].Message.EndsWith("s] Test START"));
-			Assert.IsTrue(handler.Entries[1].Message.EndsWith(String.Format("s] Test Test {0}", guid)));
-			Assert.IsTrue(handler.Entries[2].Message.EndsWith("s] Test FINISH"));
+			Assert.IsTrue(handler.Entries[0].Message.ToString().EndsWith("s] Test START"));
+			Assert.IsTrue(handler.Entries[1].Message.ToString().EndsWith(String.Format("s] Test Test {0}", guid)));
+			Assert.IsTrue(handler.Entries[2].Message.ToString().EndsWith("s] Test FINISH"));
 		}
 
 		[Test]

@@ -59,18 +59,9 @@ namespace Adenson.CoreTest.Sys
 			var buffer = new byte[] { 1, 2, 3 };
 			Assert.AreEqual(Convert.ToBase64String(buffer), StringUtil.ToString(buffer));
 		}
-		
-		[Test]
-		public void ConvertToStringTest1()
-		{
-			Exception exception = new Exception("Test1", new Exception("Test2"));
-			string expected = "Test1. Test2.";
-			string actual = StringUtil.ToString(exception, true);
-			Assert.AreEqual(expected, actual);
-		}
 
 		[Test]
-		public void ConvertToStringTest2a()
+		public void ToStringTest2a()
 		{
 			Exception exception = new Exception("Test1", new Exception("Test2"));
 			string expected = "System.Exception: Test1\r\n--------------------\r\nSystem.Exception: Test2\r\n";
@@ -94,7 +85,7 @@ namespace Adenson.CoreTest.Sys
 			}
 
 			string expected = "System.Exception: Test1\r\n   at Adenson.CoreTest.Log.LoggerTest.ConvertToStringTest2b() in C:\\Projects\\Adenson\\Adenson.Core\\Test\\Log\\LoggerTest.cs:line 35\r\n";
-			string actual = StringUtil.ToString(exception1, false);
+			string actual = StringUtil.ToString(exception1);
 			Assert.AreEqual(expected, actual);
 		}
 	}

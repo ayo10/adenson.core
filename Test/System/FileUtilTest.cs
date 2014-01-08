@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Adenson.CoreTest.Sys
@@ -18,7 +19,7 @@ namespace Adenson.CoreTest.Sys
 			Assert.IsTrue(File.Exists(actual));
 			Assert.AreEqual(filePath, actual);
 			byte[] bytes = FileUtil.ReadStream(filePath);
-			buffer.IsEquivalentTo(bytes);
+			buffer.SequenceEqual(bytes);
 		}
 
 		[Test]

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 
 namespace Adenson.CoreTest.Sys
@@ -49,7 +50,7 @@ namespace Adenson.CoreTest.Sys
 		{
 			byte[] buffer = new byte[] { 1, 2, 3 };
 			Stream stream = new MemoryStream(buffer);
-			Assert.IsTrue(buffer.IsEquivalentTo(stream.ToBytes()));
+			Assert.IsTrue(buffer.SequenceEqual(stream.ToBytes()));
 		}
 
 		[Test]
