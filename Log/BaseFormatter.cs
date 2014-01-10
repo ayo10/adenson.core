@@ -26,7 +26,7 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="message">The message object.</param>
 		/// <returns>A string.</returns>
-		public string ToString(object message)
+		public virtual string ToString(object message)
 		{
 			if (message == null)
 			{

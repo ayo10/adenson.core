@@ -66,6 +66,30 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
+		/// Gets the element with the specified key if it exists in the dictionary, else adds <paramref name="defaultIfNull"/> to the dictionary with the specified key and returns it.
+		/// </summary>
+		/// <typeparam name="TKey">The type of key.</typeparam>
+		/// <typeparam name="TValue">The type of value.</typeparam>
+		/// <param name="dictionary">The dictionary to read.</param>
+		/// <param name="key">The key to find.</param>
+		/// <param name="defaultIfNull">The value to add and return if no such key exists in the dictionary.</param>
+		/// <returns>Found value if any else added <paramref name="defaultIfNull"/>.</returns>
+		public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultIfNull)
+		{
+			if (dictionary == null)
+			{
+				throw new ArgumentNullException("dictionary");
+			}
+
+			if (!dictionary.ContainsKey(key))
+			{
+				dictionary.Add(key, defaultIfNull);
+			}
+
+			return dictionary[key];
+		}
+
+		/// <summary>
 		/// Gets the element with the specified key, else returns the default of <typeparamref name="TValue"/>.
 		/// </summary>
 		/// <typeparam name="TKey">The type of key.</typeparam>
