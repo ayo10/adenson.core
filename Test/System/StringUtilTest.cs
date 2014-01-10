@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
 
 namespace Adenson.CoreTest.System
@@ -32,7 +34,7 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringTest1()
+		public void ToStringByteArrayTest()
 		{
 			byte[] buffer = null;
 			Assert.AreEqual(null, StringUtil.ToString(buffer));
@@ -42,13 +44,13 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringTest2()
+		public void ToStringObjectTest()
 		{
 			object value = null;
 			Assert.AreEqual(null, StringUtil.ToString(value));
 
 			value = "test";
-			Assert.AreEqual(value.ToString(), StringUtil.ToString(value));
+			Assert.AreEqual((string)value, StringUtil.ToString(value));
 
 			value = 5;
 			Assert.AreEqual(value.ToString(), StringUtil.ToString(value));
@@ -56,23 +58,69 @@ namespace Adenson.CoreTest.System
 			value = new Exception("Test1");
 			Assert.AreEqual("System.Exception: Test1", StringUtil.ToString(value));
 
-			var buffer = new byte[] { 1, 2, 3 };
-			Assert.AreEqual(Convert.ToBase64String(buffer), StringUtil.ToString(buffer));
+			value = new byte[] { 1, 2, 3 };
+			Assert.AreEqual(Convert.ToBase64String((byte[])value), StringUtil.ToString(value));
+
+			value = new int[] { 1, 2, 3 };
+			Assert.AreEqual(value.ToString() + ", Items:[1,2,3]", StringUtil.ToString(value));
+
+			value = new object[] { new object(), new object(), new object() };
+			Assert.AreEqual(value.ToString() + ", Items:[System.Object,System.Object,System.Object]", StringUtil.ToString(value));
+
+			value = new List<int> { 1, 2, 3 };
+			Assert.AreEqual(value.ToString() + ", Items:[1,2,3]", StringUtil.ToString(value));
+
+			value = new List<object> { 1, 2, new byte[] { 1, 2, 3 } };
+			Assert.AreEqual(String.Format("{0}, Items:[1,2,{1}]", value.ToString(), Convert.ToBase64String(new byte[] { 1, 2, 3 })), StringUtil.ToString(value));
 		}
 
 		[Test]
-		public void ToStringTest2a()
+		public void ToStringObjectDefaultCultureTest()
+		{
+			object value = true;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = (byte)2;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 'c';
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = DateTime.Now;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 2d;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+		}
+
+		[Test, SetCulture("fr-CA")]
+		public void ToStringObjectFrenchCultureTest()
+		{
+			object value = true;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = (byte)2;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 'c';
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = DateTime.Now;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 2d;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+		}
+
+		[Test]
+		public void ToStringExceptionTest()
 		{
 			Exception exception = new Exception("Test1", new Exception("Test2"));
 			string expected = "System.Exception: Test1\r\nSystem.Exception: Test2";
 			string actual = StringUtil.ToString(exception);
 			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ToStringTest2b()
-		{
-			Exception exception = new Exception("Test2", new Exception("Test1"));
+			
+			exception = new Exception("Test2", new Exception("Test1"));
 			Assert.AreEqual("System.Exception: Test2\r\nSystem.Exception: Test1", StringUtil.ToString(exception));
 		}
 	}

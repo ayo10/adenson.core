@@ -31,7 +31,7 @@ namespace Adenson.CoreTest.System.Collections.Generic
 		}
 
 		[Test]
-		public void GetValueTest()
+		public void GetTest1()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
 			Assert.AreEqual(1, dic.Get("ONE", StringComparison.CurrentCultureIgnoreCase));
@@ -40,8 +40,18 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			Assert.Throws<KeyNotFoundException>(delegate { dic.Get("two", StringComparison.CurrentCulture); });
 		}
 
+		[Test]
+		public void GetTest2()
+		{
+			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
+			Assert.AreEqual(1, dic.Get("one", 3));
+			Assert.AreEqual(2, dic.Get("two", 4));
+			Assert.AreEqual(3, dic.Get("three", 3));
+			Assert.AreEqual(3, dic["three"]);
+		}
+
 		[Test, ExpectedException(typeof(KeyNotFoundException))]
-		public void GetValueFailTest()
+		public void GetFailTest()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
 			Assert.IsNull(dic.Get("ONE", StringComparison.CurrentCulture));

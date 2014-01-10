@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Linq;
 using System.Text;
 
 namespace System
@@ -131,34 +133,6 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts the value of the specified object to its equivalent string representation.
-		/// </summary>
-		/// <remarks>Calls Convert.ToString(value)</remarks>
-		/// <param name="value">An object that supplies the value to convert, or null.</param>
-		/// <returns>The string representation of value, or System.String.Empty if value is null.</returns>
-		public static string ToString(object value)
-		{
-			if (value == null)
-			{
-				return null;
-			}
-
-			byte[] arr = value as byte[];
-			if (arr != null)
-			{
-				return StringUtil.ToString(arr);
-			}
-
-			Exception ex = value as Exception;
-			if (ex != null)
-			{
-				return StringUtil.ToString(ex);
-			}
-
-			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
-		}
-
-		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null.
 		/// </summary>
 		/// <param name="exception">The Exception object to convert.</param>
@@ -189,6 +163,46 @@ namespace System
 			}
 
 			return message.ToString();
+		}
+
+		/// <summary>
+		/// Converts the value of the specified object to its equivalent string representation.
+		/// </summary>
+		/// <remarks>Calls Convert.ToString(value)</remarks>
+		/// <param name="value">An object that supplies the value to convert, or null.</param>
+		/// <returns>The string representation of value, or System.String.Empty if value is null.</returns>
+		public static string ToString(object value)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+
+			string str = value as string;
+			if (str != null)
+			{
+				return str;
+			}
+
+			byte[] arr = value as byte[];
+			if (arr != null)
+			{
+				return StringUtil.ToString(arr);
+			}
+
+			Exception ex = value as Exception;
+			if (ex != null)
+			{
+				return StringUtil.ToString(ex);
+			}
+
+			IEnumerable enumerable = value as IEnumerable;
+			if (enumerable != null)
+			{
+				return String.Format("{0}, Items:[{1}]", value.ToString(), String.Join(",", enumerable.Cast<object>().Select(o => StringUtil.ToString(o)).ToArray()));
+			}
+
+			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
 		}
 
 		#endregion
