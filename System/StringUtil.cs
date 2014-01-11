@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace System
@@ -145,23 +146,7 @@ namespace System
 			}
 
 			StringBuilder message = new StringBuilder();
-			Exception ex = exception;
-			while (ex != null)
-			{
-				if (message.Length != 0)
-				{
-					message.Append(Environment.NewLine);
-				}
-
-				message.AppendFormat("{0}: {1}", ex.GetType().FullName, ex.Message);
-				if (ex.StackTrace != null)
-				{
-					message.AppendLine(ex.StackTrace);
-				}
-
-				ex = ex.InnerException;
-			}
-
+			StringUtil.ToString(exception, message);
 			return message.ToString();
 		}
 
@@ -203,6 +188,39 @@ namespace System
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
+		}
+
+		private static void ToString(Exception exception, StringBuilder message)
+		{
+			if (exception == null)
+			{
+				return;
+			}
+
+			if (message.Length != 0)
+			{
+				message.Append(Environment.NewLine);
+			}
+
+			message.AppendFormat("{0}: {1}", exception.GetType().FullName, exception.Message);
+			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
+			if (rtlex != null)
+			{
+				message.AppendLine("ReflectionTypeLoadException.Types: " + String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray()));
+				message.AppendLine("ReflectionTypeLoadException.LoaderExceptions: ");
+				foreach (Exception lex in rtlex.LoaderExceptions)
+				{
+					StringUtil.ToString(lex, message);
+				}
+			}
+
+			if (exception.StackTrace != null)
+			{
+				message.AppendLine(exception.StackTrace);
+			}
+
+
+			StringUtil.ToString(exception.InnerException, message);
 		}
 
 		#endregion
