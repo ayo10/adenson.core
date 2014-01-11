@@ -30,7 +30,7 @@ namespace Adenson.Log
 
 		private static string GetDefaultFormat()
 		{
-			return "{Date:H:mm:ss.fff} {Severity,-8}\t{TypeName,-10} {Message}"
+			return "{Date:H:mm:ss.fff} {Severity,-8} {TypeName,-10} {Message}"
 									.Replace("{Severity", "{0")
 									.Replace("{Date", "{1")
 									.Replace("{TypeName", "{2")
