@@ -67,7 +67,7 @@ namespace Adenson.Cryptography
 		{
 			if (size <= 0)
 			{
-				throw new ArgumentException(Exceptions.SizeLessOrEqualToZero, "size");
+				throw new ArgumentException(String.Format(Exceptions.ArgLessOrEqualToZero, "size"), "size");
 			}
 
 			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
@@ -143,11 +143,11 @@ namespace Adenson.Cryptography
 				return algorithm.ComputeHash(value);
 			}
 		}
-
+		
 		/// <summary>
 		/// Gets the hash of specified bit array using specified hash algorithm type and salt.
 		/// </summary>
-		/// <param name="hashType">The hash algorithm to use.</param>
+		/// <param name="hashType">The hash algorithm to use. If <see cref="HashType.PBKDF2"/>, iterations is set to 5000.</param>
 		/// <param name="value">The bit array to hash.</param>
 		/// <param name="salt">The salt.</param>
 		/// <returns>The bit array hash.</returns>
@@ -192,6 +192,54 @@ namespace Adenson.Cryptography
 			else
 			{
 				return CryptUtil.GetHash(hashType, value.MergeWith(salt));
+			}
+		}
+
+		/// <summary>
+		/// Gets the hash of specified bit array using specified hash algorithm type and salt.
+		/// </summary>
+		/// <param name="hashType">The hash algorithm to use.</param>
+		/// <param name="value">The bit array to hash.</param>
+		/// <param name="salt">The salt.</param>
+		/// <returns>The bit array hash.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="salt"/> is null.</exception>
+		public static byte[] GetHash(HashType hashType, byte[] value, byte[] salt, int iterations)
+		{
+			if (value == null)
+			{
+				return null;
+			}
+
+			if (salt == null)
+			{
+				throw new ArgumentNullException("salt");
+			}
+
+			if (iterations <= 0)
+			{
+				throw new ArgumentException(String.Format(Exceptions.ArgLessOrEqualToZero, "iterations"), "iterations");
+			}
+
+			if (hashType == HashType.None)
+			{
+				return value;
+			}
+			else if (hashType == HashType.PBKDF2)
+			{
+				using (var g = new Rfc2898DeriveBytes(value, salt, iterations))
+				{
+					return g.GetBytes(32);
+				}
+			}
+			else
+			{
+				byte[] result = value;
+				for (int i = 0; i < iterations; i++)
+				{
+					result = CryptUtil.GetHash(hashType, result);
+				}
+
+				return result;
 			}
 		}
 
