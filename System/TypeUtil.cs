@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Adenson;
+using Adenson.Log;
 
 namespace System
 {
@@ -15,6 +18,7 @@ namespace System
 	public static class TypeUtil
 	{
 		#region Variables
+		private static Logger logger = Logger.GetLogger(typeof(TypeUtil));
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
 		#endregion
 		#region Methods
@@ -147,6 +151,22 @@ namespace System
 			}
 
 			return (T)Enum.Parse(typeof(T), value, true);
+		}
+
+		/// <summary>
+		/// Finds all types in the current domain where <paramref name="type"/> is assignable from (or implements) (but not equal to) (ie. type.IsAssignableFrom(t) via <see cref="Type.IsAssignableFrom(Type)"/>).
+		/// </summary>
+		/// <param name="type">The type to find.</param>
+		/// <returns>An enumerable list of types found.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="type"/> is null.</exception>
+		public static IEnumerable<Type> FindAllIsAssignableFrom(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(t => type != t && type.IsAssignableFrom(t)));
 		}
 		
 		/// <summary>
@@ -328,6 +348,23 @@ namespace System
 			}
 
 			return type;
+		}
+
+		/// <summary>
+		/// Loads one or more assemblies that reference one or more assemblies name starts with the specified partial name.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		public static void LoadReferencingAssemblies(string partialAssemblyName)
+		{
+			string path = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).AbsolutePath);
+			foreach (string file in Directory.GetFiles(path, "*.dll"))
+			{
+				var rassembly = Assembly.ReflectionOnlyLoadFrom(file);
+				if (rassembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
+				{
+					Assembly.Load(rassembly.GetName());
+				}
+			}
 		}
 
 		/// <summary>
