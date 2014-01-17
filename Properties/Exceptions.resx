@@ -178,7 +178,10 @@
   <data name="GetHashArgNotSupported" xml:space="preserve">
     <value>Getting a {0} hash using this method is unsupported. Use a salt supported version, i.e. GetHash(HashType,byte[],byte[]) instead.</value>
   </data>
-  <data name="SizeLessOrEqualToZero" xml:space="preserve">
-    <value>The specified size is invalid, must be greater than zero.</value>
+  <data name="ArgLessOrEqualToZero" xml:space="preserve">
+    <value>The specified argument '{0}' is invalid, must be greater than zero.</value>
+  </data>
+  <data name="NoTypeImplementingArgFound" xml:space="preserve">
+    <value>No types implementing '{0}' could be found. It is possible the assembly required might be loaded. Use TypeUtil.LoadAssembly to try and load it.</value>
   </data>
 </root>
