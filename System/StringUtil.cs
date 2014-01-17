@@ -202,15 +202,33 @@ namespace System
 				message.Append(Environment.NewLine);
 			}
 
-			message.AppendFormat("{0}: {1}", exception.GetType().FullName, exception.Message);
+			message.AppendLine(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
+			message.AppendLine(String.Format("\tHelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
 			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
 			if (rtlex != null)
 			{
-				message.AppendLine("ReflectionTypeLoadException.Types: " + String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray()));
-				message.AppendLine("ReflectionTypeLoadException.LoaderExceptions: ");
-				foreach (Exception lex in rtlex.LoaderExceptions)
+				if (rtlex.Types != null && rtlex.Types.Length > 0)
 				{
-					StringUtil.ToString(lex, message);
+					message.AppendLine("ReflectionTypeLoadException.Types: " + String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray()));
+				}
+
+				if (rtlex.LoaderExceptions != null && rtlex.LoaderExceptions.Length > 0)
+				{
+					message.AppendLine("ReflectionTypeLoadException.LoaderExceptions: ");
+					foreach (Exception lex in rtlex.LoaderExceptions)
+					{
+						StringUtil.ToString(lex, message);
+					}
+				}
+			}
+
+			UnauthorizedAccessException uaex = exception as UnauthorizedAccessException;
+			if (uaex != null && uaex.Data != null && uaex.GetBaseException().Data.Count > 0)
+			{
+				message.AppendLine("UnauthorizedAccessException.Data: ");
+				foreach (var key in uaex.Data.Keys)
+				{
+					message.AppendLine(String.Format("\t{0}: {1}", key, uaex.Data[key]));
 				}
 			}
 
