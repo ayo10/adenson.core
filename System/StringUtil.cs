@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -145,9 +146,9 @@ namespace System
 				throw new ArgumentNullException("exception");
 			}
 
-			StringBuilder message = new StringBuilder();
+			List<string> message = new List<string>();
 			StringUtil.ToString(exception, message);
-			return message.ToString();
+			return String.Join(Environment.NewLine, message);
 		}
 
 		/// <summary>
@@ -190,55 +191,61 @@ namespace System
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
 		}
 
-		private static void ToString(Exception exception, StringBuilder message)
+		private static void ToString(Exception exception, List<string> message, string prepend = null)
 		{
 			if (exception == null)
 			{
 				return;
 			}
 
-			if (message.Length != 0)
+			int c = message.Count;
+			message.Add(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
+			if (!String.IsNullOrEmpty(exception.HelpLink) || !String.IsNullOrEmpty(exception.Source))
 			{
-				message.Append(Environment.NewLine);
+				message.Add(String.Format("\tHelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
 			}
 
-			message.AppendLine(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
-			message.AppendLine(String.Format("\tHelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
+			if (exception.Data.Count > 0)
+			{
+				message.Add("\tData:");
+				foreach (var key in exception.Data.Keys)
+				{
+					message.Add(String.Format("\t\t{0}: {1}", key, exception.Data[key]));
+				}
+			}
+
 			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
 			if (rtlex != null)
 			{
 				if (rtlex.Types != null && rtlex.Types.Length > 0)
 				{
-					message.AppendLine("ReflectionTypeLoadException.Types: " + String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray()));
+					message.Add(String.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
 				}
 
 				if (rtlex.LoaderExceptions != null && rtlex.LoaderExceptions.Length > 0)
 				{
-					message.AppendLine("ReflectionTypeLoadException.LoaderExceptions: ");
+					message.Add("\tLoaderExceptions:");
 					foreach (Exception lex in rtlex.LoaderExceptions)
 					{
-						StringUtil.ToString(lex, message);
+						StringUtil.ToString(lex, message, "\t\t");
 					}
-				}
-			}
-
-			UnauthorizedAccessException uaex = exception as UnauthorizedAccessException;
-			if (uaex != null && uaex.Data != null && uaex.GetBaseException().Data.Count > 0)
-			{
-				message.AppendLine("UnauthorizedAccessException.Data: ");
-				foreach (var key in uaex.Data.Keys)
-				{
-					message.AppendLine(String.Format("\t{0}: {1}", key, uaex.Data[key]));
 				}
 			}
 
 			if (exception.StackTrace != null)
 			{
-				message.AppendLine(exception.StackTrace);
+				message.Add(exception.StackTrace);
 			}
 
+			if (!String.IsNullOrEmpty(prepend))
+			{
+				for (int i = c; i < message.Count; i++)
+				{
+					message[i] = prepend + message[i];
+				}
+			}
 
-			StringUtil.ToString(exception.InnerException, message);
+			StringUtil.ToString(exception.InnerException, message, prepend);
 		}
 
 		#endregion
