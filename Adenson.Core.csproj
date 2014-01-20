@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7246795C-9775-4A3E-958C-678FC7F2784C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Adenson</RootNamespace>
+    <AssemblyName>Adenson.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Adenson.Core.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>AdensonCore.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cryptography\Aes.cs" />
+    <Compile Include="Cryptography\CryptUtil.cs" />
+    <Compile Include="Log\BaseFormatter.cs" />
+    <Compile Include="Log\BaseHandler.cs" />
+    <Compile Include="Log\SettingsConfiguration.cs" />
+    <Compile Include="Log\ConsoleHandler.cs" />
+    <Compile Include="Log\DebugHandler.cs" />
+    <Compile Include="Log\DatabaseHandler.cs" />
+    <Compile Include="Log\DefaultFormatter.cs" />
+    <Compile Include="Log\EmailHandler.cs" />
+    <Compile Include="Log\EventLogHandler.cs" />
+    <Compile Include="Log\FileHandler.cs" />
+    <Compile Include="Log\HandlerCollection.cs" />
+    <Compile Include="Log\Settings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Log\Severity.cs" />
+    <Compile Include="Log\TraceHandler.cs" />
+    <Compile Include="System\Collections\Generic\GenericEqualityComparer.cs" />
+    <Compile Include="System\Collections\Generic\GenericComparer.cs" />
+    <Compile Include="Collections\CollectionChangingEventArgs.cs" />
+    <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Configuration\ConfigHelper.cs" />
+    <Compile Include="Configuration\ApplicationSettingsProvider.cs" />
+    <Compile Include="Configuration\ConnectionStrings.cs" />
+    <Compile Include="Configuration\LocalFileSettingsProvider.cs" />
+    <Compile Include="Configuration\RegistrySettingsProvider.cs" />
+    <Compile Include="Configuration\XDocumentSectionHandler.cs" />
+    <Compile Include="Configuration\XElementSettingBase.cs" />
+    <Compile Include="Cryptography\BaseCrypt.cs" />
+    <Compile Include="Cryptography\HashType.cs" />
+    <Compile Include="Data\Internal.cs" />
+    <Compile Include="Data\OdbcSqlHelper.cs" />
+    <Compile Include="Data\OleDbSqlHelper.cs" />
+    <Compile Include="Data\Parameter.cs" />
+    <Compile Include="Data\SqlClientHelper.cs" />
+    <Compile Include="Data\SqlHelperBase.cs" />
+    <Compile Include="Data\SqlHelperProvider.cs" />
+    <Compile Include="Cryptography\Des.cs" />
+    <Compile Include="Cryptography\KeyFormat.cs" />
+    <Compile Include="Cryptography\Rijndael.cs" />
+    <Compile Include="Cryptography\TripleDes.cs" />
+    <Compile Include="Log\LogMarker.cs" />
+    <Compile Include="Log\LogProfiler.cs" />
+    <Compile Include="Log\LogEntry.cs" />
+    <Compile Include="Log\Logger.cs" />
+    <Compile Include="Log\HandlerType.cs" />
+    <Compile Include="System\Console2.cs" />
+    <Compile Include="System\Coordinate.cs" />
+    <Compile Include="System\Extensions.cs" />
+    <Compile Include="System\Pair.cs" />
+    <Compile Include="System\StringUtil.cs" />
+    <Compile Include="System\TypeUtil.cs" />
+    <Compile Include="System\Collections\Extensions.cs" />
+    <Compile Include="System\Collections\Generic\Extensions.cs" />
+    <Compile Include="System\Collections\Generic\Hashtable.cs" />
+    <Compile Include="System\ComponentModel\DataAnnotations\EmailAttribute.cs" />
+    <Compile Include="System\ComponentModel\NotifyObject.cs" />
+    <Compile Include="System\IO\Extensions.cs" />
+    <Compile Include="System\IO\FileUtil.cs" />
+    <Compile Include="System\Threading\BackgroundThread.cs" />
+    <Compile Include="System\Xml\Linq\Extensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Exceptions.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Exceptions.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\GlobalSuppressions.cs" />
+    <Compile Include="Properties\SR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SR.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Exceptions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Adenson</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\SR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SR.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Adenson</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AdensonCore.snk" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
+  <Import Project="$(MSBuildExtensionsPath32)\FxCop\FxCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
+</Project>
