@@ -33,6 +33,16 @@ namespace Adenson.CoreTest.System.Collections.Generic
 		[Test]
 		public void GetTest1()
 		{
+			var dic = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
+			Assert.AreEqual(1, dic.Get("one", 3));
+			Assert.AreEqual(2, dic.Get("two", 4));
+			Assert.AreEqual(3, dic.Get("three", 3));
+			Assert.IsFalse(dic.ContainsKey("three"));
+		}
+
+		[Test]
+		public void GetTest2()
+		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
 			Assert.AreEqual(1, dic.Get("ONE", StringComparison.CurrentCultureIgnoreCase));
 			Assert.AreEqual(2, dic.Get("two", StringComparison.CurrentCultureIgnoreCase));
@@ -41,13 +51,23 @@ namespace Adenson.CoreTest.System.Collections.Generic
 		}
 
 		[Test]
-		public void GetTest2()
+		public void GetOrAddTest()
 		{
-			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.AreEqual(1, dic.Get("one", 3));
-			Assert.AreEqual(2, dic.Get("two", 4));
-			Assert.AreEqual(3, dic.Get("three", 3));
+			var dic = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
+			Assert.AreEqual(1, dic.GetOrAdd("one", 3));
+			Assert.AreEqual(2, dic.GetOrAdd("two", 4));
+			Assert.AreEqual(3, dic.GetOrAdd("three", 3));
+			Assert.IsTrue(dic.ContainsKey("three"));
 			Assert.AreEqual(3, dic["three"]);
+		}
+
+		[Test]
+		public void GetOrDefaultTest()
+		{
+			var dic = new Dictionary<string, object> { { "one", 1 }, { "two", 2 } };
+			Assert.AreEqual(1, dic.GetOrDefault("one"));
+			Assert.AreEqual(2, dic.GetOrDefault("two"));
+			Assert.AreEqual(null, dic.GetOrDefault("three"), "No 'three' exists, so returns null");
 		}
 
 		[Test, ExpectedException(typeof(KeyNotFoundException))]

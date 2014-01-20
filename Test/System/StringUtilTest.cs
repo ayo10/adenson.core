@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace Adenson.CoreTest.System
@@ -115,13 +116,34 @@ namespace Adenson.CoreTest.System
 		[Test]
 		public void ToStringExceptionTest()
 		{
-			Exception exception = new Exception("Test1", new Exception("Test2"));
-			string expected = "System.Exception: Test1\r\nSystem.Exception: Test2";
-			string actual = StringUtil.ToString(exception);
-			Assert.AreEqual(expected, actual);
+			Exception exception = new Exception("Test1");
+			Assert.AreEqual("System.Exception: Test1", StringUtil.ToString(exception));
+
+			exception = new Exception("Test1", new Exception("Test2"));
+			Assert.AreEqual("System.Exception: Test1\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
+
+			exception.HelpLink = "Woot";
+			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: Woot, Source: \r\nSystem.Exception: Test2", StringUtil.ToString(exception));
+
+			exception.Source = "Source";
+			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: Woot, Source: Source\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
+
+			exception.HelpLink = null;
+			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: , Source: Source\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
 			
 			exception = new Exception("Test2", new Exception("Test1"));
 			Assert.AreEqual("System.Exception: Test2\r\nSystem.Exception: Test1", StringUtil.ToString(exception));
+
+			exception.Data.Add("Key1", "One");
+			Assert.AreEqual("System.Exception: Test2\r\n\tData:\r\n\t\tKey1: One\r\nSystem.Exception: Test1", StringUtil.ToString(exception));
+
+			var copy = exception;
+			copy.Data.Clear();
+			exception = new ReflectionTypeLoadException(new Type[] { typeof(Int32) }, new Exception[] { copy });
+			Assert.AreEqual("System.Reflection.ReflectionTypeLoadException: Exception of type 'System.Reflection.ReflectionTypeLoadException' was thrown.\r\n\tTypes: System.Int32\r\n\tLoaderExceptions:\r\n\t\tSystem.Exception: Test2\r\n\t\tSystem.Exception: Test1", StringUtil.ToString(exception));
+
+			exception = new ReflectionTypeLoadException(new Type[] { typeof(Int32) }, new Exception[] { copy }, "Woot wooter");
+			Assert.AreEqual("System.Reflection.ReflectionTypeLoadException: Woot wooter\r\n\tTypes: System.Int32\r\n\tLoaderExceptions:\r\n\t\tSystem.Exception: Test2\r\n\t\tSystem.Exception: Test1", StringUtil.ToString(exception));
 		}
 	}
 }
