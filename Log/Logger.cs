@@ -133,8 +133,7 @@ namespace Adenson.Log
 			{
 				if (!staticLoggers.ContainsKey(type))
 				{
-					Logger logger = new Logger(type);
-					staticLoggers.Add(type, logger);
+					staticLoggers.Add(type, new Logger(type));
 				}
 
 				return staticLoggers[type];
