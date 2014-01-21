@@ -81,10 +81,12 @@ namespace Adenson.Log
 					}
 				}
 
-				writer = new StreamWriter(this.FilePath);
+				writer = new StreamWriter(this.FilePath, true);
 			}
 
 			writer.WriteLine(this.Formatter.Format(entry));
+			writer.Flush();
+
 			return true;
 		}
 
