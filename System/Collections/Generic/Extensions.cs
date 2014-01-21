@@ -61,36 +61,6 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets the element with the specified string key, using specified comparison type.
-		/// </summary>
-		/// <typeparam name="TValue">The type.</typeparam>
-		/// <param name="dictionary">The dictionary to parse.</param>
-		/// <param name="key">The key to find.</param>
-		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
-		/// <returns>The value associated with the specified key. If the specified key is not found, a get operation throws a System.Collections.Generic.KeyNotFoundException, and a set operation creates a new element with the specified key.</returns>
-		/// <exception cref="KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
-		public static TValue Get<TValue>(this IDictionary<string, TValue> dictionary, string key, StringComparison comparisonType)
-		{
-			if (dictionary == null)
-			{
-				throw new ArgumentNullException("dictionary");
-			}
-
-			if (key == null)
-			{
-				throw new ArgumentNullException("key");
-			}
-
-			string actualKey = dictionary.Keys.FirstOrDefault(k => k.Equals(key, comparisonType));
-			if (actualKey == null)
-			{
-				throw new KeyNotFoundException(key);
-			}
-
-			return dictionary[actualKey];
-		}
-
-		/// <summary>
 		/// Gets the element with the specified key if it exists in the dictionary, else adds <paramref name="addIfNull"/> to the dictionary with the specified key and returns it.
 		/// </summary>
 		/// <typeparam name="TKey">The type of key.</typeparam>
@@ -127,30 +97,6 @@ namespace System.Collections.Generic
 		public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
 		{
 			return dictionary.Get(key, default(TValue));
-		}
-
-		/// <summary>
-		/// Determines whether the dictionary contains the specified key, using the specified comparism rule.
-		/// </summary>
-		/// <typeparam name="T">The type.</typeparam>
-		/// <param name="dictionary">The dictionary to parse.</param>
-		/// <param name="key">The key to find</param>
-		/// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
-		/// <returns>true if the value of the value parameter is the same as this string; otherwise, false.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="key"/> is null.</exception>
-		public static bool ContainsKey<T>(this IDictionary<string, T> dictionary, string key, StringComparison comparison)
-		{
-			if (dictionary == null)
-			{
-				throw new ArgumentNullException("dictionary");
-			}
-
-			if (StringUtil.IsNullOrWhiteSpace(key))
-			{
-				throw new ArgumentNullException("key");
-			}
-
-			return dictionary.Keys.Any(k => k.Equals(key, comparison));
 		}
 
 		/// <summary>
