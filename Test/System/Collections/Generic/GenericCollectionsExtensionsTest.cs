@@ -20,34 +20,15 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			target.AddOrSet("test2", "value3");
 			Assert.AreEqual("value3", target["test2"]);
 		}
-		
-		[Test]
-		public void ContainsKeyTest()
-		{
-			Dictionary<string, int> dictionary = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
-			Assert.IsTrue(dictionary.ContainsKey("one", StringComparison.CurrentCulture));
-			Assert.IsTrue(dictionary.ContainsKey("ONE", StringComparison.CurrentCultureIgnoreCase));
-			Assert.IsFalse(dictionary.ContainsKey("tHREe", StringComparison.CurrentCultureIgnoreCase));
-		}
 
 		[Test]
-		public void GetTest1()
+		public void GetTest()
 		{
 			var dic = new Dictionary<string, int> { { "one", 1 }, { "two", 2 } };
 			Assert.AreEqual(1, dic.Get("one", 3));
 			Assert.AreEqual(2, dic.Get("two", 4));
 			Assert.AreEqual(3, dic.Get("three", 3));
 			Assert.IsFalse(dic.ContainsKey("three"));
-		}
-
-		[Test]
-		public void GetTest2()
-		{
-			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.AreEqual(1, dic.Get("ONE", StringComparison.CurrentCultureIgnoreCase));
-			Assert.AreEqual(2, dic.Get("two", StringComparison.CurrentCultureIgnoreCase));
-			Assert.Throws<KeyNotFoundException>(delegate { dic.Get("ONE", StringComparison.CurrentCulture); });
-			Assert.Throws<KeyNotFoundException>(delegate { dic.Get("two", StringComparison.CurrentCulture); });
 		}
 
 		[Test]
@@ -68,14 +49,6 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			Assert.AreEqual(1, dic.GetOrDefault("one"));
 			Assert.AreEqual(2, dic.GetOrDefault("two"));
 			Assert.AreEqual(null, dic.GetOrDefault("three"), "No 'three' exists, so returns null");
-		}
-
-		[Test, ExpectedException(typeof(KeyNotFoundException))]
-		public void GetFailTest()
-		{
-			var dic = new Dictionary<string, int> { { "one", 1 }, { "TWO", 2 } };
-			Assert.IsNull(dic.Get("ONE", StringComparison.CurrentCulture));
-			Assert.IsNull(dic.Get("two", StringComparison.CurrentCulture));
 		}
 
 		[Test]
