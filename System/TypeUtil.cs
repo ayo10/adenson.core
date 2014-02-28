@@ -159,7 +159,7 @@ namespace System
 		/// <param name="type">The type to find.</param>
 		/// <returns>An enumerable list of types found.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="type"/> is null.</exception>
-		public static IEnumerable<Type> FindAllIsAssignableFrom(Type type)
+		public static IEnumerable<Type> FindAssignableFrom(Type type)
 		{
 			if (type == null)
 			{
@@ -167,6 +167,35 @@ namespace System
 			}
 
 			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(t => type != t && type.IsAssignableFrom(t)));
+		}
+
+		/// <summary>
+		/// Finds one or more assemblies that reference one or more assemblies name starts with the specified partial name in the current app domain directory.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="partialAssemblyName"/> is null.</exception>
+		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName)
+		{
+			return TypeUtil.FindReferencingAssemblies(partialAssemblyName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath));
+		}
+
+		/// <summary>
+		/// Finds one or more assemblies that reference one or more assemblies name starts with the specified partial name in the specified directory (uses reflection only load).
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <param name="directory">The directory look for files.</param>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> or <paramref name="directory"/> is null.</exception>
+		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
+		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName, string directory)
+		{
+			foreach (string file in Directory.GetFiles(directory, "*.dll").Union(Directory.GetFiles(directory, "*.exe")))
+			{
+				var assembly = Assembly.ReflectionOnlyLoadFrom(file);
+				if (assembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
+				{
+					yield return assembly;
+				}
+			}
 		}
 		
 		/// <summary>
@@ -351,19 +380,27 @@ namespace System
 		}
 
 		/// <summary>
+		/// Loads one or more assemblies that reference one or more assemblies name starts with the specified partial name in the current <see cref="AppDomain.BaseDirectory"/> and <see cref="AppDomain.RelativeSearchPath"/>.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> is null.</exception>
+		public static void LoadReferencingAssemblies(string partialAssemblyName)
+		{
+			TypeUtil.LoadReferencingAssemblies(partialAssemblyName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath));
+		}
+
+		/// <summary>
 		/// Loads one or more assemblies that reference one or more assemblies name starts with the specified partial name.
 		/// </summary>
 		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
-		public static void LoadReferencingAssemblies(string partialAssemblyName)
+		/// <param name="directory">The directory look for files.</param>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> or <paramref name="directory"/> is null.</exception>
+		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
+		public static void LoadReferencingAssemblies(string partialAssemblyName, string directory)
 		{
-			string path = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).AbsolutePath);
-			foreach (string file in Directory.GetFiles(path, "*.dll"))
+			foreach (Assembly assembly in TypeUtil.FindReferencingAssemblies(partialAssemblyName, directory))
 			{
-				var rassembly = Assembly.ReflectionOnlyLoadFrom(file);
-				if (rassembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
-				{
-					Assembly.Load(rassembly.GetName());
-				}
+				Assembly.Load(assembly.GetName());
 			}
 		}
 

@@ -54,6 +54,7 @@
     <Compile Include="Cryptography\CryptUtil.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
+    <Compile Include="Log\SimpleFormatter.cs" />
     <Compile Include="Log\SettingsConfiguration.cs" />
     <Compile Include="Log\ConsoleHandler.cs" />
     <Compile Include="Log\DebugHandler.cs" />
