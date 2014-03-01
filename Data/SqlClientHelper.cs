@@ -125,6 +125,11 @@ namespace Adenson.Data
 		/// </summary>
 		public override void DropDatabase()
 		{
+			if (!this.DatabaseExists())
+			{
+				return;
+			}
+
 			var ssb = new SqlConnectionStringBuilder(this.ConnectionString);
 			var database = ssb.InitialCatalog;
 			ssb.InitialCatalog = "master";

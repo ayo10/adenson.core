@@ -10,89 +10,80 @@ namespace Adenson.CoreTest.Data
 	{
 		#region Variables
 		protected SqlHelperBase target;
+		protected string connectionString;
 		#endregion
 		#region Tests
 
 		[Test]
 		public void ColumnExistsTest()
 		{
-			string tableName = string.Empty; // TODO: Initialize to an appropriate value
-			string columnName = string.Empty; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.ColumnExists(tableName, columnName);
-			Assert.AreEqual(expected, actual);
+			target.ExecuteNonQuery("create table columnexisttest (id int not null, test varchar(20) null)");
+			Assert.IsTrue(target.ColumnExists("columnexisttest", "id"));
+			Assert.IsTrue(target.ColumnExists("columnexisttest", "test"));
+			Assert.IsTrue(target.ColumnExists("columnexisttest", "ID"), "Case is irrelevant");
+			Assert.IsTrue(target.ColumnExists("columnexisttest", "TEST"), "Case is irrelevant");
+			Assert.IsFalse(target.ColumnExists("columnexisttest", "woot"));
+			Assert.IsFalse(target.ColumnExists("woot", "woot"));
+			target.ExecuteNonQuery("drop table columnexisttest");
 		}
 
 		[Test]
 		public void CreateAdapterTest()
 		{
-			IDbCommand command = null; // TODO: Initialize to an appropriate value
-			IDbDataAdapter expected = null; // TODO: Initialize to an appropriate value
-			IDbDataAdapter actual;
-			actual = target.CreateAdapter(command);
-			Assert.AreEqual(expected, actual);
+			Assert.IsNotNull(target.CreateAdapter(target.CreateCommand()));
 		}
 
 		[Test]
 		public void CreateCommandTest()
 		{
-			IDbCommand expected = null; // TODO: Initialize to an appropriate value
-			IDbCommand actual;
-			actual = target.CreateCommand();
-			Assert.AreEqual(expected, actual);
+			Assert.IsNotNull(target.CreateCommand());
 		}
 
 		[Test]
 		public void CreateConnectionTest()
 		{
-			IDbConnection expected = null; // TODO: Initialize to an appropriate value
-			IDbConnection actual;
-			actual = target.CreateConnection();
-			Assert.AreEqual(expected, actual);
+			IDbConnection actual = target.CreateConnection();
+			Assert.IsNotNull(actual);
+			Assert.AreEqual(ConnectionState.Closed, actual.State);
 		}
 
 		[Test]
 		public virtual void CreateExistDropDatabaseTest()
 		{
-			var target = this.CreateTarget("Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;");
-			Assert.IsFalse(target.DatabaseExists());
-			target.CreateDatabase();
 			Assert.IsTrue(target.DatabaseExists());
 			target.DropDatabase();
 			Assert.IsFalse(target.DatabaseExists());
+			Assert.DoesNotThrow(delegate { target.DropDatabase(); }, "Should check first to see that the database exists before dropping");
+			target.CreateDatabase();
+			Assert.IsTrue(target.DatabaseExists());
 		}
 
 		[Test]
 		public void CreateParameterTest()
 		{
-			string name = string.Empty; // TODO: Initialize to an appropriate value
-			object value = null; // TODO: Initialize to an appropriate value
-			IDataParameter expected = null; // TODO: Initialize to an appropriate value
-			IDataParameter actual;
-			actual = target.CreateParameter(name, value);
-			Assert.AreEqual(expected, actual);
+			IDbDataParameter actual = target.CreateParameter();
+			Assert.IsNotNull(actual);
 		}
 
 		[Test]
-		public void CreateParameterTest1()
+		public void CreateParameterWithValueTest()
 		{
-			IDbDataParameter expected = null; // TODO: Initialize to an appropriate value
-			IDbDataParameter actual;
-			actual = target.CreateParameter();
-			Assert.AreEqual(expected, actual);
+			IDataParameter actual = target.CreateParameter("test", "value");
+			Assert.IsNotNull(actual);
+			Assert.AreEqual("test", actual.ParameterName);
+			Assert.AreEqual("value", actual.Value);
 		}
 
 		[Test]
-		public void DisposeTest()
+		public void CurrentConnectionTest()
 		{
-			target.Dispose();
+			Assert.IsNotNull(target.Connection);
 		}
 
 		[Test]
-		public void ExecuteDataSetTest()
+		public void ExecuteDataSetTypeTextValueTest()
 		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
+			CommandType type = new CommandType();
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			DataSet expected = null; // TODO: Initialize to an appropriate value
@@ -102,7 +93,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteDataSetTest1()
+		public void ExecuteDataSetCommandTest()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			DataSet expected = null; // TODO: Initialize to an appropriate value
@@ -112,7 +103,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteDataSetTest3()
+		public void ExecuteDataSetMultipleTextsTest()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
@@ -122,7 +113,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteDataSetTest4()
+		public void ExecuteDataSetMultipleCommandsTest()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
@@ -132,7 +123,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteNonQueryTest()
+		public void ExecuteNonQueryTypeTextValueTest()
 		{
 			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
@@ -144,7 +135,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteNonQueryTest1()
+		public void ExecuteNonQueryMultipleCommmandsTest()
 		{
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
@@ -154,7 +145,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteNonQueryTest2()
+		public void ExecuteNonQueryCommandTest()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			int expected = 0; // TODO: Initialize to an appropriate value
@@ -164,7 +155,7 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteNonQueryTest4()
+		public void ExecuteNonQueryMultipleTextsTest()
 		{
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
@@ -240,24 +231,17 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void TableExistsTest()
 		{
-			string tableName = string.Empty; // TODO: Initialize to an appropriate value
-			bool expected = false; // TODO: Initialize to an appropriate value
-			bool actual;
-			actual = target.TableExists(tableName);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void CurrentConnectionTest()
-		{
-			IDbConnection actual;
-			actual = target.Connection;
+			target.ExecuteNonQuery("create table TableExistsTest (id int not null, test varchar(20) null)");
+			Assert.IsTrue(target.TableExists("TableExistsTest"));
+			Assert.IsTrue(target.TableExists("tableexiststest"), "Case is irrelevant");
+			Assert.IsFalse(target.TableExists("woot"));
+			target.ExecuteNonQuery("drop table TableExistsTest");
 		}
 
 		#endregion
 		#region Helpers
 
-		protected abstract T CreateTarget(string connectionString);
+		protected abstract T CreateTarget();
 
 		#endregion
 	}

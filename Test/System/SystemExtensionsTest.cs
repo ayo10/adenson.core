@@ -38,9 +38,6 @@ namespace Adenson.CoreTest.System
 		[Test]
 		public void HasAttributeTest()
 		{
-			Assert.IsTrue(new HasAttributeTestClass1().HasAttribute(typeof(TestAttribute1)));
-			Assert.IsTrue(new HasAttributeTestClass2().HasAttribute(typeof(TestAttribute1)));
-			Assert.IsTrue(new HasAttributeTestClass2().HasAttribute(typeof(TestAttribute2)), "By inherit HasAttributeTestClass1");
 			Assert.IsTrue(typeof(HasAttributeTestClass1).HasAttribute(typeof(TestAttribute1)));
 			Assert.IsTrue(typeof(HasAttributeTestClass2).HasAttribute(typeof(TestAttribute2)));
 			Assert.IsFalse(typeof(HasAttributeTestClass2).HasAttribute(typeof(TestAttribute1)));

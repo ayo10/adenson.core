@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using Adenson.Configuration;
 using Adenson.Data;
 using NUnit.Framework;
 
@@ -14,50 +15,33 @@ namespace Adenson.CoreTest.Data
 		public void TestInitialize()
 		{
 			target = new SqlClientHelper();
+			target.DropDatabase();
+			target.CreateDatabase();
+		}
+
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			target.DropDatabase();
 		}
 
 		#endregion
 		#region Tests
 
-		[Test]
-		public void ConstructorTest1()
-		{
-			SqlClientHelper target = new SqlClientHelper();
-		}
-
-		[Test]
-		public void ConstructorTest2()
-		{
-			SqlClientHelper target = new SqlClientHelper("");
-		}
-
-		[Test]
-		public void ConstructorTest3()
-		{
-			ConnectionStringSettings connectionString = null; // TODO: Initialize to an appropriate value
-			SqlClientHelper target = new SqlClientHelper(connectionString);
-		}
-
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ConstructorFailTest1()
+		public void ConstructorEmptyStringFailTest()
 		{
 			SqlClientHelper target = new SqlClientHelper(String.Empty);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ConstructorFailTest2()
+		public void ConstructorNullStringFailTest()
 		{
 			SqlClientHelper target = new SqlClientHelper((string)null);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ConstructorFailTest3()
-		{
-			SqlClientHelper target = new SqlClientHelper((string)null);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ConstructorFailTest4()
+		public void ConstructorNullSettingsTest()
 		{
 			SqlClientHelper target = new SqlClientHelper((ConnectionStringSettings)null);
 		}
@@ -65,8 +49,9 @@ namespace Adenson.CoreTest.Data
 		#endregion
 		#region Helpers
 
-		protected override SqlClientHelper CreateTarget(string connectionString)
+		protected override SqlClientHelper CreateTarget()
 		{
+			connectionString = "Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;";
 			return new SqlClientHelper(connectionString);
 		}
 
