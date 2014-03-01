@@ -190,8 +190,16 @@ namespace System
 		{
 			foreach (string file in Directory.GetFiles(directory, "*.dll").Union(Directory.GetFiles(directory, "*.exe")))
 			{
-				var assembly = Assembly.ReflectionOnlyLoadFrom(file);
-				if (assembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
+				Assembly assembly = null;
+				try
+				{
+					assembly = Assembly.ReflectionOnlyLoadFrom(file);
+				}
+				catch (BadImageFormatException)
+				{
+				}
+
+				if (assembly != null && assembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
 				{
 					yield return assembly;
 				}
@@ -398,9 +406,14 @@ namespace System
 		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
 		public static void LoadReferencingAssemblies(string partialAssemblyName, string directory)
 		{
+			var names = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName()).ToList();
 			foreach (Assembly assembly in TypeUtil.FindReferencingAssemblies(partialAssemblyName, directory))
 			{
-				Assembly.Load(assembly.GetName());
+				var name = assembly.GetName();
+				if (!names.Contains(name))
+				{
+					Assembly.Load(name);
+				}
 			}
 		}
 

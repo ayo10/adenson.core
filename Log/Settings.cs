@@ -14,7 +14,7 @@ namespace Adenson.Log
 		#endregion
 		#region Constructor
 
-		internal Settings()
+		private Settings()
 		{
 			this.Formatter = new DefaultFormatter();
 			this.Severity = Severity.Error;

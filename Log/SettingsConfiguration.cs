@@ -65,6 +65,7 @@ namespace Adenson.Log
 			public HandlerType Handler
 			{
 				get { return (HandlerType)this["handler"]; }
+				set { this["handler"] = value; }
 			}
 
 			/// <summary>
@@ -74,6 +75,7 @@ namespace Adenson.Log
 			public string Formatter
 			{
 				get { return (string)this["formatter"]; }
+				set { this["formatter"] = value; }
 			}
 
 			/// <summary>
@@ -83,6 +85,7 @@ namespace Adenson.Log
 			public Severity Severity
 			{
 				get { return (Severity)this["severity"]; }
+				set { this["severity"] = value; }
 			}
 
 			/// <summary>
@@ -101,6 +104,7 @@ namespace Adenson.Log
 
 					return type;
 				}
+				set { this["customType"] = value; }
 			}
 
 			#endregion
@@ -128,6 +132,14 @@ namespace Adenson.Log
 		[SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Yes it was, dummas.")]
 		internal sealed class HandlerElementCollection : ConfigurationElementCollection
 		{
+			#region Constructor
+
+			public HandlerElementCollection()
+			{
+				this.BaseAdd(new HandlerElement { Severity = Severity.Error, Handler = HandlerType.Trace, Formatter = "Adenson.Log.DefaultFormatter, Adenson.Core" });
+			}
+
+			#endregion
 			#region Methods
 
 			/// <summary>

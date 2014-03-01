@@ -118,22 +118,6 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets if the specified object's type (or its inheritance chain) has the specified attribute (by calling <see cref="HasAttribute(Type, Type, bool)"/>).
-		/// </summary>
-		/// <param name="value">The object.</param>
-		/// <param name="attributeType">The attribute type.</param>
-		/// <returns>True if the type has the specified attribute, false otherwise.</returns>
-		public static bool HasAttribute(this object value, Type attributeType)
-		{
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
-
-			return value.GetType().HasAttribute(attributeType, true);
-		}
-
-		/// <summary>
 		/// Rounds a double-precision floating-point value to a specified number of fractional digits.
 		/// </summary>
 		/// <remarks>All it does is to call Math.Round(value, digits)</remarks>
