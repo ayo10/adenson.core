@@ -202,7 +202,7 @@ namespace System
 			message.Add(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
 			if (!String.IsNullOrEmpty(exception.HelpLink) || !String.IsNullOrEmpty(exception.Source))
 			{
-				message.Add(String.Format("\tHelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
+				message.Add(String.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
 			}
 
 			if (exception.Data.Count > 0)
