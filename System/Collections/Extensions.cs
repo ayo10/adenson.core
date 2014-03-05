@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace System.Collections
@@ -39,7 +40,7 @@ namespace System.Collections
 				throw new ArgumentNullException("other");
 			}
 
-			MergeEnumerable list = new MergeEnumerable();
+			List<object> list = new List<object>();
 			foreach (object item in value)
 			{
 				list.Add(item);
@@ -51,13 +52,6 @@ namespace System.Collections
 			}
 
 			return list;
-		}
-
-		#endregion
-		#region Inner Class
-
-		private class MergeEnumerable : ArrayList
-		{
 		}
 
 		#endregion
