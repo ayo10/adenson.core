@@ -102,6 +102,7 @@
     <Compile Include="System\Coordinate.cs" />
     <Compile Include="System\Extensions.cs" />
     <Compile Include="System\Pair.cs" />
+    <Compile Include="System\Reflection\Reflector.cs" />
     <Compile Include="System\StringUtil.cs" />
     <Compile Include="System\TypeUtil.cs" />
     <Compile Include="System\Collections\Extensions.cs" />
