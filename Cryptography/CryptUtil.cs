@@ -201,6 +201,7 @@ namespace Adenson.Cryptography
 		/// <param name="hashType">The hash algorithm to use.</param>
 		/// <param name="value">The bit array to hash.</param>
 		/// <param name="salt">The salt.</param>
+		/// <param name="iterations">The number of times the hash is iterated.</param>
 		/// <returns>The bit array hash.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="salt"/> is null.</exception>
 		public static byte[] GetHash(HashType hashType, byte[] value, byte[] salt, int iterations)

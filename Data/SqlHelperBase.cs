@@ -6,6 +6,7 @@ using System.Data;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using Adenson.Log;
 
 namespace Adenson.Data
 {
@@ -843,7 +844,7 @@ namespace Adenson.Data
 			{
 				if (command != null)
 				{
-					Log.Logger.GetLogger(this.GetType()).Debug(Exceptions.ErrantCommandArg, command.CommandText);
+					Logger.Get(this.GetType()).Debug(Exceptions.ErrantCommandArg, command.CommandText);
 				}
 
 				if (transactions.Count > 0)
