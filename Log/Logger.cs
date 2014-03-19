@@ -53,39 +53,39 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/> then <see cref="Critical(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
 		public static void Critical(Type type, object message)
 		{
-			Logger.GetLogger(type).Critical(message);
+			Logger.Get(type).Critical(message);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/> then <see cref="Critical(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
 		public static void Critical(Type type, string message, params object[] arguments)
 		{
-			Logger.GetLogger(type).Critical(message, arguments);
+			Logger.Get(type).Critical(message, arguments);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/> then <see cref="Debug(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Debug(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
 		[Conditional("DEBUG")]
 		public static void Debug(Type type, object message)
 		{
-			Logger.GetLogger(type).Debug(message);
+			Logger.Get(type).Debug(message);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Debug(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Debug(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -93,36 +93,47 @@ namespace Adenson.Log
 		[Conditional("DEBUG")]
 		public static void Debug(Type type, string message, params object[] arguments)
 		{
-			Logger.GetLogger(type).Debug(message, arguments);
+			Logger.Get(type).Debug(message, arguments);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/> then <see cref="Error(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Error(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
 		public static void Error(Type type, object message)
 		{
-			Logger.GetLogger(type).Error(message);
+			Logger.Get(type).Error(message);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Error(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Error(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
 		public static void Error(Type type, string message, params object[] arguments)
 		{
-			Logger.GetLogger(type).Error(message, arguments);
+			Logger.Get(type).Error(message, arguments);
 		}
-
+		
 		/// <summary>
-		/// Gets a pre initialized (or new) Logger for specified type
+		/// Gets a pre initialized (or new) Logger for specified type.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns>Existing, or newly minted logger</returns>
+		[Obsolete("Use Logger.Get", false)]
 		public static Logger GetLogger(Type type)
+		{
+			return Logger.Get(type);
+		}
+
+		/// <summary>
+		/// Gets a pre initialized (or new) Logger for specified type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>Existing, or newly minted logger</returns>
+		public static Logger Get(Type type)
 		{
 			if (type == null)
 			{
@@ -141,7 +152,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Info(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -149,18 +160,18 @@ namespace Adenson.Log
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Info(Type type, string message, params object[] arguments)
 		{
-			Logger.GetLogger(type).Info(message, arguments);
+			Logger.Get(type).Info(message, arguments);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Info(object)"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Info(Type type, object message)
 		{
-			Logger.GetLogger(type).Info(message);
+			Logger.Get(type).Info(message);
 		}
 
 		/// <summary>
@@ -169,24 +180,25 @@ namespace Adenson.Log
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A disposable profiler object</returns>
+		[Obsolete("Use GetProfiler on an instance of Logger", false)]
 		public static LogProfiler ProfilerStart(Type type, string identifier)
 		{
-			return Logger.GetLogger(type).ProfilerStart(identifier);
+			return Logger.Get(type).GetProfiler(identifier);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(object)"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(object)"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="value">The value.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, object value)
 		{
-			Logger.GetLogger(type).Warn(value);
+			Logger.Get(type).Warn(value);
 		}
 
 		/// <summary>
-		/// Calls <see cref="GetLogger(Type)"/>, then calls <see cref="Warn(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(string, object[])"/>
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -194,7 +206,7 @@ namespace Adenson.Log
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
 		public static void Warn(Type type, string message, params object[] arguments)
 		{
-			Logger.GetLogger(type).Warn(message, arguments);
+			Logger.Get(type).Warn(message, arguments);
 		}
 
 		/// <summary>
@@ -274,6 +286,27 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
+		/// Starts a execution duration profiler
+		/// </summary>
+		/// <param name="identifier">Some kind of identifier.</param>
+		/// <returns>A profiler object</returns>
+		public LogProfiler GetProfiler(string identifier)
+		{
+			if (StringUtil.IsNullOrWhiteSpace(identifier))
+			{
+				throw new ArgumentNullException("identifier");
+			}
+
+			LogProfiler profiler = new LogProfiler(this, identifier);
+			lock (profilers)
+			{
+				profilers.Add(profiler);
+			}
+
+			return profiler;
+		}
+
+		/// <summary>
 		/// Log debug message. Executes if DEBUG is defined.
 		/// </summary>
 		/// <param name="value">The value.</param>
@@ -300,20 +333,10 @@ namespace Adenson.Log
 		/// </summary>
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A profiler object</returns>
+		[Obsolete("Use GetProfiler", false)]
 		public LogProfiler ProfilerStart(string identifier)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier))
-			{
-				throw new ArgumentNullException("identifier");
-			}
-
-			LogProfiler profiler = new LogProfiler(this, identifier);
-			lock (profilers)
-			{
-				profilers.Add(profiler);
-			}
-
-			return profiler;
+			return this.GetProfiler(identifier);
 		}
 
 		/// <summary>

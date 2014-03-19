@@ -13,7 +13,7 @@ namespace Adenson.Data
 	public sealed class SqlCeHelper : SqlHelperBase
 	{
 		#region Variables
-		private static Logger logger = Logger.GetLogger(typeof(SqlCeHelper));
+		private static Logger logger = Logger.Get(typeof(SqlCeHelper));
 		#endregion
 		#region Constructor
 

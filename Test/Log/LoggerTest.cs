@@ -10,7 +10,7 @@ namespace Adenson.CoreTest.Log
 	{
 		#region Variables
 		private TestHandler handler = new TestHandler();
-		private Logger testLogger = Logger.GetLogger(typeof(LoggerTest));
+		private Logger testLogger = Logger.Get(typeof(LoggerTest));
 		#endregion
 		#region Init
 
@@ -33,16 +33,16 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void GetLoggerTest()
 		{
-			Logger logger1 = Logger.GetLogger(this.GetType());
+			Logger logger1 = Logger.Get(this.GetType());
 			Assert.IsNotNull(logger1);
 			Assert.AreEqual(logger1.ClassType, typeof(LoggerTest));
 
-			Logger logger2 = Logger.GetLogger(this.GetType());
+			Logger logger2 = Logger.Get(this.GetType());
 			Assert.IsNotNull(logger2);
 			Assert.AreSame(logger1, logger2, "GetLogger should always return the same object per type");
 			Assert.AreEqual(logger2.ClassType, typeof(LoggerTest));
 
-			Logger logger3 = Logger.GetLogger(typeof(LogProfilerTest));
+			Logger logger3 = Logger.Get(typeof(LogProfilerTest));
 			Assert.IsNotNull(logger3);
 			Assert.AreNotSame(logger1, logger3, "GetLogger should return a different logger per type.");
 			Assert.AreEqual(logger3.ClassType, typeof(LogProfilerTest));
@@ -83,7 +83,7 @@ namespace Adenson.CoreTest.Log
 		{
 			Logger.Settings.Severity = Severity.Debug;
 			int count = handler.Entries.Count;
-			var prf = testLogger.ProfilerStart("ProfileTest");
+			var prf = testLogger.GetProfiler("ProfileTest");
 			Assert.IsNotNull(prf);
 			Assert.AreEqual("ProfileTest", prf.Identifier);
 
@@ -94,16 +94,16 @@ namespace Adenson.CoreTest.Log
 			Assert.AreEqual(++count, handler.Entries.Count);
 			Assert.AreEqual("ProfileTest Test1", this.Strip(handler.Entries.Last().Message));
 
-			var lmk = prf.MarkStart();
+			var lmk = prf.GetMarker();
 			Assert.IsNotNull(lmk);
 
 			prf.Dispose();
 			Assert.AreEqual(++count, handler.Entries.Count);
 			Assert.AreEqual("ProfileTest FINISH", this.Strip(handler.Entries.Last().Message));
 
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(null); });
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(String.Empty); });
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.ProfilerStart(" "); });
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(null); });
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(String.Empty); });
+			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(" "); });
 		}
 
 		#endregion

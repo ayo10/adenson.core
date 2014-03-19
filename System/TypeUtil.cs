@@ -18,7 +18,7 @@ namespace System
 	public static class TypeUtil
 	{
 		#region Variables
-		private static Logger logger = Logger.GetLogger(typeof(TypeUtil));
+		private static Logger logger = Logger.Get(typeof(TypeUtil));
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
 		#endregion
 		#region Methods
@@ -232,7 +232,6 @@ namespace System
 		/// Gets the value of the property of the object passed in (attempts to anyway)
 		/// </summary>
 		/// <param name="item">Object into whose toga we shall be looking in</param>
-		/// <param name="propertyNames">The particular property name we are looking for</param>
 		/// <returns>Value of the property if found</returns>
 		/// <exception cref="System.ArgumentException">Thrown if the field name does not exist as a property of the object</exception>
 		public static string[] GetPropertyNames(object item)
