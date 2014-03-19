@@ -11,16 +11,15 @@ namespace System.Reflection
 	{
 		#region Fields
 		private static Dictionary<int, Reflector> created = new Dictionary<int, Reflector>();
-		private static Dictionary<Type, List<MethodInfo>> methods = new Dictionary<Type, List<MethodInfo>>();
-		private static Dictionary<Type, List<PropertyInfo>> properties = new Dictionary<Type, List<PropertyInfo>>();
 		private WeakReference itemReference;
 		#endregion
 		#region Constructor
 
 		private Reflector(object item)
 		{
-			throw new NotImplementedException();
 			this.Item = Item;
+			this.Methods = MethodWrapper.Read(this, item.GetType());
+			this.Properties = PropertyWrapper.Read(this, item.GetType());
 		}
 
 		#endregion
@@ -31,24 +30,8 @@ namespace System.Reflection
 		/// </summary>
 		public IEnumerable<Attribute> Attributes
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		/// <summary>
-		/// Gets all the method names of the object.
-		/// </summary>
-		public IEnumerable<string> MethodNames
-		{
-			get
-			{
-				foreach (var m in this.Methods)
-				{
-					yield return m.Name;
-				}
-			}
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -74,23 +57,33 @@ namespace System.Reflection
 		/// <summary>
 		/// Gets all the methods of the object.
 		/// </summary>
-		public IEnumerable<MethodInfo> Methods
+		public IEnumerable<MethodWrapper> Methods
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Gets all the method names of the object.
+		/// </summary>
+		public IEnumerable<string> MethodNames
 		{
 			get
 			{
-				throw new NotImplementedException();
+				foreach (var m in this.Methods)
+				{
+					yield return m.Name;
+				}
 			}
 		}
 
 		/// <summary>
 		/// Gets all the properties of the object.
 		/// </summary>
-		public IEnumerable<PropertyInfo> Properties
+		public IEnumerable<PropertyWrapper> Properties
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -116,7 +109,7 @@ namespace System.Reflection
 		/// <typeparam name="T">The type if object.</typeparam>
 		/// <param name="item">The item to wrap.</param>
 		/// <returns>A new reflector.</returns>
-		internal static Reflector Wrap<T>(T item) where T : class
+		public static Reflector Wrap<T>(T item) where T : class
 		{
 			throw new NotImplementedException();
 			if (item == null)
@@ -128,14 +121,17 @@ namespace System.Reflection
 				throw new ArgumentException("The object cannot be a System.Type object.", "item");
 			}
 
-			Reflector value;
-			if (!created.TryGetValue(item.GetHashCode(), out value))
+			lock (item.GetType())
 			{
-				value = new Reflector(item);
-				created.Add(item.GetHashCode(), value);
-			}
+				Reflector value;
+				if (!created.TryGetValue(item.GetHashCode(), out value))
+				{
+					value = new Reflector(item);
+					created.Add(item.GetHashCode(), value);
+				}
 
-			return value;
+				return value;
+			}
 		}
 
 		#endregion

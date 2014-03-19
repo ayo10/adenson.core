@@ -136,7 +136,19 @@ namespace Adenson.Log
 		/// <remarks>Timer starts when the method is invoked</remarks>
 		/// <remarks>The name of the method MIGHT change</remarks>
 		/// <returns>A new marker instance.</returns>
+		[Obsolete("Use GetMarker", false)]
 		public LogMarker MarkStart()
+		{
+			return this.GetMarker();
+		}
+
+		/// <summary>
+		/// Starts a new log marker (measures the length of time between <see cref="LogMarker.Mark()"/> calls, and on dispose, averages and displays them (along with longest and shortest run.
+		/// </summary>
+		/// <remarks>Timer starts when the method is invoked</remarks>
+		/// <remarks>The name of the method MIGHT change</remarks>
+		/// <returns>A new marker instance.</returns>
+		public LogMarker GetMarker()
 		{
 			LogMarker marker = new LogMarker(this);
 			lock (markers)
