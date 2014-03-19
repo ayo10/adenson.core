@@ -29,7 +29,7 @@ namespace Adenson.CoreTest.Log
 		{
 			handler.Entries.Clear();
 			Guid guid = Guid.NewGuid();
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				prf.Debug("Test {0}", guid);
 			}
@@ -44,7 +44,7 @@ namespace Adenson.CoreTest.Log
 		public void DisposeTest()
 		{
 			LogProfiler prf;
-			using (prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				Assert.IsFalse(prf.IsDisposed);
 			}
@@ -55,7 +55,7 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void ElapsedTimeTest()
 		{
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				var els = prf.Elapsed;
 				Assert.IsTrue(els.TotalSeconds >= 0 && els.TotalSeconds <= 1);
@@ -68,7 +68,7 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void IdentifierTest()
 		{
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				Assert.AreEqual("Test", prf.Identifier);
 			}
@@ -78,7 +78,7 @@ namespace Adenson.CoreTest.Log
 		public void IsDisposedTest()
 		{
 			LogProfiler prf;
-			using (prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				Assert.IsFalse(prf.IsDisposed);
 			}
@@ -89,8 +89,8 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void ParentTest()
 		{
-			var logger = Logger.GetLogger(this.GetType());
-			using (var prf = logger.ProfilerStart("Test"))
+			var logger = Logger.Get(this.GetType());
+			using (var prf = logger.GetProfiler("Test"))
 			{
 				Assert.AreEqual(logger, prf.Parent);
 			}
@@ -99,7 +99,7 @@ namespace Adenson.CoreTest.Log
 		[Test]
 		public void TotalMemoryTest()
 		{
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				byte[] buffer = new byte[1000000];
 				Assert.IsTrue(prf.TotalMemory > 0);
@@ -111,18 +111,18 @@ namespace Adenson.CoreTest.Log
 		public void UidTest()
 		{
 			var uids = new List<Guid>();
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				Assert.AreNotEqual(Guid.Empty, prf.Uid);
 				uids.Add(prf.Uid);
 			}
 
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				uids.Add(prf.Uid);
 			}
 
-			using (var prf = Logger.GetLogger(this.GetType()).ProfilerStart("Test"))
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
 			{
 				uids.Add(prf.Uid);
 			}

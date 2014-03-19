@@ -36,14 +36,14 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets the element with the specified key if it exists in the dictionary, else returns <paramref name="returnIfNull"/>.
+		/// Gets the element with the specified key if it exists in the dictionary, else returns <paramref name="returnIfNotContained"/>.
 		/// </summary>
 		/// <typeparam name="TKey">The type of key.</typeparam>
 		/// <typeparam name="TValue">The type of value.</typeparam>
 		/// <param name="dictionary">The dictionary to read.</param>
 		/// <param name="key">The key to find.</param>
 		/// <param name="returnIfNotContained">The value to return if no such key exists in the dictionary.</param>
-		/// <returns>Found value if any else added <paramref name="returnIfNull"/>.</returns>
+		/// <returns>Found value if any else added <paramref name="returnIfNotContained"/>.</returns>
 		public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue returnIfNotContained)
 		{
 			if (dictionary == null)
