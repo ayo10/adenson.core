@@ -19,6 +19,7 @@ namespace System.Reflection
 
 		private Reflector(object item)
 		{
+			throw new NotImplementedException();
 			this.Item = Item;
 		}
 
@@ -32,6 +33,7 @@ namespace System.Reflection
 		{
 			get
 			{
+				throw new NotImplementedException();
 			}
 		}
 
@@ -76,20 +78,7 @@ namespace System.Reflection
 		{
 			get
 			{
-			}
-		}
-
-		/// <summary>
-		/// Gets all the method names of the object.
-		/// </summary>
-		public IEnumerable<string> MethodNames
-		{
-			get
-			{
-				foreach (var m in this.Methods)
-				{
-					yield return m.Name;
-				}
+				throw new NotImplementedException();
 			}
 		}
 
@@ -100,6 +89,7 @@ namespace System.Reflection
 		{
 			get
 			{
+				throw new NotImplementedException();
 			}
 		}
 
@@ -126,8 +116,9 @@ namespace System.Reflection
 		/// <typeparam name="T">The type if object.</typeparam>
 		/// <param name="item">The item to wrap.</param>
 		/// <returns>A new reflector.</returns>
-		public static Reflector Wrap<T>(T item) where T : class
+		internal static Reflector Wrap<T>(T item) where T : class
 		{
+			throw new NotImplementedException();
 			if (item == null)
 			{
 				throw new ArgumentNullException("item");
