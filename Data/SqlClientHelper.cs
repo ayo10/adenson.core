@@ -135,15 +135,21 @@ namespace Adenson.Data
 			ssb.InitialCatalog = "master";
 			using (SqlConnection connection = new SqlConnection(ssb.ToString()))
 			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine(StringUtil.Format("alter database [{0}] set single_user with rollback immediate", database));
-				sb.AppendLine(StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'", database));
-				sb.AppendLine(StringUtil.Format("DROP DATABASE [{0}]", database));
-
 				connection.Open();
-				SqlCommand cmd = (SqlCommand)this.CreateCommand(CommandType.Text, sb.ToString());
-				cmd.Connection = connection;
-				cmd.ExecuteNonQuery();
+				Action<string> a = sql =>
+				{
+					try
+					{
+						new SqlCommand(sql, connection).ExecuteNonQuery();
+					}
+					catch
+					{
+					}
+				};
+
+				a.Invoke(StringUtil.Format("ALTER DATABASE [{0}] SET single_user with rollback immediate", database));
+				a.Invoke(StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'", database));
+				new SqlCommand(StringUtil.Format("DROP DATABASE [{0}]", database), connection).ExecuteNonQuery();
 			}
 		}
 
