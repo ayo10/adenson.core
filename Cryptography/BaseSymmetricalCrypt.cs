@@ -8,30 +8,19 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Base class for built in encryptors
 	/// </summary>
-	public abstract class BaseCrypt : IDisposable
+	public abstract class BaseSymmetricalCrypt : IDisposable
 	{
-		#region Variables
-		private byte[] _key = new byte[] { 143, 48, 7, 241, 35, 6, 35, 236, 123, 93, 240, 244, 62, 229, 41, 246, 49, 154, 85, 106, 14, 65, 208, 202, 228, 38, 253, 171, 52, 219, 22, 175 };
-		private byte[] _iv = new byte[] { 181, 230, 54, 105, 12, 203, 61, 109, 211, 133, 34, 177, 76, 29, 245, 43 };
-		#endregion
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCrypt"/> class using fixed key and iv (not a good idea, you should provide your own).
-		/// </summary>
-		protected BaseCrypt()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCrypt"/> class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
+		/// Initializes a new instance of the <see cref="BaseSymmetricalCrypt"/> class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).
 		/// </summary>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
 		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
-		protected BaseCrypt(byte[] key, byte[] iv) : this()
+		protected BaseSymmetricalCrypt(byte[] key, byte[] iv)
 		{
-			_key = key;
-			_iv = iv;
+			this.Key = key;
+			this.IV = iv;
 		}
 
 		#endregion
@@ -51,8 +40,8 @@ namespace Adenson.Cryptography
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "In this case, yes, this should return an array")]
 		public byte[] IV
 		{
-			get { return _iv; }
-			protected set { _iv = value; }
+			get;
+			protected set;
 		}
 
 		/// <summary>
@@ -61,8 +50,8 @@ namespace Adenson.Cryptography
 		[SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "In this case, yes, this should return an array")]
 		public byte[] Key
 		{
-			get { return _key; }
-			protected set { _key = value; }
+			get;
+			protected set;
 		}
 
 		#endregion
@@ -141,16 +130,15 @@ namespace Adenson.Cryptography
 				throw new ArgumentException(Exceptions.AlgorithmNull);
 			}
 
-			if (_iv == null && _key == null)
+			if (this.IV == null && this.Key == null)
 			{
-				Console.WriteLine("{0}: Key={1}, IV={2}", this.GetType().Name, this.Algorithm.Key.Length, this.Algorithm.IV.Length);
 				return encrypt ? this.Algorithm.CreateEncryptor() : this.Algorithm.CreateDecryptor();
 			}
 			else
 			{
-				this.Algorithm.IV = _iv;
-				this.Algorithm.Key = _key;
-				return encrypt ? this.Algorithm.CreateEncryptor(_key, _iv) : this.Algorithm.CreateDecryptor(_key, _iv);
+				this.Algorithm.IV = this.IV;
+				this.Algorithm.Key = this.Key;
+				return encrypt ? this.Algorithm.CreateEncryptor(this.Key, this.IV) : this.Algorithm.CreateDecryptor(this.Key, this.IV);
 			}
 		}
 

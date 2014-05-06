@@ -7,9 +7,11 @@ namespace Adenson.CoreTest.Cryptography
 	[TestFixture]
 	public class TripleDesTest : BaseCryptTest<TripleDes>
 	{
-		protected override TripleDes GetCrypt()
+		[TestFixtureSetUp]
+		public void Setup()
 		{
-			return new TripleDes();
+			this.IVSize = 8;
+			this.KeySize = 16;
 		}
 
 		protected override TripleDes GetCrypt(byte[] key, byte[] iv)

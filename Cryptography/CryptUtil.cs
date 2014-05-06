@@ -13,17 +13,7 @@ namespace Adenson.Cryptography
 		#region Methods
 
 		/// <summary>
-		/// Decrypts the specified byte array using AES.
-		/// </summary>
-		/// <param name="value">The byte array to decrypt.</param>
-		/// <returns>Decrypted array.</returns>
-		public static byte[] Decrypt(byte[] value)
-		{
-			return new Rijndael().Decrypt(value);
-		}
-
-		/// <summary>
-		/// Decrypts the specified byte array using AES, using the specified secret key and iniitalization vector.
+		/// Decrypts the specified byte array using Rijndael.
 		/// </summary>
 		/// <param name="value">The byte array to decrypt.</param>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
@@ -32,22 +22,33 @@ namespace Adenson.Cryptography
 		/// <exception cref="CryptographicException">When <paramref name="key"/> and/or <paramref name="iv"/> are not the same that were used to encrypt the value -OR- the value is not an encrypted value to begin with.</exception>
 		public static byte[] Decrypt(byte[] value, byte[] key, byte[] iv)
 		{
-			return new Rijndael(key, iv).Decrypt(value);
+			return CryptUtil.Decrypt(EncryptionType.Rijndael, value, key, iv);
 		}
 
 		/// <summary>
-		/// Encrypts the specified byte array using AES (using built-in key and iv values).
+		/// Decrypts the specified byte array using the specified encryption algorithm.
 		/// </summary>
-		/// <param name="value">The byte array to encrypt.</param>
-		/// <returns>Encrypted array.</returns>
-		/// <remarks>You should be calling <see cref="Encrypt(byte[], byte[], byte[])"/> suppling your own secret key and iv.</remarks>
-		public static byte[] Encrypt(byte[] value)
+		/// <param name="type">The encryption algorithm to use.</param>
+		/// <param name="value">The byte array to decrypt.</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Decrypted array.</returns>
+		/// <exception cref="CryptographicException">When <paramref name="key"/> and/or <paramref name="iv"/> are not the same that were used to encrypt the value -OR- the value is not an encrypted value to begin with.</exception>
+		public static byte[] Decrypt(EncryptionType type, byte[] value, byte[] key, byte[] iv)
 		{
-			return new Rijndael().Encrypt(value);
+			switch (type)
+			{
+				case EncryptionType.Rijndael:
+					return new Rijndael(key, iv).Decrypt(value);
+				case EncryptionType.TripleDES:
+					return new TripleDes(key, iv).Decrypt(value);
+				default:
+					return new Aes(key, iv).Decrypt(value);
+			}
 		}
 
 		/// <summary>
-		/// Encrypts the specified byte array using AES, using the specified secret key and iniitalization vector.
+		/// Encrypts the specified byte array using Rijndael.
 		/// </summary>
 		/// <param name="value">The byte array to decrypt.</param>
 		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
@@ -55,7 +56,28 @@ namespace Adenson.Cryptography
 		/// <returns>Encrypted array.</returns>
 		public static byte[] Encrypt(byte[] value, byte[] key, byte[] iv)
 		{
-			return new Rijndael(key, iv).Encrypt(value);
+			return CryptUtil.Encrypt(EncryptionType.Rijndael, value, key, iv);
+		}
+
+		/// <summary>
+		/// Encrypts the specified byte array using the specified encryption algorithm.
+		/// </summary>
+		/// <param name="type">The encryption algorithm to use.</param>
+		/// <param name="value">The byte array to decrypt.</param>
+		/// <param name="key">The secret key to use for the symmetric algorithm.</param>
+		/// <param name="iv">The initialization vector to use for the symmetric algorithm.</param>
+		/// <returns>Encrypted array.</returns>
+		public static byte[] Encrypt(EncryptionType type, byte[] value, byte[] key, byte[] iv)
+		{
+			switch (type)
+			{
+				case EncryptionType.Rijndael:
+					return new Rijndael(key, iv).Encrypt(value);
+				case EncryptionType.TripleDES:
+					return new TripleDes(key, iv).Encrypt(value);
+				default:
+					return new Aes(key, iv).Encrypt(value);
+			}
 		}
 
 		/// <summary>

@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Cryptography\Aes.cs" />
     <Compile Include="Cryptography\CryptUtil.cs" />
+    <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
     <Compile Include="Log\Extensions.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Configuration\RegistrySettingsProvider.cs" />
     <Compile Include="Configuration\XDocumentSectionHandler.cs" />
     <Compile Include="Configuration\XElementSettingBase.cs" />
-    <Compile Include="Cryptography\BaseCrypt.cs" />
+    <Compile Include="Cryptography\BaseSymmetricalCrypt.cs" />
     <Compile Include="Cryptography\HashType.cs" />
     <Compile Include="Data\Internal.cs" />
     <Compile Include="Data\OdbcSqlHelper.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="Data\SqlClientHelper.cs" />
     <Compile Include="Data\SqlHelperBase.cs" />
     <Compile Include="Data\SqlHelperProvider.cs" />
-    <Compile Include="Cryptography\Des.cs" />
     <Compile Include="Cryptography\KeyFormat.cs" />
     <Compile Include="Cryptography\Rijndael.cs" />
     <Compile Include="Cryptography\TripleDes.cs" />

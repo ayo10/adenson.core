@@ -6,16 +6,9 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the Rijndael (AES) algorithm.
 	/// </summary>
-	public sealed class Rijndael : BaseCrypt
+	public sealed class Rijndael : BaseSymmetricalCrypt
 	{
 		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the Rijndael class
-		/// </summary>
-		public Rijndael() : base()
-		{
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the Rijndael class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).

@@ -6,19 +6,12 @@ namespace Adenson.Cryptography
 	/// <summary>
 	/// Represents the for the BaseEncryptor implementation of the AES algorithm.
 	/// </summary>
-	public sealed class Aes : BaseCrypt
+	public sealed class Aes : BaseSymmetricalCrypt
 	{
 		#region Variables
 		private System.Security.Cryptography.Aes _algorithm;
 		#endregion
 		#region Constructor
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Aes"/> class using fixed key and iv (not a good idea, you should provide your own).
-		/// </summary>
-		public Aes() : base()
-		{
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Aes"/> class with the specified <see cref="System.Security.Cryptography.SymmetricAlgorithm.Key"/> property and initialization vector (<see cref="System.Security.Cryptography.SymmetricAlgorithm.IV"/>).

@@ -59,7 +59,6 @@
     <Compile Include="Cryptography\AesTest.cs" />
     <Compile Include="Cryptography\BaseCryptTest.cs" />
     <Compile Include="Cryptography\TripleDesTest.cs" />
-    <Compile Include="Cryptography\DesTest.cs" />
     <Compile Include="Cryptography\RijndaelTest.cs" />
     <Compile Include="Cryptography\CryptUtilTest.cs" />
     <Compile Include="System\FileUtilTest.cs" />
