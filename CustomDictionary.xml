@@ -1,4 +1,15 @@
-﻿<Dictionary>
+<Dictionary>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>DES</Acronym>
+			<Acronym>HMAC</Acronym>
+			<Acronym>HMACRIPEMD</Acronym>
+			<Acronym>MAC</Acronym>
+			<Acronym>PBKDF</Acronym>
+			<Acronym>RIPEMD</Acronym>
+			<Acronym>SHA</Acronym>
+		</CasingExceptions>
+	</Acronyms>
 	<Words>
 		<Recognized>
 			<Word>Adenson</Word>
@@ -8,18 +19,6 @@
 			<Word>Encryptor</Word>
 			<Word>Util</Word>
 		</Recognized>
-		<Unrecognized>
-		</Unrecognized>
+		<Unrecognized />
 	</Words>
-      <Acronyms>
-         <CasingExceptions>
-            <Acronym>DES</Acronym>
-            <Acronym>HMAC</Acronym>
-            <Acronym>MAC</Acronym>
-            <Acronym>RIPEMD</Acronym>
-            <Acronym>SHA</Acronym>
-            <Acronym>HMACRIPEMD</Acronym>
-			<Acronym>PBKDF</Acronym>
-		 </CasingExceptions>
-      </Acronyms>
 </Dictionary>
