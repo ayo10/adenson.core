@@ -156,7 +156,7 @@ namespace Adenson.Data
 		{
 			var parameter = this.CreateParameter();
 			parameter.ParameterName = name;
-			parameter.Value = value;
+			parameter.Value = value == null ? DBNull.Value : value;
 			return parameter;
 		}
 
@@ -674,15 +674,12 @@ namespace Adenson.Data
 				{
 					IDataParameter dataParameter = item as IDataParameter;
 					var parameter = item as Parameter;
-					if (parameter != null)
+					if (dataParameter == null && parameter != null)
 					{
 						dataParameter = this.CreateParameter(parameter.Name, parameter.Value);
 					}
 
-					if (dataParameter != null)
-					{
-						parameters.Add(dataParameter);
-					}
+					parameters.Add(dataParameter);
 				}
 			}
 			else if (parameterValues.All(p => p is KeyValuePair<string, object>))
@@ -699,7 +696,7 @@ namespace Adenson.Data
 				IDictionary dic = parameterValues[0] as IDictionary;
 				foreach (var k in dic.Keys)
 				{
-					IDataParameter dataParameter = this.CreateParameter(k.ToString(), dic[k]);
+					IDataParameter dataParameter = this.CreateParameter((string)k, dic[k]);
 					parameters.Add(dataParameter);
 				}
 			}
@@ -715,23 +712,7 @@ namespace Adenson.Data
 					{
 						string name = "@param" + i;
 						commandText = commandText.Replace("{" + i + "}", name);
-						var parameter = this.CreateParameter();
-						parameter.ParameterName = name;
-						parameter.Value = parameterValues[i];
-					}
-				}
-			}
-			else if (commandText.Contains("@"))
-			{
-				var splits = commandText.Split(new char[] { '@' }, StringSplitOptions.RemoveEmptyEntries);
-				if ((splits.Length - 1) == parameterValues.Length)
-				{
-					for (var i = 0; i < parameterValues.Length; i++)
-					{
-						IDataParameter dataParameter = this.CreateParameter();
-						dataParameter.ParameterName = "@" + splits[i + 1].Split(' ')[0];
-						dataParameter.Value = parameterValues[i];
-						parameters.Add(dataParameter);
+						parameters.Add(this.CreateParameter(name, parameterValues[i]));
 					}
 				}
 			}
@@ -739,14 +720,11 @@ namespace Adenson.Data
 			{
 				for (var i = 0; i < parameterValues.Length; i++)
 				{
-					IDataParameter dataParameter = this.CreateParameter();
-					dataParameter.ParameterName = "@param" + i;
-					dataParameter.Value = parameterValues[i];
-					parameters.Add(dataParameter);
+					parameters.Add(this.CreateParameter("@param" + i, parameterValues[i]));
 				}
 			}
 
-			if (parameterValues.Length != parameters.Count)
+			if (parameterValues.Length != parameters.Count || parameters.Any(p => p == null))
 			{
 				throw new ArgumentException(Exceptions.UnableToParseCommandText);
 			}

@@ -148,7 +148,7 @@
     <value>Type '{0}' could not be loaded.</value>
   </data>
   <data name="UnableToParseCommandText" xml:space="preserve">
-    <value>The specified command text argument could not be parsed. Use strings formattable using String.Format -OR-, use sql parameterized strings using '@' and parameter arguments that are either 'Adenson.Data.Parameter' OR 'System.Data.IDataParameter'.</value>
+    <value>The specified command text argument could not be parsed. Use formattable strings (i.e.{0}...{n}) -OR-, use sql parameterized strings using '@' and parameter arguments that are either 'Adenson.Data.Parameter', 'System.Data.IDataParameter', System.Collections.Generic.KeyValuePair&lt;string,object&gt; or System.Collections.IDictionary.</value>
   </data>
   <data name="NoSupportNonSingleParameterArrayedObjects" xml:space="preserve">
     <value>Retrieving property values using reflection for more than one arrayed object is not supported, yet!</value>
