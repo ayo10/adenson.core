@@ -142,7 +142,7 @@ namespace Adenson.Data
 					{
 						new SqlCommand(sql, connection).ExecuteNonQuery();
 					}
-					catch
+				catch
 					{
 					}
 				};
