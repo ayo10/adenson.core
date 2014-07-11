@@ -16,10 +16,13 @@ namespace Adenson.Log
 		private DateTime fileDate = DateTime.Now;
 		#endregion
 		#region Constructor
-
-		internal FileHandler(SettingsConfiguration.HandlerElement element) : base()
+		
+		/// <summary>
+		/// Iniitalizes a new instance of the <see cref="FileHandler"/> class with the specified file name.
+		/// </summary>
+		/// <param name="fileName"></param>
+		public FileHandler(string filePath) : base()
 		{
-			string filePath = element.GetValue("fileName", "eventlogger.log");
 			if (!Path.IsPathRooted(filePath))
 			{
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
@@ -28,12 +31,25 @@ namespace Adenson.Log
 			folder = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(folder))
 			{
-				Trace.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
+				try
+				{
+					Directory.CreateDirectory(folder);
+					Trace.WriteLine(StringUtil.Format("Folder '{0}' did not exist, created.", folder));
+				}
+				catch
+				{
+					Trace.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
+				}
 			}
-			else
+
+			if (Directory.Exists(folder))
 			{
 				this.FilePath = filePath;
 			}
+		}
+
+		internal FileHandler(SettingsConfiguration.HandlerElement element) : this(element.GetValue("fileName", "eventlogger.log"))
+		{
 		}
 
 		#endregion
