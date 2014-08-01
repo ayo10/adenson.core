@@ -251,7 +251,10 @@ namespace Adenson {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified command text argument could not be parsed. Use formattable strings (i.e.{0}...{n}) -OR-, use sql parameterized strings using &apos;@&apos; and parameter arguments that are either &apos;Adenson.Data.Parameter&apos;, &apos;System.Data.IDataParameter&apos;, System.Collections.Generic.KeyValuePair&lt;string,object&gt; or System.Collections.IDictionary..
+        ///   Looks up a localized string similar to The specified command text argument could not be parsed. 
+        ///Use formattable strings (e.g. &apos;UPDATE [Table] SET [Column1] = {0}, [Column2] = {1}&apos;)	
+        ///-OR-
+        ///Use sql parameterized strings (e.g.&apos;UPDATE [Table] SET [Column1] = @parameter1, [Column2] = @parameter2&apos;) and parameter arguments that MUST be one of &apos;Adenson.Data.Parameter&apos;, &apos;System.Data.IDataParameter&apos;, System.Collections.Generic.KeyValuePair&lt;string,object&gt; or System.Collections.IDictionary.	 .
         /// </summary>
         internal static string UnableToParseCommandText {
             get {

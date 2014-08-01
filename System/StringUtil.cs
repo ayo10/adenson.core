@@ -191,27 +191,19 @@ namespace System
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
 		}
 
-		private static void ToString(Exception exception, List<string> message, string prepend = null)
+		private static void ToString(Exception exception, List<string> lines, string prepend = null)
 		{
 			if (exception == null)
 			{
 				return;
 			}
 
-			int c = message.Count;
-			message.Add(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
-			if (!String.IsNullOrEmpty(exception.HelpLink) || !String.IsNullOrEmpty(exception.Source))
+			int lastEnd = lines.Count;
+			
+			lines.Add(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
+			if (!String.IsNullOrEmpty(exception.Source))
 			{
-				message.Add(String.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
-			}
-
-			if (exception.Data.Count > 0)
-			{
-				message.Add("\tData:");
-				foreach (var key in exception.Data.Keys)
-				{
-					message.Add(String.Format("\t\t{0}: {1}", key, exception.Data[key]));
-				}
+				lines.Add(String.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
 			}
 
 			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
@@ -219,33 +211,33 @@ namespace System
 			{
 				if (rtlex.Types != null && rtlex.Types.Length > 0)
 				{
-					message.Add(String.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
+					lines.Add(String.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
 				}
 
 				if (rtlex.LoaderExceptions != null && rtlex.LoaderExceptions.Length > 0)
 				{
-					message.Add("\tLoaderExceptions:");
+					lines.Add("\tLoaderExceptions:");
 					foreach (Exception lex in rtlex.LoaderExceptions)
 					{
-						StringUtil.ToString(lex, message, "\t\t");
+						StringUtil.ToString(lex, lines, "\t\t");
 					}
 				}
 			}
 
 			if (exception.StackTrace != null)
 			{
-				message.Add(exception.StackTrace);
+				lines.Add(exception.StackTrace);
 			}
 
 			if (!String.IsNullOrEmpty(prepend))
 			{
-				for (int i = c; i < message.Count; i++)
+				for (int i = lastEnd; i < lines.Count; i++)
 				{
-					message[i] = prepend + message[i];
+					lines[i] = prepend + lines[i];
 				}
 			}
 
-			StringUtil.ToString(exception.InnerException, message, prepend);
+			StringUtil.ToString(exception.InnerException, lines, prepend);
 		}
 
 		#endregion

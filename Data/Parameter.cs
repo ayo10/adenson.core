@@ -25,7 +25,18 @@ namespace Adenson.Data
 			}
 
 			this.Name = name;
-			this.Value = value;
+			this.Value = value == null ? DBNull.Value : value;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Parameter"/> class.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="type">The value type.</param>
+		public Parameter(string name, object value, DbType type) : this(name, value)
+		{
+			this.DbType = type;
 		}
 
 		#endregion
@@ -47,6 +58,15 @@ namespace Adenson.Data
 		{
 			get;
 			private set;
+		}
+
+		/// <summary>
+		/// Gets or sets the db type.
+		/// </summary>
+		public DbType? DbType
+		{
+			get;
+			set;
 		}
 
 		#endregion
