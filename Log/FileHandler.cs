@@ -20,7 +20,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Iniitalizes a new instance of the <see cref="FileHandler"/> class with the specified file name.
 		/// </summary>
-		/// <param name="fileName"></param>
+		/// <param name="filePath">The path to write the log.</param>
 		public FileHandler(string filePath) : base()
 		{
 			if (!Path.IsPathRooted(filePath))

@@ -363,7 +363,8 @@ namespace Adenson.Data
 
 					for (var i = 0; i < r.FieldCount; i++)
 					{
-						dynadic["_Item" + i] = dynadic[r.GetName(i)] = r.GetValue(i);
+						object value = r.GetValue(i);
+						dynadic["_Item" + i] = dynadic[r.GetName(i)] = value == DBNull.Value ? null : value;
 					}
 
 					result.Add(dyna);
@@ -677,6 +678,10 @@ namespace Adenson.Data
 					if (dataParameter == null && parameter != null)
 					{
 						dataParameter = this.CreateParameter(parameter.Name, parameter.Value);
+						if (parameter.DbType != null)
+						{
+							dataParameter.DbType = parameter.DbType.Value;
+						}
 					}
 
 					parameters.Add(dataParameter);
@@ -691,7 +696,7 @@ namespace Adenson.Data
 					parameters.Add(dataParameter);
 				}
 			}
-			else if (parameterValues.Length == 1 && parameterValues[0] is IDictionary)
+			else if (parameterValues.Length == 1 && parameterValues.First() is IDictionary)
 			{
 				IDictionary dic = parameterValues[0] as IDictionary;
 				foreach (var k in dic.Keys)
@@ -702,18 +707,22 @@ namespace Adenson.Data
 			}
 			else if (commandText.Contains("{0}"))
 			{
-				if (parameterValues.Any(p => p is Parameter) || !parameterValues.Any(p => p is IDataParameter))
+				try
 				{
-					throw new ArgumentException(Exceptions.UnableToParseCommandText);
-				}
-				else
-				{
+					// StringBuilder has a really good format parser, so am using it to validate the commandText and parameterValues
+					new System.Text.StringBuilder().AppendFormat(commandText, parameterValues);
+
+					// If we dont get a FormatException from StringBuilder.AppendFormat, then we are good.
 					for (var i = 0; i < parameterValues.Length; i++)
 					{
 						string name = "@param" + i;
 						commandText = commandText.Replace("{" + i + "}", name);
 						parameters.Add(this.CreateParameter(name, parameterValues[i]));
 					}
+				}
+				catch (FormatException ex)
+				{
+					throw new ArgumentException(Exceptions.UnableToParseCommandText, ex);
 				}
 			}
 			else if (type == CommandType.StoredProcedure)

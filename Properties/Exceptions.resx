@@ -148,7 +148,10 @@
     <value>Type '{0}' could not be loaded.</value>
   </data>
   <data name="UnableToParseCommandText" xml:space="preserve">
-    <value>The specified command text argument could not be parsed. Use formattable strings (i.e.{0}...{n}) -OR-, use sql parameterized strings using '@' and parameter arguments that are either 'Adenson.Data.Parameter', 'System.Data.IDataParameter', System.Collections.Generic.KeyValuePair&lt;string,object&gt; or System.Collections.IDictionary.</value>
+    <value>The specified command text argument could not be parsed. 
+Use formattable strings (e.g. 'UPDATE [Table] SET [Column1] = {0}, [Column2] = {1}')	
+-OR-
+Use sql parameterized strings (e.g.'UPDATE [Table] SET [Column1] = @parameter1, [Column2] = @parameter2') and parameter arguments that MUST be one of 'Adenson.Data.Parameter', 'System.Data.IDataParameter', System.Collections.Generic.KeyValuePair&lt;string,object&gt; or System.Collections.IDictionary.	 </value>
   </data>
   <data name="NoSupportNonSingleParameterArrayedObjects" xml:space="preserve">
     <value>Retrieving property values using reflection for more than one arrayed object is not supported, yet!</value>
