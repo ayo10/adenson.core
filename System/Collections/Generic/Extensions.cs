@@ -156,10 +156,41 @@ namespace System.Collections.Generic
 				throw new ArgumentNullException("other");
 			}
 
-			MergeEnumerable<T> list = new MergeEnumerable<T>();
-			list.AddRange(value);
-			list.AddRange(other);
-			return list;
+			return new MergeEnumerable<T>(value, other);
+		}
+
+		/// <summary>
+		/// Takes a string and converts it into a key/value pairs and returns them. Expects something similar to a=b&amp;c=d where '=' is itemDelimiter and '&amp;' is listDelimiter.
+		/// </summary>
+		/// <param name="value">The string to convert.</param>
+		/// <param name="listDelimiter">The list delimiter, defaults to '&'.</param>
+		/// <param name="itemDelimiter">The item delimiter, defaults to '-'.</param>
+		/// <returns>A dictionary object.</returns>
+		/// <remarks>This method does not perform any validation, apart from checking the method delimiter arguments.</remarks>
+		public static IDictionary<string, string> ToDictionary(this string value, string listDelimiter = "&", string itemDelimiter = "=")
+		{
+			if (String.IsNullOrEmpty(value))
+			{
+				return null;
+			}
+
+			if (listDelimiter == null)
+			{
+				throw new ArgumentNullException("listDelimiter");
+			}
+
+			if (itemDelimiter == null)
+			{
+				throw new ArgumentNullException("itemDelimiter");
+			}
+
+			Dictionary<string, string> result = new Dictionary<string,string>();
+			foreach (var kv in value.Split(new string[] { listDelimiter }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim().Split(new string[] { itemDelimiter }, StringSplitOptions.None)))
+			{
+				result.Add(kv[0].Trim(), kv[1].Trim());
+			}
+
+			return result;
 		}
 
 		#endregion
@@ -167,6 +198,11 @@ namespace System.Collections.Generic
 
 		private class MergeEnumerable<T> : List<T>
 		{
+			public MergeEnumerable(IEnumerable<T> value, IEnumerable<T> other)
+			{
+				this.AddRange(value);
+				this.AddRange(other);
+			}
 		}
 
 		#endregion
