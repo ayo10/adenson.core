@@ -1,6 +1,9 @@
 ﻿<NUnitProject>
-  <Settings activeconfig="Debug" processModel="Default" domainUsage="Default" />
+  <Settings activeconfig="Debug" />
   <Config name="Debug" configfile="App.config" binpathtype="Auto" runtimeFramework="net-4.0">
     <assembly path="bin\Debug\Adenson.CoreTest.dll" />
+  </Config>
+  <Config name="Release" configfile="App.config" binpathtype="Auto" runtimeFramework="net-4.0">
+    <assembly path="bin\Release\Adenson.CoreTest.dll" />
   </Config>
 </NUnitProject>

@@ -72,5 +72,27 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			int[] merged = value1.MergeWith(value2);
 			Assert.AreEqual(new int[] { 1, 2, 3, 4 }, merged);
 		}
+
+		[Test]
+		public void ToDictionaryTest()
+		{
+			string value = "key1=value1&key2=value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary());
+
+			value = "key1 = value1&key2 = value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary());
+
+			value = "key1 = value1 & key2 = value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary());
+
+			value = "key1=value1;key2=value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";"));
+
+			value = "key1|value1;key2|value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";", "|")); 
+			
+			value = "key1=&key2=value2";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "" }, { "key2", "value2" } }, value.ToDictionary());
+		}
 	}
 }

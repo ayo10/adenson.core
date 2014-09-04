@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace Adenson.Configuration
 {
@@ -28,6 +30,29 @@ namespace Adenson.Configuration
 
 		#endregion
 		#region Methods
+
+		/// <summary>
+		/// Finds the closest connection string to the specified, usually called if <paramref name="connectionString"/> is sanitized, i.e. doesn't have a password.
+		/// </summary>
+		/// <param name="connectionString">The connection string to compare with.</param>
+		/// <returns>Enumration of matching connection strings.</returns>
+		public static IEnumerable<ConnectionStringSettings> Closest(string connectionString)
+		{
+			if (String.IsNullOrEmpty(connectionString))
+			{
+				throw new ArgumentNullException("connectionString");
+			}
+
+			var val = connectionString.ToUpper().ToDictionary(";");
+			foreach (ConnectionStringSettings cs in ConfigurationManager.ConnectionStrings)
+			{
+				var csd = cs.ConnectionString.ToUpper().ToDictionary(";");
+				if (val.Keys.Intersect(csd.Keys).All(k => String.Equals(val[k], csd[k], StringComparison.CurrentCultureIgnoreCase)))
+				{
+					yield return cs;
+				}
+			}
+		}
 
 		/// <summary>
 		/// We'll be nice and provide an ro indexer - oh wait, we can't.
@@ -62,10 +87,6 @@ namespace Adenson.Configuration
 				if (useDefaultIfNull)
 				{
 					result = ConnectionStrings.Default;
-				}
-				else
-				{
-					new ConnectionStringSettings { Name = Guid.NewGuid().ToString(), ConnectionString = key };
 				}
 			}
 

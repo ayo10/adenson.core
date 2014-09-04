@@ -15,6 +15,15 @@ namespace Adenson.CoreTest.Configuration
 		}
 
 		[Test]
+		public void Closest()
+		{
+			CollectionAssert.AreEquivalent(new ConnectionStringSettings[] { ConnectionStrings.Default }, ConnectionStrings.Closest("Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;"));
+			CollectionAssert.AreEquivalent(new ConnectionStringSettings[] { ConnectionStrings.Default }, ConnectionStrings.Closest("Data Source=(local);Initial Catalog=TEST;MultipleActiveResultSets=true;"));
+			CollectionAssert.IsEmpty(ConnectionStrings.Closest("Data Source=(localdb);Initial Catalog=TEST;MultipleActiveResultSets=true;"));
+			CollectionAssert.IsEmpty(ConnectionStrings.Closest("Data Source=(localdb);Initial Catalog=TEST3;MultipleActiveResultSets=false;"));
+		}
+
+		[Test]
 		public void GetTest()
 		{
 			Assert.AreEqual(ConnectionStrings.Default.ConnectionString, ConnectionStrings.Get(ConnectionStrings.DefaultKey).ConnectionString);
