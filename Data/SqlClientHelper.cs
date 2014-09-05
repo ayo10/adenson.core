@@ -42,6 +42,15 @@ namespace Adenson.Data
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// </summary>
+		/// <param name="connection">The connection to use.</param>
+		/// <exception cref="ArgumentException">If specified connection is null.</exception>
+		public SqlClientHelper(SqlConnection connection) : base(connection)
+		{
+		}
+
 		#endregion
 		#region Methods
 

@@ -62,6 +62,7 @@
     <Compile Include="Cryptography\Aes.cs" />
     <Compile Include="Cryptography\CryptUtil.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
+    <Compile Include="Data\UnclosableDbConnection.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
     <Compile Include="Log\Extensions.cs" />
