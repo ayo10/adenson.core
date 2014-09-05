@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 
@@ -18,7 +19,7 @@ namespace Adenson.Log
 		#region Constructor
 		
 		/// <summary>
-		/// Iniitalizes a new instance of the <see cref="FileHandler"/> class with the specified file name.
+		/// Initializes a new instance of the <see cref="FileHandler"/> class with the specified file name.
 		/// </summary>
 		/// <param name="filePath">The path to write the log.</param>
 		public FileHandler(string filePath) : base()
@@ -31,15 +32,8 @@ namespace Adenson.Log
 			folder = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(folder))
 			{
-				try
-				{
-					Directory.CreateDirectory(folder);
-					Trace.WriteLine(StringUtil.Format("Folder '{0}' did not exist, created.", folder));
-				}
-				catch
-				{
-					Trace.WriteLine(StringUtil.Format("Adenson.Log.Logger: ERROR: Folder {0} does not exist, file logging will not happen", folder));
-				}
+				Directory.CreateDirectory(folder);
+				Trace.WriteLine(StringUtil.Format("Folder '{0}' did not exist, created.", folder));
 			}
 
 			if (Directory.Exists(folder))

@@ -59,37 +59,40 @@ namespace Adenson.Log
 			#region Properties
 
 			/// <summary>
-			/// Gets the url.
+			/// Gets or sets the handler.
 			/// </summary>
 			[ConfigurationProperty("handler", IsRequired = true, IsKey = true)]
+			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
 			public HandlerType Handler
 			{
 				get { return (HandlerType)this["handler"]; }
-				set { this["handler"] = value; }
+				internal set { this["handler"] = value; }
 			}
 
 			/// <summary>
-			/// Gets the value.
+			/// Gets or sets the formatter.
 			/// </summary>
 			[ConfigurationProperty("formatter", IsRequired = false, IsKey = false)]
+			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
 			public string Formatter
 			{
 				get { return (string)this["formatter"]; }
-				set { this["formatter"] = value; }
+				internal set { this["formatter"] = value; }
 			}
 
 			/// <summary>
-			/// Gets the value.
+			/// Gets or sets the severity.
 			/// </summary>
 			[ConfigurationProperty("severity", IsRequired = false, IsKey = false)]
+			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
 			public Severity Severity
 			{
 				get { return (Severity)this["severity"]; }
-				set { this["severity"] = value; }
+				internal set { this["severity"] = value; }
 			}
 
 			/// <summary>
-			/// Gets the value.
+			/// Gets the custom type.
 			/// </summary>
 			[ConfigurationProperty("customType", IsRequired = false, IsKey = true)]
 			public string CustomType
@@ -104,7 +107,6 @@ namespace Adenson.Log
 
 					return type;
 				}
-				set { this["customType"] = value; }
 			}
 
 			#endregion

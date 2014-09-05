@@ -184,7 +184,7 @@ namespace System.Collections.Generic
 				throw new ArgumentNullException("itemDelimiter");
 			}
 
-			Dictionary<string, string> result = new Dictionary<string,string>();
+			Dictionary<string, string> result = new Dictionary<string, string>();
 			foreach (var kv in value.Split(new string[] { listDelimiter }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim().Split(new string[] { itemDelimiter }, StringSplitOptions.None)))
 			{
 				result.Add(kv[0].Trim(), kv[1].Trim());

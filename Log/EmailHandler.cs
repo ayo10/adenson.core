@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Xml.Linq;
 using Adenson.Configuration;
@@ -66,7 +67,8 @@ namespace Adenson.Log
 		/// Writes the log to the diagnostics trace (using <see cref="System.Diagnostics.Trace"/>.
 		/// </summary>
 		/// <param name="entry">The entry to write.</param>
-		/// <returns>True, regardless.</returns>
+		/// <returns>True if the email was sent successfully, false otherwise.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1031", Justification = "Returns true if the write was successful, false otherwise.")]
 		public override bool Write(LogEntry entry)
 		{
 			if (entry == null)

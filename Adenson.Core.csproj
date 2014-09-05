@@ -62,7 +62,6 @@
     <Compile Include="Cryptography\Aes.cs" />
     <Compile Include="Cryptography\CryptUtil.cs" />
     <Compile Include="Cryptography\EncryptionType.cs" />
-    <Compile Include="Data\UnclosableDbConnection.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
     <Compile Include="Log\Extensions.cs" />
@@ -113,10 +112,6 @@
     <Compile Include="System\Coordinate.cs" />
     <Compile Include="System\Extensions.cs" />
     <Compile Include="System\Pair.cs" />
-    <Compile Include="System\Reflection\BaseWrapper.cs" />
-    <Compile Include="System\Reflection\MethodWrapper.cs" />
-    <Compile Include="System\Reflection\PropertyWrapper.cs" />
-    <Compile Include="System\Reflection\Reflector.cs" />
     <Compile Include="System\StringUtil.cs" />
     <Compile Include="System\TypeUtil.cs" />
     <Compile Include="System\Collections\Extensions.cs" />

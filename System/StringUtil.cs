@@ -185,7 +185,7 @@ namespace System
 			IEnumerable enumerable = value as IEnumerable;
 			if (enumerable != null)
 			{
-				return String.Format("{0}, Items:[{1}]", value.ToString(), String.Join(",", enumerable.Cast<object>().Select(o => StringUtil.ToString(o)).ToArray()));
+				return StringUtil.Format("{0}, Items:[{1}]", value.ToString(), String.Join(",", enumerable.Cast<object>().Select(o => StringUtil.ToString(o)).ToArray()));
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
@@ -199,11 +199,11 @@ namespace System
 			}
 
 			int lastEnd = lines.Count;
-			
-			lines.Add(String.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
+
+			lines.Add(StringUtil.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
 			if (!String.IsNullOrEmpty(exception.Source))
 			{
-				lines.Add(String.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
+				lines.Add(StringUtil.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
 			}
 
 			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
@@ -211,7 +211,7 @@ namespace System
 			{
 				if (rtlex.Types != null && rtlex.Types.Length > 0)
 				{
-					lines.Add(String.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
+					lines.Add(StringUtil.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
 				}
 
 				if (rtlex.LoaderExceptions != null && rtlex.LoaderExceptions.Length > 0)

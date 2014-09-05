@@ -89,7 +89,7 @@ namespace Adenson.Cryptography
 		{
 			if (size <= 0)
 			{
-				throw new ArgumentException(String.Format(Exceptions.ArgLessOrEqualToZero, "size"), "size");
+				throw new ArgumentException(StringUtil.Format(Exceptions.ArgLessOrEqualToZero, "size"), "size");
 			}
 
 			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
@@ -240,7 +240,7 @@ namespace Adenson.Cryptography
 
 			if (iterations <= 0)
 			{
-				throw new ArgumentException(String.Format(Exceptions.ArgLessOrEqualToZero, "iterations"), "iterations");
+				throw new ArgumentException(StringUtil.Format(Exceptions.ArgLessOrEqualToZero, "iterations"), "iterations");
 			}
 
 			if (hashType == HashType.None)

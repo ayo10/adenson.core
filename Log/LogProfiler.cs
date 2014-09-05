@@ -148,6 +148,7 @@ namespace Adenson.Log
 		/// <remarks>Timer starts when the method is invoked</remarks>
 		/// <remarks>The name of the method MIGHT change</remarks>
 		/// <returns>A new marker instance.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1024", Justification = "Not appropriate")]
 		public LogMarker GetMarker()
 		{
 			LogMarker marker = new LogMarker(this);

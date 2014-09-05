@@ -42,8 +42,9 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
 		/// </summary>
 		/// <param name="connection">The connection to use.</param>
+		/// <param name="close">If to close the connection when this object is disposed.</param>
 		/// <exception cref="ArgumentException">If specified connection is null.</exception>
-		public OdbcSqlHelper(OdbcConnection connection) : base(connection)
+		public OdbcSqlHelper(OdbcConnection connection, bool close) : base(connection, close)
 		{
 		}
 
