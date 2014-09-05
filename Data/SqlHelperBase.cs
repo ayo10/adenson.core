@@ -61,6 +61,22 @@ namespace Adenson.Data
 			this.ConnectionString = cs == null ? keyOrConnectionString : cs.ConnectionString;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// </summary>
+		/// <param name="connection">The connection to use.</param>
+		/// <exception cref="ArgumentException">If specified connection is null.</exception>
+		protected SqlHelperBase(IDbConnection connection)
+		{
+			if (connection == null)
+			{
+				throw new ArgumentNullException();
+			}
+
+			_connection = new UnclosableDbConnection(connection);
+			this.ConnectionString = connection.ConnectionString;
+		}
+
 		#endregion
 		#region Properties
 
@@ -99,7 +115,7 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual IDbConnection Connection
 		{
-			get 
+			get
 			{
 				if (_connection == null)
 				{

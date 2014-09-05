@@ -163,7 +163,7 @@ namespace System.Collections.Generic
 		/// Takes a string and converts it into a key/value pairs and returns them. Expects something similar to a=b&amp;c=d where '=' is itemDelimiter and '&amp;' is listDelimiter.
 		/// </summary>
 		/// <param name="value">The string to convert.</param>
-		/// <param name="listDelimiter">The list delimiter, defaults to '&'.</param>
+		/// <param name="listDelimiter">The list delimiter, defaults to '&amp;'.</param>
 		/// <param name="itemDelimiter">The item delimiter, defaults to '-'.</param>
 		/// <returns>A dictionary object.</returns>
 		/// <remarks>This method does not perform any validation, apart from checking the method delimiter arguments.</remarks>

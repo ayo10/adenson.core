@@ -38,6 +38,15 @@ namespace Adenson.Data
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OdbcSqlHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// </summary>
+		/// <param name="connection">The connection to use.</param>
+		/// <exception cref="ArgumentException">If specified connection is null.</exception>
+		public OdbcSqlHelper(OdbcConnection connection) : base(connection)
+		{
+		}
+
 		#endregion
 		#region Methods
 
@@ -53,17 +62,18 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new DbDataAdapter object for use by the helper methods.
+		/// Creates a new <see cref="OdbcDataAdapter"/> object for use by the helper methods.
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter</param>
 		/// <returns>New <see cref="OdbcDataAdapter"/> object</returns>
+		/// <exception cref="InvalidCastException">If <paramref name="command"/> is not an instance of <see cref="OdbcCommand"/>.</exception>
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new OdbcDataAdapter((OdbcCommand)command);
 		}
 
 		/// <summary>
-		/// Creates a new command object for use by the helper methods.
+		/// Creates a new <see cref="OdbcCommand"/> object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="OdbcCommand"/> object</returns>
 		public override IDbCommand CreateCommand()
@@ -72,7 +82,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new database connection for use by the helper methods
+		/// Creates a new <see cref="OdbcConnection"/> object for use by the helper methods
 		/// </summary>
 		/// <returns>New <see cref="OdbcConnection"/> object</returns>
 		public override IDbConnection CreateConnection()
@@ -95,7 +105,7 @@ namespace Adenson.Data
 		/// <returns>True if the database exists, false otherwise</returns>
 		public override bool DatabaseExists()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		/// <summary>
