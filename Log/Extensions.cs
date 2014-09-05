@@ -11,13 +11,14 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(object)"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">The message to log.</param>
 		public static void LogCritical<T>(this T source, object message) where T : class
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Critical(message);
@@ -26,6 +27,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(string, object[])"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">The message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
@@ -33,7 +35,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Critical(message, arguments);
@@ -63,6 +65,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Debug(object)"/>.
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		[Conditional("DEBUG")]
@@ -70,7 +73,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Debug(message);
@@ -79,6 +82,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Debug(string, object[])"/>.
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
@@ -87,7 +91,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Debug(message, arguments);
@@ -119,13 +123,14 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Error(object)"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		public static void LogError<T>(this T source, object message) where T : class
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Error(message);
@@ -134,6 +139,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Error(string, object[])"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
@@ -141,7 +147,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Error(message, arguments);
@@ -171,6 +177,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Instantiates a Logger object, then calls <see cref="Logger.GetProfiler(string)"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A disposable profiler object</returns>
@@ -178,7 +185,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			return Logger.Get(source.GetType()).GetProfiler(identifier);
@@ -198,6 +205,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(string, object[])"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
@@ -206,7 +214,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Info(message, arguments);
@@ -215,6 +223,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(object)"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
@@ -222,7 +231,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Info(message);
@@ -254,6 +263,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(object)"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="value">The value.</param>
 		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
@@ -261,7 +271,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Warn(value);
@@ -270,6 +280,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(string, object[])"/>
 		/// </summary>
+		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
@@ -278,7 +289,7 @@ namespace Adenson.Log
 		{
 			if (source == null)
 			{
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException("source");
 			}
 
 			Logger.Get(source.GetType()).Warn(message, arguments);

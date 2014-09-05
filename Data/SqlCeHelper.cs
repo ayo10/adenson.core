@@ -44,11 +44,12 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection object.
 		/// </summary>
 		/// <param name="connection">The connection to use.</param>
+		/// <param name="close">If to close the connection when this object is disposed.</param>
 		/// <exception cref="ArgumentException">If specified connection is null.</exception>
-		public SqlCeHelper(SqlCeConnection connection) : base(connection)
+		public SqlCeHelper(SqlCeConnection connection, bool close) : base(connection, close)
 		{
 		}
 

@@ -1,6 +1,7 @@
 <Dictionary>
 	<Acronyms>
 		<CasingExceptions>
+			<Acronym>AES</Acronym>
 			<Acronym>DES</Acronym>
 			<Acronym>HMAC</Acronym>
 			<Acronym>HMACRIPEMD</Acronym>

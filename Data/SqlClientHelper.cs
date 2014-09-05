@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -46,8 +47,9 @@ namespace Adenson.Data
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
 		/// </summary>
 		/// <param name="connection">The connection to use.</param>
+		/// <param name="close">If to close the connection when this object is disposed.</param>
 		/// <exception cref="ArgumentException">If specified connection is null.</exception>
-		public SqlClientHelper(SqlConnection connection) : base(connection)
+		public SqlClientHelper(SqlConnection connection, bool close) : base(connection, close)
 		{
 		}
 
@@ -132,6 +134,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Drops the database using information from the connection string.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1031", Justification = "The try/catch with no specificity is there to catch exceptions that whether they work or not, is irrelevant.")]
 		public override void DropDatabase()
 		{
 			if (!this.DatabaseExists())
@@ -151,7 +154,7 @@ namespace Adenson.Data
 					{
 						new SqlCommand(sql, connection).ExecuteNonQuery();
 					}
-				catch
+					catch
 					{
 					}
 				};

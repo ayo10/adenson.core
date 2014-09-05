@@ -27,6 +27,7 @@ namespace Adenson.Data
 		/// </summary>
 		protected SqlHelperBase() : this(Configuration.ConnectionStrings.Default)
 		{
+			this.CloseConnection = true;
 		}
 
 		/// <summary>
@@ -43,6 +44,7 @@ namespace Adenson.Data
 			}
 
 			this.ConnectionString = connectionStringSettings.ConnectionString;
+			this.CloseConnection = true;
 		}
 
 		/// <summary>
@@ -59,22 +61,25 @@ namespace Adenson.Data
 
 			var cs = ConfigurationManager.ConnectionStrings[keyOrConnectionString];
 			this.ConnectionString = cs == null ? keyOrConnectionString : cs.ConnectionString;
+			this.CloseConnection = true;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection object.
 		/// </summary>
 		/// <param name="connection">The connection to use.</param>
+		/// <param name="close">If to close the connection when this object is disposed.</param>
 		/// <exception cref="ArgumentException">If specified connection is null.</exception>
-		protected SqlHelperBase(IDbConnection connection)
+		protected SqlHelperBase(IDbConnection connection, bool close)
 		{
 			if (connection == null)
 			{
-				throw new ArgumentNullException();
+				throw new ArgumentNullException("connection");
 			}
 
-			_connection = new UnclosableDbConnection(connection);
+			_connection = connection;
 			this.ConnectionString = connection.ConnectionString;
+			this.CloseConnection = close;
 		}
 
 		#endregion
@@ -124,6 +129,15 @@ namespace Adenson.Data
 
 				return _connection; 
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to close (and dispose) the connection when this object is disposed.
+		/// </summary>
+		protected bool CloseConnection
+		{
+			get;
+			set;
 		}
 
 		#endregion
@@ -726,7 +740,7 @@ namespace Adenson.Data
 				try
 				{
 					// StringBuilder has a really good format parser, so am using it to validate the commandText and parameterValues
-					new System.Text.StringBuilder().AppendFormat(commandText, parameterValues);
+					new System.Text.StringBuilder().Append(StringUtil.Format(commandText, parameterValues));
 
 					// If we dont get a FormatException from StringBuilder.AppendFormat, then we are good.
 					for (var i = 0; i < parameterValues.Length; i++)
@@ -778,7 +792,7 @@ namespace Adenson.Data
 		/// <exception cref="InvalidOperationException">If there are open transactions.</exception>
 		protected virtual void Dispose(bool disposing)
 		{
-			if (_connection != null)
+			if (_connection != null && this.CloseConnection)
 			{
 				_connection.Dispose();
 			}

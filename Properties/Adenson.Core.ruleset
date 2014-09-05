@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Adenson.Core" Description="Adenson.Core ruleset" ToolsVersion="11.0">
+<RuleSet Name="Adenson.Core" Description="Adenson.Core ruleset" ToolsVersion="12.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1000" Action="Warning" />
     <Rule Id="CA1001" Action="Warning" />
@@ -24,7 +24,6 @@
     <Rule Id="CA1023" Action="Warning" />
     <Rule Id="CA1024" Action="Warning" />
     <Rule Id="CA1025" Action="Warning" />
-    <Rule Id="CA1026" Action="Warning" />
     <Rule Id="CA1027" Action="Warning" />
     <Rule Id="CA1028" Action="Warning" />
     <Rule Id="CA1030" Action="Warning" />

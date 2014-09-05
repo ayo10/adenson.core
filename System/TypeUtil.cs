@@ -18,7 +18,6 @@ namespace System
 	public static class TypeUtil
 	{
 		#region Variables
-		private static Logger logger = Logger.Get(typeof(TypeUtil));
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
 		#endregion
 		#region Methods
@@ -174,6 +173,7 @@ namespace System
 		/// </summary>
 		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
 		/// <exception cref="ArgumentNullException">If <paramref name="partialAssemblyName"/> is null.</exception>
+		/// <returns>A list of found assemblies.</returns>
 		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName)
 		{
 			return TypeUtil.FindReferencingAssemblies(partialAssemblyName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath));
@@ -184,6 +184,7 @@ namespace System
 		/// </summary>
 		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
 		/// <param name="directory">The directory look for files.</param>
+		/// <returns>List of found assemblies.</returns>
 		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> or <paramref name="directory"/> is null.</exception>
 		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
 		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName, string directory)
