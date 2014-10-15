@@ -43,7 +43,7 @@ namespace Adenson.Data
 		#region Properties
 
 		/// <summary>
-		/// Gets the name of the parameter
+		/// Gets the name of the parameter.
 		/// </summary>
 		public string Name
 		{
@@ -52,7 +52,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Gets the value of the parameter
+		/// Gets the value of the parameter.
 		/// </summary>
 		public object Value
 		{

@@ -52,7 +52,7 @@ namespace System
 		/// <summary>
 		/// Generates a random string of specified <paramref name="length"/>.
 		/// </summary>
-		/// <param name="length">Max length of string to generate</param>
+		/// <param name="length">Max length of string to generate.</param>
 		/// <returns>String generated</returns>
 		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is less or equal to 0.</exception>
 		public static string GenerateRandomString(int length)
@@ -88,9 +88,9 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>.
 		/// </summary>
-		/// <param name="value">The string</param>
+		/// <param name="value">The string.</param>
 		/// <returns>A byte array, or null if string is null</returns>
 		public static byte[] ToBytes(string value)
 		{
@@ -98,10 +98,10 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>.
 		/// </summary>
-		/// <param name="value">The string</param>
-		/// <param name="encoding">The encoding to use</param>
+		/// <param name="value">The string.</param>
+		/// <param name="encoding">The encoding to use.</param>
 		/// <returns>A byte array, or null if string is null</returns>
 		public static byte[] ToBytes(string value, Encoding encoding)
 		{
@@ -119,7 +119,26 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts the specified byte array to its equivalent string representation in Base64, minus the slashes and equal signs
+		/// Converts the specified list to comma delimited list.
+		/// </summary>
+		/// <param name="list">The items to iterate and string-ify.</param>
+		/// <returns>A comma delimited list of items in the list.</returns>
+		public static string ToString<T>(IEnumerable<T> list)
+		{
+			if (list == null)
+			{
+				return String.Format("Null<{0}>", typeof(T).Name);
+			}
+			else if (!list.Any())
+			{
+				return String.Format("Empty<{0}>", typeof(T).Name);
+			}
+
+			return String.Format("{0}<{1}> [{2}]", list.GetType().GetGenericTypeDefinition().Name, typeof(T).Name, String.Join(",", list.Select(x => x == null ? "null" : x.ToString())));
+		}
+
+		/// <summary>
+		/// Converts the specified byte array to its equivalent string representation in Base64, minus the slashes and equal signs.
 		/// </summary>
 		/// <param name="buffer">The byte array to convert.</param>
 		/// <returns>The string representation of the specified byte array, or null if its null.</returns>
@@ -185,7 +204,8 @@ namespace System
 			IEnumerable enumerable = value as IEnumerable;
 			if (enumerable != null)
 			{
-				return StringUtil.Format("{0}, Items:[{1}]", value.ToString(), String.Join(",", enumerable.Cast<object>().Select(o => StringUtil.ToString(o)).ToArray()));
+				var genericType = enumerable.GetType().GetGenericTypeDefinition();
+				return StringUtil.Format("{0}{1} [{2}]", value.GetType().Name, genericType == null ? String.Empty : String.Format("<{0}>", genericType.Name), String.Join(",", enumerable.Cast<object>().Select(o => o == null ? "null" : o.ToString())));
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);

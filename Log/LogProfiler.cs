@@ -55,7 +55,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the identifier
+		/// Gets the identifier.
 		/// </summary>
 		public string Identifier
 		{
@@ -64,7 +64,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether the object has been disposed
+		/// Gets a value indicating whether the object has been disposed.
 		/// </summary>
 		public bool IsDisposed
 		{
@@ -73,7 +73,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the parent <see cref="Logger"/> object
+		/// Gets the parent <see cref="Logger"/> object.
 		/// </summary>
 		public Logger Parent
 		{
@@ -90,7 +90,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the unique identifier for the profiler
+		/// Gets the unique identifier for the profiler.
 		/// </summary>
 		[SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uid", Justification = "I love uid")]
 		public Guid Uid
@@ -111,8 +111,8 @@ namespace Adenson.Log
 		/// <summary>
 		/// Called to log errors of type Debug.
 		/// </summary>
-		/// <param name="message">Message to log</param>
-		/// <param name="arguments">Arguments, if any to format message</param>
+		/// <param name="message">Message to log.</param>
+		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG")]
 		public void Debug(string message, params object[] arguments)
@@ -121,7 +121,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Effectively ends the profiler
+		/// Effectively ends the profiler.
 		/// </summary>
 		public void Dispose()
 		{

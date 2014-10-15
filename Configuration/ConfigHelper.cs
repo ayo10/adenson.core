@@ -12,10 +12,10 @@ namespace Adenson.Configuration
 		#region Methods
 
 		/// <summary>
-		/// Returns the config section with specified group and name
+		/// Returns the config section with specified group and name.
 		/// </summary>
 		/// <typeparam name="T">The type of object expected to be returned.</typeparam>
-		/// <param name="sectionName">The section name</param>
+		/// <param name="sectionName">The section name.</param>
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string sectionName) where T : class
 		{
@@ -28,11 +28,11 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Returns the config section with specified group and name
+		/// Returns the config section with specified group and name.
 		/// </summary>
 		/// <typeparam name="T">The type of configuation section to retrieve</typeparam>
-		/// <param name="groupName">The section group name</param>
-		/// <param name="sectionName">The section name</param>
+		/// <param name="groupName">The section group name.</param>
+		/// <param name="sectionName">The section name.</param>
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string groupName, string sectionName) where T : class
 		{
@@ -53,7 +53,7 @@ namespace Adenson.Configuration
 		/// Reads the config file to get the specified value from the appSettings section.
 		/// </summary>
 		/// <typeparam name="T">The type of value to return</typeparam>
-		/// <param name="key">The name of the value</param>
+		/// <param name="key">The name of the value.</param>
 		/// <returns>Found value (and converted to type) if found, default of T otherwise.</returns>
 		public static T GetValue<T>(string key)
 		{
@@ -70,7 +70,7 @@ namespace Adenson.Configuration
 		/// </summary>
 		/// <typeparam name="T">The type of value to return</typeparam>
 		/// <param name="key">The name of the section to find.</param>
-		/// <param name="defaultResult">The result to return if no value was found</param>
+		/// <param name="defaultResult">The result to return if no value was found.</param>
 		/// <returns>Found value (and converted to type) if found, <paramref name="defaultResult"/> otherwise.</returns>
 		public static T GetValue<T>(string key, T defaultResult)
 		{

@@ -24,7 +24,7 @@ namespace Adenson.Cryptography
 		#region Properties
 
 		/// <summary>
-		/// Gets the <see cref="System.Security.Cryptography.TripleDES"/> algorithm
+		/// Gets the <see cref="System.Security.Cryptography.TripleDES"/> algorithm.
 		/// </summary>
 		public override SymmetricAlgorithm Algorithm
 		{

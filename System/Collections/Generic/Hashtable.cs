@@ -29,7 +29,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the Hashtable class with specified capacity
+		/// Initializes a new instance of the Hashtable class with specified capacity.
 		/// </summary>
 		/// <param name="capacity">The initial number of elements that the dictionary can contain.</param>
 		public Hashtable(int capacity)
@@ -41,7 +41,7 @@ namespace System.Collections.Generic
 		#region Properties
 
 		/// <summary>
-		/// Gets the number of items in the dictionary
+		/// Gets the number of items in the dictionary.
 		/// </summary>
 		public int Count
 		{
@@ -49,7 +49,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether the dictionary is read only
+		/// Gets a value indicating whether the dictionary is read only.
 		/// </summary>
 		public bool IsReadOnly
 		{
@@ -58,7 +58,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets all the keys in the hashtable
+		/// Gets all the keys in the hashtable.
 		/// </summary>
 		public ICollection<TKey> Keys
 		{
@@ -66,7 +66,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets all the values in the hashtable
+		/// Gets all the values in the hashtable.
 		/// </summary>
 		public ICollection<TValue> Values
 		{
@@ -74,9 +74,9 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Gets or sets the value at the specified item
+		/// Gets or sets the value at the specified item.
 		/// </summary>
-		/// <param name="key">The key</param>
+		/// <param name="key">The key.</param>
 		/// <returns>Found value</returns>
 		public TValue this[TKey key]
 		{
@@ -114,7 +114,7 @@ namespace System.Collections.Generic
 		/// Adds an element with the provided key and value.
 		/// </summary>
 		/// <param name="key">The object to use as the key of the element to add.</param>
-		/// <param name="value">The object to use as the value</param>
+		/// <param name="value">The object to use as the value.</param>
 		public void Add(TKey key, TValue value)
 		{
 			if (this.IsReadOnly)
@@ -126,7 +126,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Removes all items
+		/// Removes all items.
 		/// </summary>
 		public void Clear()
 		{
@@ -161,7 +161,7 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Determines whether an element with the specified key exists.
 		/// </summary>
-		/// <param name="key">The key to locate</param>
+		/// <param name="key">The key to locate.</param>
 		/// <returns>true if the hashtable contains an element with the key; otherwise, false.</returns>
 		public bool ContainsKey(TKey key)
 		{
@@ -171,7 +171,7 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Determines whether the dictionary contains a specific value.
 		/// </summary>
-		/// <param name="value">The value</param>
+		/// <param name="value">The value.</param>
 		/// <returns>true if the hashtable contains an element with the value; otherwise, false.</returns>
 		public bool ContainsValue(TValue value)
 		{
@@ -179,7 +179,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Returns an enumerator that iterates through the dictionary
+		/// Returns an enumerator that iterates through the dictionary.
 		/// </summary>
 		/// <returns>The enumerator</returns>
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -188,9 +188,9 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Removes the value with the specified key from the dictionary
+		/// Removes the value with the specified key from the dictionary.
 		/// </summary>
-		/// <param name="key">The key to locate</param>
+		/// <param name="key">The key to locate.</param>
 		/// <returns>true if the item was removed, false otherwise.</returns>
 		public bool Remove(TKey key)
 		{
@@ -206,8 +206,8 @@ namespace System.Collections.Generic
 		/// <summary>
 		/// Gets the value associated with the specified key.
 		/// </summary>
-		/// <param name="key">The key</param>
-		/// <param name="value">The value found if any</param>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value found if any.</param>
 		/// <returns>true, or false</returns>
 		public bool TryGetValue(TKey key, out TValue value)
 		{

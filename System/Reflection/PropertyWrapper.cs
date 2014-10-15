@@ -24,7 +24,7 @@ namespace System.Reflection
 		#region Properties
 
 		/// <summary>
-		/// Gets the name of the property
+		/// Gets the name of the property.
 		/// </summary>
 		public string Name
 		{

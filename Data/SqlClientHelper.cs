@@ -18,7 +18,7 @@ namespace Adenson.Data
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>.
 		/// </summary>
 		public SqlClientHelper() : base()
 		{
@@ -27,7 +27,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <param name="connectionString">The connection string settings object to use.</param>
 		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
 		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		public SqlClientHelper(ConnectionStringSettings connectionString) : base(connectionString)
@@ -35,9 +35,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object
+		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object.
 		/// </summary>
-		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
+		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid.</exception>
 		public SqlClientHelper(string keyOrConnectionString) : base(keyOrConnectionString)
 		{
@@ -59,7 +59,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
-		/// <param name="command">The command to use to construct the adapter</param>
+		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="SqlDataAdapter"/> object</returns>
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
@@ -76,7 +76,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new database connection for use by the helper methods
+		/// Creates a new database connection for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlConnection"/> object</returns>
 		public override IDbConnection CreateConnection()
@@ -102,7 +102,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new data parametr for use in running commands
+		/// Creates a new data parametr for use in running commands.
 		/// </summary>
 		/// <returns>New <see cref="SqlParameter"/> object</returns>
 		public override IDbDataParameter CreateParameter()

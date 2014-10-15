@@ -27,7 +27,7 @@ namespace Adenson.Cryptography
 		#region Properties
 
 		/// <summary>
-		/// Gets the algorithm the encryptor is based on
+		/// Gets the algorithm the encryptor is based on.
 		/// </summary>
 		public abstract SymmetricAlgorithm Algorithm
 		{
@@ -58,9 +58,9 @@ namespace Adenson.Cryptography
 		#region Methods
 
 		/// <summary>
-		/// Encrypts the specified byte array
+		/// Encrypts the specified byte array.
 		/// </summary>
-		/// <param name="value">The byte array to encrypt</param>
+		/// <param name="value">The byte array to encrypt.</param>
 		/// <returns>The encrypted value</returns>
 		public byte[] Encrypt(byte[] value)
 		{

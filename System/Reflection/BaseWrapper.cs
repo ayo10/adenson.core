@@ -9,7 +9,7 @@ namespace System.Reflection
 	public abstract class BaseWrapper<T> where T : MemberInfo
 	{
 		/// <summary>
-		/// 
+		/// .
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="item"></param>

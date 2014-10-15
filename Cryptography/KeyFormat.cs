@@ -8,12 +8,12 @@ namespace Adenson.Cryptography
 	public enum KeyFormat : int
 	{
 		/// <summary>
-		/// Key is stored in base 64
+		/// Key is stored in base 64.
 		/// </summary>
 		Base64,
 
 		/// <summary>
-		/// Key is comma-delimited bytes
+		/// Key is comma-delimited bytes.
 		/// </summary>
 		CommaDelimitedBytes
 	}

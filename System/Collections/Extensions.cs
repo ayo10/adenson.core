@@ -12,9 +12,9 @@ namespace System.Collections
 		#region Methods
 
 		/// <summary>
-		/// Checks to see if the specified value is empty or null
+		/// Checks to see if the specified value is empty or null.
 		/// </summary>
-		/// <param name="values">The enumerable object to check</param>
+		/// <param name="values">The enumerable object to check.</param>
 		/// <returns>true if values is null or empty, false otherwise</returns>
 		public static bool IsNullOrEmpty(this IEnumerable values)
 		{

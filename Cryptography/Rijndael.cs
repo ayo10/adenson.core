@@ -23,7 +23,7 @@ namespace Adenson.Cryptography
 		#region Properties
 
 		/// <summary>
-		/// Gets the <see cref="System.Security.Cryptography.Rijndael"/> algorithm
+		/// Gets the <see cref="System.Security.Cryptography.Rijndael"/> algorithm.
 		/// </summary>
 		public override SymmetricAlgorithm Algorithm
 		{

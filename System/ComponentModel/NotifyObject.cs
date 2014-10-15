@@ -31,7 +31,7 @@ namespace System.ComponentModel
 		/// <summary>
 		/// Gets the value matching the specified key.
 		/// </summary>
-		/// <param name="key">The key of the value</param>
+		/// <param name="key">The key of the value.</param>
 		/// <returns>The found value, default of T otherwise</returns>
 		protected object GetValue(string key)
 		{
@@ -41,8 +41,8 @@ namespace System.ComponentModel
 		/// <summary>
 		/// Gets the value matching the specified key, or <paramref name="defaultValue"/> if none is found.
 		/// </summary>
-		/// <param name="key">The key of the value</param>
-		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
+		/// <param name="key">The key of the value.</param>
+		/// <param name="defaultValue">Value to return if the specified key doesn't exist.</param>
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
 		protected object GetValue(string key, object defaultValue)
 		{
@@ -53,7 +53,7 @@ namespace System.ComponentModel
 		/// Gets the value matching the specified key.
 		/// </summary>
 		/// <typeparam name="T">The value type to return</typeparam>
-		/// <param name="key">The key of the value</param>
+		/// <param name="key">The key of the value.</param>
 		/// <returns>The found value, default of T otherwise</returns>
 		protected T GetValue<T>(string key)
 		{
@@ -64,8 +64,8 @@ namespace System.ComponentModel
 		/// Gets the value matching the specified key, or <paramref name="defaultValue"/> if none is found.
 		/// </summary>
 		/// <typeparam name="T">The value type to return</typeparam>
-		/// <param name="key">The key of the value</param>
-		/// <param name="defaultValue">Value to return if the specified key doesn't exist</param>
+		/// <param name="key">The key of the value.</param>
+		/// <param name="defaultValue">Value to return if the specified key doesn't exist.</param>
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
 		protected virtual T GetValue<T>(string key, T defaultValue)
 		{
@@ -78,11 +78,11 @@ namespace System.ComponentModel
 		}
 
 		/// <summary>
-		/// Sets the value with the specified key
+		/// Sets the value with the specified key.
 		/// </summary>
 		/// <typeparam name="T">The value type to return</typeparam>
-		/// <param name="key">The key</param>
-		/// <param name="value">The value</param>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value.</param>
 		protected virtual void SetValue<T>(string key, T value)
 		{
 			if (Object.Equals(keyValues[key], value))
@@ -98,7 +98,7 @@ namespace System.ComponentModel
 		/// <summary>
 		/// Called after the property has changed.
 		/// </summary>
-		/// <param name="key">The value's key</param>
+		/// <param name="key">The value's key.</param>
 		protected void OnPropertyChanged(string key)
 		{
 			PropertyChangedEventArgs e = new PropertyChangedEventArgs(key);
@@ -111,7 +111,7 @@ namespace System.ComponentModel
 		/// <summary>
 		/// Called before the property's value changes.
 		/// </summary>
-		/// <param name="key">The value's key</param>
+		/// <param name="key">The value's key.</param>
 		protected void OnPropertyChanging(string key)
 		{
 			if (this.PropertyChanging != null)

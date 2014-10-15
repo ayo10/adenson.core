@@ -41,7 +41,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets the type form which this instance is forged from
+		/// Gets the type form which this instance is forged from.
 		/// </summary>
 		public Type ClassType
 		{
@@ -53,7 +53,7 @@ namespace Adenson.Log
 		#region Methods
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
@@ -63,7 +63,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
@@ -74,7 +74,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Debug(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Debug(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -85,7 +85,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Debug(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Debug(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -97,7 +97,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Error(object)"/>
+		/// Calls <see cref="Get(Type)"/> then <see cref="Error(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -107,7 +107,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Error(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Error(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -152,7 +152,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -164,7 +164,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(object)"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -175,7 +175,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>
+		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="identifier">Some kind of identifier.</param>
@@ -187,7 +187,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(object)"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="value">The value.</param>
@@ -198,7 +198,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(string, object[])"/>
+		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -286,7 +286,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Starts a execution duration profiler
+		/// Starts a execution duration profiler.
 		/// </summary>
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A profiler object</returns>
@@ -329,7 +329,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Starts a execution duration profiler
+		/// Starts a execution duration profiler.
 		/// </summary>
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A profiler object</returns>

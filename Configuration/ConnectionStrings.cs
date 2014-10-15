@@ -14,14 +14,14 @@ namespace Adenson.Configuration
 	{
 		#region Constants
 		/// <summary>
-		/// The default key constant ('default')
+		/// The default key constant ('default').
 		/// </summary>
 		public const string DefaultKey = "default";
 		#endregion
 		#region Properties
 
 		/// <summary>
-		/// Gets the default connection string
+		/// Gets the default connection string.
 		/// </summary>
 		public static ConnectionStringSettings Default
 		{
@@ -58,7 +58,7 @@ namespace Adenson.Configuration
 		/// We'll be nice and provide an ro indexer - oh wait, we can't.
 		/// Well, this GetCS thing will have to do instead.
 		/// </summary>
-		/// <param name="key">The lookup key for the connection string!</param>
+		/// <param name="key">The lookup key for the connection string!.</param>
 		/// <returns>A connection string</returns>
 		/// <remarks>Calls GetCS(key, true)</remarks>
 		public static ConnectionStringSettings Get(string key)
@@ -69,8 +69,8 @@ namespace Adenson.Configuration
 		/// <summary>
 		/// Gets a connection string using the key.
 		/// </summary>
-		/// <param name="key">Key to use to do a lookup</param>
-		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true</param>
+		/// <param name="key">Key to use to do a lookup.</param>
+		/// <param name="useDefaultIfNull">If true, returns ConnectionStrings.Default if String.IsNullOrEmpty(result) == true.</param>
 		/// <returns>A connection string</returns>
 		/// <exception cref="ArgumentNullException">If key is null or empty</exception>
 		/// <exception cref="ArgumentOutOfRangeException">If no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>

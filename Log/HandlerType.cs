@@ -8,7 +8,7 @@ namespace Adenson.Log
 	public enum HandlerType
 	{
 		/// <summary>
-		/// No logs
+		/// No logs.
 		/// </summary>
 		None = 0,
 
@@ -23,32 +23,32 @@ namespace Adenson.Log
 		File = 1,
 
 		/// <summary>
-		/// Logs via Console.WriteLine 
+		/// Logs via Console.WriteLine .
 		/// </summary>
 		Console = 2,
 
 		/// <summary>
-		/// Logs via System.Diagnostics.Debug.WriteLine
+		/// Logs via System.Diagnostics.Debug.WriteLine.
 		/// </summary>
 		Debug = 3,
 
 		/// <summary>
-		/// Logs via System.Diagnostics.Trace.WriteLine
+		/// Logs via System.Diagnostics.Trace.WriteLine.
 		/// </summary>
 		Trace = 4,
 
 		/// <summary>
-		/// Logs via email (expects config setting adenson/logSettings/emailInfo[from, to] to be set
+		/// Logs via email (expects config setting adenson/logSettings/emailInfo[from, to] to be set.
 		/// </summary>
 		Email = 5,
 
 		/// <summary>
-		/// Logs into Windows Event Log
+		/// Logs into Windows Event Log.
 		/// </summary>
 		EventLog = 6,
 
 		/// <summary>
-		/// Logs into a database (expects config setting adenson/logSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set
+		/// Logs into a database (expects config setting adenson/logSettings/databaseInfo[tableName,severityColumn,dateColumn,messageColumn,typeColumn] to be set.
 		/// </summary>
 		Database = 7,
 

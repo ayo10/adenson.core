@@ -10,10 +10,10 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the Coordinate struct
+		/// Initializes a new instance of the Coordinate struct.
 		/// </summary>
-		/// <param name="latitude">The latitude</param>
-		/// <param name="longitude">The longitude</param>
+		/// <param name="latitude">The latitude.</param>
+		/// <param name="longitude">The longitude.</param>
 		public Coordinate(double latitude, double longitude) : this()
 		{
 			this.Latitude = latitude;
@@ -24,7 +24,7 @@ namespace System
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the latitude
+		/// Gets or sets the latitude.
 		/// </summary>
 		public double Latitude
 		{
@@ -33,7 +33,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets or sets the longitude
+		/// Gets or sets the longitude.
 		/// </summary>
 		public double Longitude
 		{
@@ -47,7 +47,7 @@ namespace System
 		/// <summary>
 		/// Gets if this instance equals the other.
 		/// </summary>
-		/// <param name="other">The other</param>
+		/// <param name="other">The other.</param>
 		/// <returns>True, if they are both equal, false otherwise</returns>
 		public bool Equals(Coordinate other)
 		{
@@ -79,8 +79,8 @@ namespace System
 		/// <summary>
 		/// Checks the equality of the two specified objects.
 		/// </summary>
-		/// <param name="value1">The first</param>
-		/// <param name="value2">The second</param>
+		/// <param name="value1">The first.</param>
+		/// <param name="value2">The second.</param>
 		/// <returns>True, if they are equal, false otherwise</returns>
 		public static bool operator ==(Coordinate value1, Coordinate value2)
 		{
@@ -90,8 +90,8 @@ namespace System
 		/// <summary>
 		/// Checks the inequality of the two specified objects.
 		/// </summary>
-		/// <param name="value1">The first</param>
-		/// <param name="value2">The second</param>
+		/// <param name="value1">The first.</param>
+		/// <param name="value2">The second.</param>
 		/// <returns>True, if they are not equal, false otherwise</returns>
 		public static bool operator !=(Coordinate value1, Coordinate value2)
 		{

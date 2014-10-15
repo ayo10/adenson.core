@@ -15,7 +15,7 @@ namespace System
 		/// </summary>
 		/// <example>Phrase "SOME WORDS" returns "Some Words"</example>
 		/// <example>Phrase "some words" returns "Some Words", etc.</example>
-		/// <param name="value">The value to capitalize</param>
+		/// <param name="value">The value to capitalize.</param>
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
 		public static string Capitalize(this string value)
 		{
@@ -44,7 +44,7 @@ namespace System
 		/// <summary>
 		/// Gets if the specified <paramref name="value"/> is in the specified <paramref name="source"/> using specified <see cref="StringComparison"/> object.
 		/// </summary>
-		/// <param name="source">The string to look into</param>
+		/// <param name="source">The string to look into.</param>
 		/// <param name="value">The string to seek.</param>
 		/// <param name="comparisonType">One of the enumeration values that specifies the rules for the search.</param>
 		/// <returns>true if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
@@ -131,9 +131,9 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes
+		/// Converts the specified value to a hex string, using BitConverter.ToString, but without the dashes.
 		/// </summary>
-		/// <param name="buffer">The byte array</param>
+		/// <param name="buffer">The byte array.</param>
 		/// <returns>The hex string result.</returns>
 		public static string ToHex(this byte[] buffer)
 		{
@@ -146,13 +146,13 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts specified integer value to roman numeral
+		/// Converts specified integer value to roman numeral.
 		/// </summary>
 		/// <remarks>
 		/// <para>Any numerals greater than 5000 will begin with the the overbar character, i.e, 5000 = ¯V, 10000 = ¯X, etc, etc</para>
 		/// <para>Based on http://www.dreamcubes.com/b2/software-development/21/to-roman-c-int-to-roman-converter/ </para>
 		/// </remarks>
-		/// <param name="value">The value to convert</param>
+		/// <param name="value">The value to convert.</param>
 		/// <returns>Returns '0', if <paramref name="value"/> was 0 else the value in roman numeral</returns>
 		public static string ToRoman(this int value)
 		{
@@ -198,7 +198,7 @@ namespace System
 		/// Subtracts the specified bit duration from the specified <see cref="DateTime"/> object.
 		/// </summary>
 		/// <param name="date">The source date.</param>
-		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm')</param>
+		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm').</param>
 		/// <returns>A new <see cref="DateTime"/> object without its specified bit.</returns>
 		public static DateTime Trim(this DateTime date, string specifier)
 		{
@@ -224,7 +224,7 @@ namespace System
 		/// Subtracts the specified bit duration from the specified <see cref="TimeSpan"/> object.
 		/// </summary>
 		/// <param name="span">The source date.</param>
-		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm')</param>
+		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm').</param>
 		/// <returns>A new <see cref="TimeSpan"/> object without its specified bit.</returns>
 		public static TimeSpan Trim(this TimeSpan span, string specifier)
 		{

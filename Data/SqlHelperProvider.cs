@@ -15,7 +15,7 @@ namespace Adenson.Data
 		#region Methods
 
 		/// <summary>
-		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
+		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance.
 		/// </summary>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
 		/// <exception cref="MissingMethodException">No matching constructor was found.</exception>
@@ -32,7 +32,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
+		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance.
 		/// </summary>
 		/// <param name="connectionKey">Connection key that the new instance should use.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
@@ -48,7 +48,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance
+		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance.
 		/// </summary>
 		/// <param name="connectionString">Connection string.</param>
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>

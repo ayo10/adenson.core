@@ -129,7 +129,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Represents a configuration element for apis
+		/// Represents a configuration element for apis.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Yes it was, dummas.")]
 		internal sealed class HandlerElementCollection : ConfigurationElementCollection
