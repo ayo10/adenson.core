@@ -11,7 +11,7 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the Pair struct with specified values
+		/// Initializes a new instance of the Pair struct with specified values.
 		/// </summary>
 		/// <param name="left">The left value.</param>
 		/// <param name="right">The right value.</param>
@@ -25,7 +25,7 @@ namespace System
 		#region Properties
 
 		/// <summary>
-		/// Gets the left side of the pair
+		/// Gets the left side of the pair.
 		/// </summary>
 		public T Left
 		{
@@ -34,7 +34,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets the right side of the pair
+		/// Gets the right side of the pair.
 		/// </summary>
 		public T Right
 		{
@@ -43,7 +43,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether the pair is empty, i.e, a pair that was instantiated with an empty constructor
+		/// Gets a value indicating whether the pair is empty, i.e, a pair that was instantiated with an empty constructor.
 		/// </summary>
 		public bool IsEmpty
 		{
@@ -54,7 +54,7 @@ namespace System
 		#region Methods
 
 		/// <summary>
-		/// Gets if this pair equals the other
+		/// Gets if this pair equals the other.
 		/// </summary>
 		/// <param name="other">The other to compare to.</param>
 		/// <returns>true if </returns>
@@ -103,9 +103,9 @@ namespace System
 		}
 
 		/// <summary>
-		/// Fills this object with the source part object
+		/// Fills this object with the source part object.
 		/// </summary>
-		/// <param name="part">The part</param>
+		/// <param name="part">The part.</param>
 		/// <returns>The new pair</returns>
 		public Pair<T> Fill(Pair<T> part)
 		{
@@ -154,10 +154,10 @@ namespace System
 		#region Operators
 
 		/// <summary>
-		/// Checks the equality of the two specified pairs
+		/// Checks the equality of the two specified pairs.
 		/// </summary>
-		/// <param name="pair1">The first</param>
-		/// <param name="pair2">The second</param>
+		/// <param name="pair1">The first.</param>
+		/// <param name="pair2">The second.</param>
 		/// <returns>True, if they are equal, false otherwise</returns>
 		public static bool operator ==(Pair<T> pair1, Pair<T> pair2)
 		{
@@ -165,10 +165,10 @@ namespace System
 		}
 
 		/// <summary>
-		/// Checks the inequality of the two specified pairs
+		/// Checks the inequality of the two specified pairs.
 		/// </summary>
-		/// <param name="pair1">The first</param>
-		/// <param name="pair2">The second</param>
+		/// <param name="pair1">The first.</param>
+		/// <param name="pair2">The second.</param>
 		/// <returns>True, if they are not equal, false otherwise</returns>
 		public static bool operator !=(Pair<T> pair1, Pair<T> pair2)
 		{

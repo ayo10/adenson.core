@@ -82,7 +82,7 @@ namespace System
 		}
 
 		/// <summary>
-		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
+		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter.
 		/// </summary>
 		/// <typeparam name="T">The type of instance to return</typeparam>
 		/// <returns>Created instance</returns>
@@ -92,10 +92,10 @@ namespace System
 		}
 
 		/// <summary>
-		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter
+		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter.
 		/// </summary>
 		/// <typeparam name="T">The type of instance to return</typeparam>
-		/// <param name="typeName">The full name of the type</param>
+		/// <param name="typeName">The full name of the type.</param>
 		/// <returns>Created instance</returns>
 		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
 		public static T CreateInstance<T>(string typeName)
@@ -119,7 +119,7 @@ namespace System
 		/// </summary>
 		/// <remarks>Calls (T)Activator.CreateInstance(type).</remarks>
 		/// <typeparam name="T">The type of instance to return</typeparam>
-		/// <param name="type">The type</param>
+		/// <param name="type">The type.</param>
 		/// <returns>Created instance</returns>
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public static T CreateInstance<T>(Type type)
@@ -208,10 +208,10 @@ namespace System
 		}
 		
 		/// <summary>
-		/// Gets a <see cref="System.ComponentModel.PropertyDescriptor"/> from object using the passed property name
+		/// Gets a <see cref="System.ComponentModel.PropertyDescriptor"/> from object using the passed property name.
 		/// </summary>
-		/// <param name="item">Object into whose toga we shall be looking in</param>
-		/// <param name="propertyName">The particular property name we are looking for</param>
+		/// <param name="item">Object into whose toga we shall be looking in.</param>
+		/// <param name="propertyName">The particular property name we are looking for.</param>
 		/// <returns>A property descriptor object if found, null otherwise</returns>
 		public static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName)
 		{
@@ -230,9 +230,9 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets the value of the property of the object passed in (attempts to anyway)
+		/// Gets the value of the property of the object passed in (attempts to anyway).
 		/// </summary>
-		/// <param name="item">Object into whose toga we shall be looking in</param>
+		/// <param name="item">Object into whose toga we shall be looking in.</param>
 		/// <returns>Value of the property if found</returns>
 		/// <exception cref="System.ArgumentException">Thrown if the field name does not exist as a property of the object</exception>
 		public static string[] GetPropertyNames(object item)
@@ -246,10 +246,10 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets the value of the property of the object passed in (attempts to anyway)
+		/// Gets the value of the property of the object passed in (attempts to anyway).
 		/// </summary>
-		/// <param name="item">Object into whose toga we shall be looking in</param>
-		/// <param name="propertyName">The particular property name we are looking for</param>
+		/// <param name="item">Object into whose toga we shall be looking in.</param>
+		/// <param name="propertyName">The particular property name we are looking for.</param>
 		/// <returns>Value of the property if found</returns>
 		/// <exception cref="System.ArgumentException">Thrown if the field name does not exist as a property of the object</exception>
 		public static object GetPropertyValue(object item, string propertyName)
@@ -321,10 +321,10 @@ namespace System
 		}
 
 		/// <summary>
-		/// Gets the value of the property of the object passed in (attempts to anyway)
+		/// Gets the value of the property of the object passed in (attempts to anyway).
 		/// </summary>
-		/// <param name="item">Object into whose toga we shall be looking in</param>
-		/// <param name="propertyNames">The particular property name we are looking for</param>
+		/// <param name="item">Object into whose toga we shall be looking in.</param>
+		/// <param name="propertyNames">The particular property name we are looking for.</param>
 		/// <returns>Value of the property if found</returns>
 		/// <exception cref="System.ArgumentException">Thrown if the field name does not exist as a property of the object</exception>
 		public static object[] GetPropertyValues(object item, string[] propertyNames)
@@ -458,11 +458,11 @@ namespace System
 		}
 
 		/// <summary>
-		/// Tries to convert the specified value
+		/// Tries to convert the specified value.
 		/// </summary>
-		/// <param name="type">The type of the object we need to convert</param>
-		/// <param name="value">The value to convert</param>
-		/// <param name="output">The output of the conversion</param>
+		/// <param name="type">The type of the object we need to convert.</param>
+		/// <param name="value">The value to convert.</param>
+		/// <param name="output">The output of the conversion.</param>
 		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
 		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "It is not all instances that you can use generics.")]
 		public static bool TryConvert(Type type, object value, out object output)

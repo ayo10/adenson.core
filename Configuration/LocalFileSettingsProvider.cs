@@ -49,7 +49,7 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether to ignore version or not
+		/// Gets or sets a value indicating whether to ignore version or not.
 		/// </summary>
 		protected bool IgnoreVersion
 		{
@@ -135,7 +135,7 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Initializes the provider, setting 
+		/// Initializes the provider, setting .
 		/// </summary>
 		/// <param name="name">The friendly name of the provider.</param>
 		/// <param name="config">A collection of the name/value pairs representing the provider-specific attributes specified in the configuration for this provider.</param>

@@ -18,7 +18,7 @@ namespace Adenson.Data
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>.
 		/// </summary>
 		public SqlCeHelper() : base()
 		{
@@ -27,7 +27,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class.
 		/// </summary>
-		/// <param name="connectionString">The connection string settings object to use</param>
+		/// <param name="connectionString">The connection string settings object to use.</param>
 		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
 		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		public SqlCeHelper(ConnectionStringSettings connectionString) : base(connectionString)
@@ -35,9 +35,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection string setting object
+		/// Initializes a new instance of the <see cref="SqlCeHelper"/> class using specified connection string setting object.
 		/// </summary>
-		/// <param name="connectionString">The connection string to use</param>
+		/// <param name="connectionString">The connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
 		public SqlCeHelper(string connectionString) : base(connectionString)
 		{
@@ -113,7 +113,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Runs a check for the existence of database specified in the connectionstring (Not Supported)
+		/// Runs a check for the existence of database specified in the connectionstring (Not Supported).
 		/// </summary>
 		/// <returns>True if the database exists, false otherwise</returns>
 		public override bool DatabaseExists()
@@ -124,7 +124,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
-		/// <param name="command">The command to use to construct the adapter</param>
+		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="SqlCeDataAdapter"/> object</returns>
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
@@ -141,7 +141,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new database connection for use by the helper methods
+		/// Creates a new database connection for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlCeConnection"/> object</returns>
 		public override IDbConnection CreateConnection()
@@ -150,7 +150,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new data parametr for use in running commands
+		/// Creates a new data parametr for use in running commands.
 		/// </summary>
 		/// <returns>New <see cref="SqlCeParameter"/> object</returns>
 		public override IDbDataParameter CreateParameter()

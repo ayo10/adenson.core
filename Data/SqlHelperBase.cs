@@ -23,7 +23,7 @@ namespace Adenson.Data
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using <see cref="Configuration.ConnectionStrings.Default"/>
+		/// Initializes a new instance of the SqlHelperBase class using <see cref="Configuration.ConnectionStrings.Default"/>.
 		/// </summary>
 		protected SqlHelperBase() : this(Configuration.ConnectionStrings.Default)
 		{
@@ -31,9 +31,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object
+		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object.
 		/// </summary>
-		/// <param name="connectionStringSettings">The connection string settings object to use</param>
+		/// <param name="connectionStringSettings">The connection string settings object to use.</param>
 		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
 		/// <exception cref="ArgumentException">If specified connection string object has an invalid connection string</exception>
 		protected SqlHelperBase(ConnectionStringSettings connectionStringSettings)
@@ -48,9 +48,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object
+		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object.
 		/// </summary>
-		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use</param>
+		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
 		protected SqlHelperBase(string keyOrConnectionString)
 		{
@@ -107,7 +107,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Gets the connection string to use
+		/// Gets the connection string to use.
 		/// </summary>
 		public virtual string ConnectionString
 		{
@@ -116,7 +116,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Gets the current connection object in use (if OpenConnection was invoked)
+		/// Gets the current connection object in use (if OpenConnection was invoked).
 		/// </summary>
 		public virtual IDbConnection Connection
 		{
@@ -146,8 +146,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Runs a system check for the existence of specified column in the specified table using TSQL INFORMATION_SCHEMA.
 		/// </summary>
-		/// <param name="tableName">The table name</param>
-		/// <param name="columnName">The column name</param>
+		/// <param name="tableName">The table name.</param>
+		/// <param name="columnName">The column name.</param>
 		/// <returns>True if the table exists, false otherwise</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="tableName"/> is null or empty, OR, <paramref name="columnName"/> is null or empty</exception>
 		public virtual bool ColumnExists(string tableName, string columnName)
@@ -177,10 +177,10 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Creates a new data parametr for use in running commands
+		/// Creates a new data parametr for use in running commands.
 		/// </summary>
-		/// <param name="name">The name of the parameter</param>
-		/// <param name="value">The value of the parameter</param>
+		/// <param name="name">The name of the parameter.</param>
+		/// <param name="value">The value of the parameter.</param>
 		/// <returns>New <see cref="IDataParameter"/> object</returns>
 		public IDataParameter CreateParameter(string name, object value)
 		{
@@ -191,7 +191,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Disposes the object
+		/// Disposes the object.
 		/// </summary>
 		/// <exception cref="InvalidOperationException">If there are any transactions left in the stack.</exception>
 		public void Dispose()
@@ -243,7 +243,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Runs a query to determine if the specified table exists using TSQL INFORMATION_SCHEMA.
 		/// </summary>
-		/// <param name="tableName">The table name</param>
+		/// <param name="tableName">The table name.</param>
 		/// <returns>True if the table exists, false otherwise</returns>
 		public virtual bool TableExists(string tableName)
 		{
@@ -261,10 +261,10 @@ namespace Adenson.Data
 		#region ExecuteDataSet
 
 		/// <summary>
-		/// Executes and returns a new DataSet from specified command text using specified transaction
+		/// Executes and returns a new DataSet from specified command text using specified transaction.
 		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>A new DataSet object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -274,11 +274,11 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes and returns a new DataSet from specified command text
+		/// Executes and returns a new DataSet from specified command text.
 		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="type">The command type.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>A new DataSet object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual DataSet ExecuteDataSet(CommandType type, string commandText, params object[] parameterValues)
@@ -287,9 +287,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes and returns a new DataSet from specified command
+		/// Executes and returns a new DataSet from specified command.
 		/// </summary>
-		/// <param name="command">The command</param>
+		/// <param name="command">The command.</param>
 		/// <returns>A new DataSet object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
 		public virtual DataSet ExecuteDataSet(IDbCommand command)
@@ -316,9 +316,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes the commands in a batched mode with a transaction
+		/// Executes the commands in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commands">1 or more commands</param>
+		/// <param name="commands">1 or more commands.</param>
 		/// <returns>The result of each ExecuteDataSet run on each command</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
@@ -328,9 +328,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
+		/// Executes the command texts in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
+		/// <param name="commandTexts">1 or more command texts.</param>
 		/// <returns>The result of each ExecuteDataSet run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
@@ -346,8 +346,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text, runs as a System.Data.IDataReader, reads the result into a dynamic object.
 		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>An System.Data.IDataDynamic object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -359,9 +359,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and builds an System.Data.IDataDynamic.
 		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="type">The command type.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>An System.Data.IDataDynamic object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -373,7 +373,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataDynamic.
 		/// </summary>
-		/// <param name="command">The command</param>
+		/// <param name="command">The command.</param>
 		/// <returns>An System.Data.IDataDynamic object.</returns>
 		public virtual IEnumerable<dynamic> ExecuteDynamic(IDbCommand command)
 		{
@@ -411,8 +411,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and returns the number of rows affected.
 		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>The number of rows affected.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -424,9 +424,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and returns the number of rows affected.
 		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="type">The command type.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>The number of rows affected.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -438,7 +438,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the command and returns the number of rows affected.
 		/// </summary>
-		/// <param name="command">The command</param>
+		/// <param name="command">The command.</param>
 		/// <returns>The number of rows affected.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
 		public virtual int ExecuteNonQuery(IDbCommand command)
@@ -453,9 +453,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes the commands in a batched mode with a transaction
+		/// Executes the commands in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commands">1 or more commands</param>
+		/// <param name="commands">1 or more commands.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
@@ -467,7 +467,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the command texts in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
+		/// <param name="commandTexts">1 or more command texts.</param>
 		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
@@ -511,8 +511,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and builds an System.Data.IDataReader.
 		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -524,9 +524,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text and builds an System.Data.IDataReader.
 		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="type">The command type.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -538,7 +538,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the command and builds an System.Data.IDataReader.
 		/// </summary>
-		/// <param name="command">The command</param>
+		/// <param name="command">The command.</param>
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
@@ -557,8 +557,8 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -570,9 +570,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text using specified transaction returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
-		/// <param name="transaction">The transaction to use</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="transaction">The transaction to use.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="transaction"/> is null</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
@@ -590,9 +590,9 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the specified command text returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
-		/// <param name="type">The command type</param>
-		/// <param name="commandText">The command to execute</param>
-		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all)</param>
+		/// <param name="type">The command type.</param>
+		/// <param name="commandText">The command to execute.</param>
+		/// <param name="parameterValues">Zero or more parameter values (could be of tye System.Data.IDataParameter, Adenson.Data.Parameter, any IConvertible object or a combination of all).</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty</exception>
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
@@ -604,7 +604,7 @@ namespace Adenson.Data
 		/// <summary>
 		/// Executes the command returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
 		/// </summary>
-		/// <param name="command">The command</param>
+		/// <param name="command">The command.</param>
 		/// <returns>The first column of the first row in the resultset.</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
 		public virtual object ExecuteScalar(IDbCommand command)
@@ -619,9 +619,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes the commands in a batched mode with a transaction
+		/// Executes the commands in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commands">1 or more commands</param>
+		/// <param name="commands">1 or more commands.</param>
 		/// <returns>The result of each ExecuteScalar run on each command text</returns>
 		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
@@ -631,9 +631,9 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction
+		/// Executes the command texts in a batched mode with a transaction.
 		/// </summary>
-		/// <param name="commandTexts">1 or more command texts</param>
+		/// <param name="commandTexts">1 or more command texts.</param>
 		/// <returns>The result of each ExecuteScalar run on each command text</returns>
 		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
 		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
@@ -648,30 +648,30 @@ namespace Adenson.Data
 		/// <summary>
 		/// Creates a new data adapter object for use by the helper methods.
 		/// </summary>
-		/// <param name="command">The command to use to construct the adapter</param>
+		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="IDbDataAdapter"/> adapter</returns>
 		public abstract IDbDataAdapter CreateAdapter(IDbCommand command);
 
 		/// <summary>
-		/// Creates a new command object for use by the helper methods
+		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		public abstract IDbCommand CreateCommand();
 
 		/// <summary>
-		/// Creates a new database connection for use by the helper methods
+		/// Creates a new database connection for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="IDbConnection"/> object</returns>
 		public abstract IDbConnection CreateConnection();
 
 		/// <summary>
-		/// Creates a new data parametr for use in running commands
+		/// Creates a new data parametr for use in running commands.
 		/// </summary>
 		/// <returns>New <see cref="IDataParameter"/> object</returns>
 		public abstract IDbDataParameter CreateParameter();
 
 		/// <summary>
-		/// Runs a check for the existence of database specified in the connectionstring
+		/// Runs a check for the existence of database specified in the connectionstring.
 		/// </summary>
 		/// <returns>True if the database exists, false otherwise</returns>
 		public abstract bool DatabaseExists();
@@ -679,10 +679,10 @@ namespace Adenson.Data
 		#endregion
 
 		/// <summary>
-		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>
+		/// Creates a new command object of specified type using specified <paramref name="parameterValues"/>.
 		/// </summary>
-		/// <param name="type">The type of command</param>
-		/// <param name="commandText">The command text</param>
+		/// <param name="type">The type of command.</param>
+		/// <param name="commandText">The command text.</param>
 		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
@@ -799,7 +799,7 @@ namespace Adenson.Data
 		}
 		
 		/// <summary>
-		/// Prepares the command for execution. (Sets connection, timeout and opens connection if needed);
+		/// Prepares the command for execution. (Sets connection, timeout and opens connection if needed);.
 		/// </summary>
 		/// <param name="command">The command to prep.</param>
 		protected virtual void PrepCommand(IDbCommand command)

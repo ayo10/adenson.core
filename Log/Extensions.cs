@@ -9,7 +9,7 @@ namespace Adenson.Log
 	public static class Extensions
 	{
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(object)"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -25,7 +25,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(string, object[])"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -42,7 +42,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
@@ -52,7 +52,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Critical(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
@@ -121,7 +121,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Error(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Error(object)"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -137,7 +137,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Error(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Error(string, object[])"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -154,7 +154,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Error(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/> then <see cref="Logger.Error(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -164,7 +164,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Error(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Error(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -175,7 +175,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Instantiates a Logger object, then calls <see cref="Logger.GetProfiler(string)"/>
+		/// Instantiates a Logger object, then calls <see cref="Logger.GetProfiler(string)"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -192,7 +192,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Instantiates a Logger object, then calls <see cref="Logger.GetProfiler(string)"/>
+		/// Instantiates a Logger object, then calls <see cref="Logger.GetProfiler(string)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="identifier">Some kind of identifier.</param>
@@ -203,7 +203,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(string, object[])"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -221,7 +221,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(object)"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -238,7 +238,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -250,7 +250,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Info(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
@@ -261,7 +261,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(object)"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -278,7 +278,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(string, object[])"/>.
 		/// </summary>
 		/// <typeparam name="T">The <paramref name="source"/> object type.</typeparam>
 		/// <param name="source">The object, whose type, Logger would be called on.</param>
@@ -296,7 +296,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(object)"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="value">The value.</param>
@@ -307,7 +307,7 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(string, object[])"/>
+		/// Calls <see cref="Logger.Get(Type)"/>, then calls <see cref="Logger.Warn(string, object[])"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>

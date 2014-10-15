@@ -72,7 +72,7 @@ namespace Adenson.Collections
 		#region Methods
 
 		/// <summary>
-		/// Adds each item in items to the list
+		/// Adds each item in items to the list.
 		/// </summary>
 		/// <param name="items">The items to add.</param>
 		/// <exception cref="ArgumentNullException">If items is null</exception>
@@ -95,9 +95,9 @@ namespace Adenson.Collections
 		}
 
 		/// <summary>
-		/// Removes each item in items from the list
+		/// Removes each item in items from the list.
 		/// </summary>
-		/// <param name="items">The items to remove</param>
+		/// <param name="items">The items to remove.</param>
 		public void RemoveRange(IEnumerable<T> items)
 		{
 			if (items == null)
@@ -112,10 +112,10 @@ namespace Adenson.Collections
 		}
 
 		/// <summary>
-		/// Replaces the specified item with the new one
+		/// Replaces the specified item with the new one.
 		/// </summary>
-		/// <param name="existing">The existing item</param>
-		/// <param name="replacement">The replacement</param>
+		/// <param name="existing">The existing item.</param>
+		/// <param name="replacement">The replacement.</param>
 		public void Replace(T existing, T replacement)
 		{
 			if (existing == null)
@@ -140,7 +140,7 @@ namespace Adenson.Collections
 		}
 
 		/// <summary>
-		/// Converts the list into a read only list
+		/// Converts the list into a read only list.
 		/// </summary>
 		/// <returns>A read only collection</returns>
 		public ReadOnlyObservableCollection<T> AsReadOnly()
@@ -184,8 +184,8 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Moves the item at the specified index to a new location in the collection.
 		/// </summary>
-		/// <param name="oldIndex">The old index</param>
-		/// <param name="newIndex">The new index</param>
+		/// <param name="oldIndex">The old index.</param>
+		/// <param name="newIndex">The new index.</param>
 		protected override void MoveItem(int oldIndex, int newIndex)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Move, this[oldIndex], newIndex, oldIndex);
@@ -199,7 +199,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Removes the item at the specified index of the collection.
 		/// </summary>
-		/// <param name="index">The index to remove the item</param>
+		/// <param name="index">The index to remove the item.</param>
 		protected override void RemoveItem(int index)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Remove, this[index], index);
@@ -213,8 +213,8 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Replaces the element at the specified index.
 		/// </summary>
-		/// <param name="index">The index to set the item</param>
-		/// <param name="item">The item to set</param>
+		/// <param name="index">The index to set the item.</param>
+		/// <param name="item">The item to set.</param>
 		protected override void SetItem(int index, T item)
 		{
 			CollectionChangingEventArgs<T> e = new CollectionChangingEventArgs<T>(NotifyCollectionChangedAction.Replace, item, this[index], index);
@@ -228,7 +228,7 @@ namespace Adenson.Collections
 		/// <summary>
 		/// Raises the CollectionChanged event with the provided arguments.
 		/// </summary>
-		/// <param name="e">The event</param>
+		/// <param name="e">The event.</param>
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
 			if (this.CollectionChanged == null || suspendCollectionChange)

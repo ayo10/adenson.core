@@ -100,10 +100,10 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Checks to see if the specified value is empty or null
+		/// Checks to see if the specified value is empty or null.
 		/// </summary>
 		/// <typeparam name="T">The type of items in the enumeration.</typeparam>
-		/// <param name="values">The enumerable object to check</param>
+		/// <param name="values">The enumerable object to check.</param>
 		/// <returns>true if values is null or empty, false otherwise</returns>
 		public static bool IsNullOrEmpty<T>(this IEnumerable<T> values)
 		{

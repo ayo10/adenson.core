@@ -46,9 +46,9 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Converts a hex string to bytes
+		/// Converts a hex string to bytes.
 		/// </summary>
-		/// <param name="hexValue">The string to convert</param>
+		/// <param name="hexValue">The string to convert.</param>
 		/// <returns>Created byte array</returns>
 		/// <remarks>Borrowed from http://www.codeproject.com/KB/recipes/hexencoding.aspx?msg=2494780 </remarks>
 		/// <exception cref="NotSupportedException">If the length of the string is not a multiple of zero</exception>
@@ -81,10 +81,10 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>
+		/// Returns the names of files in the specified directory that match the specified patterns, see <see cref="System.IO.Directory.GetFiles(string, string, System.IO.SearchOption)"/>.
 		/// </summary>
 		/// <param name="directory">The directory to search.</param>
-		/// <param name="extensions">The list of extensions to match against the names of files in directory</param>
+		/// <param name="extensions">The list of extensions to match against the names of files in directory.</param>
 		/// <returns> A String array containing the names of files in the specified directory that match the specified search pattern. File names include the full path.</returns>
 		/// <exception cref="ArgumentNullException">If directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
@@ -109,9 +109,9 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Gets if the specified path is a file or a directory, operation not guaranteed
+		/// Gets if the specified path is a file or a directory, operation not guaranteed.
 		/// </summary>
-		/// <param name="fullPath">The path</param>
+		/// <param name="fullPath">The path.</param>
 		/// <returns>true if directory, false other wise</returns>
 		/// <exception cref="ArgumentNullException">If fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
@@ -125,9 +125,9 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Fixes the specified name by removing characters that are invalid
+		/// Fixes the specified name by removing characters that are invalid.
 		/// </summary>
-		/// <param name="fileName">The name to clean up</param>
+		/// <param name="fileName">The name to clean up.</param>
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
@@ -154,7 +154,7 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Creates a byte array, by reading the response stream of the specified url 
+		/// Creates a byte array, by reading the response stream of the specified url .
 		/// </summary>
 		/// <param name="filePath">The path and name of the file to create.</param>
 		/// <returns>A byte array, or null if stream is null</returns>
@@ -176,9 +176,9 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Creates a byte array, by reading the response stream of the specified url
+		/// Creates a byte array, by reading the response stream of the specified url.
 		/// </summary>
-		/// <param name="url">The url</param>
+		/// <param name="url">The url.</param>
 		/// <returns>A byte array, or null if resulting stream is null</returns>
 		/// <exception cref="ArgumentNullException">If url is null</exception>
 		public static byte[] ReadStream(Uri url)
@@ -203,9 +203,9 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Creates a byte array, by reading the specified stream
+		/// Creates a byte array, by reading the specified stream.
 		/// </summary>
-		/// <param name="stream">The stream</param>
+		/// <param name="stream">The stream.</param>
 		/// <returns>A byte array, or null if resulting stream is null</returns>
 		/// <exception cref="ArgumentNullException">If stream is null</exception>
 		/// <exception cref="NotSupportedException">If stream does not support reading</exception>
@@ -232,10 +232,10 @@ namespace System.IO
 		}
 
 		/// <summary>
-		/// Calls GetBytes(hexString) in a try catch
+		/// Calls GetBytes(hexString) in a try catch.
 		/// </summary>
-		/// <param name="hexValue">The string to convert</param>
-		/// <param name="result">The result</param>
+		/// <param name="hexValue">The string to convert.</param>
+		/// <param name="result">The result.</param>
 		/// <returns>false if an exception occurred true, true otherwise</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Its a try method, it should succeed or fail.")]
 		public static bool TryGetBytes(string hexValue, out byte[] result)

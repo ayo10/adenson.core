@@ -27,7 +27,7 @@ namespace Adenson.Configuration
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the current entry assembly's company name
+		/// Gets or sets the current entry assembly's company name.
 		/// </summary>
 		public string CompanyName
 		{
@@ -36,7 +36,7 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets the current entry assembly's product name
+		/// Gets or sets the current entry assembly's product name.
 		/// </summary>
 		public string ProductName
 		{
@@ -45,7 +45,7 @@ namespace Adenson.Configuration
 		}
 
 		/// <summary>
-		/// Gets or sets the current entry assembly's version
+		/// Gets or sets the current entry assembly's version.
 		/// </summary>
 		public Version Version
 		{
