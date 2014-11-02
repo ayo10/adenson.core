@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
+using Adenson.Log;
 
 namespace Adenson.Data
 {
@@ -136,20 +136,26 @@ namespace Adenson.Data
 			using (SqlConnection connection = new SqlConnection(ssb.ToString()))
 			{
 				connection.Open();
-				Action<string> a = sql =>
+				Action<string, bool> tryExecute = (sql, thrw) =>
 				{
 					try
 					{
+						this.LogDebug("Executing: {0}", sql);
 						new SqlCommand(sql, connection).ExecuteNonQuery();
 					}
-					catch
+					catch (Exception ex)
 					{
+						this.LogDebug(ex.Message);
+						if (thrw)
+						{
+							throw ex;
+						}
 					}
 				};
 
-				a.Invoke(StringUtil.Format("ALTER DATABASE [{0}] SET single_user with rollback immediate", database));
-				a.Invoke(StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'", database));
-				new SqlCommand(StringUtil.Format("DROP DATABASE [{0}]", database), connection).ExecuteNonQuery();
+				tryExecute.Invoke(StringUtil.Format("ALTER DATABASE [{0}] SET single_user with rollback immediate", database), false);
+				tryExecute.Invoke(StringUtil.Format("EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'{0}'", database), false);
+				tryExecute.Invoke(StringUtil.Format("DROP DATABASE [{0}]", database), true);
 			}
 		}
 
