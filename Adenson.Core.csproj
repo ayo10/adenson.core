@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Log\Severity.cs" />
     <Compile Include="Log\TraceHandler.cs" />
+    <Compile Include="System\Check.cs" />
     <Compile Include="System\Collections\Generic\GenericEqualityComparer.cs" />
     <Compile Include="System\Collections\Generic\GenericComparer.cs" />
     <Compile Include="Collections\CollectionChangingEventArgs.cs" />
