@@ -861,7 +861,7 @@ namespace Adenson.Data
 			{
 				if (command != null)
 				{
-					Logger.Get(this.GetType()).Debug(Exceptions.ErrantCommandArg, command.CommandText);
+					this.LogDebug(Exceptions.ErrantCommandArg, command.CommandText);
 				}
 
 				if (transactions.Count > 0)
