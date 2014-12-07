@@ -20,7 +20,7 @@ namespace Adenson.Log
 			this.Severity = Severity.Error;
 			this.Handlers = new HandlerCollection(this);
 			this.Handlers.Add(new TraceHandler());
-			this.SecondsFormat = "0.000000";
+			this.SecondsFormat = "N3";
 		}
 
 		#endregion
