@@ -116,17 +116,6 @@ namespace Adenson.Log
 		{
 			Logger.Get(type).Error(message, arguments);
 		}
-		
-		/// <summary>
-		/// Gets a pre initialized (or new) Logger for specified type.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>Existing, or newly minted logger</returns>
-		[Obsolete("Use Logger.Get", false)]
-		public static Logger GetLogger(Type type)
-		{
-			return Logger.Get(type);
-		}
 
 		/// <summary>
 		/// Gets a pre initialized (or new) Logger for specified type.
@@ -172,18 +161,6 @@ namespace Adenson.Log
 		public static void Info(Type type, object message)
 		{
 			Logger.Get(type).Info(message);
-		}
-
-		/// <summary>
-		/// Instantiates a Logger object, then calls <see cref="ProfilerStart(string)"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="identifier">Some kind of identifier.</param>
-		/// <returns>A disposable profiler object</returns>
-		[Obsolete("Use GetProfiler on an instance of Logger", false)]
-		public static LogProfiler ProfilerStart(Type type, string identifier)
-		{
-			return Logger.Get(type).GetProfiler(identifier);
 		}
 
 		/// <summary>
@@ -326,17 +303,6 @@ namespace Adenson.Log
 		public void Info(string message, params object[] arguments)
 		{
 			this.Write(Severity.Info, message, arguments);
-		}
-
-		/// <summary>
-		/// Starts a execution duration profiler.
-		/// </summary>
-		/// <param name="identifier">Some kind of identifier.</param>
-		/// <returns>A profiler object</returns>
-		[Obsolete("Use GetProfiler", false)]
-		public LogProfiler ProfilerStart(string identifier)
-		{
-			return this.GetProfiler(identifier);
 		}
 
 		/// <summary>

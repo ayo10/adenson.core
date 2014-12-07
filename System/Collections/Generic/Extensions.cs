@@ -71,6 +71,20 @@ namespace System.Collections.Generic
 		/// <returns>Found value if any else added <paramref name="addIfNull"/>.</returns>
 		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue addIfNull)
 		{
+			return Extensions.GetOrAdd<TKey, TValue>(dictionary, key, () => addIfNull);
+		}
+
+		/// <summary>
+		/// Gets the element with the specified key if it exists in the dictionary, else adds the result of <paramref name="addIfNull"/> to the dictionary with the specified key and returns it.
+		/// </summary>
+		/// <typeparam name="TKey">The type of key.</typeparam>
+		/// <typeparam name="TValue">The type of value.</typeparam>
+		/// <param name="dictionary">The dictionary to read.</param>
+		/// <param name="key">The key to find.</param>
+		/// <param name="addIfNull">The function to use to retrieve a value to add and return if no such key exists in the dictionary.</param>
+		/// <returns>Found value if any else added <paramref name="addIfNull"/>.</returns>
+		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> addIfNull)
+		{
 			if (dictionary == null)
 			{
 				throw new ArgumentNullException("dictionary");
@@ -79,8 +93,8 @@ namespace System.Collections.Generic
 			TValue value;
 			if (!dictionary.TryGetValue(key, out value))
 			{
-				value = addIfNull;
-				dictionary.Add(key, addIfNull);
+				value = addIfNull();
+				dictionary.Add(key, value);
 			}
 
 			return value;

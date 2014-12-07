@@ -33,7 +33,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the format name.
 		/// </summary>
-		[ConfigurationProperty("secondsFormat")]
+		[ConfigurationProperty("secondsFormat", DefaultValue = "0.00")]
 		public string SecondsFormat
 		{
 			get { return (string)base["secondsFormat"]; }
