@@ -160,7 +160,7 @@ namespace Adenson.Data
 						this.LogDebug(ex.Message);
 						if (thrw)
 						{
-							throw ex;
+							throw;
 						}
 					}
 				};

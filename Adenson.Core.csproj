@@ -10,6 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Adenson</RootNamespace>
     <AssemblyName>Adenson.Core</AssemblyName>
+    <AssemblyOriginatorKeyFile>AdensonCore.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,21 +38,28 @@
     <Prefer32Bit>false</Prefer32Bit>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>AdensonCore.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release.V4|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseV4|AnyCPU'">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release\4.0\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
     <DocumentationFile>bin\Release\4.0\Adenson.Core.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseV35|AnyCPU'">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\3.5\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS;NET35</DefineConstants>
+    <DocumentationFile>bin\Release\3.5\Adenson.Core.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -57,6 +68,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Microsoft.CSharp" Condition="'$(Configuration)|$(Platform)' != 'ReleaseV35|AnyCPU'" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cryptography\Aes.cs" />
@@ -75,9 +87,7 @@
     <Compile Include="Log\EventLogHandler.cs" />
     <Compile Include="Log\FileHandler.cs" />
     <Compile Include="Log\HandlerCollection.cs" />
-    <Compile Include="Log\Settings.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Log\Settings.cs" />
     <Compile Include="Log\Severity.cs" />
     <Compile Include="Log\TraceHandler.cs" />
     <Compile Include="System\Collections\Generic\GenericEqualityComparer.cs" />
@@ -153,8 +163,7 @@
   <ItemGroup>
     <None Include="AdensonCore.snk" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
-  <Import Project="$(MSBuildExtensionsPath32)\FxCop\FxCop.targets" Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'" />
+  <Import Project="$(MSBuildExtensionsPath32)\StyleCop\v4.7\StyleCop.targets" Condition="'$(Configuration)' == 'Debug'" />
+  <Import Project="$(MSBuildExtensionsPath32)\FxCop\FxCop.targets" Condition="'$(Configuration)' == 'Debug'" />
 </Project>

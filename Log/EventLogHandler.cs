@@ -54,7 +54,7 @@ namespace Adenson.Log
 			}
 			catch (SecurityException e)
 			{
-				Debug.WriteLine(SR.EventLogWarning, this.Source, e.Message);
+				Debug.WriteLine(StringUtil.Format(SR.EventLogWarning, this.Source, e.Message));
 				return false;
 			}
 

@@ -117,10 +117,12 @@ namespace Adenson.Cryptography
 		/// <param name="disposing">Doesn't matter.</param>
 		protected virtual void Dispose(bool disposing)
 		{
+			#if !NET35
 			if (this.Algorithm != null)
 			{
 				this.Algorithm.Dispose();
 			}
+			#endif
 		}
 
 		private ICryptoTransform CreateTransform(bool encrypt)

@@ -89,7 +89,7 @@ namespace Adenson.Log
 			{
 				settings.Severity = config.Severity;
 				settings.SecondsFormat = config.SecondsFormat;
-				settings.Formatter = String.IsNullOrWhiteSpace(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
+				settings.Formatter = String.IsNullOrEmpty(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
 				settings.Handlers = HandlerCollection.FromConfig(settings, config.Handlers);
 			}
 

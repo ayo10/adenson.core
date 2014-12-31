@@ -19,7 +19,7 @@ namespace System
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
 		public static string Capitalize(this string value)
 		{
-			if (String.IsNullOrWhiteSpace(value))
+			if (String.IsNullOrEmpty(value))
 			{
 				return value;
 			}
