@@ -76,7 +76,11 @@ namespace Adenson.Log
 				throw new ArgumentNullException("entry");
 			}
 
+			#if !NET35
 			using (SmtpClient s = new SmtpClient())
+			#else
+			SmtpClient s = new SmtpClient();
+			#endif
 			{
 				MailMessage m = new MailMessage
 				{
