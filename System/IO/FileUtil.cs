@@ -131,7 +131,7 @@ namespace System.IO
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
-			if (String.IsNullOrWhiteSpace(fileName))
+			if (String.IsNullOrEmpty(fileName))
 			{
 				throw new ArgumentNullException("fileName");
 			}

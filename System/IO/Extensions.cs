@@ -8,6 +8,30 @@ namespace System.IO
 	/// </summary>
 	public static class Extensions
 	{
+		#if NET35
+
+		/// <summary>
+		/// Reads all the bytes from the current stream and writes them to the destination stream.
+		/// </summary>
+		/// <param name="source">The source stream.</param>
+		/// <param name="destination">The destination stream.</param>
+		public static void CopyTo(this Stream source, Stream destination)
+		{
+			if (destination == null)
+			{
+				throw new ArgumentNullException("destination");
+			}
+
+			byte[] array = new byte[8196];
+			int count;
+			while ((count = source.Read(array, 0, array.Length)) != 0)
+			{
+				destination.Write(array, 0, count);
+			}
+		}
+
+		#endif
+
 		/// <summary>
 		/// Converts specified stream to a byte array.
 		/// </summary>

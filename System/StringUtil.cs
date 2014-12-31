@@ -121,20 +121,21 @@ namespace System
 		/// <summary>
 		/// Converts the specified list to comma delimited list.
 		/// </summary>
+		/// <typeparam name="T">The type of items in the list.</typeparam>
 		/// <param name="list">The items to iterate and string-ify.</param>
 		/// <returns>A comma delimited list of items in the list.</returns>
 		public static string ToString<T>(IEnumerable<T> list)
 		{
 			if (list == null)
 			{
-				return String.Format("Null<{0}>", typeof(T).Name);
+				return StringUtil.Format("Null<{0}>", typeof(T).Name);
 			}
 			else if (!list.Any())
 			{
-				return String.Format("Empty<{0}>", typeof(T).Name);
+				return StringUtil.Format("Empty<{0}>", typeof(T).Name);
 			}
 
-			return String.Format("{0}<{1}> [{2}]", list.GetType().GetGenericTypeDefinition().Name, typeof(T).Name, String.Join(",", list.Select(x => x == null ? "null" : x.ToString())));
+			return StringUtil.Format("{0}<{1}> [{2}]", list.GetType().GetGenericTypeDefinition().Name, typeof(T).Name, String.Join(",", list.Select(x => x == null ? "null" : x.ToString()).ToArray()));
 		}
 
 		/// <summary>
@@ -167,7 +168,7 @@ namespace System
 
 			List<string> message = new List<string>();
 			StringUtil.ToString(exception, message);
-			return String.Join(Environment.NewLine, message);
+			return String.Join(Environment.NewLine, message.ToArray());
 		}
 
 		/// <summary>
@@ -205,7 +206,7 @@ namespace System
 			if (enumerable != null)
 			{
 				var genericType = enumerable.GetType().GetGenericTypeDefinition();
-				return StringUtil.Format("{0}{1} [{2}]", value.GetType().Name, genericType == null ? String.Empty : String.Format("<{0}>", genericType.Name), String.Join(",", enumerable.Cast<object>().Select(o => o == null ? "null" : o.ToString())));
+				return StringUtil.Format("{0}{1} [{2}]", value.GetType().Name, genericType == null ? String.Empty : StringUtil.Format("<{0}>", genericType.Name), String.Join(",", enumerable.Cast<object>().Select(o => o == null ? "null" : o.ToString()).ToArray()));
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);

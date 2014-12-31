@@ -45,9 +45,11 @@ namespace Adenson.Log
 						case HandlerType.Debug:
 							handler = new DebugHandler();
 							break;
+						#if !NET35
 						case HandlerType.Email:
 							handler = new EmailHandler(element);
 							break;
+						#endif
 						case HandlerType.EventLog:
 							handler = new EventLogHandler(element);
 							break;
@@ -63,7 +65,7 @@ namespace Adenson.Log
 					}
 
 					handler.Severity = element.Severity;
-					if (!String.IsNullOrWhiteSpace(element.Formatter))
+					if (!String.IsNullOrEmpty(element.Formatter))
 					{
 						handler.Formatter = TypeUtil.CreateInstance<BaseFormatter>(element.Formatter);
 					}

@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+#if !NET35
 using System.Dynamic;
+#endif
 using System.IO;
 using System.Linq;
 using Adenson.Log;
@@ -688,7 +690,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
 		protected virtual IDbCommand CreateCommand(CommandType type, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrWhiteSpace(commandText))
+			if (String.IsNullOrEmpty(commandText))
 			{
 				throw new ArgumentNullException("commandText");
 			}

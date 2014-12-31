@@ -91,11 +91,15 @@ namespace Adenson.Cryptography
 			{
 				throw new ArgumentException(StringUtil.Format(Exceptions.ArgLessOrEqualToZero, "size"), "size");
 			}
-
-			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+			
+			#if !NET35
+			using (RNGCryptoServiceProvider g = new RNGCryptoServiceProvider())
+			#else
+			RNGCryptoServiceProvider g = new RNGCryptoServiceProvider();
+			#endif
 			{
 				byte[] data = new byte[size];
-				rngCsp.GetBytes(data);
+				g.GetBytes(data);
 				return data;
 			}
 		}
@@ -192,7 +196,11 @@ namespace Adenson.Cryptography
 			}
 			else if (hashType == HashType.PBKDF2)
 			{
+				#if !NET35
 				using (var g = new Rfc2898DeriveBytes(value, salt, 5000))
+				#else
+				var g = new Rfc2898DeriveBytes(value, salt, 5000);
+				#endif
 				{
 					return g.GetBytes(32);
 				}
@@ -249,7 +257,11 @@ namespace Adenson.Cryptography
 			}
 			else if (hashType == HashType.PBKDF2)
 			{
+				#if !NET35
 				using (var g = new Rfc2898DeriveBytes(value, salt, iterations))
+				#else
+				var g = new Rfc2898DeriveBytes(value, salt, iterations);
+				#endif
 				{
 					return g.GetBytes(32);
 				}

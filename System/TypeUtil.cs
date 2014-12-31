@@ -383,7 +383,7 @@ namespace System
 		/// <exception cref="BadImageFormatException">The assembly or one of its dependencies is not valid.</exception>
 		public static Type GetType(string typeDescription, bool throwOnError)
 		{
-			if (String.IsNullOrWhiteSpace(typeDescription))
+			if (String.IsNullOrEmpty(typeDescription))
 			{
 				throw new ArgumentNullException("typeDescription");
 			}
