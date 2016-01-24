@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,9 @@ namespace System.Xml.Linq
 		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static XElement Element(this XContainer source, XName name, StringComparison comparisonType)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName))
-			{
-				throw new ArgumentNullException("name");
-			}
+			Arg.IsNotNull(source, "source");
+			Arg.IsNotNull(name, "name");
+			Arg.IsNotEmpty(name.LocalName, "name");
 
 			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType));
 		}
@@ -55,15 +50,9 @@ namespace System.Xml.Linq
 		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static T GetValue<T>(this XElement source, XName name)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName))
-			{
-				throw new ArgumentNullException("name");
-			}
+			Arg.IsNotNull(source, "source");
+			Arg.IsNotNull(name, "name");
+			Arg.IsNotEmpty(name.LocalName, "name");
 
 			T result = default(T);
 			string value = null;
@@ -104,15 +93,9 @@ namespace System.Xml.Linq
 		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static bool HasElement(this XContainer source, XName name)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName))
-			{
-				throw new ArgumentNullException("name");
-			}
+			Arg.IsNotNull(source, "source");
+			Arg.IsNotNull(name, "name");
+			Arg.IsNotEmpty(name.LocalName, "name");
 
 			return source.HasElement(name, StringComparison.CurrentCulture);
 		}
@@ -127,15 +110,9 @@ namespace System.Xml.Linq
 		/// <exception cref="ArgumentNullException">If source is null, OR name is null or name.LocalName is whitespace</exception>
 		public static bool HasElement(this XContainer source, XName name, StringComparison comparisonType)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (name == null || StringUtil.IsNullOrWhiteSpace(name.LocalName))
-			{
-				throw new ArgumentNullException("name");
-			}
+			Arg.IsNotNull(source, "source");
+			Arg.IsNotNull(name, "name");
+			Arg.IsNotEmpty(name.LocalName, "name");
 
 			return source.Elements().FirstOrDefault(e => String.Equals(e.Name.LocalName, name.LocalName, comparisonType)) != null;
 		}

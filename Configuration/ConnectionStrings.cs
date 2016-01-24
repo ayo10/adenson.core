@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Adenson.Configuration
@@ -38,10 +39,7 @@ namespace Adenson.Configuration
 		/// <returns>Enumration of matching connection strings.</returns>
 		public static IEnumerable<ConnectionStringSettings> Closest(string connectionString)
 		{
-			if (String.IsNullOrEmpty(connectionString))
-			{
-				throw new ArgumentNullException("connectionString");
-			}
+			Arg.IsNotNull(connectionString, "connectionString");
 
 			var val = connectionString.ToUpper().ToDictionary(";");
 			foreach (ConnectionStringSettings cs in ConfigurationManager.ConnectionStrings)
@@ -76,10 +74,7 @@ namespace Adenson.Configuration
 		/// <exception cref="ArgumentOutOfRangeException">If no value for key could be found (will happen even if useDefaultIfNull is true if the default key does not exist)</exception>
 		public static ConnectionStringSettings Get(string key, bool useDefaultIfNull)
 		{
-			if (String.IsNullOrEmpty(key))
-			{
-				throw new ArgumentNullException("key");
-			}
+			Arg.IsNotNull(key, "key");
 
 			ConnectionStringSettings result = ConnectionStrings.GetValue(key);
 			if (result == null)

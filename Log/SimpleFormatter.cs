@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Globalization;
+using System.Diagnostics;
 
 namespace Adenson.Log
 {
@@ -17,6 +17,7 @@ namespace Adenson.Log
 		/// <returns>The formatted string.</returns>
 		public override string Format(LogEntry entry)
 		{
+			Arg.IsNotNull(entry, "entry");
 			return entry.Message.ToString();
 		}
 

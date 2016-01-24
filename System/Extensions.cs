@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -51,15 +53,8 @@ namespace System
 		/// <exception cref="ArgumentNullException"><paramref name="source"/> is null OR <paramref name="value"/> is null.</exception>
 		public static bool Contains(this string source, string value, StringComparison comparisonType)
 		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
+			Arg.IsNotNull(source, "source");
+			Arg.IsNotNull(value, "value");
 
 			return source.IndexOf(value, comparisonType) > -1;
 		}
@@ -202,11 +197,7 @@ namespace System
 		/// <returns>A new <see cref="DateTime"/> object without its specified bit.</returns>
 		public static DateTime Trim(this DateTime date, string specifier)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(specifier))
-			{
-				throw new ArgumentNullException("specifier");
-			}
-
+			Arg.IsNotEmpty(specifier, "specifier");
 			return date.Subtract(date.TimeOfDay.Trim(specifier));
 		}
 
@@ -226,12 +217,10 @@ namespace System
 		/// <param name="span">The source date.</param>
 		/// <param name="specifier">The date format specifying the bit to be trimmed (i.e. 'ff', 'ss', 'mm').</param>
 		/// <returns>A new <see cref="TimeSpan"/> object without its specified bit.</returns>
+		[SuppressMessage("Microsoft.Maintainability", "CA1502", Justification = "Fine as is.")]
 		public static TimeSpan Trim(this TimeSpan span, string specifier)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(specifier))
-			{
-				throw new ArgumentNullException("specifier");
-			}
+			Arg.IsNotEmpty(specifier, "specifier");
 
 			TimeSpan subtract;
 			switch (specifier)

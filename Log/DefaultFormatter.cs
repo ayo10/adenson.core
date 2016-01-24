@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -21,11 +22,7 @@ namespace Adenson.Log
 		/// <returns>The formatted string.</returns>
 		public override string Format(LogEntry entry)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException("entry");
-			}
-
+			Arg.IsNotNull(entry, "entry");
 			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) + "]", entry.Date, entry.TypeName, this.ToString(entry.Message));
 		}
 

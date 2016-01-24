@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Adenson.Collections;
@@ -24,22 +25,20 @@ namespace System.IO
 		/// <returns>Newly created path.</returns>
 		public static string CreateFile(string filePath, byte[] buffer)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentNullException("filePath");
-			}
+			Arg.IsNotEmpty(filePath, "filePath");
 
-			var directory = Path.GetDirectoryName(filePath);
+			string directory = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(directory))
 			{
 				Directory.CreateDirectory(directory);
 			}
 
-			FileStream stream = File.Create(filePath);
 			if (buffer != null)
 			{
-				stream.Write(buffer, 0, buffer.Length);
-				stream.Close();
+				using (FileStream stream = File.Create(filePath))
+				{
+					stream.Write(buffer, 0, buffer.Length);
+				}
 			}
 
 			return filePath;
@@ -183,10 +182,7 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">If url is null</exception>
 		public static byte[] ReadStream(Uri url)
 		{
-			if (url == null)
-			{
-				throw new ArgumentNullException("url");
-			}
+			Arg.IsNotNull(url, "url");
 
 			Stream stream;
 			if (File.Exists(url.AbsolutePath))
@@ -199,7 +195,10 @@ namespace System.IO
 				stream = request.GetResponse().GetResponseStream();
 			}
 
-			return FileUtil.ReadStream(stream);
+			using (stream)
+			{
+				return FileUtil.ReadStream(stream);
+			}
 		}
 
 		/// <summary>

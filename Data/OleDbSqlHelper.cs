@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Data
 {
@@ -86,6 +87,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="OleDbDataAdapter"/> object</returns>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new OleDbDataAdapter((OleDbCommand)command);
@@ -95,6 +97,7 @@ namespace Adenson.Data
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="OleDbCommand"/> object</returns>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbCommand CreateCommand()
 		{
 			return new OleDbCommand();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -78,10 +79,7 @@ namespace Adenson.Collections
 		/// <exception cref="ArgumentNullException">If items is null</exception>
 		public void AddRange(IEnumerable<T> items)
 		{
-			if (items == null)
-			{
-				throw new ArgumentNullException("items");
-			}
+			Arg.IsNotNull(items, "items");
 
 			suspendCollectionChange = true;
 			int startingIndex = this.Count;
@@ -100,10 +98,7 @@ namespace Adenson.Collections
 		/// <param name="items">The items to remove.</param>
 		public void RemoveRange(IEnumerable<T> items)
 		{
-			if (items == null)
-			{
-				throw new ArgumentNullException("items");
-			}
+			Arg.IsNotNull(items, "items");
 
 			foreach (T item in items)
 			{
@@ -118,15 +113,8 @@ namespace Adenson.Collections
 		/// <param name="replacement">The replacement.</param>
 		public void Replace(T existing, T replacement)
 		{
-			if (existing == null)
-			{
-				throw new ArgumentNullException("existing");
-			}
-
-			if (replacement == null)
-			{
-				throw new ArgumentNullException("replacement");
-			}
+			Arg.IsNotNull(existing, "existing");
+			Arg.IsNotNull(replacement, "replacement");
 
 			int index = this.IndexOf(existing);
 			if (index == -1)

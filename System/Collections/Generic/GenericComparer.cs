@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace System.Collections.Generic
@@ -21,11 +22,7 @@ namespace System.Collections.Generic
 		/// <param name="func">The compare delegate.</param>
 		public GenericComparer(Func<T, T, int> func)
 		{
-			if (func == null)
-			{
-				throw new ArgumentNullException("func");
-			}
-
+			Arg.IsNotNull(func, "func");
 			_func = func;
 		}
 

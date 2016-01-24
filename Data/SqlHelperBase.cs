@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 #if !NET35
 using System.Dynamic;
 #endif
@@ -294,13 +296,10 @@ namespace Adenson.Data
 		/// <param name="command">The command.</param>
 		/// <returns>A new DataSet object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public virtual DataSet ExecuteDataSet(IDbCommand command)
 		{
-			if (command == null)
-			{
-				throw new ArgumentNullException("command");
-			}
-
+			Arg.IsNotNull(command, "command");
 			this.PrepCommand(command);
 
 			IDbDataAdapter dataAdapter = this.CreateAdapter(command);
@@ -688,17 +687,13 @@ namespace Adenson.Data
 		/// <param name="parameterValues">The parameter values, which can be an array of <see cref="Parameter"/>, <see cref="IDataParameter"/>.</param>
 		/// <returns>New <see cref="IDbCommand"/> object</returns>
 		/// <exception cref="ArgumentNullException">If <paramref name="commandText"/> is null or empty, OR, parameterValues is not empty but any item in it is null</exception>
+		[SuppressMessage("Microsoft.Maintainability", "CA1502", Justification = "Fine as is.")]
+		[SuppressMessage("Microsoft.Security", "CA2100", Justification = "Class is a sql execution helper, executes whatever is passed to it without any validation.")]
 		protected virtual IDbCommand CreateCommand(CommandType type, string commandText, params object[] parameterValues)
 		{
-			if (String.IsNullOrEmpty(commandText))
-			{
-				throw new ArgumentNullException("commandText");
-			}
-
-			if (parameterValues == null || (!parameterValues.IsNullOrEmpty() && parameterValues.Any(p => p == null)))
-			{
-				throw new ArgumentNullException("parameterValues");
-			}
+			Arg.IsNotEmpty(commandText, "commandText");
+			Arg.IsNotNull(parameterValues, "parameterValues");
+			Arg.IsNotAllNull(parameterValues, "parameterValues");
 
 			List<IDataParameter> parameters = new List<IDataParameter>();
 			if (parameterValues.Any(p => p is Parameter) || parameterValues.Any(p => p is IDataParameter))
@@ -863,7 +858,7 @@ namespace Adenson.Data
 			{
 				if (command != null)
 				{
-					this.LogDebug(Exceptions.ErrantCommandArg, command.CommandText);
+					Logger.Debug(this.GetType(), Exceptions.ErrantCommandArg, command.CommandText);
 				}
 
 				if (transactions.Count > 0)

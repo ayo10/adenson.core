@@ -24,6 +24,7 @@ namespace Adenson.Log
 		/// <param name="filePath">The path to write the log.</param>
 		public FileHandler(string filePath) : base()
 		{
+			Arg.IsNotEmpty(filePath, "filePath");
 			if (!Path.IsPathRooted(filePath))
 			{
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Adenson.Log
 {
@@ -37,11 +38,7 @@ namespace Adenson.Log
 			}
 			set
 			{
-				if (value == null)
-				{
-					throw new ArgumentNullException("value");
-				}
-
+				Arg.IsNotNull(value, "value");
 				_formatter = value;
 			}
 		}

@@ -1,5 +1,7 @@
 using System;
 using System.Configuration;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Adenson.Configuration;
 
@@ -54,12 +56,10 @@ namespace Adenson.Data
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
 		/// <exception cref="ArgumentNullException">If 'connectionString' is null or its 'ConnectionString' property is null.</exception>
 		/// <exception cref="NotSupportedException">If unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
+		[SuppressMessage("Microsoft.Maintainability", "CA1502", Justification = "Fine as is.")]
 		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
 		{
-			if (connectionString == null)
-			{
-				throw new ArgumentNullException("connectionString");
-			}
+			Arg.IsNotNull(connectionString, "connectionString");
 
 			if (String.IsNullOrEmpty(connectionString.ProviderName))
 			{
