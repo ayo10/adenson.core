@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -36,14 +37,23 @@ namespace Adenson.Cryptography
 		/// <exception cref="CryptographicException">When <paramref name="key"/> and/or <paramref name="iv"/> are not the same that were used to encrypt the value -OR- the value is not an encrypted value to begin with.</exception>
 		public static byte[] Decrypt(EncryptionType type, byte[] value, byte[] key, byte[] iv)
 		{
+			BaseSymmetricalCrypt crypt;
 			switch (type)
 			{
 				case EncryptionType.Rijndael:
-					return new Rijndael(key, iv).Decrypt(value);
+					crypt = new Rijndael(key, iv);
+					break;
 				case EncryptionType.TripleDES:
-					return new TripleDes(key, iv).Decrypt(value);
+					crypt = new TripleDes(key, iv);
+					break;
 				default:
-					return new Aes(key, iv).Decrypt(value);
+					crypt = new Aes(key, iv);
+					break;
+			}
+
+			using (crypt)
+			{
+				return crypt.Decrypt(value);
 			}
 		}
 
@@ -69,14 +79,23 @@ namespace Adenson.Cryptography
 		/// <returns>Encrypted array.</returns>
 		public static byte[] Encrypt(EncryptionType type, byte[] value, byte[] key, byte[] iv)
 		{
+			BaseSymmetricalCrypt crypt;
 			switch (type)
 			{
 				case EncryptionType.Rijndael:
-					return new Rijndael(key, iv).Encrypt(value);
+					crypt = new Rijndael(key, iv);
+					break;
 				case EncryptionType.TripleDES:
-					return new TripleDes(key, iv).Encrypt(value);
+					crypt = new TripleDes(key, iv);
+					break;
 				default:
-					return new Aes(key, iv).Encrypt(value);
+					crypt = new Aes(key, iv);
+					break;
+			}
+
+			using (crypt)
+			{
+				return crypt.Encrypt(value);
 			}
 		}
 
@@ -185,10 +204,7 @@ namespace Adenson.Cryptography
 				return null;
 			}
 
-			if (salt == null)
-			{
-				throw new ArgumentNullException("salt");
-			}
+			Arg.IsNotNull(salt, "salt");
 
 			if (hashType == HashType.None)
 			{
@@ -241,10 +257,7 @@ namespace Adenson.Cryptography
 				return null;
 			}
 
-			if (salt == null)
-			{
-				throw new ArgumentNullException("salt");
-			}
+			Arg.IsNotNull(salt, "salt");
 
 			if (iterations <= 0)
 			{

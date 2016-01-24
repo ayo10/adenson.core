@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Adenson.Log
 {
@@ -84,11 +85,7 @@ namespace Adenson.Log
 		/// <param name="item">The item to insert.</param>
 		protected override void InsertItem(int index, BaseHandler item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException("item");
-			}
-
+			Arg.IsNotNull(item, "item");
 			item.Settings = _settings;
 			base.InsertItem(index, item);
 		}
@@ -100,11 +97,7 @@ namespace Adenson.Log
 		/// <param name="item">The item to insert.</param>
 		protected override void SetItem(int index, BaseHandler item)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException("item");
-			}
-
+			Arg.IsNotNull(item, "item");
 			item.Settings = _settings;
 			base.SetItem(index, item);
 		}

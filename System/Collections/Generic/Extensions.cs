@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace System.Collections.Generic
@@ -20,10 +21,7 @@ namespace System.Collections.Generic
 		/// <param name="value">The value to set.</param>
 		public static void AddOrSet<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
 		{
-			if (dictionary == null)
-			{
-				throw new ArgumentNullException("dictionary");
-			}
+			Arg.IsNotNull(dictionary, "dictionary");
 
 			if (dictionary.ContainsKey(key))
 			{
@@ -46,10 +44,7 @@ namespace System.Collections.Generic
 		/// <returns>Found value if any else added <paramref name="returnIfNotContained"/>.</returns>
 		public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue returnIfNotContained)
 		{
-			if (dictionary == null)
-			{
-				throw new ArgumentNullException("dictionary");
-			}
+			Arg.IsNotNull(dictionary, "dictionary");
 
 			TValue value;
 			if (dictionary.TryGetValue(key, out value))
@@ -85,10 +80,8 @@ namespace System.Collections.Generic
 		/// <returns>Found value if any else added <paramref name="addIfNull"/>.</returns>
 		public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> addIfNull)
 		{
-			if (dictionary == null)
-			{
-				throw new ArgumentNullException("dictionary");
-			}
+			Arg.IsNotNull(dictionary, "dictionary");
+			Arg.IsNotNull(addIfNull, "addIfNull");
 
 			TValue value;
 			if (!dictionary.TryGetValue(key, out value))
@@ -134,15 +127,8 @@ namespace System.Collections.Generic
 		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
 		public static T[] MergeWith<T>(this T[] value, T[] other)
 		{
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
-
-			if (other == null)
-			{
-				throw new ArgumentNullException("other");
-			}
+			Arg.IsNotNull(value, "value");
+			Arg.IsNotNull(other, "other");
 
 			T[] result = new T[value.Length + other.Length];
 			value.CopyTo(result, 0);
@@ -160,15 +146,9 @@ namespace System.Collections.Generic
 		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
 		public static IEnumerable<T> MergeWith<T>(this IEnumerable<T> value, IEnumerable<T> other)
 		{
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
+			Arg.IsNotNull(value, "value");
 
-			if (other == null)
-			{
-				throw new ArgumentNullException("other");
-			}
+			Arg.IsNotNull(other, "other");
 
 			return new MergeEnumerable<T>(value, other);
 		}
@@ -188,15 +168,8 @@ namespace System.Collections.Generic
 				return null;
 			}
 
-			if (listDelimiter == null)
-			{
-				throw new ArgumentNullException("listDelimiter");
-			}
-
-			if (itemDelimiter == null)
-			{
-				throw new ArgumentNullException("itemDelimiter");
-			}
+			Arg.IsNotNull(listDelimiter, "listDelimiter");
+			Arg.IsNotNull(itemDelimiter, "itemDelimiter");
 
 			Dictionary<string, string> result = new Dictionary<string, string>();
 			foreach (var kv in value.Split(new string[] { listDelimiter }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim().Split(new string[] { itemDelimiter }, StringSplitOptions.None)))

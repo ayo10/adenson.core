@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace Adenson.Configuration
 {
@@ -57,10 +58,7 @@ namespace Adenson.Configuration
 		/// <returns>Found value (and converted to type) if found, default of T otherwise.</returns>
 		public static T GetValue<T>(string key)
 		{
-			if (String.IsNullOrEmpty(key))
-			{
-				throw new ArgumentNullException("key");
-			}
+			Arg.IsNotNull(key, "key");
 
 			return ConfigHelper.GetValue<T>(key, default(T));
 		}
@@ -74,10 +72,7 @@ namespace Adenson.Configuration
 		/// <returns>Found value (and converted to type) if found, <paramref name="defaultResult"/> otherwise.</returns>
 		public static T GetValue<T>(string key, T defaultResult)
 		{
-			if (String.IsNullOrEmpty(key))
-			{
-				throw new ArgumentNullException("key");
-			}
+			Arg.IsNotNull(key, "key");
 
 			string value = ConfigurationManager.AppSettings[key];
 			T result = defaultResult;

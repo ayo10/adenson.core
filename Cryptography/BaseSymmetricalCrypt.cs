@@ -62,6 +62,7 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="value">The byte array to encrypt.</param>
 		/// <returns>The encrypted value</returns>
+		[SuppressMessage("Microsoft.Usage", "CA2202", Justification = "Double disposal not an issue.")]
 		public byte[] Encrypt(byte[] value)
 		{
 			if (value == null)
@@ -89,10 +90,10 @@ namespace Adenson.Cryptography
 		/// </summary>
 		/// <param name="value">The byte array to decrypt.</param>
 		/// <returns>Decrypted byte array.</returns>
+		[SuppressMessage("Microsoft.Usage", "CA2202", Justification = "Double disposal not an issue.")]
 		public byte[] Decrypt(byte[] value)
 		{
 			ICryptoTransform transform = this.CreateTransform(false);
-
 			using (MemoryStream msin = new MemoryStream(value))
 			{
 				using (CryptoStream cs = new CryptoStream(msin, transform, CryptoStreamMode.Read))

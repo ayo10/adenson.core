@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace System.Collections
@@ -30,15 +31,8 @@ namespace System.Collections
 		/// <exception cref="ArgumentNullException">If <paramref name="value"/> or <paramref name="other"/> is null.</exception>
 		public static IEnumerable MergeWith(this IEnumerable value, IEnumerable other)
 		{
-			if (value == null)
-			{
-				throw new ArgumentNullException("value");
-			}
-
-			if (other == null)
-			{
-				throw new ArgumentNullException("other");
-			}
+			Arg.IsNotNull(value, "value");
+			Arg.IsNotNull(other, "other");
 
 			List<object> list = new List<object>();
 			foreach (object item in value)

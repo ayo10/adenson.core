@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 using System.Xml.Linq;
@@ -69,12 +70,10 @@ namespace Adenson.Log
 		/// <param name="entry">The entry to write.</param>
 		/// <returns>True if the email was sent successfully, false otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031", Justification = "Returns true if the write was successful, false otherwise.")]
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "MailMessage was disposed!!!.")]
 		public override bool Write(LogEntry entry)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException("entry");
-			}
+			Arg.IsNotNull(entry, "entry");
 
 			#if !NET35
 			using (SmtpClient s = new SmtpClient())
@@ -82,24 +81,18 @@ namespace Adenson.Log
 			SmtpClient s = new SmtpClient();
 			#endif
 			{
-				MailMessage m = new MailMessage
+				using (MailMessage message = new MailMessage { From = new MailAddress(this.From), Subject = this.Subject, Body = entry.ToString(), IsBodyHtml = true })
 				{
-					From = new MailAddress(this.From),
-					Subject = this.Subject,
-					Body = entry.ToString(),
-					IsBodyHtml = true
-				};
-
-				m.To.Add(this.To);
-				
-				try
-				{
-					s.SendAsync(m, null);
-					return true;
-				}
-				catch
-				{
-					return false;
+					message.To.Add(this.To);
+					try
+					{
+						s.SendAsync(message, null);
+						return true;
+					}
+					catch
+					{
+						return false;
+					}
 				}
 			}
 		}

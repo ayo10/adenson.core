@@ -61,6 +61,7 @@ namespace Adenson.Data
 		/// </summary>
 		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="SqlDataAdapter"/> object</returns>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new SqlDataAdapter((SqlCommand)command);
@@ -70,6 +71,7 @@ namespace Adenson.Data
 		/// Creates a new command object for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlCommand"/> object</returns>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbCommand CreateCommand()
 		{
 			return new SqlCommand();
@@ -79,6 +81,7 @@ namespace Adenson.Data
 		/// Creates a new database connection for use by the helper methods.
 		/// </summary>
 		/// <returns>New <see cref="SqlConnection"/> object</returns>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbConnection CreateConnection()
 		{
 			return new SqlConnection(this.ConnectionString);
@@ -135,6 +138,7 @@ namespace Adenson.Data
 		/// Drops the database using information from the connection string.
 		/// </summary>
 		[SuppressMessage("Microsoft.Design", "CA1031", Justification = "The try/catch with no specificity is there to catch exceptions that whether they work or not, is irrelevant.")]
+		[SuppressMessage("Microsoft.Security", "CA2100", Justification = "All scripts executed are internal to this method.")]
 		public override void DropDatabase()
 		{
 			if (!this.DatabaseExists())
@@ -152,12 +156,15 @@ namespace Adenson.Data
 				{
 					try
 					{
-						this.LogDebug("Executing: {0}", sql);
-						new SqlCommand(sql, connection).ExecuteNonQuery();
+						Logger.Debug(this.GetType(), "Executing: {0}", sql);
+						using (var dc = new SqlCommand(sql, connection))
+						{
+							dc.ExecuteNonQuery();
+						}
 					}
 					catch (Exception ex)
 					{
-						this.LogDebug(ex.Message);
+						Logger.Error(this.GetType(), ex);
 						if (thrw)
 						{
 							throw;

@@ -12,7 +12,6 @@
     <AssemblyName>Adenson.Core</AssemblyName>
     <AssemblyOriginatorKeyFile>AdensonCore.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -23,41 +22,51 @@
     <DefineConstants>DEBUG;TRACE;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\4.5.1\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\4.5.1\Adenson.Core.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Adenson.Core.xml</DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseV4|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.net35|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\4.0\</OutputPath>
-    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
-    <DocumentationFile>bin\Release\4.0\Adenson.Core.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseV35|AnyCPU'">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\3.5\</OutputPath>
+    <OutputPath>bin\Release\net35\</OutputPath>
     <DefineConstants>TRACE;CODE_ANALYSIS;NET35</DefineConstants>
-    <DocumentationFile>bin\Release\3.5\Adenson.Core.xml</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\net35\Adenson.Core.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.net40|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net40\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\net40\Adenson.Core.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release.net45|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net45\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\net45\Adenson.Core.xml</DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,7 +85,6 @@
     <Compile Include="Cryptography\EncryptionType.cs" />
     <Compile Include="Log\BaseFormatter.cs" />
     <Compile Include="Log\BaseHandler.cs" />
-    <Compile Include="Log\Extensions.cs" />
     <Compile Include="Log\SimpleFormatter.cs" />
     <Compile Include="Log\SettingsConfiguration.cs" />
     <Compile Include="Log\ConsoleHandler.cs" />
@@ -120,6 +128,8 @@
     <Compile Include="Log\HandlerType.cs" />
     <Compile Include="System\Console2.cs" />
     <Compile Include="System\Coordinate.cs" />
+    <Compile Include="System\Diagnostics\Arg.cs" />
+    <Compile Include="System\Diagnostics\ValidatedNotNullAttribute.cs" />
     <Compile Include="System\Extensions.cs" />
     <Compile Include="System\Pair.cs" />
     <Compile Include="System\StringUtil.cs" />

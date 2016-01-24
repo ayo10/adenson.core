@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -79,10 +80,7 @@ namespace Adenson.Configuration
 		/// <returns>A System.Configuration.SettingsPropertyValueCollection containing the values for the specified settings property group.</returns>
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException("collection");
-			}
+			Arg.IsNotNull(collection, "collection");
 
 			var config = this.GetConfiguration(context);
 			var sectionName = LocalFileSettingsProvider.GetSectionName(context);

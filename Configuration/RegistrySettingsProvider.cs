@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Win32;
 
@@ -121,10 +122,7 @@ namespace Adenson.Configuration
 		/// <param name="collection">A System.Configuration.SettingsPropertyValueCollection representing the group of property settings to set.</param>
 		public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
 		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException("collection");
-			}
+			Arg.IsNotNull(collection, "collection");
 
 			foreach (SettingsPropertyValue setting in collection)
 			{

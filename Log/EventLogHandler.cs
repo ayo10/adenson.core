@@ -40,10 +40,7 @@ namespace Adenson.Log
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Should not fail regardless of any exception.")]
 		public override bool Write(LogEntry entry)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException("entry");
-			}
+			Arg.IsNotNull(entry, "entry");
 
 			try
 			{

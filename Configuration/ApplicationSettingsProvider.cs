@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -84,10 +85,7 @@ namespace Adenson.Configuration
 		/// <returns>The found section name.</returns>
 		protected static string GetSectionName(SettingsContext context)
 		{
-			if (context == null)
-			{
-				throw new ArgumentNullException("context");
-			}
+			Arg.IsNotNull(context, "context");
 
 			string groupName = (string)context["GroupName"];
 			string settingsKey = (string)context["SettingsKey"];

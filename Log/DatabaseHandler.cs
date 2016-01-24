@@ -100,37 +100,34 @@ namespace Adenson.Log
 		/// <param name="entry">The entry to log.</param>
 		/// <returns>True if record was successfully inserted, false otherwise.</returns>
 		[SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "Should not fail regardless of any exception.")]
+		[SuppressMessage("Microsoft.Security", "CA2100", Justification = "Class is a sql execution helper, executes whatever is passed to it without any validation.")]
 		public override bool Write(LogEntry entry)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException("entry");
-			}
+			Arg.IsNotNull(entry, "entry");
 
-			SqlHelperBase sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get(this.Connection, false));
-			if (sqlHelper == null)
+			using (SqlHelperBase sqlHelper = SqlHelperProvider.Create(ConnectionStrings.Get(this.Connection, false)))
 			{
-				return false;
-			}
+				try
+				{
+					using (IDbCommand command = sqlHelper.CreateCommand())
+					{
+						command.CommandText = insertStatement;
+						command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
+						command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
+						command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
+						command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
+						sqlHelper.ExecuteNonQuery(command);
+					}
+				}
+				catch (Exception ex)
+				{
+					Debug.WriteLine("Unable to log to DB");
+					Debug.WriteLine(StringUtil.ToString(ex));
+					return false;
+				}
 
-			try
-			{
-				IDbCommand command = sqlHelper.CreateCommand();
-				command.CommandText = insertStatement;
-				command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
-				command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
-				sqlHelper.ExecuteNonQuery(command);
+				return true;
 			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine("Unable to log to DB");
-				Debug.WriteLine(StringUtil.ToString(ex));
-				return false;
-			}
-
-			return true;
 		}
 
 		#endregion

@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.Odbc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Adenson.Data
 {
@@ -68,6 +69,7 @@ namespace Adenson.Data
 		/// <param name="command">The command to use to construct the adapter.</param>
 		/// <returns>New <see cref="OdbcDataAdapter"/> object</returns>
 		/// <exception cref="InvalidCastException">If <paramref name="command"/> is not an instance of <see cref="OdbcCommand"/>.</exception>
+		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
 		{
 			return new OdbcDataAdapter((OdbcCommand)command);

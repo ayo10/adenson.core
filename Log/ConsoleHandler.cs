@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -17,13 +18,8 @@ namespace Adenson.Log
 		/// <returns>True, regardless.</returns>
 		public override bool Write(LogEntry entry)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException("entry");
-			}
-
+			Arg.IsNotNull(entry, "entry");
 			string formatted = this.Formatter.Format(entry);
-
 			switch (entry.Severity)
 			{
 				case Severity.Critical:
