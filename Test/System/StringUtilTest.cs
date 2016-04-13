@@ -9,6 +9,8 @@ namespace Adenson.CoreTest.System
 	[TestFixture]
 	public class StringUtilTest
 	{
+		#region Tests
+
 		[Test]
 		public void FormatTest()
 		{
@@ -35,17 +37,7 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringByteArrayTest()
-		{
-			byte[] buffer = null;
-			Assert.AreEqual(null, StringUtil.ToString(buffer));
-			
-			buffer = new byte[] { 1, 2, 3 };
-			Assert.AreEqual(Convert.ToBase64String(buffer), StringUtil.ToString(buffer));
-		}
-
-		[Test]
-		public void ToStringObjectTest()
+		public void ToStringTest()
 		{
 			object value = null;
 			Assert.AreEqual(null, StringUtil.ToString(value));
@@ -60,19 +52,31 @@ namespace Adenson.CoreTest.System
 			Assert.AreEqual("System.Exception: Test1", StringUtil.ToString(value));
 
 			value = new byte[] { 1, 2, 3 };
-			Assert.AreEqual(Convert.ToBase64String((byte[])value), StringUtil.ToString(value));
+			Assert.AreEqual("byte[]{1,2,3}", StringUtil.ToString(value));
 
-			value = new int[] { 1, 2, 3 };
-			Assert.AreEqual(value.ToString() + ", Items:[1,2,3]", StringUtil.ToString(value));
+			value = new[] { 1, 2, 3 };
+			Assert.AreEqual("int[]{1,2,3}", StringUtil.ToString(value));
 
-			value = new object[] { new object(), new object(), new object() };
-			Assert.AreEqual(value.ToString() + ", Items:[System.Object,System.Object,System.Object]", StringUtil.ToString(value));
+			value = new[] { "1", "2", "3" };
+			Assert.AreEqual("string[]{1,2,3}", StringUtil.ToString(value));
+
+			value = new[] { "1", "2", null };
+			Assert.AreEqual("string[]{1,2,null}", StringUtil.ToString(value));
+
+			value = new[] { new object(), null, new object() };
+			Assert.AreEqual("object[]{System.Object,null,System.Object}", StringUtil.ToString(value));
+
+			value = new[] { new Woot() };
+			Assert.AreEqual("Woot[]{Wootee}", StringUtil.ToString(value));
+
+			value = new[] { new Woot(), new object() };
+			Assert.AreEqual("object[]{Wootee,System.Object}", StringUtil.ToString(value));
 
 			value = new List<int> { 1, 2, 3 };
-			Assert.AreEqual(value.ToString() + ", Items:[1,2,3]", StringUtil.ToString(value));
+			Assert.AreEqual("List<int>{1,2,3}", StringUtil.ToString(value));
 
 			value = new List<object> { 1, 2, new byte[] { 1, 2, 3 } };
-			Assert.AreEqual(String.Format("{0}, Items:[1,2,{1}]", value.ToString(), Convert.ToBase64String(new byte[] { 1, 2, 3 })), StringUtil.ToString(value));
+			Assert.AreEqual("List<object>{1,2,byte[]{1,2,3}}", StringUtil.ToString(value));
 		}
 
 		[Test]
@@ -145,5 +149,18 @@ namespace Adenson.CoreTest.System
 			exception = new ReflectionTypeLoadException(new Type[] { typeof(Int32) }, new Exception[] { copy }, "Woot wooter");
 			Assert.AreEqual("System.Reflection.ReflectionTypeLoadException: Woot wooter\r\n\tTypes: System.Int32\r\n\tLoaderExceptions:\r\n\t\tSystem.Exception: Test2\r\n\t\tSystem.Exception: Test1", StringUtil.ToString(exception));
 		}
+
+		#endregion
+		#region Classes
+
+		private class Woot
+		{
+			public override string ToString()
+			{
+				return "Wootee";
+			}
+		}
+
+		#endregion
 	}
 }

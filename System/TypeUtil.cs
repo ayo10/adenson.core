@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -19,6 +20,52 @@ namespace System
 	{
 		#region Variables
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
+		private static Dictionary<Type, string> typeAliases = new Dictionary<Type, string>()
+		{
+			{ typeof(byte), "byte" },
+			{ typeof(sbyte), "sbyte" },
+			{ typeof(short), "short" },
+			{ typeof(ushort), "ushort" },
+			{ typeof(int), "int" },
+			{ typeof(uint), "uint" },
+			{ typeof(long), "long" },
+			{ typeof(ulong), "ulong" },
+			{ typeof(float), "float" },
+			{ typeof(double), "double" },
+			{ typeof(decimal), "decimal" },
+			{ typeof(object), "object" },
+			{ typeof(bool), "bool" },
+			{ typeof(char), "char" },
+			{ typeof(string), "string" },
+			{ typeof(void), "void" },
+			{ typeof(Nullable<byte>), "byte?" },
+			{ typeof(Nullable<sbyte>), "sbyte?" },
+			{ typeof(Nullable<short>), "short?" },
+			{ typeof(Nullable<ushort>), "ushort?" },
+			{ typeof(Nullable<int>), "int?" },
+			{ typeof(Nullable<uint>), "uint?" },
+			{ typeof(Nullable<long>), "long?" },
+			{ typeof(Nullable<ulong>), "ulong?" },
+			{ typeof(Nullable<float>), "float?" },
+			{ typeof(Nullable<double>), "double?" },
+			{ typeof(Nullable<decimal>), "decimal?" },
+			{ typeof(Nullable<bool>), "bool?" },
+			{ typeof(Nullable<char>), "char?" },
+			{ typeof(byte[]), "byte[]" },
+			{ typeof(sbyte[]), "sbyte[]" },
+			{ typeof(ushort[]), "ushort[]" },
+			{ typeof(int[]), "int[]" },
+			{ typeof(uint[]), "uint[]" },
+			{ typeof(long[]), "long[]" },
+			{ typeof(ulong[]), "ulong[]" },
+			{ typeof(float[]), "float[]" },
+			{ typeof(double[]), "double[]" },
+			{ typeof(decimal[]), "decimal[]" },
+			{ typeof(bool[]), "bool[]" },
+			{ typeof(char[]), "char[]" },
+			{ typeof(string[]), "string[]" },
+			{ typeof(object[]), "object[]" }
+		};
 		#endregion
 		#region Methods
 
@@ -205,6 +252,26 @@ namespace System
 					yield return assembly;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the name of the type (int instead of Int32, int[] instead of Int32[], List&lt;int&gt; instead of List'.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>The name of the type.</returns>
+		public static string GetName(Type type)
+		{
+			Arg.IsNotNull(type, "type");
+			if (typeAliases.ContainsKey(type))
+			{
+				return typeAliases[type];
+			}
+			else if (type.IsGenericType)
+			{
+				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetGenericArguments().Select(t => GetName(t))));
+			}
+
+			return type.Name;
 		}
 		
 		/// <summary>

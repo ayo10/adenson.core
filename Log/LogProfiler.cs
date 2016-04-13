@@ -23,7 +23,7 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(Severity.Info, SR.ProfilerStart);
+			this.Write(Severity.Profile, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -125,7 +125,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(Severity.Info, SR.ProfilerStop);
+			this.Write(Severity.Profile, SR.ProfilerStop);
 			this.Parent.ProfilerStop(this.Uid);
 			this.IsDisposed = true;
 		}
