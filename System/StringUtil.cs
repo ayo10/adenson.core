@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -126,7 +127,12 @@ namespace System
 		/// <returns>A comma delimited list of items in the list.</returns>
 		public static string ToString<T>(IEnumerable<T> list)
 		{
-			if (list == null)
+			string str = list as string;
+			if (str != null)
+			{
+				return str;
+			}
+			else if (list == null)
 			{
 				return StringUtil.Format("Null<{0}>", typeof(T).Name);
 			}
@@ -139,32 +145,13 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts the specified byte array to its equivalent string representation in Base64, minus the slashes and equal signs.
-		/// </summary>
-		/// <param name="buffer">The byte array to convert.</param>
-		/// <returns>The string representation of the specified byte array, or null if its null.</returns>
-		public static string ToString(byte[] buffer)
-		{
-			if (buffer == null)
-			{
-				return null;
-			}
-
-			var base64 = System.Convert.ToBase64String(buffer);
-			return base64.Replace("\\", String.Empty).Replace("/", String.Empty).Replace("=", String.Empty);
-		}
-
-		/// <summary>
 		/// Converts an Exception object into a string by looping thru its InnerException and prepending Message and StackTrace until InnerException becomes null.
 		/// </summary>
 		/// <param name="exception">The Exception object to convert.</param>
 		/// <returns>The string</returns>
 		public static string ToString(Exception exception)
 		{
-			if (exception == null)
-			{
-				throw new ArgumentNullException("exception");
-			}
+			Arg.IsNotNull(exception, "exception");
 
 			List<string> message = new List<string>();
 			StringUtil.ToString(exception, message);
@@ -190,12 +177,6 @@ namespace System
 				return str;
 			}
 
-			byte[] arr = value as byte[];
-			if (arr != null)
-			{
-				return StringUtil.ToString(arr);
-			}
-
 			Exception ex = value as Exception;
 			if (ex != null)
 			{
@@ -205,8 +186,10 @@ namespace System
 			IEnumerable enumerable = value as IEnumerable;
 			if (enumerable != null)
 			{
-				var genericType = enumerable.GetType().GetGenericTypeDefinition();
-				return StringUtil.Format("{0}{1} [{2}]", value.GetType().Name, genericType == null ? String.Empty : StringUtil.Format("<{0}>", genericType.Name), String.Join(",", enumerable.Cast<object>().Select(o => o == null ? "null" : o.ToString()).ToArray()));
+				Type type = value.GetType();
+				string typeName = TypeUtil.GetName(type);
+				string items = String.Join(",", enumerable.Cast<object>().Select(o => ToString(o) ?? "null"));
+				return StringUtil.Format("{0}{{{1}}}", typeName, items);
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);

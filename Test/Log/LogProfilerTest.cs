@@ -38,6 +38,15 @@ namespace Adenson.CoreTest.Log
 			Assert.IsTrue(handler.Entries[0].Message.ToString().EndsWith("s] Test START"));
 			Assert.IsTrue(handler.Entries[1].Message.ToString().EndsWith(String.Format("s] Test Test {0}", guid)));
 			Assert.IsTrue(handler.Entries[2].Message.ToString().EndsWith("s] Test FINISH"));
+
+			Logger.Settings.Severity = Severity.Info;
+			handler.Entries.Clear();
+			using (var prf = Logger.Get(this.GetType()).GetProfiler("Test"))
+			{
+				prf.Debug("Test {0}", guid);
+			}
+
+			Assert.AreEqual(0, handler.Entries.Count);
 		}
 
 		[Test]

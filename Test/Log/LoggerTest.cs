@@ -114,7 +114,7 @@ namespace Adenson.CoreTest.Log
 			Logger.Settings.Severity = severity;
 			int count = handler.Entries.Count;
 			int s = (int)severity;
-			for (int i = 5; i > 0; i--)
+			for (int i = 6; i > 0; i--)
 			{
 				switch (i)
 				{
@@ -122,15 +122,18 @@ namespace Adenson.CoreTest.Log
 						testLogger.Debug("This is a {0} message", (Severity)i);
 						break;
 					case 2:
-						testLogger.Info("This is a {0} message", (Severity)i);
+						testLogger.Debug("This is a {0} message", (Severity)i);
 						break;
 					case 3:
-						testLogger.Warn("This is a {0} message", (Severity)i);
+						testLogger.Info("This is a {0} message", (Severity)i);
 						break;
 					case 4:
-						testLogger.Error("This is a {0} message", (Severity)i);
+						testLogger.Warn("This is a {0} message", (Severity)i);
 						break;
 					case 5:
+						testLogger.Error("This is a {0} message", (Severity)i);
+						break;
+					case 6:
 						testLogger.Critical("This is a {0} message", (Severity)i);
 						break;
 				}
