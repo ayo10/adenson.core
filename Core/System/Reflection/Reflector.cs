@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace System.Reflection
 {
@@ -11,6 +10,7 @@ namespace System.Reflection
 	{
 		#region Fields
 		private static Dictionary<int, Reflector> created = new Dictionary<int, Reflector>();
+		private static readonly object locker = new object();
 		private WeakReference itemReference;
 		#endregion
 		#region Constructor
@@ -111,17 +111,10 @@ namespace System.Reflection
 		/// <returns>A new reflector.</returns>
 		public static Reflector Wrap<T>(T item) where T : class
 		{
-			//throw new NotImplementedException();
-			if (item == null)
-			{
-				throw new ArgumentNullException("item");
-			}
-			else if (item is Type)
-			{
-				throw new ArgumentException("The object cannot be a System.Type object.", "item");
-			}
+			Arg.IsNotNull(item);
+			Arg.IsInstanceOf<Type>(item, "The object cannot be a System.Type object.");
 
-			lock (item.GetType())
+			lock (locker)
 			{
 				Reflector value;
 				if (!created.TryGetValue(item.GetHashCode(), out value))

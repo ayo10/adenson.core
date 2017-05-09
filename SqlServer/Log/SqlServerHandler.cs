@@ -5,7 +5,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Handler for inserting logs into sql server.
 	/// </summary>
-	public class SqlServerHandler : BaseDatabaseHandler
+	public class SqlServerHandler : DatabaseHandler
 	{
 		/// <inheritdoc />
 		protected override SqlHelperBase CreateSqlHelper(string connection)

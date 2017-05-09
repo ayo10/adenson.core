@@ -42,10 +42,6 @@ namespace Adenson.Log
 			}
 		}
 
-		internal FileHandler(SettingsConfiguration.HandlerElement element) : this(element.GetValue("fileName", "eventlogger.log"))
-		{
-		}
-
 		#endregion
 		#region Properties
 

@@ -28,14 +28,6 @@ namespace Adenson.Log
 			this.Source = Arg.IsNotNull(source);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EventLogHandler"/> class.
-		/// </summary>
-		/// <param name="element">The element to initialize the class with.</param>
-		internal EventLogHandler(SettingsConfiguration.HandlerElement element) : this(element.GetValue("source", "Application"))
-		{
-		}
-
 		#endregion
 		#region Properties
 

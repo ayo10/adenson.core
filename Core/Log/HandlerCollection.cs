@@ -24,55 +24,56 @@ namespace Adenson.Log
 		#endregion
 		#region Methods
 
-		internal static HandlerCollection FromConfig(Settings settings, SettingsConfiguration.HandlerElementCollection handlers)
-		{
-			HandlerCollection result = new HandlerCollection(settings);
-			if (handlers == null || handlers.Count == 0)
-			{
-				result.Add(new TraceHandler());
-			}
-			else
-			{
-				foreach (SettingsConfiguration.HandlerElement element in handlers)
-				{
-					BaseHandler handler = null;
-					switch (element.Handler)
-					{
-						case HandlerType.Console:
-							handler = new ConsoleHandler();
-							break;
-						case HandlerType.Debug:
-							handler = new DebugHandler();
-							break;
-						case HandlerType.Email:
-							handler = new EmailHandler(element);
-							break;
-						case HandlerType.EventLog:
-							handler = new EventLogHandler(element);
-							break;
-						case HandlerType.File:
-							handler = new FileHandler(element);
-							break;
-						case HandlerType.Trace:
-							handler = new TraceHandler();
-							break;
-						case HandlerType.Custom:
-							handler = TypeUtil.CreateInstance<BaseHandler>(element.CustomType);
-							break;
-					}
+		////internal static HandlerCollection FromConfig(Settings settings, SettingsConfiguration.HandlerElementCollection handlers)
+		////{
+		////	HandlerCollection result = new HandlerCollection(settings);
+		////	if (handlers == null || handlers.Count == 0)
+		////	{
+		////		result.Add(new TraceHandler());
+		////	}
+		////	else
+		////	{
+		////		foreach (SettingsConfiguration.HandlerElement element in handlers)
+		////		{
+		////			BaseHandler handler = null;
+		////			switch (element.Handler)
+		////			{
+		////				case HandlerType.Console:
+		////					handler = new ConsoleHandler();
+		////					break;
+		////				case HandlerType.Debug:
+		////					handler = new DebugHandler();
+		////					break;
+		///						///element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("severityColumn", "Severity"), element.GetValue("dateColumn", "Date"), element.GetValue("typeColumn", "Type"), element.GetValue("messageColumn", "Message")
+		////				case HandlerType.Email:
+		////					handler = new EmailHandler(element.GetValue("From", "logger@devnull"), element.GetValue("To", null), element.GetValue("Subject", "Adenson.Log.Logger"));
+		////					break;
+		////				case HandlerType.EventLog:
+		////					handler = new EventLogHandler(element.GetValue("source", "Application"));
+		////					break;
+		////				case HandlerType.File:
+		////					handler = new FileHandler(element.GetValue("fileName", "eventlogger.log"));
+		////					break;
+		////				case HandlerType.Trace:
+		////					handler = new TraceHandler();
+		////					break;
+		////				case HandlerType.Custom:
+		////					handler = TypeUtil.CreateInstance<BaseHandler>(element.CustomType);
+		////					break;
+		////			}
 
-					handler.Severity = element.Severity;
-					if (!String.IsNullOrEmpty(element.Formatter))
-					{
-						handler.Formatter = TypeUtil.CreateInstance<BaseFormatter>(element.Formatter);
-					}
+		////			handler.Severity = element.Severity;
+		////			if (!String.IsNullOrEmpty(element.Formatter))
+		////			{
+		////				handler.Formatter = TypeUtil.CreateInstance<BaseFormatter>(element.Formatter);
+		////			}
 
-					result.Add(handler);
-				}
-			}
+		////			result.Add(handler);
+		////		}
+		////	}
 
-			return result;
-		}
+		////	return result;
+		////}
 
 		/// <summary>
 		/// Inserts the <paramref name="item"/> at the specified <paramref name="index"/>.
