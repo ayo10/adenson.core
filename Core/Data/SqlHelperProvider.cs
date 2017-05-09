@@ -1,9 +1,7 @@
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using Adenson.Configuration;
 
 namespace Adenson.Data
 {
@@ -30,7 +28,11 @@ namespace Adenson.Data
 		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
 		public static SqlHelperBase Create()
 		{
-			return SqlHelperProvider.Create(ConnectionStrings.Default);
+			#if NETSTANDARD1_6
+			throw new NotSupportedException();
+			#else
+			return SqlHelperProvider.Create(Configuration.ConnectionStrings.Default);
+			#endif
 		}
 
 		/// <summary>
@@ -41,14 +43,15 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If 'connectionKey' is null or empty.</exception>
 		public static SqlHelperBase Create(string connectionKey)
 		{
-			if (String.IsNullOrEmpty(connectionKey))
-			{
-				throw new ArgumentNullException("connectionKey");
-			}
-
-			return SqlHelperProvider.Create(ConnectionStrings.Get(connectionKey));
+			Arg.IsNotEmpty(connectionKey);
+			#if NETSTANDARD1_6
+			throw new NotSupportedException();
+			#else
+			return SqlHelperProvider.Create(Configuration.ConnectionStrings.Get(connectionKey));
+			#endif
 		}
 
+		#if !NETSTANDARD1_6
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance.
 		/// </summary>
@@ -57,7 +60,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If 'connectionString' is null or its 'ConnectionString' property is null.</exception>
 		/// <exception cref="NotSupportedException">If unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
 		[SuppressMessage("Microsoft.Maintainability", "CA1502", Justification = "Fine as is.")]
-		public static SqlHelperBase Create(ConnectionStringSettings connectionString)
+		public static SqlHelperBase Create(System.Configuration.ConnectionStringSettings connectionString)
 		{
 			Arg.IsNotNull(connectionString);
 			if (String.IsNullOrEmpty(connectionString.ProviderName))
@@ -111,6 +114,7 @@ namespace Adenson.Data
 					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringsSettings object");
 			}
 		}
+		#endif
 
 		#endregion
 	}

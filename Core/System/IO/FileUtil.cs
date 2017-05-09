@@ -189,8 +189,15 @@ namespace System.IO
 			}
 			else
 			{
+				#if NETSTANDARD1_6
+				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
+				Threading.Tasks.Task<Net.WebResponse> task = request.GetResponseAsync();
+				task.Wait();
+				stream = task.Result.GetResponseStream();
+				#else
 				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
 				stream = request.GetResponse().GetResponseStream();
+				#endif
 			}
 
 			using (stream)

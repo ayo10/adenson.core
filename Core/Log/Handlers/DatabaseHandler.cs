@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Adenson.Configuration;
 using Adenson.Data;
 
 namespace Adenson.Log

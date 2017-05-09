@@ -49,9 +49,15 @@ namespace System.Reflection
 			List<MethodWrapper> results;
 			if (!cache.TryGetValue(type, out results))
 			{
+				#if NETSTANDARD1_6
+				results = type.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
+					.Select(m => new MethodWrapper(parent, m))
+					.ToList();
+				#else
 				results = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
 					.Select(m => new MethodWrapper(parent, m))
 					.ToList();
+				#endif
 				cache.Add(type, results);
 			}
 

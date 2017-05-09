@@ -23,7 +23,7 @@ namespace Adenson.Log
 		public override string Format(LogEntry entry)
 		{
 			Arg.IsNotNull(entry, "entry");
-			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpper(CultureInfo.CurrentCulture) + "]", entry.Date, entry.TypeName, this.ToString(entry.Message));
+			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpperInvariant() + "]", entry.Date, entry.TypeName, this.ToString(entry.Message));
 		}
 
 		private static string GetDefaultFormat()

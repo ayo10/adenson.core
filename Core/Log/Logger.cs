@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading;
 
 namespace Adenson.Log
 {	
@@ -362,10 +360,6 @@ namespace Adenson.Log
 		public void Error(Exception ex)
 		{
 			this.Write(Severity.Error, ex);
-			if (ex is OutOfMemoryException)
-			{
-				Thread.CurrentThread.Abort();
-			}
 		}
 
 		/// <summary>
@@ -376,11 +370,7 @@ namespace Adenson.Log
 		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
 		public LogProfiler GetProfiler(string identifier)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(identifier))
-			{
-				throw new ArgumentNullException("identifier");
-			}
-
+			Arg.IsNotEmpty(identifier);
 			LogProfiler profiler = new LogProfiler(this, identifier);
 			lock (profilers)
 			{
@@ -482,7 +472,11 @@ namespace Adenson.Log
 
 		private static Settings ReadSettings()
 		{
+			#if NETSTANDARD1_6
+			return new Settings();
+			#else
 			return Settings.FromConfigSection() ?? Settings.FromAppSettings() ?? new Settings();
+			#endif
 		}
 
 		#endregion

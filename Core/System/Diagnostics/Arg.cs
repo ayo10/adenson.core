@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace System.Diagnostics
@@ -12,7 +13,7 @@ namespace System.Diagnostics
 	/// Borrowed/Stolen/Hijacked/Hoodwinkled/Hinted (mostly) from MS.
 	/// </summary>
 	[DebuggerStepThrough]
-	#if !NET35
+	#if !NET35 && !NETSTANDARD1_6
 	[ExcludeFromCodeCoverage]
 	#endif
 	public static class Arg
@@ -43,7 +44,11 @@ namespace System.Diagnostics
 		public static void IsAssignableFrom<T>(Type value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
+			#if NETSTANDARD1_6
+			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
+			#else
 			Arg.ThrowIf<ArgumentException>(typeof(T).IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
+			#endif
 		}
 
 		/// <summary>
@@ -70,7 +75,11 @@ namespace System.Diagnostics
 		public static T IsInstanceOf<T>([ValidatedNotNull]object value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
+			#if NETSTANDARD1_6
+			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
+			#else
 			Arg.ThrowIf<ArgumentException>(typeof(T).IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
+			#endif
 			return (T)value;
 		}
 
@@ -88,6 +97,16 @@ namespace System.Diagnostics
 			Arg.IsNotNull(value, parameterName);
 			Arg.ThrowIf<ArgumentNullException>(!value.Any(x => x == null), parameterName, String.Format("Argument '{0}' cannot contain null values", parameterName));
 			return value;
+		}
+
+		/// <summary>
+		/// Checks to see if the value is null or empty or whitespace.
+		/// </summary>
+		/// <param name="value">The value.</param>
+		/// <returns>The value if its not empty.</returns>
+		public static string IsNotEmpty([ValidatedNotNull]string value)
+		{
+			return Arg.IsNotEmpty(value, nameof(value));
 		}
 
 		/// <summary>

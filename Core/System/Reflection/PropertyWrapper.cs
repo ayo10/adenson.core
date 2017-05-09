@@ -39,9 +39,15 @@ namespace System.Reflection
 			List<PropertyWrapper> results;
 			if (!cache.TryGetValue(type, out results))
 			{
+				#if NETSTANDARD1_6
+				results = type.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
+					.Select(m => new PropertyWrapper(parent, m))
+					.ToList();
+				#else
 				results = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
 					.Select(m => new PropertyWrapper(parent, m))
 					.ToList();
+				#endif
 				cache.Add(type, results);
 			}
 

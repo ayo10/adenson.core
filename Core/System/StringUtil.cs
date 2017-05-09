@@ -89,17 +89,17 @@ namespace System
 		}
 
 		/// <summary>
-		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>.
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.UTF8"/>.
 		/// </summary>
 		/// <param name="value">The string.</param>
 		/// <returns>A byte array, or null if string is null</returns>
 		public static byte[] ToBytes(string value)
 		{
-			return StringUtil.ToBytes(value, Encoding.Default);
+			return StringUtil.ToBytes(value, Encoding.UTF8);
 		}
 
 		/// <summary>
-		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.Default"/>.
+		/// Converts specified string to a byte array using <see cref="System.Text.Encoding.UTF8"/>.
 		/// </summary>
 		/// <param name="value">The string.</param>
 		/// <param name="encoding">The encoding to use.</param>
@@ -111,12 +111,7 @@ namespace System
 				return null;
 			}
 
-			if (encoding == null)
-			{
-				throw new ArgumentNullException("encoding");
-			}
-
-			return encoding.GetBytes(value);
+			return Arg.IsNotNull(encoding).GetBytes(value);
 		}
 
 		/// <summary>

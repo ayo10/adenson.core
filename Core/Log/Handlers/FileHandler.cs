@@ -24,9 +24,14 @@ namespace Adenson.Log
 		public FileHandler(string filePath) : base()
 		{
 			Arg.IsNotEmpty(filePath, "filePath");
+			
 			if (!Path.IsPathRooted(filePath))
 			{
+				#if !NETSTANDARD1_6
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
+				#else
+				filePath = Path.Combine(Path.GetFullPath("."), filePath);
+				#endif
 			}
 
 			folder = Path.GetDirectoryName(filePath);
@@ -42,8 +47,8 @@ namespace Adenson.Log
 			}
 		}
 
-		#endregion
-		#region Properties
+#endregion
+#region Properties
 
 		/// <summary>
 		/// Gets the full file name of the file into which the log will be written into.
@@ -54,8 +59,8 @@ namespace Adenson.Log
 			private set; 
 		}
 
-		#endregion
-		#region Methods
+#endregion
+#region Methods
 
 		/// <summary>
 		/// Writes the log to a log file.
@@ -75,7 +80,7 @@ namespace Adenson.Log
 				if (numDays > 1)
 				{
 					writer.Flush();
-					writer.Close();
+					writer.Dispose();
 
 					string fileName = Path.GetFileNameWithoutExtension(this.FilePath);
 					string extension = Path.GetExtension(this.FilePath);
@@ -87,7 +92,7 @@ namespace Adenson.Log
 					}
 				}
 
-				writer = new StreamWriter(this.FilePath, true);
+				writer = File.AppendText(this.FilePath);
 			}
 
 			writer.WriteLine(this.Formatter.Format(entry));
@@ -107,6 +112,6 @@ namespace Adenson.Log
 			}
 		}
 
-		#endregion
+#endregion
 	}
 }
