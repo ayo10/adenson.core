@@ -1,26 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$(SolutionDir)CommonProps.targets" />
 	<PropertyGroup>
 		<TargetFrameworks>net461;net40;net35</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-		<PackageVersion>1.9.0.0</PackageVersion>
-		<Version>1.0.0.999</Version>
-		<AssemblyVersion>1.0.0.0</AssemblyVersion>
-		<FileVersion>1.0.0.0</FileVersion>
+		<Description>SQL Server specific extensions and implementations for Adenson.Core.</Description>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>Full</DebugType>
+		<RunCodeAnalysis>True</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\AdensonCore.snk</AssemblyOriginatorKeyFile>
 		<DebugType>none</DebugType>
 		<DebugSymbols>False</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Include="..\AssemblyInfo.cs" />
+		<ProjectReference Include="..\Core\Adenson.Core.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Core\Adenson.Core.csproj" />
+		<Reference Include="System.Configuration" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Reference Include="System.Configuration" />
+		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
+		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represents sql server log settings.
 	/// </summary>
-	public abstract class BaseDatabaseHandler : BaseHandler
+	public class DatabaseHandler : BaseHandler
 	{
 		#region Variables
 		private const string InsertStatementText = "INSERT INTO {0} ({1}, {2}, {3}, {4}) VALUES (@{1}, @{2}, @{3}, @{4})";
@@ -21,7 +21,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
 		/// </summary>
-		public BaseDatabaseHandler() : base()
+		public DatabaseHandler() : base()
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace Adenson.Log
 		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
 		/// </summary>
 		/// <param name="element">The element to initialize the class with.</param>
-		public BaseDatabaseHandler(string connectionStringOrKey, string tableName = "EventLog", string severityColumn = "Severity", string dateColumn = "Date", string typeColumn = "Type", string messageColumn = "Message") : base()
+		public DatabaseHandler(string connectionStringOrKey, string tableName = "EventLog", string severityColumn = "Severity", string dateColumn = "Date", string typeColumn = "Type", string messageColumn = "Message") : base()
 		{
 			this.Connection = Arg.IsNotNull(connectionStringOrKey);
 			this.TableName = Arg.IsNotNull(tableName);
@@ -37,21 +37,7 @@ namespace Adenson.Log
 			this.DateColumn = Arg.IsNotNull(dateColumn);
 			this.TypeColumn = Arg.IsNotNull(typeColumn);
 			this.MessageColumn = Arg.IsNotNull(messageColumn);
-			_insertStatement = StringUtil.Format(BaseDatabaseHandler.InsertStatementText, this.TableName, this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
-		/// </summary>
-		/// <param name="element">The element to initialize the class with.</param>
-		internal BaseDatabaseHandler(SettingsConfiguration.HandlerElement element) : 
-			this(element.GetValue("connection", "Logger"), 
-				element.GetValue("tableName", "EventLog"), 
-				element.GetValue("severityColumn", "Severity"),
-				element.GetValue("dateColumn", "Date"),
-				element.GetValue("typeColumn", "Type"),
-				element.GetValue("messageColumn", "Message"))
-		{
+			_insertStatement = StringUtil.Format(DatabaseHandler.InsertStatementText, this.TableName, this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn);
 		}
 
 		#endregion
@@ -124,7 +110,7 @@ namespace Adenson.Log
 		public override bool Write(LogEntry entry)
 		{
 			Arg.IsNotNull(entry);
-			using (SqlHelperBase sqlHelper = this.CreateSqlHelper(this.Connection))
+			using (SqlHelperBase sqlHelper = SqlHelperProvider.Create(this.Connection))
 			{
 				try
 				{
@@ -148,8 +134,6 @@ namespace Adenson.Log
 				return true;
 			}
 		}
-
-		protected abstract SqlHelperBase CreateSqlHelper(string connection);
 
 		#endregion
 	}

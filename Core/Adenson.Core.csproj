@@ -1,23 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="$(SolutionDir)CommonProps.targets" />
 	<PropertyGroup>
 		<TargetFrameworks>net461;net40;net35</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Description>A collection of different utilities such as sql, mail, configuration/connection string reading, logging, etc, etc.</Description>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>Full</DebugType>
+		<RunCodeAnalysis>True</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<SignAssembly>True</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\AdensonCore.snk</AssemblyOriginatorKeyFile>
-		<DebugType>none</DebugType>
+		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="Collections\**" />
-		<Compile Include="..\AssemblyInfo.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="Microsoft.CSharp" />
 		<Reference Include="System.Configuration" />
 		<Reference Include="System.ComponentModel.DataAnnotations" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'net35'">
+		<Reference Include="Microsoft.CSharp" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Collections\**" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Exceptions.Designer.cs">
@@ -42,5 +46,9 @@
 	    <LastGenOutput>SR.Designer.cs</LastGenOutput>
 	    <CustomToolNamespace>Adenson</CustomToolNamespace>
 	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
+		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
 	</ItemGroup>
 </Project>

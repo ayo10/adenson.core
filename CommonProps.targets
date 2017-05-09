@@ -1,0 +1,10 @@
+<Project>
+	<PropertyGroup>
+		<Authors>Ayo Adeniran</Authors>
+		<Company>Ayo Adeniran</Company>
+		<Copyright>Copyright 2010 Ayo Adeniran</Copyright>
+		<VersionPrefix>1.9.0.1</VersionPrefix>
+		<VersionSuffix></VersionSuffix>
+		<PackageResourcesLanguage>en-US</PackageResourcesLanguage>
+	</PropertyGroup>
+</Project>

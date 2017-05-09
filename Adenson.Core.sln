@@ -6,13 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core", "Core\Adenso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.CoreTest", "Tests\Adenson.CoreTest.csproj", "{60701161-BAC6-405C-811C-D2B4B3E5063A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adenson.Core.SqlServer", "SqlServer\Adenson.Core.SqlServer.csproj", "{7187998F-0BAD-4779-B62F-1F344EECAA9D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A315F489-810D-42A6-BE62-8A68792E392F}"
 	ProjectSection(SolutionItems) = preProject
 		Adenson.Core.doxygen = Adenson.Core.doxygen
 		AdensonCore.snk = AdensonCore.snk
 		AssemblyInfo.cs = AssemblyInfo.cs
+		CommonProps.targets = CommonProps.targets
 		CustomDictionary.xml = CustomDictionary.xml
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
@@ -30,10 +29,6 @@ Global
 		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60701161-BAC6-405C-811C-D2B4B3E5063A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7187998F-0BAD-4779-B62F-1F344EECAA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7187998F-0BAD-4779-B62F-1F344EECAA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7187998F-0BAD-4779-B62F-1F344EECAA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7187998F-0BAD-4779-B62F-1F344EECAA9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

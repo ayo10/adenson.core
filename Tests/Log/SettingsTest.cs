@@ -109,15 +109,15 @@ namespace Adenson.CoreTest.Log
 			ConsoleHandler consoleHandler = settings.Handlers[0] as ConsoleHandler;
 			Assert.IsNotNull(consoleHandler);
 
-			DatabaseHandler databaseHandler = settings.Handlers[1] as DatabaseHandler;
-			Assert.IsNotNull(databaseHandler);
-			Assert.AreEqual("woot", databaseHandler.Connection);
-			Assert.AreEqual("testdate", databaseHandler.DateColumn);
-			Assert.AreEqual("testmessage", databaseHandler.MessageColumn);
-			Assert.AreEqual("testseverity", databaseHandler.SeverityColumn);
-			Assert.AreEqual("testname", databaseHandler.TableName);
-			Assert.AreEqual("testtype", databaseHandler.TypeColumn);
-			Assert.AreEqual(settings.Formatter, databaseHandler.Formatter);
+			////DatabaseHandler databaseHandler = settings.Handlers[1] as DatabaseHandler;
+			////Assert.IsNotNull(databaseHandler);
+			////Assert.AreEqual("woot", databaseHandler.Connection);
+			////Assert.AreEqual("testdate", databaseHandler.DateColumn);
+			////Assert.AreEqual("testmessage", databaseHandler.MessageColumn);
+			////Assert.AreEqual("testseverity", databaseHandler.SeverityColumn);
+			////Assert.AreEqual("testname", databaseHandler.TableName);
+			////Assert.AreEqual("testtype", databaseHandler.TypeColumn);
+			////Assert.AreEqual(settings.Formatter, databaseHandler.Formatter);
 
 			DebugHandler debugHandler = settings.Handlers[2] as DebugHandler;
 			Assert.IsNotNull(debugHandler);

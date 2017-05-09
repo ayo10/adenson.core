@@ -28,14 +28,6 @@ namespace Adenson.Log
 			this.Subject = Arg.IsNotNull(from);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EmailHandler"/> class.
-		/// </summary>
-		/// <param name="element">The element to initialize the class with.</param>
-		internal EmailHandler(SettingsConfiguration.HandlerElement element) : this(element.GetValue("From", "logger@devnull"), element.GetValue("To", null), element.GetValue("Subject", "Adenson.Log.Logger"))
-		{
-		}
-
 		#endregion
 		#region Properties
 
