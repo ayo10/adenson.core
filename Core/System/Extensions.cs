@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace System
@@ -26,7 +27,7 @@ namespace System
 				return value;
 			}
 
-			char[] result = value.ToLower(CultureInfo.CurrentUICulture).ToCharArray();
+			char[] result = value.ToLowerInvariant().ToCharArray();
 			int index = 0;
 			while (index < value.Length)
 			{
@@ -34,7 +35,7 @@ namespace System
 				var prev = index == 0 ? ' ' : value.ToCharArray()[index - 1];
 				if (!Char.IsLetter(prev))
 				{
-					result[index] = Char.ToUpper(c, CultureInfo.CurrentUICulture);
+					result[index] = Char.ToUpperInvariant(c);
 				}
 
 				index++;
@@ -104,12 +105,12 @@ namespace System
 		/// <returns>True if the type has the specified attribute, false otherwise.</returns>
 		public static bool HasAttribute(this Type type, Type attributeType, bool inherit)
 		{
-			if (type == null)
-			{
-				throw new ArgumentNullException("type");
-			}
-
+			Arg.IsNotNull(type);
+			#if NETSTANDARD1_6
+			return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).Any();
+			#else
 			return type.GetCustomAttributes(attributeType, inherit).Any();
+			#endif
 		}
 
 		/// <summary>
@@ -132,11 +133,7 @@ namespace System
 		/// <returns>The hex string result.</returns>
 		public static string ToHex(this byte[] buffer)
 		{
-			if (buffer == null)
-			{
-				return null;
-			}
-
+			Arg.IsNotNull(buffer);
 			return BitConverter.ToString(buffer).Replace("-", String.Empty);
 		}
 

@@ -7,4 +7,7 @@
 		<VersionSuffix></VersionSuffix>
 		<PackageResourcesLanguage>en-US</PackageResourcesLanguage>
 	</PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
+		<DefineConstants>NETSTANDARD</DefineConstants>
+	</PropertyGroup>
 </Project>
