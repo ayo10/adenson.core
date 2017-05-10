@@ -10,14 +10,14 @@ namespace Adenson.CoreTest.Log
 	{
 		private TestHandler handler = new TestHandler();
 		
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			Logger.Settings.Severity = Severity.Debug;
 			Logger.Settings.Handlers.Add(handler);
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void TestFixtureTearDown()
 		{
 			Logger.Settings.Severity = Severity.Error;
