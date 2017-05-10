@@ -7,7 +7,7 @@ namespace Adenson.CoreTest.Cryptography
 	[TestFixture]
 	public class TripleDesTest : BaseCryptTest<TripleDes>
 	{
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			this.IVSize = 8;

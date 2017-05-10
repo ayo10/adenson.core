@@ -11,7 +11,7 @@ namespace Adenson.CoreTest.Data
 	{
 		#region Init
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestInitialize()
 		{
 			target = new SqlClientHelper();
@@ -19,7 +19,7 @@ namespace Adenson.CoreTest.Data
 			target.CreateDatabase();
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void TestFixtureTearDown()
 		{
 			target.DropDatabase();
@@ -28,22 +28,22 @@ namespace Adenson.CoreTest.Data
 		#endregion
 		#region Tests
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ConstructorEmptyStringFailTest()
 		{
-			SqlClientHelper target = new SqlClientHelper(String.Empty);
+			Assert.That(() => new SqlClientHelper(String.Empty), Throws.ArgumentNullException);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ConstructorNullStringFailTest()
 		{
-			SqlClientHelper target = new SqlClientHelper((string)null);
+			Assert.That(() => new SqlClientHelper((string)null), Throws.ArgumentNullException);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ConstructorNullSettingsTest()
 		{
-			SqlClientHelper target = new SqlClientHelper((ConnectionStringSettings)null);
+			Assert.That(() => new SqlClientHelper((ConnectionStringSettings)null), Throws.ArgumentNullException);
 		}
 
 		#endregion

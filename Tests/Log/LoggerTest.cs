@@ -14,13 +14,13 @@ namespace Adenson.CoreTest.Log
 		#endregion
 		#region Init
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			Logger.Settings.Handlers.Add(handler);
 		}
 
-		[TestFixtureTearDown]
+		[OneTimeTearDown]
 		public void TestFixtureTearDown()
 		{
 			Logger.Settings.Severity = Severity.Error;
