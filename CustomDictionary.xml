@@ -1,0 +1,25 @@
+<Dictionary>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>AES</Acronym>
+			<Acronym>DES</Acronym>
+			<Acronym>HMAC</Acronym>
+			<Acronym>HMACRIPEMD</Acronym>
+			<Acronym>MAC</Acronym>
+			<Acronym>PBKDF</Acronym>
+			<Acronym>RIPEMD</Acronym>
+			<Acronym>SHA</Acronym>
+		</CasingExceptions>
+	</Acronyms>
+	<Words>
+		<Recognized>
+			<Word>Adenson</Word>
+			<Word>Ce</Word>
+			<Word>Db</Word>
+			<Word>Decryptor</Word>
+			<Word>Encryptor</Word>
+			<Word>Util</Word>
+		</Recognized>
+		<Unrecognized />
+	</Words>
+</Dictionary>

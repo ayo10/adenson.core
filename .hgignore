@@ -1,0 +1,9 @@
+syntax: glob
+*.suo
+*\bin\*
+*\obj\*
+*.csproj.user
+*.suo
+bin/
+obj/
+*.Cache
