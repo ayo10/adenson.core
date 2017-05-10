@@ -163,11 +163,7 @@ namespace Adenson.Configuration
 		/// <param name="collection">A System.Configuration.SettingsPropertyValueCollection representing the group of property settings to set.</param>
 		public override void SetPropertyValues(SettingsContext context, SettingsPropertyValueCollection collection)
 		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException("collection");
-			}
-
+			Arg.IsNotNull(collection);
 			var config = this.GetConfiguration(context, true);
 			var sectionName = LocalFileSettingsProvider.GetSectionName(context);
 			ClientSettingsSection userSettings = config.GetSection("userSettings/" + sectionName) as ClientSettingsSection;

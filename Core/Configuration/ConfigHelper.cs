@@ -20,11 +20,7 @@ namespace Adenson.Configuration
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string sectionName) where T : class
 		{
-			if (String.IsNullOrEmpty(sectionName))
-			{
-				throw new ArgumentNullException("sectionName");
-			}
-
+			Arg.IsNotEmpty(sectionName);
 			return (T)ConfigurationManager.GetSection(sectionName);
 		}
 
@@ -37,16 +33,8 @@ namespace Adenson.Configuration
 		/// <returns>Found section if any</returns>
 		public static T GetSection<T>(string groupName, string sectionName) where T : class
 		{
-			if (String.IsNullOrEmpty(groupName))
-			{
-				throw new ArgumentNullException("groupName");
-			}
-
-			if (String.IsNullOrEmpty(sectionName))
-			{
-				throw new ArgumentNullException("sectionName");
-			}
-
+			Arg.IsNotEmpty(groupName);
+			Arg.IsNotEmpty(sectionName);
 			return ConfigHelper.GetSection<T>(String.Concat(groupName, "/", sectionName));
 		}
 

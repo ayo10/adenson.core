@@ -27,7 +27,7 @@ namespace Adenson.Log
 			
 			if (!Path.IsPathRooted(filePath))
 			{
-				#if !NETSTANDARD1_6
+				#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
 				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
 				#else
 				filePath = Path.Combine(Path.GetFullPath("."), filePath);

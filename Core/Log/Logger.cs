@@ -20,12 +20,7 @@ namespace Adenson.Log
 
 		private Logger(Type classType)
 		{
-			if (classType == null)
-			{
-				throw new ArgumentNullException("classType");
-			}
-
-			this.ClassType = classType;
+			this.ClassType = Arg.IsNotNull(classType);
 		}
 
 		#endregion
@@ -205,11 +200,7 @@ namespace Adenson.Log
 		/// <returns>Existing, or newly minted logger</returns>
 		public static Logger Get(Type type)
 		{
-			if (type == null)
-			{
-				throw new ArgumentNullException("type");
-			}
-
+			Arg.IsNotNull(type);
 			lock (staticLoggers)
 			{
 				if (!staticLoggers.ContainsKey(type))
@@ -472,7 +463,7 @@ namespace Adenson.Log
 
 		private static Settings ReadSettings()
 		{
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			return new Settings();
 			#else
 			return Settings.FromConfigSection() ?? Settings.FromAppSettings() ?? new Settings();

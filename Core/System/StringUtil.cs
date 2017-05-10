@@ -29,11 +29,7 @@ namespace System
 				return String.Empty;
 			}
 
-			if (args == null)
-			{
-				throw new ArgumentNullException("args");
-			}
-
+			Arg.IsNotNull(args);
 			try
 			{
 				return String.Format(System.Globalization.CultureInfo.CurrentCulture, value, args);

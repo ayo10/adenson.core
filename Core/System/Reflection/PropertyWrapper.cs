@@ -39,7 +39,7 @@ namespace System.Reflection
 			List<PropertyWrapper> results;
 			if (!cache.TryGetValue(type, out results))
 			{
-				#if NETSTANDARD1_6
+				#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 				results = type.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
 					.Select(m => new PropertyWrapper(parent, m))
 					.ToList();

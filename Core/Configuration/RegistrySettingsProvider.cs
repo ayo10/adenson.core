@@ -77,11 +77,7 @@ namespace Adenson.Configuration
 		/// <returns>A System.Configuration.SettingsPropertyValueCollection containing the values for the specified settings property group.</returns>
 		public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection collection)
 		{
-			if (collection == null)
-			{
-				throw new ArgumentNullException("collection");
-			}
-
+			Arg.IsNotNull(collection);
 			SettingsPropertyValueCollection settingValues = new SettingsPropertyValueCollection();
 			foreach (SettingsProperty setting in collection)
 			{

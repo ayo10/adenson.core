@@ -106,7 +106,7 @@ namespace System
 		public static bool HasAttribute(this Type type, Type attributeType, bool inherit)
 		{
 			Arg.IsNotNull(type);
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).Any();
 			#else
 			return type.GetCustomAttributes(attributeType, inherit).Any();

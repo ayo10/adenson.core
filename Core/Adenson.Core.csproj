@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="$(SolutionDir)CommonProps.targets" />
 	<PropertyGroup>
-		<TargetFrameworks>net461;net40;net35;netstandard1.6</TargetFrameworks>
+		<TargetFrameworks>net45;net40;net35;netstandard1.6;netstandard1.5;netstandard1.3</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Description>A collection of different utilities such as sql, mail, configuration/connection string reading, logging, etc, etc.</Description>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>Full</DebugType>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' And '$(TargetFramework)' == 'net461'">
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' And '$(TargetFramework)' == 'net45'">
 		<RunCodeAnalysis>True</RunCodeAnalysis>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -16,27 +16,31 @@
 		<DebugSymbols>False</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-		<PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
-		<PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+		<PackageReference Include="System.Data.Common" Version="4.3.0" />
+		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
+		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+		<PackageReference Include="System.Net.Requests" Version="4.3.0" />
+	</ItemGroup>
+	<ItemGroup Condition="$(TargetFramework.StartsWith('netcore'))">
 		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.1.0" />
 		<PackageReference Include="System.Data.Common" Version="4.1.0" />
 		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.0.0" />
-		<PackageReference Include="System.Dynamic.Runtime" Version="4.0.11" />
-		<PackageReference Include="System.Net.Requests" Version="4.0.11" />
-		<PackageReference Include="System.Reflection" Version="4.1.0" />
 	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == false">
+	<ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) == false And $(TargetFramework.StartsWith('netcore')) == false">
 		<Reference Include="System.Configuration" />
 		<Reference Include="System.ComponentModel.DataAnnotations" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' != 'net35' And $(TargetFramework.StartsWith('netstandard')) == false">
+	<ItemGroup Condition="'$(TargetFramework)' != 'net35' And $(TargetFramework.StartsWith('netstandard')) == false And $(TargetFramework.StartsWith('netcore')) == false">
 		<Reference Include="Microsoft.CSharp" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Collections\**" />
 	</ItemGroup>
 	<Choose>
-		<When Condition="$(TargetFramework.StartsWith('netstandard'))">
+		<When Condition="$(TargetFramework.StartsWith('netstandard')) Or $(TargetFramework.StartsWith('netcore'))">
 			<ItemGroup>
 				<Compile Remove="**\*.netframework*.cs" />
 				<Compile Remove="Configuration\**" />
@@ -54,6 +58,11 @@
 				<EmbeddedResource Remove="System\Threading\**" />
 				<None Remove="System\Threading\**" />
 			</ItemGroup>
+			<ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
+				<Compile Remove="System\Reflection\**" />
+				<EmbeddedResource Remove="System\Reflection\**" />
+				<None Remove="System\Reflection\**" />
+			</ItemGroup>
 		</When>
 		<Otherwise>
 			<ItemGroup>
@@ -62,7 +71,7 @@
 		</Otherwise>
 	</Choose>
 	<Choose>
-		<When Condition="$(TargetFramework.StartsWith('netstandard'))">
+		<When Condition="$(TargetFramework.StartsWith('netstandard')) Or $(TargetFramework.StartsWith('netcore'))">
 			<ItemGroup>
 				<EmbeddedResource Update="Properties\Exceptions.resx">
 					<Generator>ResXFileCodeGenerator</Generator>

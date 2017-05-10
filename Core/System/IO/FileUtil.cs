@@ -86,16 +86,8 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">If directory is null or empty or is just white space</exception>
 		public static string[] GetFiles(string directory, IEnumerable<string> extensions)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(directory))
-			{
-				throw new ArgumentNullException("directory");
-			}
-
-			if (extensions == null)
-			{
-				throw new ArgumentNullException("extensions");
-			}
-
+			Arg.IsNotEmpty(directory);
+			Arg.IsNotNull(extensions);
 			List<string> filesToProcess = new List<string>();
 			foreach (string ext in extensions)
 			{
@@ -113,11 +105,7 @@ namespace System.IO
 		/// <exception cref="ArgumentNullException">If fullPath is null or empty or is just white space</exception>
 		public static bool GetIsDirectory(string fullPath)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(fullPath))
-			{
-				throw new ArgumentNullException("fullPath");
-			}
-
+			Arg.IsNotEmpty(fullPath);
 			return Path.GetFileName(fullPath) == Path.GetFileNameWithoutExtension(fullPath); // Prob a directory
 		}
 
@@ -128,10 +116,7 @@ namespace System.IO
 		/// <returns>Cleaned up name.</returns>
 		public static string FixFileName(string fileName)
 		{
-			if (String.IsNullOrEmpty(fileName))
-			{
-				throw new ArgumentNullException("fileName");
-			}
+			Arg.IsNotEmpty(fileName);
 
 			var invalidCharacters = FileUtil.fileInvalidCharsReplacements.Keys.ToArray();
 			IEnumerable<char> intersect = fileName.ToCharArray().Intersect(invalidCharacters);
@@ -159,11 +144,7 @@ namespace System.IO
 		/// <exception cref="FileNotFoundException">If the specified filePath does not exist</exception>
 		public static byte[] ReadStream(string filePath)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(filePath))
-			{
-				throw new ArgumentNullException("filePath");
-			}
-
+			Arg.IsNotEmpty(filePath);
 			if (!File.Exists(filePath))
 			{
 				throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
@@ -189,7 +170,7 @@ namespace System.IO
 			}
 			else
 			{
-				#if NETSTANDARD1_6
+				#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
 				Threading.Tasks.Task<Net.WebResponse> task = request.GetResponseAsync();
 				task.Wait();
@@ -215,11 +196,7 @@ namespace System.IO
 		/// <exception cref="NotSupportedException">If stream does not support reading</exception>
 		public static byte[] ReadStream(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new ArgumentNullException("stream");
-			}
-
+			Arg.IsNotNull(stream);
 			MemoryStream memoryStream = stream as MemoryStream;
 			if (memoryStream == null)
 			{

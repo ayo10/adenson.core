@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Diagnostics;
 
 namespace Adenson.Data
 {
@@ -17,12 +18,7 @@ namespace Adenson.Data
 		/// <param name="value">The value.</param>
 		public Parameter(string name, object value)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(name))
-			{
-				throw new ArgumentNullException("name");
-			}
-
-			this.Name = name;
+			this.Name = Arg.IsNotEmpty(name);
 			this.Value = value == null ? DBNull.Value : value;
 		}
 

@@ -49,7 +49,7 @@ namespace System.Reflection
 			List<MethodWrapper> results;
 			if (!cache.TryGetValue(type, out results))
 			{
-				#if NETSTANDARD1_6
+				#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 				results = type.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static)
 					.Select(m => new MethodWrapper(parent, m))
 					.ToList();

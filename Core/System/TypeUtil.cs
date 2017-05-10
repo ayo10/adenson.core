@@ -15,7 +15,9 @@ namespace System
 	public static partial class TypeUtil
 	{
 		#region Variables
+		#if !NETSTANDARD1_3
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
+		#endif
 		private static Dictionary<Type, string> typeAliases = new Dictionary<Type, string>()
 		{
 			{ typeof(byte), "byte" },
@@ -98,30 +100,50 @@ namespace System
 				TypeConverter typeConverter = TypeDescriptor.GetConverter(type);
 				if (typeConverter != null && typeConverter.CanConvertFrom(value.GetType()))
 				{
-					if (typeConverter.IsValid(value))
+					object result;
+					string valueAsString;
+					if (TypeUtil.TryConvert(typeConverter, value, out result))
 					{
-						return typeConverter.ConvertFrom(value);
+						return result;
 					}
-					else
+					else if ((valueAsString = value as string) != null && (typeConverter is EnumConverter))
 					{
-						string valueAsString = value as string;
-						if ((typeConverter is EnumConverter) && valueAsString != null)
+						string[] splits = valueAsString.Split('|');
+						int pipedValue = 0;
+						foreach (var str in splits)
 						{
-							string[] splits = valueAsString.Split('|');
-							int pipedValue = 0;
-							foreach (var str in splits)
-							{
-								int parse = (int)Enum.Parse(type, str);
-								pipedValue = pipedValue == 0 ? parse : pipedValue | parse;
-							}
-
-							return Enum.Parse(type, pipedValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
+							int parse = (int)Enum.Parse(type, str);
+							pipedValue = pipedValue == 0 ? parse : pipedValue | parse;
 						}
+
+						return Enum.Parse(type, pipedValue.ToString(System.Globalization.CultureInfo.CurrentCulture));
 					}
 				}
 			}
 
 			throw new NotSupportedException();
+		}
+
+		private static bool TryConvert(TypeConverter typeConverter, object value, out object result)
+		{
+			#if NETSTANDARD1_3
+			try
+			{
+				result = typeConverter.ConvertFrom(value);
+				return true;
+			}
+			catch
+			{
+			}
+			#else
+			if (typeConverter.IsValid(value))
+			{
+				result = typeConverter.ConvertFrom(value);
+			}
+			#endif
+			
+			result = null;
+			return false;
 		}
 
 		/// <summary>
@@ -143,17 +165,8 @@ namespace System
 		/// <exception cref="ArgumentNullException">If typeName is null or whitespace</exception>
 		public static T CreateInstance<T>(string typeName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(typeName))
-			{
-				throw new ArgumentNullException("typeName");
-			}
-
-			Type type = TypeUtil.GetType(typeName);
-			if (type == null)
-			{
-				throw new TypeLoadException(StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
-			}
-
+			Arg.IsNotEmpty(typeName);
+			Type type = Arg.IsNotNull(TypeUtil.GetType(typeName), StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
 			return TypeUtil.CreateInstance<T>(type);
 		}
 
@@ -167,11 +180,7 @@ namespace System
 		/// <exception cref="ArgumentNullException">If type is null</exception>
 		public static T CreateInstance<T>(Type type)
 		{
-			if (type == null)
-			{
-				throw new ArgumentNullException("type");
-			}
-
+			Arg.IsNotNull(type);
 			return (T)Activator.CreateInstance(type);
 		}
 
@@ -187,11 +196,7 @@ namespace System
 		/// <exception cref="OverflowException">If <paramref name="value"/> is outside the range of the underlying type of enumType.</exception>
 		public static T EnumParse<T>(string value)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(value))
-			{
-				throw new ArgumentNullException("value");
-			}
-
+			Arg.IsNotEmpty(value);
 			return (T)Enum.Parse(typeof(T), value, true);
 		}
 
@@ -207,10 +212,14 @@ namespace System
 			{
 				return typeAliases[type];
 			}
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			else if (type.GetTypeInfo().IsGenericType)
 			{
+				#if NETSTANDARD1_6 || NETSTANDARD1_5
 				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetTypeInfo().GetGenericArguments().Select(t => GetName(t)).ToArray()));
+				#else
+				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetTypeInfo().GetGenericParameterConstraints().Select(t => TypeUtil.GetName(t)).ToArray()));
+				#endif
 			}
 			#else
 			else if (type.IsGenericType)
@@ -222,6 +231,8 @@ namespace System
 			return type.Name;
 		}
 		
+		#if !NETSTANDARD1_3
+		
 		/// <summary>
 		/// Gets a <see cref="System.ComponentModel.PropertyDescriptor"/> from object using the passed property name.
 		/// </summary>
@@ -230,16 +241,8 @@ namespace System
 		/// <returns>A property descriptor object if found, null otherwise</returns>
 		public static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName)
 		{
-			if (item == null)
-			{
-				throw new ArgumentNullException("item");
-			}
-
-			if (StringUtil.IsNullOrWhiteSpace(propertyName))
-			{
-				throw new ArgumentNullException("propertyName");
-			}
-
+			Arg.IsNotNull(item);
+			Arg.IsNotEmpty(propertyName);
 			object source;
 			return TypeUtil.GetPropertyDescriptor(item, propertyName, out source);
 		}
@@ -274,11 +277,7 @@ namespace System
 				return null;
 			}
 
-			if (String.IsNullOrEmpty(propertyName))
-			{
-				throw new ArgumentNullException("propertyName");
-			}
-
+			Arg.IsNotEmpty(propertyName);
 			IDictionary di = item as IDictionary;
 			if (di != null)
 			{
@@ -307,7 +306,7 @@ namespace System
 						for (int i = 1; i < splits.Length; i++)
 						{
 							indexName = splits[i].TrimEnd(']').Replace("'", String.Empty).Replace("\"", String.Empty);
-							#if NETSTANDARD1_6
+							#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 							PropertyInfo pi = item.GetType().GetTypeInfo().GetProperty("Item");
 							#else
 							PropertyInfo pi = item.GetType().GetProperty("Item");
@@ -353,10 +352,8 @@ namespace System
 				return null;
 			}
 
-			if (propertyNames == null)
-			{
-				throw new ArgumentNullException("propertyNames");
-			}
+			Arg.IsNotNull(propertyNames);
+			Arg.IsNotAllNull(propertyNames);
 
 			List<object> list = new List<object>();
 			for (int i = 0; i < propertyNames.Length; i++)
@@ -370,6 +367,8 @@ namespace System
 
 			return list.ToArray();
 		}
+
+		#endif
 
 		/// <summary>
 		/// Gets the <see cref="Type"/> with the specified name.
@@ -475,6 +474,8 @@ namespace System
 				return false;
 			}
 		}
+		
+		#if !NETSTANDARD1_3
 
 		private static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName, out object source)
 		{
@@ -505,7 +506,6 @@ namespace System
 
 			return pd;
 		}
-
 		private static PropertyDescriptorCollection GetDescriptors(Type type)
 		{
 			if (!typeDescriptorCache.ContainsKey(type))
@@ -515,6 +515,8 @@ namespace System
 
 			return typeDescriptorCache[type];
 		}
+
+		#endif
 
 		#endregion
 	}

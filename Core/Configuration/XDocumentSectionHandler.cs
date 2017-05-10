@@ -1,5 +1,5 @@
-using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace Adenson.Configuration
@@ -13,11 +13,7 @@ namespace Adenson.Configuration
 
 		object IConfigurationSectionHandler.Create(object parent, object configContext, System.Xml.XmlNode section)
 		{
-			if (section == null)
-			{
-				throw new ArgumentNullException("section");
-			}
-
+			Arg.IsNotNull(section);
 			return XDocument.Parse(section.OuterXml);
 		}
 

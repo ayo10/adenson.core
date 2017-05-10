@@ -13,7 +13,7 @@ namespace System.Diagnostics
 	/// Borrowed/Stolen/Hijacked/Hoodwinkled/Hinted (mostly) from MS.
 	/// </summary>
 	[DebuggerStepThrough]
-	#if !NET35 && !NETSTANDARD1_6
+	#if !NET35 && !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
 	[ExcludeFromCodeCoverage]
 	#endif
 	public static class Arg
@@ -44,8 +44,10 @@ namespace System.Diagnostics
 		public static void IsAssignableFrom<T>(Type value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5
 			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
+			#elif NETSTANDARD1_3
+			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetTypeInfo()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
 			#else
 			Arg.ThrowIf<ArgumentException>(typeof(T).IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
 			#endif
@@ -75,12 +77,27 @@ namespace System.Diagnostics
 		public static T IsInstanceOf<T>([ValidatedNotNull]object value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5
 			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
+			#elif NETSTANDARD1_3
+			Arg.ThrowIf<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetType().GetTypeInfo()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
 			#else
 			Arg.ThrowIf<ArgumentException>(typeof(T).IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
 			#endif
 			return (T)value;
+		}
+
+		/// <summary>
+		/// Checks to see if the list has any null values. This WILL also check if <paramref name="value"/> is not null.
+		/// </summary>
+		/// <typeparam name="T">The type.</typeparam>
+		/// <param name="value">The value.</param>
+		/// <returns>The <paramref name="value"/> argument.</returns>
+		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
+		[SuppressMessage("Microsoft.Globalization", "CA1305", Justification = "Irrelevant.")]
+		public static IEnumerable<T> IsNotAllNull<T>([ValidatedNotNull]IEnumerable<T> value)
+		{
+			return Arg.IsNotAllNull(value, nameof(value));
 		}
 
 		/// <summary>
@@ -184,7 +201,7 @@ namespace System.Diagnostics
 		/// <param name="conditions">The conditions that need to be met. The signature in conditions you will notice matches Arg method like <see cref="IsNotNull"/>, <see cref="IsNotAllNull"/> etc.</param>
 		/// <param name="parameterName">The parameter to pass to the argument exception.</param>
 		/// <returns>The value if its not null and is of the specified type.</returns>
-		public static T Is<T>(T value, Func<T, string, T>[] conditions, string parameterName)
+		public static T MatchesAll<T>(T value, Func<T, string, T>[] conditions, string parameterName)
 		{
 			foreach (var method in Arg.IsNotAllNull(conditions, "conditions"))
 			{
@@ -199,7 +216,7 @@ namespace System.Diagnostics
 		/// </summary>
 		/// <param name="condition">The condition that needs to be met.</param>
 		/// <param name="parameterName">The parameter to pass to the argument exception.</param>
-		public static void Is(bool condition, string parameterName)
+		public static void IsTrue(bool condition, string parameterName)
 		{
 			Arg.ThrowIf<ArgumentException>(condition, parameterName);
 		}

@@ -28,7 +28,7 @@ namespace Adenson.Data
 		/// <exception cref="System.IO.FileLoadException">An assembly or module was loaded twice with two different evidences.</exception>
 		public static SqlHelperBase Create()
 		{
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			throw new NotSupportedException();
 			#else
 			return SqlHelperProvider.Create(Configuration.ConnectionStrings.Default);
@@ -44,14 +44,14 @@ namespace Adenson.Data
 		public static SqlHelperBase Create(string connectionKey)
 		{
 			Arg.IsNotEmpty(connectionKey);
-			#if NETSTANDARD1_6
+			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			throw new NotSupportedException();
 			#else
 			return SqlHelperProvider.Create(Configuration.ConnectionStrings.Get(connectionKey));
 			#endif
 		}
 
-		#if !NETSTANDARD1_6
+		#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
 		/// <summary>
 		/// Creates a new SqlHelperBase instance using information from configuration files. If none exist, returns a new Adenson.Data.SqlClient.SqlClientImpl instance.
 		/// </summary>

@@ -108,16 +108,8 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="tableName"/> is null or empty, OR, <paramref name="columnName"/> is null or empty</exception>
 		public virtual bool ColumnExists(string tableName, string columnName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(tableName))
-			{
-				throw new ArgumentNullException("tableName");
-			}
-
-			if (StringUtil.IsNullOrWhiteSpace(columnName))
-			{
-				throw new ArgumentNullException("columnName");
-			}
-
+			Arg.IsNotEmpty(tableName);
+			Arg.IsNotEmpty(columnName);
 			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @p0 AND COLUMN_NAME = @p1',N'@p0 nvarchar(max),@p1 nvarchar(max)',@p0=N'{0}',@p1=N'{1}'", tableName, columnName)))
 			{
 				return r.Read();
@@ -203,11 +195,7 @@ namespace Adenson.Data
 		/// <returns>True if the table exists, false otherwise</returns>
 		public virtual bool TableExists(string tableName)
 		{
-			if (StringUtil.IsNullOrWhiteSpace(tableName))
-			{
-				throw new ArgumentNullException("tableName");
-			}
-
+			Arg.IsNotEmpty(tableName);
 			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @p0',N'@p0 nvarchar(max)',@p0=N'{0}'", tableName)))
 			{
 				return r.Read();
@@ -251,11 +239,7 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataDynamic object.</returns>
 		public virtual IEnumerable<dynamic> ExecuteDynamic(IDbCommand command)
 		{
-			if (command == null)
-			{
-				throw new ArgumentNullException("command");
-			}
-
+			Arg.IsNotNull(command);
 			this.PrepCommand(command);
 			List<dynamic> result = new List<dynamic>();
 			using (IDataReader r = command.ExecuteReader())
@@ -317,11 +301,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
 		public virtual int ExecuteNonQuery(IDbCommand command)
 		{
-			if (command == null)
-			{
-				throw new ArgumentNullException("command");
-			}
-
+			Arg.IsNotNull(command);
 			this.PrepCommand(command);
 			return command.ExecuteNonQuery();
 		}
@@ -370,11 +350,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
 		public virtual int[] ExecuteNonQueries(StreamReader stream, string delimiter)
 		{
-			if (stream == null)
-			{
-				throw new ArgumentNullException("stream");
-			}
-
+			Arg.IsNotNull(stream);
 			string[] scripts = stream.ReadToEnd().Split(new string[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
 			return this.ExecuteNonQueries(scripts);
 		}
@@ -416,11 +392,7 @@ namespace Adenson.Data
 		/// <returns>An System.Data.IDataReader object.</returns>
 		public virtual IDataReader ExecuteReader(IDbCommand command)
 		{
-			if (command == null)
-			{
-				throw new ArgumentNullException("command");
-			}
-
+			Arg.IsNotNull(command);
 			this.PrepCommand(command);
 			return command.ExecuteReader();
 		}
@@ -453,11 +425,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="parameterValues"/> is not empty but any item in it is null</exception>
 		public virtual object ExecuteScalar(IDbTransaction transaction, string commandText, params object[] parameterValues)
 		{
-			if (transaction == null)
-			{
-				throw new ArgumentNullException("transaction");
-			}
-
+			Arg.IsNotNull(transaction);
 			return this.ExecuteScalar(this.CreateCommand(CommandType.Text, commandText, parameterValues));
 		}
 
@@ -483,11 +451,7 @@ namespace Adenson.Data
 		/// <exception cref="ArgumentNullException">If <paramref name="command"/> is null</exception>
 		public virtual object ExecuteScalar(IDbCommand command)
 		{
-			if (command == null)
-			{
-				throw new ArgumentNullException("command");
-			}
-
+			Arg.IsNotNull(command);
 			this.PrepCommand(command);
 			return command.ExecuteScalar();
 		}
@@ -706,7 +670,7 @@ namespace Adenson.Data
 
 					switch (type)
 					{
-						#if !NETSTANDARD1_6
+						#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
 						case ExecuteType.Dataset:
 							list.Add((T)(object)this.ExecuteDataSet(command));
 							break;
