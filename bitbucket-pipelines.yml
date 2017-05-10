@@ -12,6 +12,7 @@ pipelines:
           - export PROJECT_NAME=Adenson.Core
           - export TEST_NAME=Adenson.Tests
 
+          - dotnet --info
           - dotnet restore
           - dotnet build $PROJECT_NAME
           - dotnet test $TEST_NAME
