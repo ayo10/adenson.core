@@ -7,7 +7,9 @@ namespace Adenson.Data
 		#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
 		Dataset,
 		#endif
+
 		NonQuery,
+
 		Scalar
 	}
 }

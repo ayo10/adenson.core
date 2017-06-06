@@ -502,6 +502,7 @@ namespace System
 
 			return pd;
 		}
+
 		private static PropertyDescriptorCollection GetDescriptors(Type type)
 		{
 			if (!typeDescriptorCache.ContainsKey(type))

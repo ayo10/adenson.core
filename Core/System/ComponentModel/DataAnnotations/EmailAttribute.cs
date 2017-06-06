@@ -10,7 +10,7 @@ namespace System.ComponentModel.DataAnnotations
 	public sealed class EmailAttribute : RegularExpressionAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the EmailValidAttribute class.
+		/// Initializes a new instance of the <see cref="EmailAttribute"/> class.
 		/// </summary>
 		public EmailAttribute() : base(@"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")
 		{

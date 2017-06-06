@@ -14,7 +14,7 @@ namespace Adenson.Configuration
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the ApplicationSettingsProvider class.
+		/// Initializes a new instance of the <see cref="ApplicationSettingsProvider"/> class.
 		/// </summary>
 		protected ApplicationSettingsProvider()
 		{

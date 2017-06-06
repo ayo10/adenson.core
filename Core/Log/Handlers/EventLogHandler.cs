@@ -8,10 +8,13 @@ namespace Adenson.Log
 	/// <summary>
 	/// Sends logs to the event log.
 	/// </summary>
+	/// <remarks>
+	/// </remarks>
 	public sealed class EventLogHandler : BaseHandler
 	{
 		#region Constants
-		internal const int DefaultEventId = 9999;
+		internal const int DefaultEventId = 1026;
+		private static bool createEventSourceLogged;
 		#endregion
 		#region Constructor
 
@@ -26,6 +29,7 @@ namespace Adenson.Log
 		/// Initializes a new instance of the <see cref="EventLogHandler"/> class.
 		/// </summary>
 		/// <param name="source">The event log source.</param>
+		/// <param name="eventId">The event id to use.</param>
 		public EventLogHandler(string source, int eventId) : base()
 		{
 			this.Source = Arg.IsNotNull(source);
@@ -75,8 +79,13 @@ namespace Adenson.Log
 			}
 			catch (SecurityException e)
 			{
-				Trace.WriteLine(StringUtil.Format(SR.EventLogWarning, this.Source, e.Message));
-				source = "Application";
+				if (!createEventSourceLogged)
+				{
+					Trace.TraceError(StringUtil.Format(SR.EventLogWarning, this.Source, e.Message));
+					createEventSourceLogged = true;
+				}
+
+				source = ".NET Runtime";
 			}
 
 			EventLogEntryType eventLogType;
@@ -96,11 +105,11 @@ namespace Adenson.Log
 
 			try
 			{
-				EventLog.WriteEntry(source, this.Formatter.Format(entry), eventLogType);
+				EventLog.WriteEntry(source, this.Formatter.Format(entry), eventLogType, this.EventId);
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine(StringUtil.ToString(ex));
+				Trace.TraceError(StringUtil.ToString(ex));
 				return false;
 			}
 

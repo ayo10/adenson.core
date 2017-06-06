@@ -204,7 +204,7 @@ namespace System
 
 			if (!StringUtil.IsNullOrWhiteSpace(exception.Source))
 			{
-				linkAndSource = (linkAndSource == String.Empty ? String.Empty : linkAndSource + ", ") + $"Source: {exception.Source}";
+				linkAndSource = (String.IsNullOrEmpty(linkAndSource) ? String.Empty : linkAndSource + ", ") + $"Source: {exception.Source}";
 			}
 
 			if (!String.IsNullOrEmpty(linkAndSource))

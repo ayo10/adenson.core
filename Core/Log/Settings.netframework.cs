@@ -20,15 +20,15 @@ namespace Adenson.Log
 		/// <returns>Created settings object.</returns>
 		/// <remarks>
 		/// <para>Not supported in .NET 3.5.</para>
-		/// <para>
-		///	Takes the form:
-		///	&lt;appSettings&gt;
-		///		&lt;add key="logger:formatter" value="AFormatterTypeFullName" /&gt;
-		///		&lt;add key="logger:secondsFormat" value="0.0" /&gt;
-		///		&lt;add key="logger:severity" value="Info" /&gt;
-		///		&lt;add key="logger:handlers" value="Console;Debug;Custom:ACustomTypeFullName;AnotherCustomTypeFullNameTreatedAsCustom" /&gt;
-		///	&lt;/appSettings&gt;
-		/// </para>
+		/// <code>
+		/// Takes the form:
+		/// &lt;appSettings&gt;
+		/// \t&lt;add key="logger:formatter" value="AFormatterTypeFullName" /&gt;
+		/// \t&lt;add key="logger:secondsFormat" value="0.0" /&gt;
+		/// \t&lt;add key="logger:severity" value="Info" /&gt;
+		/// \t&lt;add key="logger:handlers" value="Console;Debug;Custom:ACustomTypeFullName;AnotherCustomTypeFullNameTreatedAsCustom" /&gt;
+		/// &lt;/appSettings&gt;
+		/// </code>
 		/// <para>
 		/// For handlers, only supports either <see cref="HandlerType"/> OR a full type that implements <see cref="BaseHandler"/>. In the example, Custom:ACustomTypeFullName and AnotherCustomTypeFullNameTreatedAsCustom
 		/// are both treated as <see cref="HandlerType.Custom"/>
@@ -139,14 +139,16 @@ namespace Adenson.Log
 						handler = new DebugHandler();
 						break;
 					case HandlerType.Database:
-						handler = new DatabaseHandler(element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("severityColumn", "Severity"), element.GetValue("dateColumn", "Date"), element.GetValue("typeColumn", "Type"), element.GetValue("messageColumn", "Message"));
+						handler = element.GetValue("type", null) == "flat" 
+							? new DatabaseHandler(element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("messageColumn", "Message")) 
+							: new DatabaseHandler(element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("severityColumn", "Severity"), element.GetValue("dateColumn", "Date"), element.GetValue("typeColumn", "Type"), element.GetValue("messageColumn", "Message"));
 						break;
 					case HandlerType.Email:
 						handler = new EmailHandler(element.GetValue("From", "logger@devnull"), element.GetValue("To", null), element.GetValue("Subject", "Adenson.Log.Logger"));
 						break;
 					case HandlerType.EventLog:
 						string eventId = element.GetValue("eventid", null);
-						handler = new EventLogHandler(element.GetValue("source", "Application"), String.IsNullOrEmpty(eventId) ? EventLogHandler.DefaultEventId : Convert.ToInt32(eventId));
+						handler = new EventLogHandler(element.GetValue("source", ".NET Runtime"), String.IsNullOrEmpty(eventId) ? EventLogHandler.DefaultEventId : Convert.ToInt32(eventId));
 						break;
 					case HandlerType.File:
 						handler = new FileHandler(element.GetValue("fileName", "eventlogger.log"));

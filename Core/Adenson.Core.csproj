@@ -130,6 +130,14 @@
 		</Otherwise>
 	</Choose>
 	<ItemGroup>
+	  <Compile Remove="Data\ConnectionManager.cs" />
+	  <Compile Remove="Log\LogFilter.cs" />
+	  <Compile Remove="System\Reflection\BaseWrapper.cs" />
+	  <Compile Remove="System\Reflection\MethodWrapper.cs" />
+	  <Compile Remove="System\Reflection\PropertyWrapper.cs" />
+	  <Compile Remove="System\Reflection\Reflector.cs" />
+	</ItemGroup>
+	<ItemGroup>
 		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
 		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
 	</ItemGroup>

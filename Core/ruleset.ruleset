@@ -218,11 +218,11 @@
     <Rule Id="SA1123" Action="Warning" />
     <Rule Id="SA1124" Action="None" />
     <Rule Id="SA1126" Action="Warning" />
-    <Rule Id="SA1127" Action="Warning" />
+    <Rule Id="SA1127" Action="None" />
     <Rule Id="SA1128" Action="None" />
     <Rule Id="SA1200" Action="Warning" />
     <Rule Id="SA1204" Action="Warning" />
-    <Rule Id="SA1309" Action="Warning" />
+    <Rule Id="SA1309" Action="None" />
     <Rule Id="SA1513" Action="Warning" />
     <Rule Id="SA1516" Action="Warning" />
     <Rule Id="SA1600" Action="None" />

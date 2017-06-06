@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Adenson;
 
 namespace System.Collections.Generic
 {
@@ -8,7 +9,7 @@ namespace System.Collections.Generic
 	/// Represents a collection of keys and values.
 	/// </summary>
 	/// <remarks>
-	/// Behaves like System.Collections.Hashtable of old.
+	/// Behaves like <see cref="System.Collections.Hashtable"/> of old.
 	/// </remarks>
 	/// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
 	/// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
@@ -21,7 +22,7 @@ namespace System.Collections.Generic
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the Hashtable class.
+		/// Initializes a new instance of the <see cref="Hashtable{TKey, TValue}"/> class.
 		/// </summary>
 		public Hashtable()
 		{
@@ -29,7 +30,7 @@ namespace System.Collections.Generic
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the Hashtable class with specified capacity.
+		/// Initializes a new instance of the <see cref="Hashtable{TKey, TValue}"/> class with specified capacity.
 		/// </summary>
 		/// <param name="capacity">The initial number of elements that the dictionary can contain.</param>
 		public Hashtable(int capacity)
@@ -119,7 +120,7 @@ namespace System.Collections.Generic
 		{
 			if (this.IsReadOnly)
 			{
-				throw new InvalidOperationException(Adenson.Exceptions.ReadOnlyInstance);
+				throw new InvalidOperationException(Exceptions.ReadOnlyInstance);
 			}
 
 			dick.Add(key, value);

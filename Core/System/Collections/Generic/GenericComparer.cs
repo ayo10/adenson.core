@@ -17,7 +17,7 @@ namespace System.Collections.Generic
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the GenericComparer class using specified compare function delegate.
+		/// Initializes a new instance of the <see cref="GenericComparer{T}"/> class using specified compare function delegate.
 		/// </summary>
 		/// <param name="func">The compare delegate.</param>
 		public GenericComparer(Func<T, T, int> func)

@@ -92,28 +92,45 @@ namespace Adenson.Data
 				}
 			}
 
-			Assembly assembly;
-			switch (connectionString.ProviderName)
+			if (String.IsNullOrEmpty(connectionString.ProviderName))
 			{
-				case "System.Data.Odbc":
+				throw new ArgumentException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringsSettings object");
+			}
+
+			Assembly assembly;
+			switch (connectionString.ProviderName.ToLower())
+			{
+				case "system.data.odbc":
 					return new OdbcSqlHelper(connectionString);
-				case "System.Data.OleDb":
+				case "system.data.oledb":
 					return new OleDbSqlHelper(connectionString);
-				case "System.Data.SqlClient":
+				case "system.data.sqlclient":
 					assembly = Assembly.Load("Adenson.Core.SqlServer");
 					return (SqlHelperBase)assembly?.CreateInstance("Adenson.Data.SqlClientHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
-				case "Microsoft.SqlServerCe.Client":
-				case "System.Data.SqlServerCe":
-				case "System.Data.SqlServerCe.3.5":
-				case "System.Data.SqlServerCe.4.0":
+				case "microsoft.sqlserverce.client":
+				case "system.data.sqlserverce":
+				case "system.data.sqlserverce.3.5":
+				case "system.data.sqlserverce.4.0":
 					assembly = Assembly.Load("Adenson.Core.SqlCe");
 					return (SqlHelperBase)assembly?.CreateInstance("Adenson.Data.SqlCeHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
-				case "System.Data.OracleClient":
+				case "system.data.oracleclient":
 					throw new NotSupportedException(connectionString.ProviderName);
 				default:
-					throw new NotSupportedException("Unable to determine sql provider type, please set the 'ProverName' property of the ConnectionStringsSettings object");
+					return SqlHelperProvider.CreateCustomHelper(connectionString.ProviderName);
 			}
 		}
+
+		private static SqlHelperBase CreateCustomHelper(string providerName)
+		{
+			Type type = TypeUtil.GetType(providerName, false);
+			if (type != null && typeof(SqlHelperBase).IsAssignableFrom(type))
+			{
+				return TypeUtil.CreateInstance<SqlHelperBase>(type);
+			}
+
+			throw new NotSupportedException(providerName);
+		}
+
 		#endif
 
 		#endregion

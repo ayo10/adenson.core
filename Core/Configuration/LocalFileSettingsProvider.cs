@@ -30,7 +30,7 @@ namespace Adenson.Configuration
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the LocalFileSettingsProvider class.
+		/// Initializes a new instance of the <see cref="LocalFileSettingsProvider"/> class.
 		/// </summary>
 		public LocalFileSettingsProvider()
 		{
