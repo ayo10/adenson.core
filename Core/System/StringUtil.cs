@@ -78,7 +78,7 @@ namespace System
 		public static bool IsNullOrWhiteSpace(string value)
 		{
 			#if NET35
-			return String.IsNullOrEmpty(value == null ? null : value.Trim());
+			return value == null || value.Trim() == String.Empty;
 			#else
 			return String.IsNullOrWhiteSpace(value);
 			#endif
@@ -195,10 +195,21 @@ namespace System
 
 			int lastEnd = lines.Count;
 
-			lines.Add(StringUtil.Format("{0}: {1}", exception.GetType().FullName, exception.Message));
-			if (!String.IsNullOrEmpty(exception.Source))
+			lines.Add($"{exception.GetType().FullName}: {exception.Message}");
+			string linkAndSource = String.Empty;
+			if (!StringUtil.IsNullOrWhiteSpace(exception.HelpLink))
 			{
-				lines.Add(StringUtil.Format("   HelpLink: {0}, Source: {1}", exception.HelpLink, exception.Source));
+				linkAndSource = $"HelpLink: {exception.HelpLink}";
+			}
+
+			if (!StringUtil.IsNullOrWhiteSpace(exception.Source))
+			{
+				linkAndSource = (linkAndSource == String.Empty ? String.Empty : linkAndSource + ", ") + $"Source: {exception.Source}";
+			}
+
+			if (!String.IsNullOrEmpty(linkAndSource))
+			{
+				lines.Add("\t" + linkAndSource);
 			}
 
 			ReflectionTypeLoadException rtlex = exception as ReflectionTypeLoadException;
@@ -206,7 +217,7 @@ namespace System
 			{
 				if (rtlex.Types != null && rtlex.Types.Length > 0)
 				{
-					lines.Add(StringUtil.Format("\tTypes: {0}", String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())));
+					lines.Add($"\tTypes: {String.Join(", ", rtlex.Types.Select(t => t.FullName).ToArray())}");
 				}
 
 				if (rtlex.LoaderExceptions != null && rtlex.LoaderExceptions.Length > 0)

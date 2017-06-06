@@ -1,48 +1,50 @@
+using System.Data;
 using Adenson.Data;
 using NUnit.Framework;
-using System;
-using System.Data;
 
 namespace Adenson.CoreTest.Data
 {
 	[TestFixture]
 	public abstract class SqlHelperBaseTest<T> where T : SqlHelperBase
 	{
-		#region Variables
-		protected SqlHelperBase target;
-		protected string connectionString;
+		#region Properties
+
+		protected SqlHelperBase Target { get; set; }
+
+		protected string ConnectionString { get; set; }
+
 		#endregion
 		#region Tests
 
 		[Test]
 		public void ColumnExistsTest()
 		{
-			target.ExecuteNonQuery("create table columnexisttest (id int not null, test varchar(20) null)");
-			Assert.IsTrue(target.ColumnExists("columnexisttest", "id"));
-			Assert.IsTrue(target.ColumnExists("columnexisttest", "test"));
-			Assert.IsTrue(target.ColumnExists("columnexisttest", "ID"), "Case is irrelevant");
-			Assert.IsTrue(target.ColumnExists("columnexisttest", "TEST"), "Case is irrelevant");
-			Assert.IsFalse(target.ColumnExists("columnexisttest", "woot"));
-			Assert.IsFalse(target.ColumnExists("woot", "woot"));
-			target.ExecuteNonQuery("drop table columnexisttest");
+			Target.ExecuteNonQuery("create table columnexisttest (id int not null, test varchar(20) null)");
+			Assert.IsTrue(Target.ColumnExists("columnexisttest", "id"));
+			Assert.IsTrue(Target.ColumnExists("columnexisttest", "test"));
+			Assert.IsTrue(Target.ColumnExists("columnexisttest", "ID"), "Case is irrelevant");
+			Assert.IsTrue(Target.ColumnExists("columnexisttest", "TEST"), "Case is irrelevant");
+			Assert.IsFalse(Target.ColumnExists("columnexisttest", "woot"));
+			Assert.IsFalse(Target.ColumnExists("woot", "woot"));
+			Target.ExecuteNonQuery("drop table columnexisttest");
 		}
 
 		[Test]
 		public void CreateAdapterTest()
 		{
-			Assert.IsNotNull(target.CreateAdapter(target.CreateCommand()));
+			Assert.IsNotNull(Target.CreateAdapter(Target.CreateCommand()));
 		}
 
 		[Test]
 		public void CreateCommandTest()
 		{
-			Assert.IsNotNull(target.CreateCommand());
+			Assert.IsNotNull(Target.CreateCommand());
 		}
 
 		[Test]
 		public void CreateConnectionTest()
 		{
-			IDbConnection actual = target.CreateConnection();
+			IDbConnection actual = Target.CreateConnection();
 			Assert.IsNotNull(actual);
 			Assert.AreEqual(ConnectionState.Closed, actual.State);
 		}
@@ -50,25 +52,25 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public virtual void CreateExistDropDatabaseTest()
 		{
-			Assert.IsTrue(target.DatabaseExists());
-			target.DropDatabase();
-			Assert.IsFalse(target.DatabaseExists());
-			Assert.DoesNotThrow(delegate { target.DropDatabase(); }, "Should check first to see that the database exists before dropping");
-			target.CreateDatabase();
-			Assert.IsTrue(target.DatabaseExists());
+			Assert.IsTrue(Target.DatabaseExists());
+			Target.DropDatabase();
+			Assert.IsFalse(Target.DatabaseExists());
+			Assert.DoesNotThrow(() => Target.DropDatabase(), "Should check first to see that the database exists before dropping");
+			Target.CreateDatabase();
+			Assert.IsTrue(Target.DatabaseExists());
 		}
 
 		[Test]
 		public void CreateParameterTest()
 		{
-			IDbDataParameter actual = target.CreateParameter();
+			IDbDataParameter actual = Target.CreateParameter();
 			Assert.IsNotNull(actual);
 		}
 
 		[Test]
 		public void CreateParameterWithValueTest()
 		{
-			IDataParameter actual = target.CreateParameter("test", "value");
+			IDataParameter actual = Target.CreateParameter("test", "value");
 			Assert.IsNotNull(actual);
 			Assert.AreEqual("test", actual.ParameterName);
 			Assert.AreEqual("value", actual.Value);
@@ -77,7 +79,7 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void CurrentConnectionTest()
 		{
-			Assert.IsNotNull(target.Connection);
+			Assert.IsNotNull(Target.Connection);
 		}
 
 		[Test]
@@ -88,7 +90,7 @@ namespace Adenson.CoreTest.Data
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			DataSet expected = null; // TODO: Initialize to an appropriate value
 			DataSet actual;
-			actual = target.ExecuteDataSet(type, commandText, parameterValues);
+			actual = Target.ExecuteDataSet(type, commandText, parameterValues);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -98,7 +100,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			DataSet expected = null; // TODO: Initialize to an appropriate value
 			DataSet actual;
-			actual = target.ExecuteDataSet(command);
+			actual = Target.ExecuteDataSet(command);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -108,7 +110,7 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
 			DataSet[] actual;
-			actual = target.ExecuteDataSets(commandTexts);
+			actual = Target.ExecuteDataSets(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -118,7 +120,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			DataSet[] expected = null; // TODO: Initialize to an appropriate value
 			DataSet[] actual;
-			actual = target.ExecuteDataSets(commands);
+			actual = Target.ExecuteDataSets(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -130,7 +132,7 @@ namespace Adenson.CoreTest.Data
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			int expected = 0; // TODO: Initialize to an appropriate value
 			int actual;
-			actual = target.ExecuteNonQuery(type, commandText, parameterValues);
+			actual = Target.ExecuteNonQuery(type, commandText, parameterValues);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -140,7 +142,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
 			int[] actual;
-			actual = target.ExecuteNonQueries(commands);
+			actual = Target.ExecuteNonQueries(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -150,7 +152,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			int expected = 0; // TODO: Initialize to an appropriate value
 			int actual;
-			actual = target.ExecuteNonQuery(command);
+			actual = Target.ExecuteNonQuery(command);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -160,7 +162,7 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			int[] expected = null; // TODO: Initialize to an appropriate value
 			int[] actual;
-			actual = target.ExecuteNonQueries(commandTexts);
+			actual = Target.ExecuteNonQueries(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -170,7 +172,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			IDataReader expected = null; // TODO: Initialize to an appropriate value
 			IDataReader actual;
-			actual = target.ExecuteReader(command);
+			actual = Target.ExecuteReader(command);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -182,7 +184,7 @@ namespace Adenson.CoreTest.Data
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			IDataReader expected = null; // TODO: Initialize to an appropriate value
 			IDataReader actual;
-			actual = target.ExecuteReader(type, commandText, parameterValues);
+			actual = Target.ExecuteReader(type, commandText, parameterValues);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -192,7 +194,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			object expected = null; // TODO: Initialize to an appropriate value
 			object actual;
-			actual = target.ExecuteScalar(command);
+			actual = Target.ExecuteScalar(command);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -202,7 +204,7 @@ namespace Adenson.CoreTest.Data
 			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
 			object[] expected = null; // TODO: Initialize to an appropriate value
 			object[] actual;
-			actual = target.ExecuteScalars(commands);
+			actual = Target.ExecuteScalars(commands);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -214,7 +216,7 @@ namespace Adenson.CoreTest.Data
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			object expected = null; // TODO: Initialize to an appropriate value
 			object actual;
-			actual = target.ExecuteScalar(type, commandText, parameterValues);
+			actual = Target.ExecuteScalar(type, commandText, parameterValues);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -224,18 +226,18 @@ namespace Adenson.CoreTest.Data
 			string[] commandTexts = null; // TODO: Initialize to an appropriate value
 			object[] expected = null; // TODO: Initialize to an appropriate value
 			object[] actual;
-			actual = target.ExecuteScalars(commandTexts);
+			actual = Target.ExecuteScalars(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
 		[Test]
 		public void TableExistsTest()
 		{
-			target.ExecuteNonQuery("create table TableExistsTest (id int not null, test varchar(20) null)");
-			Assert.IsTrue(target.TableExists("TableExistsTest"));
-			Assert.IsTrue(target.TableExists("tableexiststest"), "Case is irrelevant");
-			Assert.IsFalse(target.TableExists("woot"));
-			target.ExecuteNonQuery("drop table TableExistsTest");
+			Target.ExecuteNonQuery("create table TableExistsTest (id int not null, test varchar(20) null)");
+			Assert.IsTrue(Target.TableExists("TableExistsTest"));
+			Assert.IsTrue(Target.TableExists("tableexiststest"), "Case is irrelevant");
+			Assert.IsFalse(Target.TableExists("woot"));
+			Target.ExecuteNonQuery("drop table TableExistsTest");
 		}
 
 		#endregion

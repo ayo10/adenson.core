@@ -14,15 +14,15 @@ namespace Adenson.CoreTest.Data
 		[OneTimeSetUp]
 		public void TestInitialize()
 		{
-			target = new SqlClientHelper();
-			target.DropDatabase();
-			target.CreateDatabase();
+			Target = new SqlClientHelper();
+			Target.DropDatabase();
+			Target.CreateDatabase();
 		}
 
 		[OneTimeTearDown]
 		public void TestFixtureTearDown()
 		{
-			target.DropDatabase();
+			Target.DropDatabase();
 		}
 
 		#endregion
@@ -51,8 +51,8 @@ namespace Adenson.CoreTest.Data
 
 		protected override SqlClientHelper CreateTarget()
 		{
-			connectionString = "Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;";
-			return new SqlClientHelper(connectionString);
+			ConnectionString = "Data Source=(local);Initial Catalog=TEST;Integrated Security=True;MultipleActiveResultSets=true;";
+			return new SqlClientHelper(ConnectionString);
 		}
 
 		#endregion

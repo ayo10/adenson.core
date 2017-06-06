@@ -103,7 +103,7 @@ namespace Adenson.CoreTest.Log
 
 			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(null); });
 			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(String.Empty); });
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(" "); });
+			Assert.Throws<ArgumentNullException>(() => testLogger.GetProfiler(" "));
 		}
 
 		#endregion
@@ -166,7 +166,7 @@ namespace Adenson.CoreTest.Log
 			Assert.AreEqual(3, sp.Length);
 			Assert.AreEqual(String.Empty, sp[0]);
 			Assert.IsTrue(sp[1].EndsWith("s"));
-			Assert.DoesNotThrow(delegate { Assert.IsTrue(double.Parse(sp[1].Substring(0, sp[1].Length - 1).Trim()) >= 0); });
+			Assert.DoesNotThrow(() => Assert.IsTrue(double.Parse(sp[1].Substring(0, sp[1].Length - 1).Trim()) >= 0));
 			return String.Join(String.Empty, sp.Skip(2).ToArray()).Trim();
 		}
 

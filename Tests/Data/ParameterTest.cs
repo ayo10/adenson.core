@@ -1,6 +1,5 @@
 using Adenson.Data;
 using NUnit.Framework;
-using System;
 
 namespace Adenson.CoreTest.Data
 {

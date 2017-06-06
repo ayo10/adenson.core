@@ -73,7 +73,7 @@ namespace Adenson.CoreTest.System
 		[Test]
 		public void ToRomanTest()
 		{
-			Assert.AreEqual("", 0.ToRoman());
+			Assert.AreEqual("N", 0.ToRoman());
 			Assert.AreEqual("I", 1.ToRoman());
 			Assert.AreEqual("II", 2.ToRoman());
 			Assert.AreEqual("III", 3.ToRoman());

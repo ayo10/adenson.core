@@ -17,9 +17,9 @@ namespace Adenson.Log
 		/// </summary>
 		public Settings()
 		{
+			this.Handlers = new HandlerCollection(this);
 			this.Formatter = new DefaultFormatter();
 			this.Severity = Severity.Error;
-			this.Handlers.Add(new TraceHandler());
 			this.SecondsFormat = "N3";
 		}
 

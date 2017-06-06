@@ -111,7 +111,7 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void TryConvertTest1()
+		public void TryConvertGenericTest()
 		{
 			int intResult = 1;
 			Assert.IsTrue(TypeUtil.TryConvert<int>("1", out intResult));

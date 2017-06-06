@@ -14,6 +14,7 @@ namespace Adenson.Configuration
 	public static class ConnectionStrings
 	{
 		#region Constants
+
 		/// <summary>
 		/// The default key constant ('default').
 		/// </summary>

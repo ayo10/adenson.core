@@ -44,7 +44,7 @@ namespace Adenson.Log
 		////				case HandlerType.Debug:
 		////					handler = new DebugHandler();
 		////					break;
-		///						///element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("severityColumn", "Severity"), element.GetValue("dateColumn", "Date"), element.GetValue("typeColumn", "Type"), element.GetValue("messageColumn", "Message")
+		////						///element.GetValue("connection", "Logger"), element.GetValue("tableName", "EventLog"), element.GetValue("severityColumn", "Severity"), element.GetValue("dateColumn", "Date"), element.GetValue("typeColumn", "Type"), element.GetValue("messageColumn", "Message")
 		////				case HandlerType.Email:
 		////					handler = new EmailHandler(element.GetValue("From", "logger@devnull"), element.GetValue("To", null), element.GetValue("Subject", "Adenson.Log.Logger"));
 		////					break;

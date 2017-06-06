@@ -4,6 +4,11 @@
 		<TargetFrameworks>net45;net40;net35;netstandard1.6;netstandard1.5;netstandard1.3</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Description>A collection of different utilities such as sql, mail, configuration/connection string reading, logging, etc, etc.</Description>
+		<PackageProjectUrl>https://bitbucket.org/ayo10/adenson.core</PackageProjectUrl>
+		<RepositoryUrl>https://bitbucket.org/ayo10/adenson.core</RepositoryUrl>
+		<RepositoryType>private</RepositoryType>
+		<PackageTags>utilities; helpers</PackageTags>
+		<CodeAnalysisRuleSet>ruleset.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>Full</DebugType>
@@ -14,6 +19,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
+	  <DocumentationFile>bin\Debug\net45\Adenson.Core.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
 		<PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
@@ -52,6 +60,7 @@
 				<Compile Remove="Data\OdbcSqlHelper.cs" />
 				<Compile Remove="Data\OleDbSqlHelper.cs" />
 				<Compile Remove="Data\SqlClientHelper.cs" />
+				<Compile Remove="Log\SettingsConfiguration.cs" />
 				<Compile Remove="Log\Handlers\EmailHandler.cs" />
 				<Compile Remove="Log\Handlers\EventLogHandler.cs" />
 				<Compile Remove="System\Threading\**" />
@@ -123,5 +132,11 @@
 	<ItemGroup>
 		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
 		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001" />
 	</ItemGroup>
 </Project>
