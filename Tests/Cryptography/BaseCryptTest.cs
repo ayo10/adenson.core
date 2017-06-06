@@ -8,8 +8,9 @@ namespace Adenson.CoreTest.Cryptography
 	[TestFixture]
 	public abstract class BaseCryptTest<T> where T : BaseSymmetricalCrypt
 	{
-		protected int IVSize = 16;
-		protected int KeySize = 16;
+		protected int IVSize { get; set; } = 16;
+
+		protected int KeySize { get; set; } = 16;
 
 		[Test]
 		public void EncryptDecryptWithKeysTest()

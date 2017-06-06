@@ -27,7 +27,12 @@ namespace Adenson.Log
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
 		/// </summary>
-		/// <param name="element">The element to initialize the class with.</param>
+		/// <param name="connectionStringOrKey">The connection string (or the connection configuration key).</param>
+		/// <param name="tableName">The database table name.</param>
+		/// <param name="severityColumn">The severity column name.</param>
+		/// <param name="dateColumn">The date column.</param>
+		/// <param name="typeColumn">The type column.</param>
+		/// <param name="messageColumn">The message column.</param>
 		public DatabaseHandler(string connectionStringOrKey, string tableName = "EventLog", string severityColumn = "Severity", string dateColumn = "Date", string typeColumn = "Type", string messageColumn = "Message") : base()
 		{
 			this.Connection = Arg.IsNotNull(connectionStringOrKey);

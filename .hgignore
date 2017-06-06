@@ -1,9 +1,10 @@
 syntax: glob
-*.suo
 *\bin\*
 *\obj\*
-*.csproj.user
-*.suo
 bin/
 obj/
+packages/
+.vs/
+*.csproj.user
+*.suo
 *.Cache

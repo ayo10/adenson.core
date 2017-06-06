@@ -90,7 +90,7 @@ namespace Adenson.CoreTest.System.Collections.Generic
 
 			value = "key1|value1;key2|value2";
 			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";", "|")); 
-			
+
 			value = "key1=&key2=value2";
 			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "" }, { "key2", "value2" } }, value.ToDictionary());
 		}

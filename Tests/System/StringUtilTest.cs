@@ -37,7 +37,7 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringTest()
+		public void ToString_Default_Test()
 		{
 			object value = null;
 			Assert.AreEqual(null, StringUtil.ToString(value));
@@ -80,26 +80,7 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringObjectDefaultCultureTest()
-		{
-			object value = true;
-			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
-
-			value = (byte)2;
-			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
-
-			value = 'c';
-			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
-
-			value = DateTime.Now;
-			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
-
-			value = 2d;
-			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
-		}
-
-		[Test, SetCulture("fr-CA")]
-		public void ToStringObjectFrenchCultureTest()
+		public void ToString_ObjectDefaultCulture_Test()
 		{
 			object value = true;
 			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
@@ -118,7 +99,27 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void ToStringExceptionTest()
+		[SetCulture("fr-CA")]
+		public void ToString_ObjectFrenchCulture_Test()
+		{
+			object value = true;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = (byte)2;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 'c';
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = DateTime.Now;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+
+			value = 2d;
+			Assert.AreEqual(Convert.ToString(value, CultureInfo.CurrentCulture), StringUtil.ToString(value));
+		}
+
+		[Test]
+		public void ToString_Exception_Test()
 		{
 			Exception exception = new Exception("Test1");
 			Assert.AreEqual("System.Exception: Test1", StringUtil.ToString(exception));
@@ -127,26 +128,23 @@ namespace Adenson.CoreTest.System
 			Assert.AreEqual("System.Exception: Test1\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
 
 			exception.HelpLink = "Woot";
-			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: Woot, Source: \r\nSystem.Exception: Test2", StringUtil.ToString(exception));
+			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: Woot\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
 
 			exception.Source = "Source";
 			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: Woot, Source: Source\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
 
 			exception.HelpLink = null;
-			Assert.AreEqual("System.Exception: Test1\r\n\tHelpLink: , Source: Source\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
-			
+			Assert.AreEqual("System.Exception: Test1\r\n\tSource: Source\r\nSystem.Exception: Test2", StringUtil.ToString(exception));
+
 			exception = new Exception("Test2", new Exception("Test1"));
 			Assert.AreEqual("System.Exception: Test2\r\nSystem.Exception: Test1", StringUtil.ToString(exception));
 
-			exception.Data.Add("Key1", "One");
-			Assert.AreEqual("System.Exception: Test2\r\n\tData:\r\n\t\tKey1: One\r\nSystem.Exception: Test1", StringUtil.ToString(exception));
-
 			var copy = exception;
 			copy.Data.Clear();
-			exception = new ReflectionTypeLoadException(new Type[] { typeof(Int32) }, new Exception[] { copy });
+			exception = new ReflectionTypeLoadException(new Type[] { typeof(int) }, new Exception[] { copy });
 			Assert.AreEqual("System.Reflection.ReflectionTypeLoadException: Exception of type 'System.Reflection.ReflectionTypeLoadException' was thrown.\r\n\tTypes: System.Int32\r\n\tLoaderExceptions:\r\n\t\tSystem.Exception: Test2\r\n\t\tSystem.Exception: Test1", StringUtil.ToString(exception));
 
-			exception = new ReflectionTypeLoadException(new Type[] { typeof(Int32) }, new Exception[] { copy }, "Woot wooter");
+			exception = new ReflectionTypeLoadException(new Type[] { typeof(int) }, new Exception[] { copy }, "Woot wooter");
 			Assert.AreEqual("System.Reflection.ReflectionTypeLoadException: Woot wooter\r\n\tTypes: System.Int32\r\n\tLoaderExceptions:\r\n\t\tSystem.Exception: Test2\r\n\t\tSystem.Exception: Test1", StringUtil.ToString(exception));
 		}
 

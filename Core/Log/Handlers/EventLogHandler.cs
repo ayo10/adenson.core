@@ -10,12 +10,15 @@ namespace Adenson.Log
 	/// </summary>
 	public sealed class EventLogHandler : BaseHandler
 	{
+		#region Constants
+		internal const int DefaultEventId = 9999;
+		#endregion
 		#region Constructor
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventLogHandler"/> class.
 		/// </summary>
-		public EventLogHandler() : this("Application")
+		public EventLogHandler() : this("Application", EventLogHandler.DefaultEventId)
 		{
 		}
 
@@ -23,9 +26,10 @@ namespace Adenson.Log
 		/// Initializes a new instance of the <see cref="EventLogHandler"/> class.
 		/// </summary>
 		/// <param name="source">The event log source.</param>
-		public EventLogHandler(string source) : base()
+		public EventLogHandler(string source, int eventId) : base()
 		{
 			this.Source = Arg.IsNotNull(source);
+			this.EventId = Arg.IsValid(eventId, v => v >= 0 && eventId <= UInt16.MaxValue, "Event Ids must be between 0 and 65535");
 		}
 
 		#endregion
@@ -40,6 +44,15 @@ namespace Adenson.Log
 			private set; 
 		}
 
+		/// <summary>
+		/// Gets the event id to use.
+		/// </summary>
+		public int EventId
+		{
+			get;
+			private set;
+		}
+
 		#endregion
 		#region Methods
 
@@ -52,18 +65,18 @@ namespace Adenson.Log
 		public override bool Write(LogEntry entry)
 		{
 			Arg.IsNotNull(entry, "entry");
-
+			string source = this.Source;
 			try
 			{
-				if (!EventLog.SourceExists(this.Source))
+				if (!EventLog.SourceExists(source))
 				{
-					EventLog.CreateEventSource(this.Source, entry.TypeName);
+					EventLog.CreateEventSource(source, entry.TypeName);
 				}
 			}
 			catch (SecurityException e)
 			{
-				Debug.WriteLine(StringUtil.Format(SR.EventLogWarning, this.Source, e.Message));
-				return false;
+				Trace.WriteLine(StringUtil.Format(SR.EventLogWarning, this.Source, e.Message));
+				source = "Application";
 			}
 
 			EventLogEntryType eventLogType;
@@ -83,7 +96,7 @@ namespace Adenson.Log
 
 			try
 			{
-				EventLog.WriteEntry(this.Source, this.Formatter.Format(entry), eventLogType);
+				EventLog.WriteEntry(source, this.Formatter.Format(entry), eventLogType);
 			}
 			catch (Exception ex)
 			{
