@@ -10,7 +10,7 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the Coordinate struct.
+		/// Initializes a new instance of the <see cref="Coordinate"/> struct.
 		/// </summary>
 		/// <param name="latitude">The latitude.</param>
 		/// <param name="longitude">The longitude.</param>

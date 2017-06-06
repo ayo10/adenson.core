@@ -9,8 +9,8 @@ namespace System.Reflection
 	public sealed class Reflector
 	{
 		#region Fields
+		private static object locker = new object();
 		private static Dictionary<int, Reflector> created = new Dictionary<int, Reflector>();
-		private static readonly object locker = new object();
 		private WeakReference itemReference;
 		#endregion
 		#region Constructor

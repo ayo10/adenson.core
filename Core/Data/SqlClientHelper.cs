@@ -226,7 +226,7 @@ namespace Adenson.Data
 					sqls.Add(last.Trim());
 				}
 
-				return base.ExecuteNonQueries(sqls.ToArray());
+				return this.ExecuteNonQueries(sqls.ToArray());
 			}
 
 			return new int[] { this.ExecuteNonQuery(text) };

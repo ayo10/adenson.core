@@ -20,7 +20,6 @@ namespace Adenson.Log
 		public string Formatter
 		{
 			get { return (string)this["formatter"]; }
-			internal set { this["formatter"] = value; }
 		}
 
 		/// <summary>
@@ -30,7 +29,6 @@ namespace Adenson.Log
 		public HandlerElementCollection Handlers
 		{
 			get { return (HandlerElementCollection)this["handlers"]; }
-			internal set { this["handlers"] = value; }
 		}
 
 		/// <summary>
@@ -40,7 +38,6 @@ namespace Adenson.Log
 		public string SecondsFormat
 		{
 			get { return (string)this["secondsFormat"]; }
-			internal set { this["secondsFormat"] = value; }
 		}
 
 		/// <summary>
@@ -50,7 +47,6 @@ namespace Adenson.Log
 		public Severity Severity
 		{
 			get { return (Severity)this["severity"]; }
-			internal set { this["severity"] = value; }
 		}
 
 		#endregion
@@ -64,7 +60,7 @@ namespace Adenson.Log
 			#region Properties
 
 			/// <summary>
-			/// Gets or sets the handler.
+			/// Gets the handler.
 			/// </summary>
 			[ConfigurationProperty("handler", IsRequired = true, IsKey = true)]
 			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
@@ -75,7 +71,7 @@ namespace Adenson.Log
 			}
 
 			/// <summary>
-			/// Gets or sets the formatter.
+			/// Gets the formatter.
 			/// </summary>
 			[ConfigurationProperty("formatter", IsRequired = false, IsKey = false)]
 			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
@@ -86,7 +82,7 @@ namespace Adenson.Log
 			}
 
 			/// <summary>
-			/// Gets or sets the severity.
+			/// Gets the severity.
 			/// </summary>
 			[ConfigurationProperty("severity", IsRequired = false, IsKey = false)]
 			[SuppressMessage("Microsoft.Performance", "CA1811", Justification = "Called by the HandlerElementCollection constructor.")]
@@ -134,6 +130,9 @@ namespace Adenson.Log
 		{
 			#region Constructor
 
+			/// <summary>
+			/// Initializes a new instance of the <see cref="HandlerElementCollection"/> class.
+			/// </summary>
 			public HandlerElementCollection()
 			{
 				this.BaseAdd(new HandlerElement { Severity = Severity.Error, Handler = HandlerType.Trace, Formatter = "Adenson.Log.DefaultFormatter, Adenson.Core" });

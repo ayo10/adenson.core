@@ -218,7 +218,9 @@ namespace Adenson.Log
 		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
 		/// <param name="message">Message to log.</param>
 		/// <param name="arguments">Arguments, if any to format message.</param>
-		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
+		[Conditional("DEBUG")]
+		[Conditional("INFO")]
+		[Conditional("TRACE")]
 		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
 		public static void Info<T>(string message, params object[] arguments)
 		{
@@ -230,7 +232,9 @@ namespace Adenson.Log
 		/// </summary>
 		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
 		/// <param name="message">Message to log.</param>
-		[Conditional("DEBUG"), Conditional("INFO"), Conditional("TRACE")]
+		[Conditional("DEBUG")]
+		[Conditional("INFO")]
+		[Conditional("TRACE")]
 		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
 		public static void Info<T>(object message)
 		{

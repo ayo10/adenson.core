@@ -27,7 +27,9 @@ namespace System
 				return value;
 			}
 
+			#pragma warning disable CA1308
 			char[] result = value.ToLowerInvariant().ToCharArray();
+			#pragma warning disable CA1308
 			int index = 0;
 			while (index < value.Length)
 			{
