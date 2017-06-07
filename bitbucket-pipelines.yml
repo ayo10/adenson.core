@@ -14,5 +14,5 @@ pipelines:
 
           - dotnet --info
           - dotnet restore
-          - dotnet build $PROJECT_NAME
-          - dotnet test $TEST_NAME
+          - dotnet msbuild
+          - dotnet test Tests\Adenson.Tests.csproj
