@@ -8,8 +8,6 @@ namespace Adenson.Log
 	/// <summary>
 	/// Sends logs to the event log.
 	/// </summary>
-	/// <remarks>
-	/// </remarks>
 	public sealed class EventLogHandler : BaseHandler
 	{
 		#region Constants

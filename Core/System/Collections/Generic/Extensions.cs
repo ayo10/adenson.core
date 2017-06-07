@@ -147,9 +147,7 @@ namespace System.Collections.Generic
 		public static IEnumerable<T> MergeWith<T>(this IEnumerable<T> value, IEnumerable<T> other)
 		{
 			Arg.IsNotNull(value, "value");
-
 			Arg.IsNotNull(other, "other");
-
 			return new MergeEnumerable<T>(value, other);
 		}
 
@@ -168,13 +166,14 @@ namespace System.Collections.Generic
 				return null;
 			}
 
-			Arg.IsNotNull(listDelimiter, "listDelimiter");
-			Arg.IsNotNull(itemDelimiter, "itemDelimiter");
-
+			Arg.IsNotEmpty(listDelimiter);
+			Arg.IsNotEmpty(itemDelimiter);
 			Dictionary<string, string> result = new Dictionary<string, string>();
 			foreach (var kv in value.Split(new string[] { listDelimiter }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim().Split(new string[] { itemDelimiter }, StringSplitOptions.None)))
 			{
-				result.Add(kv[0].Trim(), kv[1].Trim());
+				string k = kv.Length == 1 ? String.Empty : kv[0].Trim();
+				string v = kv.Length == 1 ? kv[0].Trim() : kv[1].Trim();
+				result.AddOrSet(k, v);
 			}
 
 			return result;
