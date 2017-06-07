@@ -106,7 +106,7 @@ namespace Adenson.Data
 				case "system.data.oledb":
 					return new OleDbSqlHelper(connectionString);
 				case "system.data.sqlclient":
-					return new SqlClientHelper(connectionString);
+					return new SqlServerHelper(connectionString);
 				case "microsoft.sqlserverce.client":
 				case "system.data.sqlserverce":
 				case "system.data.sqlserverce.3.5":

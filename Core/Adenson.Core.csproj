@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$(SolutionDir)CommonProps.targets" />
+	<Import Project="..\CommonProps.targets" />
 	<PropertyGroup>
 		<TargetFrameworks>net45;net40;net35;netstandard1.6;netstandard1.5;netstandard1.3</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -63,6 +63,7 @@
 				<Compile Remove="Data\OdbcSqlHelper.cs" />
 				<Compile Remove="Data\OleDbSqlHelper.cs" />
 				<Compile Remove="Data\SqlClientHelper.cs" />
+				<Compile Remove="Data\SqlServerHelper.cs" />
 				<Compile Remove="Log\SettingsConfiguration.cs" />
 				<Compile Remove="Log\Handlers\EmailHandler.cs" />
 				<Compile Remove="Log\Handlers\EventLogHandler.cs" />
