@@ -13,9 +13,9 @@ namespace Adenson.Tests.Data
 		{
 			ConnectionStringSettings cs = ConfigurationManager.ConnectionStrings["Default"];
 			SqlHelperBase result1 = SqlHelperProvider.Create(cs);
-			Assert.That(result1, Is.Not.Null.And.InstanceOf<CustomSqlHelper>());
+			Assert.That(result1, Is.Not.Null.And.InstanceOf<SqlServerHelper>());
 			SqlHelperBase result2 = SqlHelperProvider.Create();
-			Assert.That(result2, Is.SameAs(result1), "Empty Create() loads default.");
+			Assert.That(result2, Is.Not.Null.And.InstanceOf<SqlServerHelper>(), "Empty Create() loads default.");
 		}
 
 		[Test]

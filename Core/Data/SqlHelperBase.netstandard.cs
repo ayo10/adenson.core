@@ -1,15 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-#if !NET35
-using System.Dynamic;
-#endif
-using System.IO;
-using System.Linq;
-using Adenson.Log;
 
 namespace Adenson.Data
 {
@@ -21,13 +11,13 @@ namespace Adenson.Data
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object.
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection string setting object.
 		/// </summary>
-		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use.</param>
+		/// <param name="connectionKeyOrString">Either the connection key or the connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
-		protected SqlHelperBase(string connectionString)
+		protected SqlHelperBase(string connectionKeyOrString)
 		{
-			this.ConnectionString = Arg.IsNotEmpty(connectionString);
+			this.ConnectionString = Arg.IsNotEmpty(connectionKeyOrString);
 			this.CloseConnection = true;
 		}
 
