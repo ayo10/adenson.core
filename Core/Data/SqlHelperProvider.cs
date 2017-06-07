@@ -59,6 +59,7 @@ namespace Adenson.Data
 		/// <returns>New SqlHelperBase instance if one was created successfully</returns>
 		/// <exception cref="ArgumentNullException">If 'connectionString' is null or its 'ConnectionString' property is null.</exception>
 		/// <exception cref="NotSupportedException">If unable to create a SqlHelperBase object from specified connectionstringSettings object.</exception>
+		[SuppressMessage("Microsoft.Globalization", "CA1304", Justification = "Fine as is.")]
 		[SuppressMessage("Microsoft.Maintainability", "CA1502", Justification = "Fine as is.")]
 		public static SqlHelperBase Create(System.Configuration.ConnectionStringSettings connectionString)
 		{
@@ -105,8 +106,7 @@ namespace Adenson.Data
 				case "system.data.oledb":
 					return new OleDbSqlHelper(connectionString);
 				case "system.data.sqlclient":
-					assembly = Assembly.Load("Adenson.Core.SqlServer");
-					return (SqlHelperBase)assembly?.CreateInstance("Adenson.Data.SqlClientHelper", true, BindingFlags.CreateInstance, null, new object[] { connectionString }, null, null);
+					return new SqlClientHelper(connectionString);
 				case "microsoft.sqlserverce.client":
 				case "system.data.sqlserverce":
 				case "system.data.sqlserverce.3.5":

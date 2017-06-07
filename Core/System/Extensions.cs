@@ -20,6 +20,7 @@ namespace System
 		/// <example>Phrase "some words" returns "Some Words", etc.</example>
 		/// <param name="value">The value to capitalize.</param>
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
+		[SuppressMessage("Microsoft.Globalization", "CA13084", Justification = "That would defeat the purpose of capitalizing.")]
 		public static string Capitalize(this string value)
 		{
 			if (String.IsNullOrEmpty(value))
@@ -29,7 +30,7 @@ namespace System
 
 			#pragma warning disable CA1308
 			char[] result = value.ToLowerInvariant().ToCharArray();
-			#pragma warning disable CA1308
+			#pragma warning restore CA1308
 			int index = 0;
 			while (index < value.Length)
 			{

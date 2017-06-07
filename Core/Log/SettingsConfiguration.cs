@@ -55,6 +55,7 @@ namespace Adenson.Log
 		/// <summary>
 		/// Represents the api config element.
 		/// </summary>
+		[SuppressMessage("Microsoft.Design", "CA1034", Justification = "Auto initialized, should never be initialized outside of SettingsConfiguration.")]
 		public class HandlerElement : ConfigurationElement
 		{
 			#region Properties
@@ -126,6 +127,8 @@ namespace Adenson.Log
 		/// Represents a configuration element for apis.
 		/// </summary>
 		[SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Justification = "Yes it was, dummas.")]
+		[SuppressMessage("Microsoft.Design", "CA1034", Justification = "Auto initialized, should never be initialized outside of SettingsConfiguration.")]
+		[SuppressMessage("Microsoft.Design", "CA1010", Justification = "Auto initialized, should never be initialized outside of SettingsConfiguration.")]
 		public sealed class HandlerElementCollection : ConfigurationElementCollection
 		{
 			#region Constructor

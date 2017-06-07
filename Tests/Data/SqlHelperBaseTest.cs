@@ -211,7 +211,7 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void ExecuteScalarTest3()
 		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
+			CommandType type = CommandType.StoredProcedure; // TODO: Initialize to an appropriate value
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			object expected = null; // TODO: Initialize to an appropriate value
