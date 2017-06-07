@@ -33,6 +33,7 @@ namespace Adenson.Log
 		/// <param name="messageColumn">The message column.</param>
 		public DatabaseHandler(string connectionStringOrKey, string tableName, string messageColumn) : base()
 		{
+			this.Connection = Arg.IsNotNull(connectionStringOrKey);
 			this.TableName = Arg.IsNotNull(tableName);
 			this.MessageColumn = Arg.IsNotNull(messageColumn);
 			simple = true;

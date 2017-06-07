@@ -7,6 +7,17 @@ namespace Adenson.CoreTest.System
 	[TestFixture]
 	public class TypeUtilTest
 	{
+		[Flags]
+		public enum TestEnum
+		{
+			None = 0,
+			Enum1 = 1,
+			Enum2 = 2,
+			Enum4 = 4,
+			Enum16 = 16,
+			All = Enum1 | Enum2 | Enum4 | Enum16
+		}
+
 		[Test]
 		public void CreateInstanceTest1()
 		{
@@ -124,17 +135,6 @@ namespace Adenson.CoreTest.System
 			TestEnum ltResult;
 			Assert.IsTrue(TypeUtil.TryConvert<TestEnum>("Enum1 | Enum2 | Enum4 | Enum16", out ltResult));
 			Assert.AreEqual(TestEnum.All, ltResult);
-		}
-
-		[Flags]
-		public enum TestEnum
-		{
-			None = 0,
-			Enum1 = 1,
-			Enum2 = 2,
-			Enum4 = 4,
-			Enum16 = 16,
-			All = Enum1 | Enum2 | Enum4 | Enum16
 		}
 
 		public class TestClass
