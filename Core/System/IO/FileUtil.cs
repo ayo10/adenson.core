@@ -11,7 +11,7 @@ namespace System.IO
 	public static class FileUtil
 	{
 		#region Variables
-		private static Hashtable<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
+		private static Dictionary<char, char> fileInvalidCharsReplacements = GetFileInvalidCharsReplacements();
 		#endregion
 		#region Methods
 
@@ -236,9 +236,9 @@ namespace System.IO
 		#endregion
 		#region Helper Methods
 
-		private static Hashtable<char, char> GetFileInvalidCharsReplacements()
+		private static Dictionary<char, char> GetFileInvalidCharsReplacements()
 		{
-			var result = new Hashtable<char, char>();
+			var result = new Dictionary<char, char>();
 			foreach (var c in Path.GetInvalidPathChars())
 			{
 				result.Add(c, ' ');
