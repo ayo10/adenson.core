@@ -10,7 +10,7 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the Coordinate struct.
+		/// Initializes a new instance of the <see cref="Coordinate"/> struct.
 		/// </summary>
 		/// <param name="latitude">The latitude.</param>
 		/// <param name="longitude">The longitude.</param>
@@ -39,6 +39,31 @@ namespace System
 		{
 			get;
 			set;
+		}
+
+		#endregion
+		#region Operators
+
+		/// <summary>
+		/// Checks the equality of the two specified objects.
+		/// </summary>
+		/// <param name="value1">The first.</param>
+		/// <param name="value2">The second.</param>
+		/// <returns>True, if they are equal, false otherwise</returns>
+		public static bool operator ==(Coordinate value1, Coordinate value2)
+		{
+			return value1.Equals(value2);
+		}
+
+		/// <summary>
+		/// Checks the inequality of the two specified objects.
+		/// </summary>
+		/// <param name="value1">The first.</param>
+		/// <param name="value2">The second.</param>
+		/// <returns>True, if they are not equal, false otherwise</returns>
+		public static bool operator !=(Coordinate value1, Coordinate value2)
+		{
+			return !value1.Equals(value2);
 		}
 
 		#endregion
@@ -71,31 +96,6 @@ namespace System
 		public override int GetHashCode()
 		{
 			return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
-		}
-
-		#endregion
-		#region Operators
-
-		/// <summary>
-		/// Checks the equality of the two specified objects.
-		/// </summary>
-		/// <param name="value1">The first.</param>
-		/// <param name="value2">The second.</param>
-		/// <returns>True, if they are equal, false otherwise</returns>
-		public static bool operator ==(Coordinate value1, Coordinate value2)
-		{
-			return value1.Equals(value2);
-		}
-
-		/// <summary>
-		/// Checks the inequality of the two specified objects.
-		/// </summary>
-		/// <param name="value1">The first.</param>
-		/// <param name="value2">The second.</param>
-		/// <returns>True, if they are not equal, false otherwise</returns>
-		public static bool operator !=(Coordinate value1, Coordinate value2)
-		{
-			return !value1.Equals(value2);
 		}
 
 		#endregion

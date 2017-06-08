@@ -14,6 +14,7 @@ namespace Adenson.Configuration
 	public static class ConnectionStrings
 	{
 		#region Constants
+
 		/// <summary>
 		/// The default key constant ('default').
 		/// </summary>
@@ -45,7 +46,8 @@ namespace Adenson.Configuration
 			foreach (ConnectionStringSettings cs in ConfigurationManager.ConnectionStrings)
 			{
 				var csd = cs.ConnectionString.ToUpper().ToDictionary(";");
-				if (val.Keys.Intersect(csd.Keys).All(k => String.Equals(val[k], csd[k], StringComparison.CurrentCultureIgnoreCase)))
+				var matches = val.Keys.Intersect(csd.Keys);
+				if (matches.Any() && matches.All(k => String.Equals(val[k], csd[k], StringComparison.CurrentCultureIgnoreCase)))
 				{
 					yield return cs;
 				}

@@ -11,7 +11,7 @@ namespace System
 		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of the Pair struct with specified values.
+		/// Initializes a new instance of the <see cref="Pair{T}"/> struct with specified values.
 		/// </summary>
 		/// <param name="left">The left value.</param>
 		/// <param name="right">The right value.</param>
@@ -47,7 +47,32 @@ namespace System
 		/// </summary>
 		public bool IsEmpty
 		{
-			get { return this.Equals(new Pair<T>()); }
+			get { return Object.Equals(this.Left, default(T)) && Object.Equals(this.Right, default(T)); }
+		}
+
+		#endregion
+		#region Operators
+
+		/// <summary>
+		/// Checks the equality of the two specified pairs.
+		/// </summary>
+		/// <param name="pair1">The first.</param>
+		/// <param name="pair2">The second.</param>
+		/// <returns>True, if they are equal, false otherwise</returns>
+		public static bool operator ==(Pair<T> pair1, Pair<T> pair2)
+		{
+			return pair1.Equals(pair2);
+		}
+
+		/// <summary>
+		/// Checks the inequality of the two specified pairs.
+		/// </summary>
+		/// <param name="pair1">The first.</param>
+		/// <param name="pair2">The second.</param>
+		/// <returns>True, if they are not equal, false otherwise</returns>
+		public static bool operator !=(Pair<T> pair1, Pair<T> pair2)
+		{
+			return !pair1.Equals(pair2);
 		}
 
 		#endregion
@@ -148,31 +173,6 @@ namespace System
 			{
 				return String.Concat(this.Left, ", ", this.Right);
 			}
-		}
-
-		#endregion
-		#region Operators
-
-		/// <summary>
-		/// Checks the equality of the two specified pairs.
-		/// </summary>
-		/// <param name="pair1">The first.</param>
-		/// <param name="pair2">The second.</param>
-		/// <returns>True, if they are equal, false otherwise</returns>
-		public static bool operator ==(Pair<T> pair1, Pair<T> pair2)
-		{
-			return pair1.Equals(pair2);
-		}
-
-		/// <summary>
-		/// Checks the inequality of the two specified pairs.
-		/// </summary>
-		/// <param name="pair1">The first.</param>
-		/// <param name="pair2">The second.</param>
-		/// <returns>True, if they are not equal, false otherwise</returns>
-		public static bool operator !=(Pair<T> pair1, Pair<T> pair2)
-		{
-			return !pair1.Equals(pair2);
 		}
 
 		#endregion

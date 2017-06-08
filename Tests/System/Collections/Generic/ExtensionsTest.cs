@@ -11,7 +11,7 @@ namespace Adenson.CoreTest.System.Collections.Generic
 		[Test]
 		public void AddOrSetTest()
 		{
-			Dictionary<string, string> target = new Dictionary<string,string>();
+			Dictionary<string, string> target = new Dictionary<string, string>();
 			target.AddOrSet("test1", "value1");
 			Assert.IsTrue(target.ContainsKey("test1"));
 			Assert.AreEqual("value1", target["test1"]);
@@ -63,7 +63,7 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			values = new int[] { 2 };
 			Assert.IsFalse(values.IsNullOrEmpty());
 		}
-		
+
 		[Test]
 		public void MergeWithTest()
 		{
@@ -89,10 +89,16 @@ namespace Adenson.CoreTest.System.Collections.Generic
 			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";"));
 
 			value = "key1|value1;key2|value2";
-			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";", "|")); 
-			
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value1" }, { "key2", "value2" } }, value.ToDictionary(";", "|"));
+
 			value = "key1=&key2=value2";
-			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "" }, { "key2", "value2" } }, value.ToDictionary());
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", String.Empty }, { "key2", "value2" } }, value.ToDictionary());
+
+			value = "key1=&key2=value2&key1=value3";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { "key1", "value3" }, { "key2", "value2" } }, value.ToDictionary());
+
+			value = "key1";
+			CollectionAssert.AreEquivalent(new Dictionary<string, string> { { String.Empty, "key1" } }, value.ToDictionary());
 		}
 	}
 }

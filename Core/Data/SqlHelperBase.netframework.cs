@@ -16,7 +16,7 @@ namespace Adenson.Data
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using <see cref="Configuration.ConnectionStrings.Default"/>.
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using.<see cref="Configuration.ConnectionStrings.Default"/>.
 		/// </summary>
 		protected SqlHelperBase() : this(Configuration.ConnectionStrings.Default)
 		{
@@ -24,7 +24,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object.
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection string setting object.
 		/// </summary>
 		/// <param name="connectionStringSettings">The connection string settings object to use.</param>
 		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
@@ -37,7 +37,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the SqlHelperBase class using specified connection string setting object.
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection string setting object.
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>

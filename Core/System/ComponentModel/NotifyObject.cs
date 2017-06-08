@@ -8,7 +8,7 @@ namespace System.ComponentModel
 	public abstract class NotifyObject : INotifyPropertyChanged, INotifyPropertyChanging
 	{
 		#region Variables
-		private Hashtable<string, object> keyValues = new Hashtable<string, object>();
+		private Dictionary<string, object> keyValues = new Dictionary<string, object>();
 		#endregion
 		#region Properties
 
@@ -43,7 +43,7 @@ namespace System.ComponentModel
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
 		protected object GetValue(string key, object defaultValue)
 		{
-			return keyValues.ContainsKey(key) ? keyValues[key] : defaultValue;
+			return keyValues.Get(key, defaultValue);
 		}
 
 		/// <summary>
@@ -66,12 +66,7 @@ namespace System.ComponentModel
 		/// <returns>The found value, <paramref name="defaultValue"/> otherwise</returns>
 		protected virtual T GetValue<T>(string key, T defaultValue)
 		{
-			if (keyValues.ContainsKey(key))
-			{
-				return (T)keyValues[key];
-			}
-
-			return defaultValue;
+			return (T)keyValues.Get(key, defaultValue);
 		}
 
 		/// <summary>
@@ -82,13 +77,13 @@ namespace System.ComponentModel
 		/// <param name="value">The value.</param>
 		protected virtual void SetValue<T>(string key, T value)
 		{
-			if (Object.Equals(keyValues[key], value))
+			if (Object.Equals(keyValues.GetOrDefault(key), value))
 			{
 				return;
 			}
 
 			this.OnPropertyChanging(key);
-			keyValues[key] = value;
+			keyValues.AddOrSet(key, value);
 			this.OnPropertyChanged(key);
 		}
 
