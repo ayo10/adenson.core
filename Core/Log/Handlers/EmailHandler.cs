@@ -25,7 +25,7 @@ namespace Adenson.Log
 		{
 			this.From = Arg.IsNotNull(from);
 			this.To = Arg.IsNotNull(to);
-			this.Subject = Arg.IsNotNull(from);
+			this.Subject = Arg.IsNotNull(subject);
 		}
 
 		#endregion

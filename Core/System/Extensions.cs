@@ -20,6 +20,7 @@ namespace System
 		/// <example>Phrase "some words" returns "Some Words", etc.</example>
 		/// <param name="value">The value to capitalize.</param>
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
+		[SuppressMessage("Microsoft.Globalization", "CA13084", Justification = "That would defeat the purpose of capitalizing.")]
 		public static string Capitalize(this string value)
 		{
 			if (String.IsNullOrEmpty(value))
@@ -27,7 +28,9 @@ namespace System
 				return value;
 			}
 
+			#pragma warning disable CA1308
 			char[] result = value.ToLowerInvariant().ToCharArray();
+			#pragma warning restore CA1308
 			int index = 0;
 			while (index < value.Length)
 			{
@@ -140,17 +143,17 @@ namespace System
 		/// <summary>
 		/// Converts specified integer value to roman numeral.
 		/// </summary>
+		/// <param name="value">The value to convert.</param>
+		/// <returns>Returns 'N', if <paramref name="value"/> was 0 (there is no zero in roman numerals) else the value in roman numeral</returns>
 		/// <remarks>
 		/// <para>Any numerals greater than 5000 will begin with the the overbar character, i.e, 5000 = ¯V, 10000 = ¯X, etc, etc</para>
 		/// <para>Based on http://www.dreamcubes.com/b2/software-development/21/to-roman-c-int-to-roman-converter/ </para>
 		/// </remarks>
-		/// <param name="value">The value to convert.</param>
-		/// <returns>Returns '0', if <paramref name="value"/> was 0 else the value in roman numeral</returns>
 		public static string ToRoman(this int value)
 		{
 			if (value == 0)
 			{
-				return String.Empty;
+				return "N";
 			}
 
 			var wasNegative = value < 0;

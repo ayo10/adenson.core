@@ -36,19 +36,19 @@ namespace System
 			{ typeof(char), "char" },
 			{ typeof(string), "string" },
 			{ typeof(void), "void" },
-			{ typeof(Nullable<byte>), "byte?" },
-			{ typeof(Nullable<sbyte>), "sbyte?" },
-			{ typeof(Nullable<short>), "short?" },
-			{ typeof(Nullable<ushort>), "ushort?" },
-			{ typeof(Nullable<int>), "int?" },
-			{ typeof(Nullable<uint>), "uint?" },
-			{ typeof(Nullable<long>), "long?" },
-			{ typeof(Nullable<ulong>), "ulong?" },
-			{ typeof(Nullable<float>), "float?" },
-			{ typeof(Nullable<double>), "double?" },
-			{ typeof(Nullable<decimal>), "decimal?" },
-			{ typeof(Nullable<bool>), "bool?" },
-			{ typeof(Nullable<char>), "char?" },
+			{ typeof(byte?), "byte?" },
+			{ typeof(sbyte?), "sbyte?" },
+			{ typeof(short?), "short?" },
+			{ typeof(ushort?), "ushort?" },
+			{ typeof(int?), "int?" },
+			{ typeof(uint?), "uint?" },
+			{ typeof(long?), "long?" },
+			{ typeof(ulong?), "ulong?" },
+			{ typeof(float?), "float?" },
+			{ typeof(double?), "double?" },
+			{ typeof(decimal?), "decimal?" },
+			{ typeof(bool?), "bool?" },
+			{ typeof(char?), "char?" },
 			{ typeof(byte[]), "byte[]" },
 			{ typeof(sbyte[]), "sbyte[]" },
 			{ typeof(ushort[]), "ushort[]" },
@@ -62,7 +62,7 @@ namespace System
 			{ typeof(bool[]), "bool[]" },
 			{ typeof(char[]), "char[]" },
 			{ typeof(string[]), "string[]" },
-			{ typeof(object[]), "object[]" }
+			{ typeof(object[]), "object[]" },
 		};
 		#endregion
 		#region Methods
@@ -122,28 +122,6 @@ namespace System
 			}
 
 			throw new NotSupportedException();
-		}
-
-		private static bool TryConvert(TypeConverter typeConverter, object value, out object result)
-		{
-			#if NETSTANDARD1_3
-			try
-			{
-				result = typeConverter.ConvertFrom(value);
-				return true;
-			}
-			catch
-			{
-			}
-			#else
-			if (typeConverter.IsValid(value))
-			{
-				result = typeConverter.ConvertFrom(value);
-			}
-			#endif
-			
-			result = null;
-			return false;
 		}
 
 		/// <summary>
@@ -230,9 +208,9 @@ namespace System
 
 			return type.Name;
 		}
-		
+
 		#if !NETSTANDARD1_3
-		
+
 		/// <summary>
 		/// Gets a <see cref="System.ComponentModel.PropertyDescriptor"/> from object using the passed property name.
 		/// </summary>
@@ -389,12 +367,7 @@ namespace System
 		/// <returns>The type with the specified description.</returns>
 		/// <exception cref="ArgumentNullException">Argument <paramref name="typeDescription"/> is null.</exception>
 		/// <exception cref="System.Reflection.TargetInvocationException">A class initializer is invoked and throws an exception.</exception>
-		/// <exception cref="TypeLoadException">
-		///	Argument <paramref name="throwOnError"/> is true and the type is not found. 
-		///	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> contains invalid characters, such as an embedded tab.
-		///	-or- <paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> is an empty string.
-		///	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> represents an array type with an invalid size. -or-<paramref name="typeDescription"/> represents an array of <see cref="TypedReference"/>.
-		///	</exception>
+		/// <exception cref="TypeLoadException">Argument <paramref name="throwOnError"/> is true and the type is not found.  -or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> contains invalid characters, such as an embedded tab. -or- <paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> is an empty string.	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> represents an array type with an invalid size. -or-<paramref name="typeDescription"/> represents an array of <see cref="TypedReference"/>.</exception>
 		/// <exception cref="ArgumentException">throwOnError is true and typeName contains invalid syntax.</exception>
 		/// <exception cref="System.IO.FileNotFoundException"><paramref name="throwOnError"/> is true and the assembly or one of its dependencies was not found.</exception>
 		/// <exception cref="System.IO.FileLoadException">The assembly or one of its dependencies was found, but could not be loaded.</exception>
@@ -474,7 +447,30 @@ namespace System
 				return false;
 			}
 		}
-		
+
+		private static bool TryConvert(TypeConverter typeConverter, object value, out object result)
+		{
+			#if NETSTANDARD1_3
+			try
+			{
+				result = typeConverter.ConvertFrom(value);
+				return true;
+			}
+			catch
+			{
+			}
+			#else
+			if (typeConverter.IsValid(value))
+			{
+				result = typeConverter.ConvertFrom(value);
+				return true;
+			}
+			#endif
+
+			result = null;
+			return false;
+		}
+
 		#if !NETSTANDARD1_3
 
 		private static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName, out object source)
@@ -506,6 +502,7 @@ namespace System
 
 			return pd;
 		}
+
 		private static PropertyDescriptorCollection GetDescriptors(Type type)
 		{
 			if (!typeDescriptorCache.ContainsKey(type))

@@ -1,9 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$(SolutionDir)CommonProps.targets" />
+	<Import Project="..\CommonProps.targets" />
 	<PropertyGroup>
 		<TargetFrameworks>net45;net40;net35;netstandard1.6;netstandard1.5;netstandard1.3</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Description>A collection of different utilities such as sql, mail, configuration/connection string reading, logging, etc, etc.</Description>
+		<PackageProjectUrl>https://bitbucket.org/ayo10/adenson.core</PackageProjectUrl>
+		<RepositoryUrl>https://bitbucket.org/ayo10/adenson.core</RepositoryUrl>
+		<RepositoryType>private</RepositoryType>
+		<PackageTags>utilities; helpers</PackageTags>
+		<CodeAnalysisRuleSet>ruleset.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>Full</DebugType>
@@ -14,6 +19,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DebugType>None</DebugType>
 		<DebugSymbols>False</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
+		<DocumentationFile>bin\Debug\net45\Adenson.Core.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
 		<PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
@@ -36,6 +44,9 @@
 	<ItemGroup Condition="'$(TargetFramework)' != 'net35' And $(TargetFramework.StartsWith('netstandard')) == false And $(TargetFramework.StartsWith('netcore')) == false">
 		<Reference Include="Microsoft.CSharp" />
 	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001" />
+	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Collections\**" />
 	</ItemGroup>
@@ -52,6 +63,8 @@
 				<Compile Remove="Data\OdbcSqlHelper.cs" />
 				<Compile Remove="Data\OleDbSqlHelper.cs" />
 				<Compile Remove="Data\SqlClientHelper.cs" />
+				<Compile Remove="Data\SqlServerHelper.cs" />
+				<Compile Remove="Log\SettingsConfiguration.cs" />
 				<Compile Remove="Log\Handlers\EmailHandler.cs" />
 				<Compile Remove="Log\Handlers\EventLogHandler.cs" />
 				<Compile Remove="System\Threading\**" />
@@ -109,19 +122,30 @@
 				</Compile>
 				<EmbeddedResource Update="Properties\SR.resx">
 					<Generator>ResXFileCodeGenerator</Generator>
-					<LastGenOutput>SR.netframework.Designer.cs</LastGenOutput>
+					<LastGenOutput>SR.Designer.cs</LastGenOutput>
 					<CustomToolNamespace>Adenson</CustomToolNamespace>
 				</EmbeddedResource>
-				<Compile Update="Properties\SR.netframework.Designer.cs">
-					<DesignTime>True</DesignTime>
-					<AutoGen>True</AutoGen>
-					<DependentUpon>SR.resx</DependentUpon>
-				</Compile>
 			</ItemGroup>
 		</Otherwise>
 	</Choose>
 	<ItemGroup>
+		<Compile Remove="Data\ConnectionManager.cs" />
+		<Compile Remove="Log\LogFilter.cs" />
+		<Compile Remove="System\Reflection\BaseWrapper.cs" />
+		<Compile Remove="System\Reflection\MethodWrapper.cs" />
+		<Compile Remove="System\Reflection\PropertyWrapper.cs" />
+		<Compile Remove="System\Reflection\Reflector.cs" />
+	</ItemGroup>
+	<ItemGroup>
 		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
 		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+		<AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\SR.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SR.resx</DependentUpon>
+		</Compile>
 	</ItemGroup>
 </Project>

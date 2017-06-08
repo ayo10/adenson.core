@@ -624,7 +624,7 @@ namespace Adenson.Data
 				_connection.Dispose();
 			}
 		}
-		
+
 		/// <summary>
 		/// Prepares the command for execution. (Sets connection, timeout and opens connection if needed);.
 		/// </summary>
@@ -645,19 +645,11 @@ namespace Adenson.Data
 
 		private T[] Execute<T>(ExecuteType type, params object[] commands)
 		{
-			if (commands.Length == 0)
-			{
-				throw new ArgumentException(Exceptions.ArgumentsEmpty, "commands");
-			}
-
-			if (commands.Any(c => c == null))
-			{
-				throw new ArgumentNullException("commands", Exceptions.ArgumentInListNull);
-			}
+			Arg.IsNotEmpty(commands);
+			Arg.IsNotAllNull(commands);
 
 			List<T> list = new List<T>();
 			IDbCommand command = null;
-
 			try
 			{
 				foreach (object c in commands)
