@@ -85,7 +85,7 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void ExecuteDataSetTypeTextValueTest()
 		{
-			CommandType type = new CommandType();
+			CommandType type = CommandType.StoredProcedure;
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			DataSet expected = null; // TODO: Initialize to an appropriate value
@@ -127,7 +127,7 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void ExecuteNonQueryTypeTextValueTest()
 		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
+			CommandType type = CommandType.StoredProcedure;
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			int expected = 0; // TODO: Initialize to an appropriate value
@@ -179,7 +179,7 @@ namespace Adenson.CoreTest.Data
 		[Test]
 		public void ExecuteReaderTest2()
 		{
-			CommandType type = new CommandType(); // TODO: Initialize to an appropriate value
+			CommandType type = CommandType.Text;
 			string commandText = string.Empty; // TODO: Initialize to an appropriate value
 			object[] parameterValues = null; // TODO: Initialize to an appropriate value
 			IDataReader expected = null; // TODO: Initialize to an appropriate value

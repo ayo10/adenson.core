@@ -1,10 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace Adenson.Tests.Log.Handlers
+namespace Adenson.CoreTests.Log.Handlers
 {
 	[TestFixture]
-    public class DatabaseHandlerTest
-    {
-    }
+	public class DatabaseHandlerTest
+	{
+	}
 }

@@ -470,7 +470,7 @@ namespace Adenson.Log
 			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 			return new Settings();
 			#else
-			return Settings.FromConfigSection() ?? Settings.FromAppSettings() ?? new Settings();
+			return Settings.FromConfigSection("adenson/logSettings") ?? Settings.FromConfigSection("logSettings") ?? Settings.FromAppSettings() ?? new Settings();
 			#endif
 		}
 

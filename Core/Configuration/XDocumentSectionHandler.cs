@@ -1,5 +1,5 @@
+using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace Adenson.Configuration

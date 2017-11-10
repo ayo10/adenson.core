@@ -3,7 +3,7 @@ using System.Configuration;
 using Adenson.Data;
 using NUnit.Framework;
 
-namespace Adenson.Tests.Data
+namespace Adenson.CoreTests.Data
 {
 	[TestFixture]
 	public class SqlHelperProviderTest

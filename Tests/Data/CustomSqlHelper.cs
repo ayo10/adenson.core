@@ -3,7 +3,7 @@ using System.Data;
 using Adenson.Data;
 using NUnit.Framework;
 
-namespace Adenson.Tests.Data
+namespace Adenson.CoreTests.Data
 {
 
     public class CustomSqlHelper : SqlHelperBase

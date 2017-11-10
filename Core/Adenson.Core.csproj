@@ -47,9 +47,6 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net45'">
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001" />
 	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Collections\**" />
-	</ItemGroup>
 	<Choose>
 		<When Condition="$(TargetFramework.StartsWith('netstandard')) Or $(TargetFramework.StartsWith('netcore'))">
 			<ItemGroup>
@@ -129,6 +126,8 @@
 		</Otherwise>
 	</Choose>
 	<ItemGroup>
+		<Compile Remove="Collections\CollectionChangingEventArgs.cs" />
+		<Compile Remove="Collections\ObservableCollection.cs" />
 		<Compile Remove="Data\ConnectionManager.cs" />
 		<Compile Remove="Log\LogFilter.cs" />
 		<Compile Remove="System\Reflection\BaseWrapper.cs" />
@@ -147,5 +146,8 @@
 			<AutoGen>True</AutoGen>
 			<DependentUpon>SR.resx</DependentUpon>
 		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Collections\" />
 	</ItemGroup>
 </Project>

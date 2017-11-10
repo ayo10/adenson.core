@@ -108,15 +108,23 @@ namespace Adenson.Log
 		/// <summary>
 		/// Instantiates a new instance of the <see cref="Settings"/> class from the config object. If config is null, creates a default settings object.
 		/// </summary>
+		/// <param name="sectionName">The name of the section.</param>
 		/// <returns>Created settings object if any, null otherwise.</returns>
-		public static Settings FromConfigSection()
+		public static Settings FromConfigSection(string sectionName)
 		{
-			SettingsConfiguration config = (ConfigurationManager.GetSection("adenson/logSettings") ?? ConfigurationManager.GetSection("logSettings")) as SettingsConfiguration;
-			Settings settings = new Settings();
-			settings.Severity = config.Severity;
-			settings.SecondsFormat = config.SecondsFormat;
-			settings.Formatter = String.IsNullOrEmpty(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter);
-			Settings.LoadHandlers(settings, config.Handlers.Cast<HandlerElement>());
+			SettingsConfiguration config = ConfigurationManager.GetSection(sectionName) as SettingsConfiguration;
+			Settings settings = null;
+			if (config != null)
+			{
+				settings = new Settings
+				{
+					Severity = config.Severity,
+					SecondsFormat = config.SecondsFormat,
+					Formatter = String.IsNullOrEmpty(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter),
+				};
+				Settings.LoadHandlers(settings, config.Handlers.Cast<HandlerElement>());
+			}
+
 			return settings;
 		}
 

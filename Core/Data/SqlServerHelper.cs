@@ -18,14 +18,14 @@ namespace Adenson.Data
 		#region Constructors
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>.
+		/// Initializes a new instance of the <see cref="SqlServerHelper"/> class using <see cref="Configuration.ConnectionStrings.Default"/>.
 		/// </summary>
 		public SqlServerHelper() : base()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class.
+		/// Initializes a new instance of the <see cref="SqlServerHelper"/> class.
 		/// </summary>
 		/// <param name="connectionString">The connection string settings object to use.</param>
 		/// <exception cref="ArgumentNullException">If specified connection string null</exception>
@@ -35,7 +35,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection string setting object.
+		/// Initializes a new instance of the <see cref="SqlServerHelper"/> class using specified connection string setting object.
 		/// </summary>
 		/// <param name="keyOrConnectionString">Either the config connection key or the connection string to use.</param>
 		/// <exception cref="ArgumentException">If specified connection string is invalid.</exception>
@@ -44,7 +44,7 @@ namespace Adenson.Data
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SqlClientHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
+		/// Initializes a new instance of the <see cref="SqlServerHelper"/> class using specified connection object (which will never be closed or disposed of in this class).
 		/// </summary>
 		/// <param name="connection">The connection to use.</param>
 		/// <param name="close">If to close the connection when this object is disposed.</param>
