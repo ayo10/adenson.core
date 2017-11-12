@@ -62,7 +62,8 @@ namespace Adenson.Log
 						{
 						}
 						#else
-						if (Enum.TryParse<HandlerType>(iv[0], out HandlerType t))
+						HandlerType t;
+						if (Enum.TryParse<HandlerType>(iv[0], out t))
 						{
 							handlerType = t;
 						}

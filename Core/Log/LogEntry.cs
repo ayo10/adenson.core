@@ -5,14 +5,11 @@ namespace Adenson.Log
 	/// <summary>
 	/// Represents a log entry
 	/// </summary>
-	public class LogEntry
+	public sealed class LogEntry
 	{
 		#region Constructor
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="LogEntry"/> class.
-		/// </summary>
-		public LogEntry()
+		internal LogEntry()
 		{
 		}
 
@@ -20,12 +17,12 @@ namespace Adenson.Log
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the severity of the message.
+		/// Gets the severity of the message.
 		/// </summary>
 		public Severity Severity
 		{
 			get;
-			set;
+			internal set;
 		}
 
 		/// <summary>
@@ -38,30 +35,21 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets or sets the date.
+		/// Gets the date.
 		/// </summary>
 		public DateTime Date
 		{
 			get;
-			set;
+			internal set;
 		}
 
 		/// <summary>
-		/// Gets or sets the date.
-		/// </summary>
-		public string Caller
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// Gets or sets the class type name the logger was created with.
+		/// Gets the class type name the logger was created with.
 		/// </summary>
 		public string TypeName
 		{
 			get;
-			set;
+			internal set;
 		}
 
 		#endregion

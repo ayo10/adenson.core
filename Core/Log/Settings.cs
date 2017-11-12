@@ -31,8 +31,15 @@ namespace Adenson.Log
 		/// </summary>
 		public BaseFormatter Formatter
 		{
-			get;
-			set;
+			get
+			{
+				return _formatter; 
+			}
+			set
+			{
+				Arg.IsNotNull(value, "value");
+				_formatter = value;
+			}
 		}
 
 		/// <summary>

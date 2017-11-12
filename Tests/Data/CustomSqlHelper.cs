@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace Adenson.CoreTests.Data
 {
+
     public class CustomSqlHelper : SqlHelperBase
 	{
 		public override IDbDataAdapter CreateAdapter(IDbCommand command)
