@@ -20,7 +20,6 @@ namespace Adenson.Data
 	{
 		#region Variables
 		private IDbConnection _connection;
-		private int _commandTimeout = 30;
 		private Stack<IDbTransaction> transactions = new Stack<IDbTransaction>();
 		#endregion
 		#region Constructors
@@ -45,22 +44,7 @@ namespace Adenson.Data
 		/// Gets or sets the wait time (in seconds) before terminating the attempt to execute a command and generating an error (default 30).
 		/// </summary>
 		/// <exception cref="ArgumentException">The property value assigned is less than 0.</exception>
-		public virtual int CommandTimeout
-		{
-			get
-			{
-				return _commandTimeout;
-			}
-			set
-			{
-				if (value < 0)
-				{
-					throw new ArgumentException("The value must be greater than 0.", "value");
-				}
-
-				_commandTimeout = value;
-			}
-		}
+		public virtual int CommandTimeout { get; set; } = 30;
 
 		/// <summary>
 		/// Gets the connection string to use.
@@ -134,7 +118,7 @@ namespace Adenson.Data
 		{
 			var parameter = this.CreateParameter();
 			parameter.ParameterName = name;
-			parameter.Value = value == null ? DBNull.Value : value;
+			parameter.Value = value ?? DBNull.Value;
 			return parameter;
 		}
 

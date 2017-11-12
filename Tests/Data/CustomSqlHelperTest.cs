@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Adenson.Tests.Data
 {
 	[TestFixture]
-    public class CustomSqlHelperTest
-    {
-    }
+	public class CustomSqlHelperTest
+	{
+	}
 }
