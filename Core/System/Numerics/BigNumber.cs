@@ -292,43 +292,12 @@ namespace System.Numerics
 			{
 				return BigNumber.Zero;
 			}
-
-			int length = Math.Max(this._fac.Length, value._fac.Length);
-
-			bool thisnegative = this.IsNegative;
-			List<byte> thisval = new List<byte>(this._fac);
-
-			bool thatnegative = value.IsNegative;
-			List<byte> thatval = new List<byte>(value._fac);
-
-			List<byte> newfac = new List<byte>(new byte[length]);
-			byte carry = 0;
-			for (int i = length - 1; i >= 0; i--)
+			else if (!this.IsNegative && value.IsNegative)
 			{
-				byte s = (byte)((((thisnegative ? -1 : 1) * thisval[i]) + ((thatnegative ? -1 : 1) * thatval[i])) + carry);
-				carry = (byte)(s >= 10 ? 1 : 0);
-				newfac[i] = (byte)(s >= 10 ? s - 10 : s);
+				return BigNumber.Operate("Subtract", this, value);
 			}
 
-			length = Math.Max(this._digits.Length, value._digits.Length);
-			thisval = new List<byte>(length);
-			thisval.InsertRange(length - this._digits.Length, this._digits);
-			thatval = new List<byte>(length);
-			thatval.InsertRange(length - value._digits.Length, value._digits);
-			List<byte> newdigit = new List<byte>(new byte[length]);
-			for (int i = length - 1; i >= 0; i--)
-			{
-				int s = (byte)(((thisnegative ? -1 : 1) * thisval[i]) + ((thatnegative ? -1 : 1) * thatval[i]) + carry);
-				carry = (byte)(s >= 10 ? 1 : 0);
-				newdigit[i] = (byte)(s >= 10 ? s - 10 : s);
-			}
-
-			if (carry > 0)
-			{
-				newdigit.Insert(0, carry);
-			}
-
-			return BigNumber.Convert(newdigit, newfac, true);
+			return BigNumber.Operate("Add", this, value);
 		}
 
 		/// <summary>
@@ -343,38 +312,7 @@ namespace System.Numerics
 				return BigNumber.Zero;
 			}
 
-			int length = Math.Max(this._fac.Length, value._fac.Length);
-			bool negative = this.IsNegative && value.IsNegative;
-			byte carry = 0;
-			List<byte> thisval = new List<byte>(this._fac);
-			List<byte> thatval = new List<byte>(value._fac);
-			List<byte> newfac = new List<byte>(new byte[length]);
-			for (int i = 0; i < length; i++)
-			{
-				byte s = (byte)(thisval[i] + thatval[i] + carry);
-				carry = (byte)(s >= 10 ? 1 : 0);
-				newfac[i] = (byte)(s >= 10 ? s - 10 : s);
-			}
-
-			length = Math.Max(this._digits.Length, value._digits.Length);
-			thisval = new List<byte>(length);
-			thisval.InsertRange(length - this._digits.Length, this._digits);
-			thatval = new List<byte>(length);
-			thatval.InsertRange(length - value._digits.Length, value._digits);
-			List<byte> newdigit = new List<byte>(new byte[length]);
-			for (int i = length - 1; i >= 0; i--)
-			{
-				int s = (byte)(thisval[i] + thisval[i]) + carry;
-				carry = (byte)(s >= 10 ? 1 : 0);
-				newdigit[i] = (byte)(s >= 10 ? s - 10 : s);
-			}
-
-			if (carry > 0)
-			{
-				newdigit.Insert(0, carry);
-			}
-
-			return BigNumber.Convert(newdigit, newfac, true);
+			throw new NotImplementedException();
 		}
 
 		private static int Compare(byte[] array1, byte[] array2, bool n, bool digits)
@@ -385,14 +323,14 @@ namespace System.Numerics
 			// - an empty array is exactly the same thing as [0];
 			int length1 = array1.Length == 0 ? 1 : array1.Length;
 			int length2 = array2.Length == 0 ? 1 : array2.Length;
-			int flip = digits ? (n ? -1 : 1) : 1; // -9 > -11 but -9.11 < -9.9;
-			int result = length1.CompareTo(length2) * flip;
+			int flip = n ? -1 : 1;
+			int result = length1.CompareTo(length2) * (digits ? flip : -1);
 			if (digits && result == 0)
 			{
 				for (int i = 0; i < array1.Length; i++)
 				{
-					int a1v = array1[i] * (n ? -1 : 1);
-					int a2v = array2[i] * (n ? -1 : 1);
+					int a1v = array1[i] * flip;
+					int a2v = array2[i] * flip;
 					result = a1v.CompareTo(a2v);
 					if (result != 0)
 					{
@@ -405,8 +343,8 @@ namespace System.Numerics
 				int max = Math.Max(array1.Length, array2.Length);
 				for (int i = 0; i < max; i++)
 				{
-					int a1v = i <= array1.Length - 1 ? array1[i] : 0 * (n ? -1 : 1);
-					int a2v = i <= array2.Length - 1 ? array2[i] : 0 * (n ? -1 : 1);
+					int a1v = (i <= array1.Length - 1 ? array1[i] : 0) * flip;
+					int a2v = (i <= array2.Length - 1 ? array2[i] : 0) * flip;
 					result = a1v.CompareTo(a2v);
 					if (result != 0)
 					{
@@ -466,6 +404,51 @@ namespace System.Numerics
 			{
 				return new BigNumber(v.Length == 0 ? new byte[] { 0 } : v, f, neg);
 			}
+		}
+
+		private static BigNumber Operate(string type, BigNumber value1, BigNumber value2)
+		{
+			bool negative = false;
+			int carry = 0;
+			List<byte> newfac = OperateAdd(value1._negative, value1._fac, value2._negative, value2._fac, 0, out negative, out carry);
+			List<byte> newdigit = OperateAdd(value1._negative, value1._digits, value2._negative, value2._digits, carry, out negative, out carry);
+			if (carry > 0)
+			{
+				newdigit.Insert(0, (byte)carry);
+			}
+
+			return BigNumber.Convert(newdigit, newfac, negative);
+		}
+
+		private static List<byte> OperateAdd(bool neg1, byte[] value1, bool neg2, byte[] value2, int incarry, out bool negative, out int carry)
+		{
+			negative = false;
+			int length = Math.Max(value1.Length, value2.Length);
+
+			List<byte> thisval = new List<byte>(length);
+			thisval.AddRange(new byte[length - value1.Length]);
+			thisval.InsertRange(length - value1.Length, value1);
+
+			List<byte> thatval = new List<byte>(length);
+			thatval.AddRange(new byte[length - value2.Length]);
+			thatval.InsertRange(length - value2.Length, value2);
+
+			List<byte> newfac = new List<byte>(new byte[length]);
+			carry = incarry;
+			for (int i = length - 1; i >= 0; i--)
+			{
+				int s = (((neg1 ? -1 : 1) * thisval[i]) + ((neg2 ? -1 : 1) * thatval[i])) + carry;
+				if (s < 0)
+				{
+					negative = true;
+					s *= -1;
+				}
+
+				carry = s >= 10 ? 1 : 0;
+				newfac[i] = (byte)(s >= 10 ? s - 10 : s);
+			}
+
+			return newfac;
 		}
 
 		private static byte[] Trim(List<byte> list, bool trimEnd)

@@ -60,9 +60,13 @@ namespace Adenson.CoreTests.System.Numerics
 		public void Op_Add_Test()
 		{
 			Assert.That(BigNumber.Parse("1234") + BigNumber.Parse("1234"), Is.EqualTo(BigNumber.Parse("2468")));
+			Assert.That(BigNumber.Parse("1234") + BigNumber.Parse("56789"), Is.EqualTo(BigNumber.Parse("58023")));
+			Assert.That(BigNumber.Parse("1234.56") + BigNumber.Parse("56789.0"), Is.EqualTo(BigNumber.Parse("58023.56")));
 			Assert.That(BigNumber.Parse("54321.03") + BigNumber.Parse("54321.03"), Is.EqualTo(BigNumber.Parse("108642.06")));
 			Assert.That(BigNumber.Parse("54321.03") + BigNumber.Parse("-54321.03"), Is.EqualTo(BigNumber.Zero));
 			Assert.That(BigNumber.Parse("-54321.03") + BigNumber.Parse("54321.03"), Is.EqualTo(BigNumber.Zero));
+			Assert.That(BigNumber.Parse("54321.03") + BigNumber.Parse("-108642.06"), Is.EqualTo(BigNumber.Parse("-54321.03")));
+			Assert.That(BigNumber.Parse("1234.666666") + BigNumber.Parse("1234.666666"), Is.EqualTo(BigNumber.Parse("2469.333332")));
 		}
 
 		[Test]
@@ -151,6 +155,7 @@ namespace Adenson.CoreTests.System.Numerics
 		{
 			Assert.That(BigNumber.Parse("1234") - BigNumber.Parse("1234"), Is.EqualTo(BigNumber.Zero));
 			Assert.That(BigNumber.Parse("1234") - BigNumber.Parse("54321"), Is.EqualTo(BigNumber.Parse("-107408")));
+			Assert.That(BigNumber.Parse("-1234") - BigNumber.Parse("-54321"), Is.EqualTo(BigNumber.Parse("55555")));
 		}
 
 		[Test]
@@ -188,7 +193,7 @@ namespace Adenson.CoreTests.System.Numerics
 			target = BigNumber.Parse("-1234.000000001");
 			Assert.That(target.IsNegative, Is.True);
 			Assert.That(target.Value[0], Is.EqualTo(new byte[] { 1, 2, 3, 4 }));
-			Assert.That(target.Value[1], Is.EqualTo(new byte[] { 0, 0, 0, 0, 0, 0, 0, 1 }));
+			Assert.That(target.Value[1], Is.EqualTo(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 1 }));
 
 			Assert.That(BigNumber.Parse("0"), Is.EqualTo(BigNumber.Zero));
 
