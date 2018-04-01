@@ -15,20 +15,6 @@ namespace Adenson.CoreTest.System.Xml.Linq
 		}
 
 		[Test]
-		public void GetValueTest()
-		{
-			XElement source = XDocument.Parse("<root><elem>1</elem></root>").Root;
-			Assert.AreEqual(1, source.GetValue<int>("elem"));
-
-			source = XDocument.Parse("<root><elem>1</elem></root>").Root;
-			Assert.AreEqual(1, source.GetValue<int>("elem"));
-
-			source = XDocument.Parse("<elem attrib1=\"1\" attrib2=\"some string\" />").Root;
-			Assert.AreEqual(1, source.GetValue<int>("attrib1"));
-			Assert.AreEqual("some string", source.GetValue("attrib2"));
-		}
-
-		[Test]
 		public void HasElementTest1()
 		{
 			XContainer source = XDocument.Parse("<elem>1</elem>");

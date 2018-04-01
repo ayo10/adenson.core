@@ -30,12 +30,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void CreateAdapterTest()
-		{
-			Assert.IsNotNull(Target.CreateAdapter(Target.CreateCommand()));
-		}
-
-		[Test]
 		public void CreateCommandTest()
 		{
 			Assert.IsNotNull(Target.CreateCommand());
@@ -83,48 +77,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteDataSetTypeTextValueTest()
-		{
-			CommandType type = CommandType.StoredProcedure;
-			string commandText = string.Empty; // TODO: Initialize to an appropriate value
-			object[] parameterValues = null; // TODO: Initialize to an appropriate value
-			DataSet expected = null; // TODO: Initialize to an appropriate value
-			DataSet actual;
-			actual = Target.ExecuteDataSet(type, commandText, parameterValues);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ExecuteDataSetCommandTest()
-		{
-			IDbCommand command = null; // TODO: Initialize to an appropriate value
-			DataSet expected = null; // TODO: Initialize to an appropriate value
-			DataSet actual;
-			actual = Target.ExecuteDataSet(command);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ExecuteDataSetMultipleTextsTest()
-		{
-			string[] commandTexts = null; // TODO: Initialize to an appropriate value
-			DataSet[] expected = null; // TODO: Initialize to an appropriate value
-			DataSet[] actual;
-			actual = Target.ExecuteDataSets(commandTexts);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ExecuteDataSetMultipleCommandsTest()
-		{
-			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
-			DataSet[] expected = null; // TODO: Initialize to an appropriate value
-			DataSet[] actual;
-			actual = Target.ExecuteDataSets(commands);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
 		public void ExecuteNonQueryTypeTextValueTest()
 		{
 			CommandType type = CommandType.StoredProcedure;
@@ -137,32 +89,12 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteNonQueryMultipleCommmandsTest()
-		{
-			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
-			int[] expected = null; // TODO: Initialize to an appropriate value
-			int[] actual;
-			actual = Target.ExecuteNonQueries(commands);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
 		public void ExecuteNonQueryCommandTest()
 		{
 			IDbCommand command = null; // TODO: Initialize to an appropriate value
 			int expected = 0; // TODO: Initialize to an appropriate value
 			int actual;
 			actual = Target.ExecuteNonQuery(command);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ExecuteNonQueryMultipleTextsTest()
-		{
-			string[] commandTexts = null; // TODO: Initialize to an appropriate value
-			int[] expected = null; // TODO: Initialize to an appropriate value
-			int[] actual;
-			actual = Target.ExecuteNonQueries(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -199,16 +131,6 @@ namespace Adenson.CoreTest.Data
 		}
 
 		[Test]
-		public void ExecuteScalarTest2()
-		{
-			IDbCommand[] commands = null; // TODO: Initialize to an appropriate value
-			object[] expected = null; // TODO: Initialize to an appropriate value
-			object[] actual;
-			actual = Target.ExecuteScalars(commands);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
 		public void ExecuteScalarTest3()
 		{
 			CommandType type = CommandType.StoredProcedure; // TODO: Initialize to an appropriate value
@@ -217,16 +139,6 @@ namespace Adenson.CoreTest.Data
 			object expected = null; // TODO: Initialize to an appropriate value
 			object actual;
 			actual = Target.ExecuteScalar(type, commandText, parameterValues);
-			Assert.AreEqual(expected, actual);
-		}
-
-		[Test]
-		public void ExecuteScalarTest4()
-		{
-			string[] commandTexts = null; // TODO: Initialize to an appropriate value
-			object[] expected = null; // TODO: Initialize to an appropriate value
-			object[] actual;
-			actual = Target.ExecuteScalars(commandTexts);
 			Assert.AreEqual(expected, actual);
 		}
 

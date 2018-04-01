@@ -12,28 +12,12 @@ namespace Adenson.CoreTest.System
 		#region Tests
 
 		[Test]
-		public void FormatTest()
-		{
-			Assert.AreEqual("Test1 Test2", StringUtil.Format("Test1 {0}", "Test2"));
-			Assert.AreEqual("Test1 Test2 {1}", StringUtil.Format("Test1 {0} {1}", "Test2"));
-			Assert.AreEqual("Test1 {1}", StringUtil.Format("Test1 {1}", "Test2"));
-		}
-
-		[Test]
 		public void GenerateRandomStringTest()
 		{
 			int length = 10;
 			var target = StringUtil.GenerateRandomString(length);
 			Assert.IsFalse(String.IsNullOrEmpty(target));
 			Assert.AreEqual(length, target.Length);
-		}
-
-		[Test]
-		public void IsNullOrWhiteSpaceTest()
-		{
-			Assert.IsTrue(StringUtil.IsNullOrWhiteSpace(String.Empty));
-			Assert.IsTrue(StringUtil.IsNullOrWhiteSpace(" "));
-			Assert.IsFalse(StringUtil.IsNullOrWhiteSpace(" Test "));
 		}
 
 		[Test]

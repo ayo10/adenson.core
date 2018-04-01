@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD1_0
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace System.ComponentModel.DataAnnotations
@@ -18,3 +19,4 @@ namespace System.ComponentModel.DataAnnotations
 		}
 	}
 }
+#endif

@@ -1,10 +1,7 @@
+#if !NETSTANDARD1_0 && !NETSTANDARD1_6 && !NETSTANDARD1_3
 using System;
-using System.Configuration;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
-using System.Xml.Linq;
-using Adenson.Configuration;
 
 namespace Adenson.Log
 {
@@ -72,11 +69,7 @@ namespace Adenson.Log
 		{
 			Arg.IsNotNull(entry, "entry");
 
-			#if !NET35
 			using (SmtpClient s = new SmtpClient())
-			#else
-			SmtpClient s = new SmtpClient();
-			#endif
 			{
 				using (MailMessage message = new MailMessage { From = new MailAddress(this.From), Subject = this.Subject, Body = entry.ToString(), IsBodyHtml = true })
 				{
@@ -97,3 +90,4 @@ namespace Adenson.Log
 		#endregion
 	}
 }
+#endif

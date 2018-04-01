@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="$(SolutionDir)CommonProps.targets" />
 	<PropertyGroup>
-		<TargetFrameworks>net461;net40;net35</TargetFrameworks>
+		<TargetFrameworks>net461;net40</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Description>SQL Server specific extensions and implementations for Adenson.Core.</Description>
+		<Version>2.0.0.0-beta</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DebugType>Full</DebugType>
@@ -22,5 +23,8 @@
 	<ItemGroup>
 		<CodeAnalysisDictionary Include="..\CustomDictionary.xml" Link="CustomDictionary.xml" />
 		<Compile Include="..\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Log\" />
 	</ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+#if !NETSTANDARD1_0
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -98,7 +99,7 @@ namespace Adenson.Cryptography
 			{
 				using (CryptoStream cs = new CryptoStream(msin, transform, CryptoStreamMode.Read))
 				{
-					return FileUtil.ReadStream(cs);
+					return cs.ToBytes();
 				}
 			}
 		}
@@ -130,7 +131,7 @@ namespace Adenson.Cryptography
 		{
 			if (this.Algorithm == null)
 			{
-				throw new ArgumentException(Exceptions.AlgorithmNull);
+				throw new ArgumentException("The Algorithm property is used for encryption and decryption, and cannot be null.");
 			}
 
 			if (this.IV == null && this.Key == null)
@@ -148,3 +149,4 @@ namespace Adenson.Cryptography
 		#endregion
 	}
 }
+#endif

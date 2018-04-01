@@ -49,71 +49,13 @@ namespace Adenson.Log
 		/// <summary>
 		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(object)"/>.
 		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">The message to log.</param>
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Critical<T>(object message)
-		{
-			Logger.Get(typeof(T)).Critical(message);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(string, object[])"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">The message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Critical<T>(string message, params object[] arguments)
-		{
-			Logger.Get(typeof(T)).Critical(message, arguments);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(object)"/>.
-		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">The message to log.</param>
 		public static void Critical(Type type, object message)
 		{
 			Logger.Get(type).Critical(message);
 		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Critical(string, object[])"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="message">The message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		public static void Critical(Type type, string message, params object[] arguments)
-		{
-			Logger.Get(type).Critical(message, arguments);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Debug(object)"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		[Conditional("DEBUG")]
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Debug<T>(object message)
-		{
-			Logger.Get(typeof(T)).Debug(message);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Debug(string, object[])"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[Conditional("DEBUG")]
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Debug<T>(string message, params object[] arguments)
-		{
-			Logger.Get(typeof(T)).Debug(message, arguments);
-		}
+		
 
 		/// <summary>
 		/// Calls <see cref="Get(Type)"/> then <see cref="Debug(object)"/>.
@@ -127,41 +69,6 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Debug(string, object[])"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[Conditional("DEBUG")]
-		public static void Debug(Type type, string message, params object[] arguments)
-		{
-			Logger.Get(type).Debug(message, arguments);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/> then <see cref="Error(object)"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Error<T>(object message)
-		{
-			Logger.Get(typeof(T)).Error(message);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Error(string, object[])"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Error<T>(string message, params object[] arguments)
-		{
-			Logger.Get(typeof(T)).Error(message, arguments);
-		}
-
-		/// <summary>
 		/// Calls <see cref="Get(Type)"/> then <see cref="Error(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
@@ -169,28 +76,6 @@ namespace Adenson.Log
 		public static void Error(Type type, object message)
 		{
 			Logger.Get(type).Error(message);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Error(string, object[])"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		public static void Error(Type type, string message, params object[] arguments)
-		{
-			Logger.Get(type).Error(message, arguments);
-		}
-
-		/// <summary>
-		/// Gets a pre initialized (or new) Logger for specified type.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <returns>Existing, or newly minted logger</returns>
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static Logger Get<T>()
-		{
-			return Logger.Get(typeof(T));
 		}
 
 		/// <summary>
@@ -213,52 +98,10 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(string, object[])"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[Conditional("DEBUG")]
-		[Conditional("INFO")]
-		[Conditional("TRACE")]
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Info<T>(string message, params object[] arguments)
-		{
-			Logger.Get(typeof(T)).Info(message, arguments);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(object)"/>.
-		/// </summary>
-		/// <typeparam name="T">Type where Logger is being called on.</typeparam>
-		/// <param name="message">Message to log.</param>
-		[Conditional("DEBUG")]
-		[Conditional("INFO")]
-		[Conditional("TRACE")]
-		[SuppressMessage("Microsoft.Design", "CA1004", Justification = "In use.")]
-		public static void Info<T>(object message)
-		{
-			Logger.Get(typeof(T)).Info(message);
-		}
-
-		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(string, object[])"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		[Conditional("TRACE")]
-		public static void Info(Type type, string message, params object[] arguments)
-		{
-			Logger.Get(type).Info(message, arguments);
-		}
-
-		/// <summary>
 		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Info(object)"/>.
 		/// </summary>
 		/// <param name="type">Type where Logger is being called on.</param>
 		/// <param name="message">Message to log.</param>
-		[Conditional("TRACE")]
 		public static void Info(Type type, object message)
 		{
 			Logger.Get(type).Info(message);
@@ -275,17 +118,6 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Calls <see cref="Get(Type)"/>, then calls <see cref="Warn(string, object[])"/>.
-		/// </summary>
-		/// <param name="type">Type where Logger is being called on.</param>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		public static void Warn(Type type, string message, params object[] arguments)
-		{
-			Logger.Get(type).Warn(message, arguments);
-		}
-
-		/// <summary>
 		/// Logs critical message.
 		/// </summary>
 		/// <param name="message">The message to log.</param>
@@ -293,17 +125,6 @@ namespace Adenson.Log
 		public void Critical(object message)
 		{
 			this.Write(Severity.Critical, message);
-		}
-
-		/// <summary>
-		/// Log critical message.
-		/// </summary>
-		/// <param name="message">The message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		public void Critical(string message, params object[] arguments)
-		{
-			this.Write(Severity.Critical, StringUtil.ToString(message), arguments);
 		}
 
 		/// <summary>
@@ -317,35 +138,12 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log debug message. Executes if DEBUG is defined.
-		/// </summary>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("DEBUG")]
-		public void Debug(string message, params object[] arguments)
-		{
-			this.Write(Severity.Debug, message, arguments);
-		}
-
-		/// <summary>
 		/// Log error message.
 		/// </summary>
 		/// <param name="value">The value.</param>
 		public void Error(object value)
 		{
 			this.Write(Severity.Error, value);
-		}
-
-		/// <summary>
-		/// Log error message.
-		/// </summary>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		public void Error(string message, params object[] arguments)
-		{
-			this.Write(Severity.Error, message, arguments);
 		}
 
 		/// <summary>
@@ -363,10 +161,18 @@ namespace Adenson.Log
 		/// <param name="identifier">Some kind of identifier.</param>
 		/// <returns>A profiler object</returns>
 		[SuppressMessage("Microsoft.Reliability", "CA2000", Justification = "Object being returned.")]
-		public LogProfiler GetProfiler(string identifier)
+		public LogProfiler Profiler(string identifier)
 		{
 			Arg.IsNotEmpty(identifier);
 			LogProfiler profiler = new LogProfiler(this, identifier);
+			profiler.Disposed = () =>
+			{
+				lock (profilers)
+				{
+					profilers.Remove(profiler);
+				}
+			};
+
 			lock (profilers)
 			{
 				profilers.Add(profiler);
@@ -386,18 +192,6 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Log information message. Executes if DEBUG is defined.
-		/// </summary>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		[Conditional("TRACE")]
-		public void Info(string message, params object[] arguments)
-		{
-			this.Write(Severity.Info, message, arguments);
-		}
-
-		/// <summary>
 		/// Log warning message. Executes if DEBUG or TRACE is defined.
 		/// </summary>
 		/// <param name="value">The value.</param>
@@ -406,31 +200,12 @@ namespace Adenson.Log
 			this.Write(Severity.Warn, value);
 		}
 
-		/// <summary>
-		/// Log warning message. Executes if DEBUG or TRACE is defined.
-		/// </summary>
-		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
-		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
-		public void Warn(string message, params object[] arguments)
-		{
-			this.Write(Severity.Warn, message, arguments);
-		}
-
 		internal static string Round(double seconds)
 		{
 			return seconds.ToString(Settings.SecondsFormat, System.Globalization.CultureInfo.CurrentCulture);
 		}
 
-		internal void ProfilerStop(Guid uid)
-		{
-			lock (profilers)
-			{
-				profilers.Remove(profilers.First(p => p.Uid == uid));
-			}
-		}
-
-		internal void Write(Severity severity, object message, params object[] arguments)
+		internal void Write(Severity severity, object message)
 		{
 			if (_settings.Handlers.Count == 0)
 			{
@@ -442,18 +217,13 @@ namespace Adenson.Log
 				return;
 			}
 
-			string str = message as string;
-			if (str != null && arguments.Length > 0)
+			LogEntry entry = new LogEntry
 			{
-				message = StringUtil.Format(str, arguments);
-			}
-
-			LogEntry entry = new LogEntry();
-			entry.Severity = severity;
-			entry.TypeName = this.ClassType.Name;
-			entry.Date = DateTime.Now;
-			entry.Message = message;
-
+				Severity = severity,
+				TypeName = this.ClassType.Name,
+				Date = DateTime.Now,
+				Message = message
+			};
 			foreach (BaseHandler handler in _settings.Handlers)
 			{
 				if ((int)handler.Severity > (int)severity)
@@ -467,11 +237,11 @@ namespace Adenson.Log
 
 		private static Settings ReadSettings()
 		{
-			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
+#if NETSTANDARD2_0 || NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3 || NETSTANDARD1_0
 			return new Settings();
-			#else
+#else
 			return Settings.FromConfigSection("adenson/logSettings") ?? Settings.FromConfigSection("logSettings") ?? Settings.FromAppSettings() ?? new Settings();
-			#endif
+#endif
 		}
 
 		#endregion

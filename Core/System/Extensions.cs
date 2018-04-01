@@ -1,10 +1,6 @@
-using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace System
 {
@@ -20,17 +16,15 @@ namespace System
 		/// <example>Phrase "some words" returns "Some Words", etc.</example>
 		/// <param name="value">The value to capitalize.</param>
 		/// <returns>Null or whitespace if value is null or whitespace, the capitalized version otherwise.</returns>
-		[SuppressMessage("Microsoft.Globalization", "CA13084", Justification = "That would defeat the purpose of capitalizing.")]
+		[SuppressMessage("Microsoft.Globalization", "CA1308", Justification = "That would defeat the purpose of capitalizing.")]
 		public static string Capitalize(this string value)
 		{
 			if (String.IsNullOrEmpty(value))
 			{
 				return value;
 			}
-
-			#pragma warning disable CA1308
+			
 			char[] result = value.ToLowerInvariant().ToCharArray();
-			#pragma warning restore CA1308
 			int index = 0;
 			while (index < value.Length)
 			{
@@ -59,7 +53,6 @@ namespace System
 		{
 			Arg.IsNotNull(source, "source");
 			Arg.IsNotNull(value, "value");
-
 			return source.IndexOf(value, comparisonType) > -1;
 		}
 
@@ -109,11 +102,11 @@ namespace System
 		public static bool HasAttribute(this Type type, Type attributeType, bool inherit)
 		{
 			Arg.IsNotNull(type);
-			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
+#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_4 || NETSTANDARD1_3 || NETSTANDARD1_0
 			return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).Any();
-			#else
+#else
 			return type.GetCustomAttributes(attributeType, inherit).Any();
-			#endif
+#endif
 		}
 
 		/// <summary>

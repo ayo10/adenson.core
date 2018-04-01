@@ -16,37 +16,6 @@ namespace System
 		#region Methods
 
 		/// <summary>
-		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array.
-		/// </summary>
-		/// <param name="value">A composite format string.</param>
-		/// <param name="args">An object array that contains zero or more objects to format.</param>
-		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
-		/// <exception cref="ArgumentNullException">Either <paramref name="value"/> or <paramref name="args"/> is null.</exception>
-		public static string Format(string value, params object[] args)
-		{
-			if (StringUtil.IsNullOrWhiteSpace(value))
-			{
-				return String.Empty;
-			}
-
-			Arg.IsNotNull(args);
-			try
-			{
-				return String.Format(System.Globalization.CultureInfo.CurrentCulture, value, args);
-			}
-			catch (FormatException)
-			{
-				var str = value;
-				for (int i = 0; i < args.Length; i++)
-				{
-					str = str.Replace("{" + i + "}", args[i] == null ? "null" : StringUtil.ToString(args[i]));
-				}
-
-				return str;
-			}
-		}
-
-		/// <summary>
 		/// Generates a random string of specified <paramref name="length"/>.
 		/// </summary>
 		/// <param name="length">Max length of string to generate.</param>
@@ -67,21 +36,6 @@ namespace System
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// Indicates whether a specified string is null, empty, or consists only of white-space characters.
-		/// </summary>
-		/// <remarks>Method exists for .NET 3.5, for .NET 4, simply calls String.IsNullOrWhiteSpace</remarks>
-		/// <param name="value">The string to test.</param>
-		/// <returns>true if the value parameter is null or System.String.Empty, or if value consists exclusively of white-space characters.</returns>
-		public static bool IsNullOrWhiteSpace(string value)
-		{
-			#if NET35
-			return value == null || value.Trim() == String.Empty;
-			#else
-			return String.IsNullOrWhiteSpace(value);
-			#endif
 		}
 
 		/// <summary>
@@ -125,14 +79,14 @@ namespace System
 			}
 			else if (list == null)
 			{
-				return StringUtil.Format("Null<{0}>", typeof(T).Name);
+				return $"Null<{typeof(T).Name}>";
 			}
 			else if (!list.Any())
 			{
-				return StringUtil.Format("Empty<{0}>", typeof(T).Name);
+				return $"Empty<{typeof(T).Name}>";
 			}
 
-			return StringUtil.Format("{0}<{1}> [{2}]", list.GetType().GetGenericTypeDefinition().Name, typeof(T).Name, String.Join(",", list.Select(x => x == null ? "null" : x.ToString()).ToArray()));
+			return $"{list.GetType().GetGenericTypeDefinition().Name}<{typeof(T).Name}> [{String.Join(",", list.Select(x => x == null ? "null" : x.ToString()).ToArray())}]";
 		}
 
 		/// <summary>
@@ -146,7 +100,7 @@ namespace System
 
 			List<string> message = new List<string>();
 			StringUtil.ToString(exception, message);
-			return String.Join(Environment.NewLine, message.ToArray());
+			return String.Join(Environment.NewLine, message);
 		}
 
 		/// <summary>
@@ -180,7 +134,7 @@ namespace System
 				Type type = value.GetType();
 				string typeName = TypeUtil.GetName(type);
 				string items = String.Join(",", enumerable.Cast<object>().Select(o => ToString(o) ?? "null").ToArray());
-				return StringUtil.Format("{0}{{{1}}}", typeName, items);
+				return $"{typeName}{{{items}}}";
 			}
 
 			return Convert.ToString(value, System.Globalization.CultureInfo.CurrentCulture);
@@ -197,12 +151,12 @@ namespace System
 
 			lines.Add($"{exception.GetType().FullName}: {exception.Message}");
 			string linkAndSource = String.Empty;
-			if (!StringUtil.IsNullOrWhiteSpace(exception.HelpLink))
+			if (!String.IsNullOrWhiteSpace(exception.HelpLink))
 			{
 				linkAndSource = $"HelpLink: {exception.HelpLink}";
 			}
 
-			if (!StringUtil.IsNullOrWhiteSpace(exception.Source))
+			if (!String.IsNullOrWhiteSpace(exception.Source))
 			{
 				linkAndSource = (String.IsNullOrEmpty(linkAndSource) ? String.Empty : linkAndSource + ", ") + $"Source: {exception.Source}";
 			}

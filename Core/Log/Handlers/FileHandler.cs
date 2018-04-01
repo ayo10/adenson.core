@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD1_0
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -16,29 +17,27 @@ namespace Adenson.Log
 		private DateTime fileDate = DateTime.Now;
 		#endregion
 		#region Constructor
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FileHandler"/> class with the specified file name.
 		/// </summary>
 		/// <param name="filePath">The path to write the log.</param>
 		public FileHandler(string filePath) : base()
 		{
-			Arg.IsNotEmpty(filePath, "filePath");
-			
+			Arg.IsNotEmpty(filePath, nameof(filePath));
 			if (!Path.IsPathRooted(filePath))
 			{
-				#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
-				filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
-				#else
+				//#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
+				//filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filePath.Replace("/", "\\"));
+				//#else
 				filePath = Path.Combine(Path.GetFullPath("."), filePath);
-				#endif
+				//#endif
 			}
 
 			folder = Path.GetDirectoryName(filePath);
 			if (!Directory.Exists(folder))
 			{
 				Directory.CreateDirectory(folder);
-				Trace.WriteLine(StringUtil.Format("Folder '{0}' did not exist, created.", folder));
 			}
 
 			if (Directory.Exists(folder))
@@ -47,20 +46,20 @@ namespace Adenson.Log
 			}
 		}
 
-#endregion
-#region Properties
+		#endregion
+		#region Properties
 
 		/// <summary>
 		/// Gets the full file name of the file into which the log will be written into.
 		/// </summary>
 		public string FilePath
-		{ 
-			get; 
-			private set; 
+		{
+			get;
+			private set;
 		}
 
-#endregion
-#region Methods
+		#endregion
+		#region Methods
 
 		/// <summary>
 		/// Writes the log to a log file.
@@ -112,6 +111,7 @@ namespace Adenson.Log
 			}
 		}
 
-#endregion
+		#endregion
 	}
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD1_0
+using System;
 using System.Diagnostics;
 
 namespace Adenson.Log
@@ -20,3 +21,4 @@ namespace Adenson.Log
 		}
 	}
 }
+#endif

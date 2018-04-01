@@ -19,14 +19,6 @@ namespace Adenson.CoreTest.System
 		}
 
 		[Test]
-		public void CreateInstanceTest1()
-		{
-			var result = TypeUtil.CreateInstance<TestClass>();
-			Assert.IsNotNull(result);
-			Assert.IsInstanceOf(typeof(TestClass), result);
-		}
-
-		[Test]
 		public void CreateInstanceTest2()
 		{
 			var typeName = typeof(TestClass).AssemblyQualifiedName;

@@ -1,15 +1,11 @@
+#if !NETSTANDARD1_0
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-#if !NET35
 using System.Dynamic;
-#endif
-using System.IO;
 using System.Linq;
-using Adenson.Log;
 
 namespace Adenson.Data
 {
@@ -24,6 +20,41 @@ namespace Adenson.Data
 		private Stack<IDbTransaction> transactions = new Stack<IDbTransaction>();
 		#endregion
 		#region Constructors
+
+#if NET40 || NET45
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using.<see cref="System.Configuration.ConfigurationManager.ConnectionStrings"/> with key 'default'.
+		/// </summary>
+		protected SqlHelperBase() : this("default")
+		{
+			this.CloseConnection = true;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection string setting object.
+		/// </summary>
+		/// <param name="connectionString">Either the connection key or the connection string to use.</param>
+		/// <exception cref="ArgumentException">If specified connection string is invalid</exception>
+		protected SqlHelperBase(string connectionString)
+		{
+			Arg.IsNotEmpty(connectionString);
+			var cs = System.Configuration.ConfigurationManager.ConnectionStrings[connectionString];
+			this.ConnectionString = cs == null ? connectionString : cs.ConnectionString;
+			this.CloseConnection = true;
+		}
+#else
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection string setting object.
+		/// </summary>
+		/// <param name="connectionString">The connection string to use.</param>
+		/// <exception cref="ArgumentException">If specified connection string is invalid.</exception>
+		protected SqlHelperBase(string connectionString)
+		{
+			this.ConnectionString = Arg.IsNotEmpty(connectionString);
+			this.CloseConnection = true;
+		}
+#endif
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlHelperBase"/> class using specified connection object.
@@ -110,7 +141,7 @@ namespace Adenson.Data
 		{
 			Arg.IsNotEmpty(tableName);
 			Arg.IsNotEmpty(columnName);
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @p0 AND COLUMN_NAME = @p1',N'@p0 nvarchar(max),@p1 nvarchar(max)',@p0=N'{0}',@p1=N'{1}'", tableName, columnName)))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = @p0 AND COLUMN_NAME = @p1", new Parameter("p0", tableName), new Parameter("p1", columnName)))
 			{
 				return r.Read();
 			}
@@ -121,7 +152,7 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual void CreateDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("CREATE DATABASE [{0}]", this.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, $"CREATE DATABASE [{this.Connection.Database}]");
 		}
 
 		/// <summary>
@@ -153,7 +184,7 @@ namespace Adenson.Data
 		/// </summary>
 		public virtual void DropDatabase()
 		{
-			this.ExecuteNonQuery(CommandType.Text, StringUtil.Format("DROP DATABASE [{0}]", this.Connection.Database));
+			this.ExecuteNonQuery(CommandType.Text, $"DROP DATABASE [{this.Connection.Database}]");
 		}
 
 		/// <summary>
@@ -180,7 +211,7 @@ namespace Adenson.Data
 		{
 			if (transactions.Count == 0)
 			{
-				throw new InvalidOperationException(Exceptions.NoOpenTransactions);
+				throw new InvalidOperationException("There are no current open transactions.");
 			}
 
 			IDbTransaction transaction = transactions.Pop();
@@ -196,13 +227,12 @@ namespace Adenson.Data
 		public virtual bool TableExists(string tableName)
 		{
 			Arg.IsNotEmpty(tableName);
-			using (IDataReader r = this.ExecuteReader(CommandType.Text, StringUtil.Format("EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @p0',N'@p0 nvarchar(max)',@p0=N'{0}'", tableName)))
+			using (IDataReader r = this.ExecuteReader(CommandType.Text, "EXEC sp_executesql N'SELECT * from INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = @p0", new Parameter("p0", tableName)))
 			{
 				return r.Read();
 			}
 		}
 		
-		#if !NET35
 		#region ExecuteDynamic
 
 		/// <summary>
@@ -263,7 +293,6 @@ namespace Adenson.Data
 		}
 
 		#endregion
-		#endif
 		#region ExecuteNonQuery
 
 		/// <summary>
@@ -304,55 +333,6 @@ namespace Adenson.Data
 			Arg.IsNotNull(command);
 			this.PrepCommand(command);
 			return command.ExecuteNonQuery();
-		}
-
-		/// <summary>
-		/// Executes the commands in a batched mode with a transaction.
-		/// </summary>
-		/// <param name="commands">1 or more commands.</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
-		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
-		public virtual int[] ExecuteNonQueries(params IDbCommand[] commands)
-		{
-			return this.Execute<int>(ExecuteType.NonQuery, commands);
-		}
-
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction.
-		/// </summary>
-		/// <param name="commandTexts">1 or more command texts.</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual int[] ExecuteNonQueries(params string[] commandTexts)
-		{
-			return this.Execute<int>(ExecuteType.NonQuery, commandTexts);
-		}
-
-		/// <summary>
-		/// Reads the specified stream split into strings (delimiting using <see cref="Environment.NewLine"/>), and runs them in batched mode.
-		/// </summary>
-		/// <param name="stream">The stream containing the commmand text to run.</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
-		public virtual int[] ExecuteNonQueries(StreamReader stream)
-		{
-			return this.ExecuteNonQueries(stream, Environment.NewLine);
-		}
-
-		/// <summary>
-		/// Reads the specified stream split into strings (using specified delimiter), and runs them in batched mode.
-		/// </summary>
-		/// <param name="stream">The stream containing the commmand text to run.</param>
-		/// <param name="delimiter">The delimiter to use.</param>
-		/// <returns>The result of each ExecuteNonQuery run on each command text.</returns>
-		/// <exception cref="ArgumentNullException">If <paramref name="stream"/> is null.</exception>
-		public virtual int[] ExecuteNonQueries(StreamReader stream, string delimiter)
-		{
-			Arg.IsNotNull(stream);
-			string[] scripts = stream.ReadToEnd().Split(new string[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
-			return this.ExecuteNonQueries(scripts);
 		}
 
 		#endregion
@@ -456,30 +436,6 @@ namespace Adenson.Data
 			return command.ExecuteScalar();
 		}
 
-		/// <summary>
-		/// Executes the commands in a batched mode with a transaction.
-		/// </summary>
-		/// <param name="commands">1 or more commands.</param>
-		/// <returns>The result of each ExecuteScalar run on each command text</returns>
-		/// <exception cref="ArgumentException">If <paramref name="commands"/> is empty</exception>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commands"/> is null</exception>
-		public virtual object[] ExecuteScalars(params IDbCommand[] commands)
-		{
-			return this.Execute<object>(ExecuteType.Scalar, commands);
-		}
-
-		/// <summary>
-		/// Executes the command texts in a batched mode with a transaction.
-		/// </summary>
-		/// <param name="commandTexts">1 or more command texts.</param>
-		/// <returns>The result of each ExecuteScalar run on each command text</returns>
-		/// <exception cref="ArgumentNullException">If any of the items in <paramref name="commandTexts"/> is null</exception>
-		/// <exception cref="ArgumentException">If <paramref name="commandTexts"/> is empty</exception>
-		public virtual object[] ExecuteScalars(params string[] commandTexts)
-		{
-			return this.Execute<object>(ExecuteType.Scalar, commandTexts);
-		}
-
 		#endregion
 		#region Abstract 
 
@@ -521,11 +477,12 @@ namespace Adenson.Data
 		[SuppressMessage("Microsoft.Security", "CA2100", Justification = "Class is a sql execution helper, executes whatever is passed to it without any validation.")]
 		protected virtual IDbCommand CreateCommand(CommandType type, string commandText, params object[] parameterValues)
 		{
-			Arg.IsNotEmpty(commandText, "commandText");
-			Arg.IsNotNull(parameterValues, "parameterValues");
-			Arg.IsNotAllNull(parameterValues, "parameterValues");
+			Arg.IsNotEmpty(commandText, nameof(commandText));
+			Arg.IsNotNull(parameterValues, nameof(parameterValues));
+			Arg.IsNotAllNull(parameterValues, nameof(parameterValues));
 
 			List<IDataParameter> parameters = new List<IDataParameter>();
+			Exception exception = null;
 			if (parameterValues.Any(p => p is Parameter) || parameterValues.Any(p => p is IDataParameter))
 			{
 				foreach (var item in parameterValues)
@@ -562,26 +519,6 @@ namespace Adenson.Data
 					parameters.Add(dataParameter);
 				}
 			}
-			else if (commandText.Contains("{0}"))
-			{
-				try
-				{
-					// StringBuilder has a really good format parser, so am using it to validate the commandText and parameterValues
-					new System.Text.StringBuilder().Append(StringUtil.Format(commandText, parameterValues));
-
-					// If we dont get a FormatException from StringBuilder.AppendFormat, then we are good.
-					for (var i = 0; i < parameterValues.Length; i++)
-					{
-						string name = "@param" + i;
-						commandText = commandText.Replace("{" + i + "}", name);
-						parameters.Add(this.CreateParameter(name, parameterValues[i]));
-					}
-				}
-				catch (FormatException ex)
-				{
-					throw new ArgumentException(Exceptions.UnableToParseCommandText, ex);
-				}
-			}
 			else if (type == CommandType.StoredProcedure)
 			{
 				for (var i = 0; i < parameterValues.Length; i++)
@@ -590,9 +527,12 @@ namespace Adenson.Data
 				}
 			}
 
-			if (parameterValues.Length != parameters.Count || parameters.Any(p => p == null))
+			if (exception != null || (parameterValues.Length != parameters.Count || parameters.Any(p => p == null)))
 			{
-				throw new ArgumentException(Exceptions.UnableToParseCommandText);
+				throw new ArgumentException(
+					@"The specified command text argument could not be parsed.\r\n"
+					+ "Use sql parameterized strings(e.g.'UPDATE [Table] SET [Column1] = @parameter1, [Column2] = @parameter2') and parameter arguments that MUST be one of 'Adenson.Data.Parameter', 'System.Data.IDataParameter', System.Collections.Generic.KeyValuePair<string, object> or System.Collections.IDictionary.",
+					exception);
 			}
 
 			IDbCommand command = this.CreateCommand();
@@ -643,59 +583,7 @@ namespace Adenson.Data
 			}
 		}
 
-		private T[] Execute<T>(ExecuteType type, params object[] commands)
-		{
-			Arg.IsNotEmpty(commands);
-			Arg.IsNotAllNull(commands);
-
-			List<T> list = new List<T>();
-			IDbCommand command = null;
-			try
-			{
-				foreach (object c in commands)
-				{
-					command = c as IDbCommand;
-					if (command == null)
-					{
-						command = this.CreateCommand(CommandType.Text, (string)c);
-					}
-
-					switch (type)
-					{
-						#if !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
-						case ExecuteType.Dataset:
-							list.Add((T)(object)this.ExecuteDataSet(command));
-							break;
-						#endif
-						case ExecuteType.NonQuery:
-							list.Add((T)(object)this.ExecuteNonQuery(command));
-							break;
-						case ExecuteType.Scalar:
-							list.Add((T)this.ExecuteScalar(command));
-							break;
-						default:
-							throw new NotSupportedException();
-					}
-				}
-			}
-			catch
-			{
-				if (command != null)
-				{
-					Logger.Debug(this.GetType(), Exceptions.ErrantCommandArg, command.CommandText);
-				}
-
-				if (transactions.Count > 0)
-				{
-					transactions.Peek().Rollback();
-				}
-
-				throw;
-			}
-
-			return list.ToArray();
-		}
-
 		#endregion
 	}
 }
+#endif

@@ -10,7 +10,7 @@ namespace Adenson.Log
 	public sealed class LogMarker : IDisposable
 	{
 		#region Variables
-		private List<KeyValuePair<double, string>> marks = new List<KeyValuePair<double, string>>();
+		private List<Tuple<double, string>> marks = new List<Tuple<double, string>>();
 		private TimeSpan? lastmark;
 		private LogProfiler _profiler;
 		#endregion
@@ -39,12 +39,10 @@ namespace Adenson.Log
 		/// </summary>
 		/// <remarks>The name of the method MIGHT change.</remarks>
 		/// <param name="message">A message to display.</param>
-		/// <param name="args">The arguments to pass along with message.</param>
-		public void Mark(string message, params object[] args)
+		public void Mark(string message)
 		{
 			double key = DateTime.Now.TimeOfDay.Subtract(lastmark.Value).TotalSeconds;
-			string value = StringUtil.Format(message, args);
-			KeyValuePair<double, string> kv = new KeyValuePair<double, string>(key, value);
+			Tuple<double, string> kv = new Tuple<double, string>(key, message);
 			marks.Add(kv);
 			lastmark = DateTime.Now.TimeOfDay;
 		}
@@ -56,18 +54,17 @@ namespace Adenson.Log
 		{
 			if (marks.Count > 0)
 			{
-				var e = marks.Select(s => s.Key).OrderBy(s => s).ToList();
+				var e = marks.Select(s => s.Item1).OrderBy(s => s).ToList();
 				double avg = e.Average();
 				double min = e.First();
 				double max = e.Last();
-				string ns = marks.Where(k => k.Key == min).First().Value;
-				string xs = marks.Where(k => k.Key == max).First().Value;
-
+				string ns = marks.Where(k => k.Item1 == min).First().Item2;
+				string xs = marks.Where(k => k.Item1 == max).First().Item2;
 				_profiler.Debug("Markers:");
-				_profiler.Debug("  Count: {0}", marks.Count);
-				_profiler.Debug("  Avg: {0}s", Logger.Round(avg));
-				_profiler.Debug("  Max: {0}s, {1}", Logger.Round(max), ns ?? "--");
-				_profiler.Debug("  Min: {0}s, {1}", Logger.Round(min), xs ?? "--");
+				_profiler.Debug($"  Count: {marks.Count}");
+				_profiler.Debug($"  Avg: {Logger.Round(avg)}");
+				_profiler.Debug($"  Max: {Logger.Round(max)}, {ns ?? "--"}");
+				_profiler.Debug($"  Min: {Logger.Round(min)}, {xs ?? "--"}");
 			}
 			else
 			{

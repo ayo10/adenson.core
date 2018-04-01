@@ -1,7 +1,9 @@
+#if !NETSTANDARD1_0
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace System.IO
 {
@@ -135,23 +137,7 @@ namespace System.IO
 			return fileName;
 		}
 
-		/// <summary>
-		/// Creates a byte array, by reading the response stream of the specified url .
-		/// </summary>
-		/// <param name="filePath">The path and name of the file to create.</param>
-		/// <returns>A byte array, or null if stream is null</returns>
-		/// <exception cref="ArgumentNullException">If filePath is null or empty or is just white space</exception>
-		/// <exception cref="FileNotFoundException">If the specified filePath does not exist</exception>
-		public static byte[] ReadStream(string filePath)
-		{
-			Arg.IsNotEmpty(filePath);
-			if (!File.Exists(filePath))
-			{
-				throw new System.IO.FileNotFoundException("File specified does not exist.", filePath);
-			}
-
-			return FileUtil.ReadStream(new Uri(filePath, UriKind.Absolute));
-		}
+#if !NETSTANDARD1_6 && !NETSTANDARD1_3
 
 		/// <summary>
 		/// Creates a byte array, by reading the response stream of the specified url.
@@ -159,58 +145,45 @@ namespace System.IO
 		/// <param name="url">The url.</param>
 		/// <returns>A byte array, or null if resulting stream is null</returns>
 		/// <exception cref="ArgumentNullException">If url is null</exception>
-		public static byte[] ReadStream(Uri url)
+		public static Stream ReadStream(Uri url)
 		{
-			Arg.IsNotNull(url, "url");
-
-			Stream stream;
+			Arg.IsNotNull(url, nameof(url));
 			if (File.Exists(url.AbsolutePath))
 			{
-				stream = File.Open(url.AbsolutePath, FileMode.Open);
+				return File.Open(url.AbsolutePath, FileMode.Open);
 			}
 			else
 			{
-				#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
-				Threading.Tasks.Task<Net.WebResponse> task = request.GetResponseAsync();
-				task.Wait();
-				stream = task.Result.GetResponseStream();
-				#else
-				System.Net.WebRequest request = System.Net.WebRequest.Create(url);
-				stream = request.GetResponse().GetResponseStream();
-				#endif
-			}
-
-			using (stream)
-			{
-				return FileUtil.ReadStream(stream);
+				return request.GetResponse().GetResponseStream();
 			}
 		}
+#endif
+#if !NET40
 
 		/// <summary>
-		/// Creates a byte array, by reading the specified stream.
+		/// Creates a byte array, by reading the response stream of the specified url.
 		/// </summary>
-		/// <param name="stream">The stream.</param>
+		/// <param name="url">The url.</param>
 		/// <returns>A byte array, or null if resulting stream is null</returns>
-		/// <exception cref="ArgumentNullException">If stream is null</exception>
-		/// <exception cref="NotSupportedException">If stream does not support reading</exception>
-		public static byte[] ReadStream(Stream stream)
+		/// <exception cref="ArgumentNullException">If url is null</exception>
+		public static async Task<Stream> ReadStreamAsync(Uri url)
 		{
-			Arg.IsNotNull(stream);
-			MemoryStream memoryStream = stream as MemoryStream;
-			if (memoryStream == null)
+			Arg.IsNotNull(url);
+			
+			if (File.Exists(url.AbsolutePath))
 			{
-				using (memoryStream = new MemoryStream())
-				{
-					stream.CopyTo(memoryStream);
-					return memoryStream.ToArray();
-				}
+				return File.Open(url.AbsolutePath, FileMode.Open);
 			}
 			else
 			{
-				return memoryStream.ToArray();
+				WebRequest request = WebRequest.Create(url);
+				WebResponse response = await request.GetResponseAsync();
+				return response.GetResponseStream();
 			}
 		}
+
+#endif
 
 		/// <summary>
 		/// Calls GetBytes(hexString) in a try catch.
@@ -252,3 +225,4 @@ namespace System.IO
 		#endregion
 	}
 }
+#endif

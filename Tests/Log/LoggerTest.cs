@@ -83,7 +83,7 @@ namespace Adenson.CoreTest.Log
 		{
 			Logger.Settings.Severity = Severity.Debug;
 			int count = handler.Entries.Count;
-			var prf = testLogger.GetProfiler("ProfileTest");
+			var prf = testLogger.Profiler("ProfileTest");
 			Assert.IsNotNull(prf);
 			Assert.AreEqual("ProfileTest", prf.Identifier);
 
@@ -101,9 +101,9 @@ namespace Adenson.CoreTest.Log
 			Assert.AreEqual(++count, handler.Entries.Count);
 			Assert.AreEqual("ProfileTest FINISH", this.Strip(handler.Entries.Last().Message));
 
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(null); });
-			Assert.Throws<ArgumentNullException>(delegate { testLogger.GetProfiler(String.Empty); });
-			Assert.Throws<ArgumentNullException>(() => testLogger.GetProfiler(" "));
+			Assert.Throws<ArgumentNullException>(() => testLogger.Profiler(null));
+			Assert.Throws<ArgumentNullException>(() => testLogger.Profiler(String.Empty));
+			Assert.Throws<ArgumentNullException>(() => testLogger.Profiler(" "));
 		}
 
 		#endregion
@@ -119,22 +119,22 @@ namespace Adenson.CoreTest.Log
 				switch (i)
 				{
 					case 1:
-						testLogger.Debug("This is a {0} message", (Severity)i);
+						testLogger.Debug($"This is a {i} message");
 						break;
 					case 2:
-						testLogger.Debug("This is a {0} message", (Severity)i);
+						testLogger.Debug($"This is a {i} message");
 						break;
 					case 3:
-						testLogger.Info("This is a {0} message", (Severity)i);
+						testLogger.Info($"This is a {i} message");
 						break;
 					case 4:
-						testLogger.Warn("This is a {0} message", (Severity)i);
+						testLogger.Warn($"This is a {i} message");
 						break;
 					case 5:
-						testLogger.Error("This is a {0} message", (Severity)i);
+						testLogger.Error($"This is a {i} message");
 						break;
 					case 6:
-						testLogger.Critical("This is a {0} message", (Severity)i);
+						testLogger.Critical($"This is a {i} message");
 						break;
 				}
 

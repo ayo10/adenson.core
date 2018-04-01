@@ -1,6 +1,5 @@
 using System;
 using System.Configuration;
-using Adenson.Configuration;
 using Adenson.Data;
 using NUnit.Framework;
 
@@ -38,12 +37,6 @@ namespace Adenson.CoreTest.Data
 		public void ConstructorNullStringFailTest()
 		{
 			Assert.That(() => new SqlServerHelper((string)null), Throws.ArgumentNullException);
-		}
-
-		[Test]
-		public void ConstructorNullSettingsTest()
-		{
-			Assert.That(() => new SqlServerHelper((ConnectionStringSettings)null), Throws.ArgumentNullException);
 		}
 
 		#endregion

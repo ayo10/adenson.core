@@ -17,6 +17,8 @@ namespace Adenson.Cryptography
 		/// </summary>
 		AES,
 
+#if !NETSTANDARD1_6 && !NETSTANDARD1_3
+
 		/// <summary>
 		/// Rijndael symmetric encryption.
 		/// </summary>
@@ -26,5 +28,7 @@ namespace Adenson.Cryptography
 		/// Triple Data Encryption Standard algorithm.
 		/// </summary>
 		TripleDES
+
+#endif
 	}
 }

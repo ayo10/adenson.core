@@ -1,3 +1,4 @@
+#if !NETSTANDARD1_6 && !NETSTANDARD1_3 && !NETSTANDARD1_0
 using System;
 using System.Security.Cryptography;
 
@@ -33,3 +34,4 @@ namespace Adenson.Cryptography
 		#endregion
 	}
 }
+#endif

@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Data;
 using Adenson.Data;
-using NUnit.Framework;
 
 namespace Adenson.CoreTests.Data
 {
-
-    public class CustomSqlHelper : SqlHelperBase
+	public class CustomSqlHelper : SqlHelperBase
 	{
-		public override IDbDataAdapter CreateAdapter(IDbCommand command)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override IDbCommand CreateCommand()
 		{
 			throw new NotImplementedException();

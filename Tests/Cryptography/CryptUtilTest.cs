@@ -16,37 +16,6 @@ namespace Adenson.CoreTest.Cryptography
 		#region Tests
 
 		[Test]
-		public void EncryptTest()
-		{
-			string expected = "Test test test test";
-			byte[] value = Encoding.Default.GetBytes(expected);
-			byte[] encrypted = CryptUtil.Encrypt(value, key, iv);
-			byte[] expectedBytes = new byte[] { 206, 167, 175, 90, 108, 117, 232, 113, 162, 237, 185, 245, 125, 51, 5, 72, 10, 201, 121, 183, 96, 136, 202, 124, 175, 225, 88, 162, 61, 99, 126, 116 };
-			string encryptedSting = Encoding.Default.GetString(encrypted);
-			Assert.AreNotEqual(value, encrypted);
-			Assert.AreEqual(expectedBytes, encrypted);
-			Assert.AreNotEqual(expected, encryptedSting);
-
-			byte[] decrypted = CryptUtil.Decrypt(encrypted, key, iv);
-			Assert.AreNotEqual(decrypted, encrypted);
-			Assert.AreEqual(value, decrypted);
-			string decryptedSting = Encoding.Default.GetString(decrypted);
-			Assert.AreEqual(expected, decryptedSting);
-
-			byte[] iv2 = CryptUtil.GenerateRandom(16);
-			byte[] key2 = CryptUtil.GenerateRandom(32);
-			byte[] encrypted2 = CryptUtil.Encrypt(value, key2, iv2);
-			Assert.AreNotEqual(value, encrypted);
-			Assert.AreNotEqual(encrypted2, encrypted, "Different key and iv, different encryption.");
-
-			byte[] decrypted2 = CryptUtil.Decrypt(encrypted2, key2, iv2);
-			Assert.AreNotEqual(decrypted2, encrypted2);
-			Assert.AreEqual(value, decrypted2);
-			decryptedSting = Encoding.Default.GetString(decrypted2);
-			Assert.AreEqual(expected, decryptedSting);
-		}
-
-		[Test]
 		public void EncryptAESTest()
 		{
 			string expected = "Test test test test";

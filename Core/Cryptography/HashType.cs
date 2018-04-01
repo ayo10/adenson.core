@@ -37,10 +37,12 @@ namespace Adenson.Cryptography
 		/// </summary>
 		SHA512,
 
+#if !NETSTANDARD1_3
 		/// <summary>
 		/// Computes a hash using the RACE Integrity Primitives Evaluation Message Digest 160.
 		/// </summary>
 		RIPEMD160,
+#endif
 
 		/// <summary>
 		/// Computes a Message Authentication Code (MAC) using TripleDES.

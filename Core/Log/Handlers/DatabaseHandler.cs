@@ -1,3 +1,4 @@
+#if !NETSTANDARD1_0
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -11,64 +12,32 @@ namespace Adenson.Log
 	/// </summary>
 	public class DatabaseHandler : BaseHandler
 	{
-		#region Variables
-		private const string InsertStatementFullText = "INSERT INTO {0} ({1}, {2}, {3}, {4}) VALUES (@{1}, @{2}, @{3}, @{4})";
-		private const string InsertStatementFlatText = "INSERT INTO {0} ({1}) VALUES (@{1})";
-		private bool simple;
+		#region Fields
+		private SqlHelperBase sql; 
 		#endregion
 		#region Constructor
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
 		/// </summary>
-		public DatabaseHandler() : base()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
-		/// </summary>
-		/// <param name="connectionStringOrKey">The connection string (or the connection configuration key).</param>
+		/// <param name="sql">The <see cref="SqlHelperBase"/> to use.</param>
 		/// <param name="tableName">The database table name.</param>
-		/// <param name="messageColumn">The message column.</param>
-		public DatabaseHandler(string connectionStringOrKey, string tableName, string messageColumn) : base()
-		{
-			this.Connection = Arg.IsNotNull(connectionStringOrKey);
-			this.TableName = Arg.IsNotNull(tableName);
-			this.MessageColumn = Arg.IsNotNull(messageColumn);
-			simple = true;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DatabaseHandler"/> class.
-		/// </summary>
-		/// <param name="connectionStringOrKey">The connection string (or the connection configuration key).</param>
-		/// <param name="tableName">The database table name.</param>
-		/// <param name="severityColumn">The severity column name.</param>
 		/// <param name="dateColumn">The date column.</param>
 		/// <param name="typeColumn">The type column.</param>
+		/// <param name="severityColumn">The severity column name.</param>
 		/// <param name="messageColumn">The message column.</param>
-		public DatabaseHandler(string connectionStringOrKey, string tableName, string severityColumn, string dateColumn, string typeColumn, string messageColumn) : base()
+		public DatabaseHandler(SqlHelperBase sql, string tableName, string dateColumn, string typeColumn, string severityColumn, string messageColumn)
 		{
-			this.Connection = Arg.IsNotNull(connectionStringOrKey);
-			this.TableName = Arg.IsNotNull(tableName);
-			this.SeverityColumn = Arg.IsNotNull(severityColumn);
-			this.DateColumn = Arg.IsNotNull(dateColumn);
-			this.TypeColumn = Arg.IsNotNull(typeColumn);
-			this.MessageColumn = Arg.IsNotNull(messageColumn);
+			this.sql = Arg.IsNotNull(sql, nameof(sql));
+			this.TableName = Arg.IsNotNull(tableName, nameof(tableName));
+			this.SeverityColumn = Arg.IsNotNull(severityColumn, nameof(tableName));
+			this.DateColumn = Arg.IsNotNull(dateColumn, nameof(tableName));
+			this.TypeColumn = Arg.IsNotNull(typeColumn, nameof(tableName));
+			this.MessageColumn = Arg.IsNotNull(messageColumn, nameof(tableName));
 		}
 
 		#endregion
 		#region Properties
-
-		/// <summary>
-		/// Gets the database connection (string or configuration name).
-		/// </summary>
-		public string Connection
-		{
-			get;
-			private set;
-		}
 
 		/// <summary>
 		/// Gets the table name.
@@ -128,40 +97,29 @@ namespace Adenson.Log
 		public override bool Write(LogEntry entry)
 		{
 			Arg.IsNotNull(entry);
-			using (SqlHelperBase sqlHelper = SqlHelperProvider.Create(this.Connection))
+			try
 			{
-				try
+				using (IDbCommand command = sql.CreateCommand())
 				{
-					using (IDbCommand command = sqlHelper.CreateCommand())
-					{
-						if (simple)
-						{
-							command.CommandText = StringUtil.Format(DatabaseHandler.InsertStatementFlatText, this.TableName, this.MessageColumn);
-							command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.ToString()));
-						}
-						else
-						{
-							command.CommandText = StringUtil.Format(DatabaseHandler.InsertStatementFullText, this.TableName, this.SeverityColumn, this.TypeColumn, this.MessageColumn, this.DateColumn);
-							command.Parameters.Add(sqlHelper.CreateParameter(this.SeverityColumn, entry.Severity.ToString()));
-							command.Parameters.Add(sqlHelper.CreateParameter(this.TypeColumn, entry.TypeName));
-							command.Parameters.Add(sqlHelper.CreateParameter(this.MessageColumn, entry.Message));
-							command.Parameters.Add(sqlHelper.CreateParameter(this.DateColumn, entry.Date));
-						}
-						
-						sqlHelper.ExecuteNonQuery(command);
-					}
-				}
-				catch (Exception ex)
-				{
-					Debug.WriteLine("Unable to log to DB");
-					Debug.WriteLine(StringUtil.ToString(ex));
-					return false;
+					command.CommandText = $@"INSERT INTO {this.TableName} ({this.DateColumn}, {this.SeverityColumn}, {this.TypeColumn}, {this.MessageColumn}) VALUES (@p0, @p1, @p2, @p3)";
+					command.Parameters.Add(sql.CreateParameter("p0", entry.Date));
+					command.Parameters.Add(sql.CreateParameter("p1", entry.Severity.ToString()));
+					command.Parameters.Add(sql.CreateParameter("p2", entry.TypeName));
+					command.Parameters.Add(sql.CreateParameter("p3", entry.Message));
+					sql.ExecuteNonQuery(command);
 				}
 
 				return true;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("Unable to log to DB");
+				Debug.WriteLine(StringUtil.ToString(ex));
+				return false;
 			}
 		}
 
 		#endregion
 	}
 }
+#endif

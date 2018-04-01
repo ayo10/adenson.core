@@ -18,7 +18,7 @@ namespace Adenson.CoreTest.System
 
 			Assert.IsTrue(File.Exists(actual));
 			Assert.AreEqual(filePath, actual);
-			byte[] bytes = FileUtil.ReadStream(filePath);
+			byte[] bytes = FileUtil.ReadStream(new Uri(filePath)).ToBytes();
 			buffer.SequenceEqual(bytes);
 		}
 
@@ -63,33 +63,6 @@ namespace Adenson.CoreTest.System
 
 			Uri url = new Uri(path);
 			Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(url));
-		}
-
-		[Test]
-		public void ReadStreamTest2()
-		{
-			string path = Path.GetTempFileName();
-			using (var s = File.CreateText(path))
-			{
-				s.WriteLine("a");
-			}
-
-			using (var stream = File.OpenRead(path))
-			{
-				Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(stream));
-			}
-		}
-
-		[Test]
-		public void ReadStreamTest3()
-		{
-			string filePath = Path.GetTempFileName();
-			using (var stream = File.CreateText(filePath))
-			{
-				stream.WriteLine("a");
-			}
-
-			Assert.AreEqual(new byte[] { 97, 13, 10 }, FileUtil.ReadStream(filePath));
 		}
 
 		[Test]

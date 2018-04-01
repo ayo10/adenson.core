@@ -1,3 +1,4 @@
+#if !NETSTANDARD1_0
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -34,3 +35,4 @@ namespace Adenson.Cryptography
 		#endregion
 	}
 }
+#endif

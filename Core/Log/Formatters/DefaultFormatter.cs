@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 
 namespace Adenson.Log
 {
@@ -10,9 +7,6 @@ namespace Adenson.Log
 	/// </summary>
 	public class DefaultFormatter : BaseFormatter
 	{
-		#region Variables
-		private static string format = DefaultFormatter.GetDefaultFormat();
-		#endregion
 		#region Methods
 
 		/// <summary>
@@ -23,16 +17,7 @@ namespace Adenson.Log
 		public override string Format(LogEntry entry)
 		{
 			Arg.IsNotNull(entry, "entry");
-			return StringUtil.Format(format, "[" + entry.Severity.ToString().ToUpperInvariant() + "]", entry.Date, entry.TypeName, this.ToString(entry.Message));
-		}
-
-		private static string GetDefaultFormat()
-		{
-			return "{Date:H:mm:ss.fff} {Severity,-8} {TypeName,-10} {Message}"
-									.Replace("{Severity", "{0")
-									.Replace("{Date", "{1")
-									.Replace("{TypeName", "{2")
-									.Replace("{Message", "{3");
+			return $"{entry.Date:H:mm:ss.fff} {entry.Severity.ToString().Substring(0, 1)}] {entry.TypeName} {this.ToString(entry.Message)}";
 		}
 
 		#endregion

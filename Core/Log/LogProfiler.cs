@@ -23,7 +23,6 @@ namespace Adenson.Log
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
-			this.Write(Severity.Profile, SR.ProfilerStart);
 		}
 
 		#endregion
@@ -99,6 +98,11 @@ namespace Adenson.Log
 			private set;
 		}
 
+		/// <summary>
+		/// Gets a predicate that is invoked when the profilfer is disposed.
+		/// </summary>
+		public Action Disposed { get; internal set; }
+
 		private DateTime Start
 		{
 			get;
@@ -112,12 +116,11 @@ namespace Adenson.Log
 		/// Called to log errors of type Debug.
 		/// </summary>
 		/// <param name="message">Message to log.</param>
-		/// <param name="arguments">Arguments, if any to format message.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG")]
-		public void Debug(string message, params object[] arguments)
+		public void Debug(string message)
 		{
-			this.Write(Severity.Profile, message, arguments);
+			this.Write(Severity.Profile, message);
 		}
 
 		/// <summary>
@@ -125,8 +128,7 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
-			this.Write(Severity.Profile, SR.ProfilerStop);
-			this.Parent.ProfilerStop(this.Uid);
+			this.Disposed?.Invoke();
 			this.IsDisposed = true;
 		}
 
@@ -149,9 +151,9 @@ namespace Adenson.Log
 			return marker;
 		}
 
-		private void Write(Severity severity, string message, params object[] arguments)
+		private void Write(Severity severity, string message)
 		{
-			this.Parent.Write(severity, "[{0}s] {1} {2}", Logger.Round(this.Elapsed.TotalSeconds), this.Identifier, message == null ? String.Empty : StringUtil.Format(message, arguments));
+			this.Parent.Write(severity, $"[{Logger.Round(this.Elapsed.TotalSeconds)}] {this.Identifier} {message}");
 		}
 
 		#endregion

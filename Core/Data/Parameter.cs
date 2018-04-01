@@ -1,3 +1,4 @@
+#if !NETSTANDARD1_0
 using System;
 using System.Data;
 using System.Diagnostics;
@@ -114,3 +115,4 @@ namespace Adenson.Data
 		#endregion
 	}
 }
+#endif

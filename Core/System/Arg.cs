@@ -13,9 +13,9 @@ namespace System
 	/// Borrowed/Stolen/Hijacked/Hoodwinkled/Hinted (mostly) from MS.
 	/// </summary>
 	[DebuggerStepThrough]
-	#if !NET35 && !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3
+#if !NET35 && !NETSTANDARD1_6 && !NETSTANDARD1_5 && !NETSTANDARD1_3 && !NETSTANDARD1_0
 	[ExcludeFromCodeCoverage]
-	#endif
+#endif
 	public static class Arg
 	{
 		#region Methods
@@ -43,12 +43,12 @@ namespace System
 		public static void IsAssignableFrom<T>(Type value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
-			#if NETSTANDARD1_6 || NETSTANDARD1_5
-			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
-			#elif NETSTANDARD1_3
-			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetTypeInfo()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
-			#else
-			Arg.ThrowIfNot<ArgumentException>(typeof(T).IsAssignableFrom(value), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.FullName, typeof(T).FullName));
+#if NETSTANDARD1_6
+			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value), parameterName, $"'{value.FullName}' is not an instance of '{typeof(T).FullName}'.");
+#elif NETSTANDARD1_3 || NETSTANDARD1_0
+			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetTypeInfo()), parameterName, $"'{value.FullName}' is not an instance of '{typeof(T).FullName}'.");
+#else
+			Arg.ThrowIfNot<ArgumentException>(typeof(T).IsAssignableFrom(value), parameterName, $"'{value.FullName}' is not an instance of '{typeof(T).FullName}'.");
 #endif
 		}
 
@@ -76,13 +76,13 @@ namespace System
 		public static T IsInstanceOf<T>([ValidatedNotNull]object value, string parameterName)
 		{
 			Arg.IsNotNull(value, parameterName);
-			#if NETSTANDARD1_6 || NETSTANDARD1_5
+#if NETSTANDARD1_6
 			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
-			#elif NETSTANDARD1_3
+#elif NETSTANDARD1_4 || NETSTANDARD1_3 || NETSTANDARD1_0
 			Arg.ThrowIfNot<ArgumentException>(typeof(T).GetTypeInfo().IsAssignableFrom(value.GetType().GetTypeInfo()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
-			#else
+#else
 			Arg.ThrowIfNot<ArgumentException>(typeof(T).IsAssignableFrom(value.GetType()), parameterName, String.Format("The specified type '{0}' is not an instance of '{1}'.", value.GetType().FullName, typeof(T).FullName));
-			#endif
+#endif
 			return (T)value;
 		}
 
@@ -133,7 +133,7 @@ namespace System
 		/// <returns>The value if its not empty.</returns>
 		public static string IsNotEmpty([ValidatedNotNull]string value, string parameterName)
 		{
-			Arg.ThrowIfNot<ArgumentNullException>(!StringUtil.IsNullOrWhiteSpace(value), parameterName);
+			Arg.ThrowIfNot<ArgumentNullException>(!String.IsNullOrWhiteSpace(value), parameterName);
 			return value;
 		}
 
@@ -212,7 +212,6 @@ namespace System
 		/// <returns>The value of it meets the specified condition.</returns>
 		public static T IsValid<T>(T value, Func<T, bool> condition, string parameterName)
 		{
-			Arg.IsNotNull(condition, "condition");
 			Arg.ThrowIfNot<ArgumentException>(condition(value), parameterName);
 			return value;
 		}

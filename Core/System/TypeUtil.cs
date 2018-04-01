@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -15,9 +16,9 @@ namespace System
 	public static partial class TypeUtil
 	{
 		#region Variables
-		#if !NETSTANDARD1_3
+#if !NETSTANDARD1_3 && !NETSTANDARD1_0
 		private static Dictionary<Type, PropertyDescriptorCollection> typeDescriptorCache = new Dictionary<Type, PropertyDescriptorCollection>();
-		#endif
+#endif
 		private static Dictionary<Type, string> typeAliases = new Dictionary<Type, string>()
 		{
 			{ typeof(byte), "byte" },
@@ -66,6 +67,8 @@ namespace System
 		};
 		#endregion
 		#region Methods
+
+#if !NETSTANDARD1_0
 
 		/// <summary>
 		/// Converts the specified value to the specified type.
@@ -124,15 +127,7 @@ namespace System
 			throw new NotSupportedException();
 		}
 
-		/// <summary>
-		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter.
-		/// </summary>
-		/// <typeparam name="T">The type of instance to return</typeparam>
-		/// <returns>Created instance</returns>
-		public static T CreateInstance<T>()
-		{
-			return Activator.CreateInstance<T>();
-		}
+#endif
 
 		/// <summary>
 		/// Creates an instance of the type whose name is specified, using the named assembly and default constructor, and casts it to specified generic type parameter.
@@ -144,7 +139,7 @@ namespace System
 		public static T CreateInstance<T>(string typeName)
 		{
 			Arg.IsNotEmpty(typeName);
-			Type type = Arg.IsNotNull(TypeUtil.GetType(typeName), StringUtil.Format(Adenson.Exceptions.TypeArgCouldNotBeLoaded, typeName));
+			Type type = Arg.IsNotNull(TypeUtil.GetType(typeName), $"Type '{typeName}' could not be loaded.");
 			return TypeUtil.CreateInstance<T>(type);
 		}
 
@@ -190,26 +185,213 @@ namespace System
 			{
 				return typeAliases[type];
 			}
-			#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
+#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_4 || NETSTANDARD1_3 || NETSTANDARD1_0
 			else if (type.GetTypeInfo().IsGenericType)
 			{
-				#if NETSTANDARD1_6 || NETSTANDARD1_5
+#if NETSTANDARD1_6 || NETSTANDARD1_5
 				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetTypeInfo().GetGenericArguments().Select(t => GetName(t)).ToArray()));
-				#else
+#else
 				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetTypeInfo().GetGenericParameterConstraints().Select(t => TypeUtil.GetName(t)).ToArray()));
-				#endif
+#endif
 			}
-			#else
+#else
 			else if (type.IsGenericType)
 			{
 				return String.Format("{0}<{1}>", type.Name.Split('`')[0], String.Join(",", type.GetGenericArguments().Select(t => GetName(t)).ToArray()));
 			}
-			#endif
+#endif
 
 			return type.Name;
 		}
 
-		#if !NETSTANDARD1_3
+		/// <summary>
+		/// Gets the <see cref="Type"/> with the specified name.
+		/// </summary>
+		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
+		/// <returns>The type with the specified name, and if not found, returns null.</returns>
+		/// <exception cref="ArgumentNullException"><paramref name="typeDescription"/> is null.</exception>
+		public static Type GetType(string typeDescription)
+		{
+			return TypeUtil.GetType(typeDescription, false);
+		}
+
+		/// <summary>
+		/// Gets the System.Type with the specified name.
+		/// </summary>
+		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
+		/// <param name="throwOnError">True to throw an exception if the type cannot be found; false to return null.</param>
+		/// <returns>The type with the specified description.</returns>
+		/// <exception cref="ArgumentNullException">Argument <paramref name="typeDescription"/> is null.</exception>
+		/// <exception cref="System.Reflection.TargetInvocationException">A class initializer is invoked and throws an exception.</exception>
+		/// <exception cref="TypeLoadException">Argument <paramref name="throwOnError"/> is true and the type is not found.  -or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> contains invalid characters, such as an embedded tab. -or- <paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> is an empty string.	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> represents an array type with an invalid size. -or-<paramref name="typeDescription"/> represents an array of <see cref="TypedReference"/>.</exception>
+		/// <exception cref="ArgumentException">throwOnError is true and typeName contains invalid syntax.</exception>
+		/// <exception cref="System.IO.FileNotFoundException"><paramref name="throwOnError"/> is true and the assembly or one of its dependencies was not found.</exception>
+		/// <exception cref="System.IO.FileLoadException">The assembly or one of its dependencies was found, but could not be loaded.</exception>
+		/// <exception cref="BadImageFormatException">The assembly or one of its dependencies is not valid.</exception>
+		public static Type GetType(string typeDescription, bool throwOnError)
+		{
+			Arg.IsNotEmpty(typeDescription, nameof(typeDescription));
+#if !NETSTANDARD1_0
+			Type type = Type.GetType(typeDescription, throwOnError, true);
+#else
+			Type type = Type.GetType(typeDescription, throwOnError);
+#endif
+			if (type == null)
+			{
+				string[] splits = typeDescription.Split(';');
+				if (splits.Length >= 2)
+				{
+					string assemblyName = splits[0].Trim();
+					string typeName = splits[1].Trim();
+#if !NETSTANDARD1_0
+					type = Type.GetType($"{typeName}, {assemblyName}", throwOnError, true);
+#else
+					type = Type.GetType($"{typeName}, {assemblyName}", throwOnError);
+#endif
+				}
+			}
+
+			return type;
+		}
+
+#if !NETSTANDARD1_0
+
+		/// <summary>
+		/// Tries to convert the specified value.
+		/// </summary>
+		/// <typeparam name="T">The type of the object we need to convert.</typeparam>
+		/// <param name="value">The value to convert.</param>
+		/// <param name="result">The output of the result.</param>
+		/// <returns>Returns true if conversion happened correctly, false otherwise.</returns>
+		public static bool TryConvert<T>(object value, out T result)
+		{
+			object output;
+			var converted = TypeUtil.TryConvert(typeof(T), value, out output);
+			if (converted)
+			{
+				result = (T)output;
+			}
+			else
+			{
+				result = default(T);
+			}
+
+			return converted;
+		}
+
+		/// <summary>
+		/// Tries to convert the specified value.
+		/// </summary>
+		/// <param name="type">The type of the object we need to convert.</param>
+		/// <param name="value">The value to convert.</param>
+		/// <param name="output">The output of the conversion.</param>
+		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
+		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "It is not all instances that you can use generics.")]
+		public static bool TryConvert(Type type, object value, out object output)
+		{
+			output = null;
+			try
+			{
+				output = TypeUtil.Convert(type, value);
+				return true;
+			}
+			catch (ArgumentException)
+			{
+				return false;
+			}
+			catch (OverflowException)
+			{
+				return false;
+			}
+			catch (NotSupportedException)
+			{
+				return false;
+			}
+		}
+
+#endif
+#if NET40 || NET45
+
+		/// <summary>
+		/// Finds all types in the current domain where <paramref name="type"/> is assignable from (or implements) (but not equal to) (ie. type.IsAssignableFrom(t) via <see cref="Type.IsAssignableFrom(Type)"/>).
+		/// </summary>
+		/// <param name="type">The type to find.</param>
+		/// <returns>An enumerable list of types found.</returns>
+		/// <exception cref="ArgumentNullException">If <paramref name="type"/> is null.</exception>
+		public static IEnumerable<Type> FindAssignableFrom(Type type)
+		{
+			Arg.IsNotNull(type);
+			return AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes().Where(t => type != t && type.IsAssignableFrom(t)));
+		}
+
+		/// <summary>
+		/// Finds one or more assemblies that reference one or more assemblies name starts with the specified partial name in the current app domain directory.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <exception cref="ArgumentNullException">If <paramref name="partialAssemblyName"/> is null.</exception>
+		/// <returns>A list of found assemblies.</returns>
+		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName)
+		{
+			return TypeUtil.FindReferencingAssemblies(partialAssemblyName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath));
+		}
+
+		/// <summary>
+		/// Finds one or more assemblies that reference one or more assemblies name starts with the specified partial name in the specified directory (uses reflection only load).
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <param name="directory">The directory look for files.</param>
+		/// <returns>List of found assemblies.</returns>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> or <paramref name="directory"/> is null.</exception>
+		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
+		public static IEnumerable<Assembly> FindReferencingAssemblies(string partialAssemblyName, string directory)
+		{
+			foreach (string file in Directory.GetFiles(directory, "*.dll").Union(Directory.GetFiles(directory, "*.exe")))
+			{
+				Assembly assembly = null;
+				try
+				{
+					assembly = Assembly.ReflectionOnlyLoadFrom(file);
+				}
+				catch (BadImageFormatException)
+				{
+				}
+
+				if (assembly != null && assembly.GetReferencedAssemblies().Any(a => a.Name.StartsWith(partialAssemblyName)))
+				{
+					yield return assembly;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Loads one or more assemblies that reference one or more assemblies name starts with the specified partial name in the current <see cref="AppDomain.BaseDirectory"/> and <see cref="AppDomain.RelativeSearchPath"/>.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> is null.</exception>
+		public static void LoadReferencingAssemblies(string partialAssemblyName)
+		{
+			TypeUtil.LoadReferencingAssemblies(partialAssemblyName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppDomain.CurrentDomain.RelativeSearchPath));
+		}
+
+		/// <summary>
+		/// Loads one or more assemblies that reference one or more assemblies name starts with the specified partial name.
+		/// </summary>
+		/// <param name="partialAssemblyName">The name the assembly starts with.</param>
+		/// <param name="directory">The directory look for files.</param>
+		/// <exception cref="ArgumentNullException">If either <paramref name="partialAssemblyName"/> or <paramref name="directory"/> is null.</exception>
+		/// <exception cref="DirectoryNotFoundException">If <paramref name="directory"/> does not exist.</exception>
+		public static void LoadReferencingAssemblies(string partialAssemblyName, string directory)
+		{
+			var names = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName()).ToList();
+			foreach (Assembly assembly in TypeUtil.FindReferencingAssemblies(partialAssemblyName, directory))
+			{
+				var name = assembly.GetName();
+				if (!names.Contains(name))
+				{
+					Assembly.Load(name);
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets a <see cref="System.ComponentModel.PropertyDescriptor"/> from object using the passed property name.
@@ -284,11 +466,11 @@ namespace System
 						for (int i = 1; i < splits.Length; i++)
 						{
 							indexName = splits[i].TrimEnd(']').Replace("'", String.Empty).Replace("\"", String.Empty);
-							#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
+#if NETSTANDARD1_6 || NETSTANDARD1_5 || NETSTANDARD1_3
 							PropertyInfo pi = item.GetType().GetTypeInfo().GetProperty("Item");
-							#else
+#else
 							PropertyInfo pi = item.GetType().GetProperty("Item");
-							#endif
+#endif
 							if (pi != null)
 							{
 								ParameterInfo[] parms = pi.GetIndexParameters();
@@ -301,7 +483,7 @@ namespace System
 					}
 				}
 
-				throw new NotImplementedException(Adenson.Exceptions.NoSupportNonSingleParameterArrayedObjects);
+				throw new NotImplementedException("Retrieving property values using reflection for more than one arrayed object is not supported.");
 			}
 			else
 			{
@@ -313,7 +495,7 @@ namespace System
 				}
 			}
 
-			throw new ArgumentException(StringUtil.Format(Adenson.Exceptions.PropertyOrFieldNotFound, propertyName));
+			throw new ArgumentException($"A field or property with the name '{propertyName}' was not found on the provided data item.");
 		}
 
 		/// <summary>
@@ -346,111 +528,12 @@ namespace System
 			return list.ToArray();
 		}
 
-		#endif
-
-		/// <summary>
-		/// Gets the <see cref="Type"/> with the specified name.
-		/// </summary>
-		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
-		/// <returns>The type with the specified name, and if not found, returns null.</returns>
-		/// <exception cref="ArgumentNullException"><paramref name="typeDescription"/> is null.</exception>
-		public static Type GetType(string typeDescription)
-		{
-			return TypeUtil.GetType(typeDescription, false);
-		}
-
-		/// <summary>
-		/// Gets the System.Type with the specified name.
-		/// </summary>
-		/// <param name="typeDescription">The assembly-qualified name of the type to get.</param>
-		/// <param name="throwOnError">True to throw an exception if the type cannot be found; false to return null.</param>
-		/// <returns>The type with the specified description.</returns>
-		/// <exception cref="ArgumentNullException">Argument <paramref name="typeDescription"/> is null.</exception>
-		/// <exception cref="System.Reflection.TargetInvocationException">A class initializer is invoked and throws an exception.</exception>
-		/// <exception cref="TypeLoadException">Argument <paramref name="throwOnError"/> is true and the type is not found.  -or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> contains invalid characters, such as an embedded tab. -or- <paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> is an empty string.	-or-<paramref name="throwOnError"/> is true and <paramref name="typeDescription"/> represents an array type with an invalid size. -or-<paramref name="typeDescription"/> represents an array of <see cref="TypedReference"/>.</exception>
-		/// <exception cref="ArgumentException">throwOnError is true and typeName contains invalid syntax.</exception>
-		/// <exception cref="System.IO.FileNotFoundException"><paramref name="throwOnError"/> is true and the assembly or one of its dependencies was not found.</exception>
-		/// <exception cref="System.IO.FileLoadException">The assembly or one of its dependencies was found, but could not be loaded.</exception>
-		/// <exception cref="BadImageFormatException">The assembly or one of its dependencies is not valid.</exception>
-		public static Type GetType(string typeDescription, bool throwOnError)
-		{
-			if (String.IsNullOrEmpty(typeDescription))
-			{
-				throw new ArgumentNullException("typeDescription");
-			}
-
-			Type type = Type.GetType(typeDescription, throwOnError, true);
-			if (type == null)
-			{
-				string[] splits = typeDescription.Split(';');
-				if (splits.Length >= 2)
-				{
-					string assemblyName = splits[0].Trim();
-					string typeName = splits[1].Trim();
-
-					type = Type.GetType(typeName + ", " + assemblyName, throwOnError, true);
-				}
-			}
-
-			return type;
-		}
-
-		/// <summary>
-		/// Tries to convert the specified value.
-		/// </summary>
-		/// <typeparam name="T">The type of the object we need to convert.</typeparam>
-		/// <param name="value">The value to convert.</param>
-		/// <param name="result">The output of the result.</param>
-		/// <returns>Returns true if conversion happened correctly, false otherwise.</returns>
-		public static bool TryConvert<T>(object value, out T result)
-		{
-			object output;
-			var converted = TypeUtil.TryConvert(typeof(T), value, out output);
-			if (converted)
-			{
-				result = (T)output;
-			}
-			else
-			{
-				result = default(T);
-			}
-
-			return converted;
-		}
-
-		/// <summary>
-		/// Tries to convert the specified value.
-		/// </summary>
-		/// <param name="type">The type of the object we need to convert.</param>
-		/// <param name="value">The value to convert.</param>
-		/// <param name="output">The output of the conversion.</param>
-		/// <returns>Returns true if conversion happened correctly, false otherwise</returns>
-		[SuppressMessage("Microsoft.Design", "CA1007:UseGenericsWhereAppropriate", Justification = "It is not all instances that you can use generics.")]
-		public static bool TryConvert(Type type, object value, out object output)
-		{
-			output = null;
-			try
-			{
-				output = TypeUtil.Convert(type, value);
-				return true;
-			}
-			catch (ArgumentException)
-			{
-				return false;
-			}
-			catch (OverflowException)
-			{
-				return false;
-			}
-			catch (NotSupportedException)
-			{
-				return false;
-			}
-		}
+#endif
+#if !NETSTANDARD1_0
 
 		private static bool TryConvert(TypeConverter typeConverter, object value, out object result)
 		{
-			#if NETSTANDARD1_3
+#if NETSTANDARD1_4 || NETSTANDARD1_3
 			try
 			{
 				result = typeConverter.ConvertFrom(value);
@@ -459,19 +542,20 @@ namespace System
 			catch
 			{
 			}
-			#else
+#else
 			if (typeConverter.IsValid(value))
 			{
 				result = typeConverter.ConvertFrom(value);
 				return true;
 			}
-			#endif
+#endif
 
 			result = null;
 			return false;
 		}
 
-		#if !NETSTANDARD1_3
+#endif
+#if !NETSTANDARD1_3 && !NETSTANDARD1_0
 
 		private static PropertyDescriptor GetPropertyDescriptor(object item, string propertyName, out object source)
 		{
@@ -513,8 +597,8 @@ namespace System
 			return typeDescriptorCache[type];
 		}
 
-		#endif
+#endif
 
-		#endregion
+#endregion
 	}
 }
