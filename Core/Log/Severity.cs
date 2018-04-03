@@ -18,28 +18,23 @@ namespace Adenson.Log
 		Debug = 1,
 
 		/// <summary>
-		/// All messages are logged, but meant to be used by LogProfiler.
-		/// </summary>
-		Profile = 2,
-
-		/// <summary>
 		/// Only messages called with <see cref="Warn"/>, <see cref="Warn"/>, <see cref="Error"/> and <see cref="Critical"/> are logged (in this case, all messages).
 		/// </summary>
-		Info = 3,
+		Info = 2,
 
 		/// <summary>
 		/// Only messages called with <see cref="Warn"/>, <see cref="Error"/> and <see cref="Critical"/> are logged.
 		/// </summary>
-		Warn = 4,
+		Warn = 3,
 
 		/// <summary>
 		/// Only messages called with <see cref="Error"/> and <see cref="Critical"/> are logged.
 		/// </summary>
-		Error = 5,
+		Error = 4,
 
 		/// <summary>
 		/// Only messages called with <see cref="Critical"/> are logged.
 		/// </summary>
-		Critical = 6,
+		Critical = 5,
 	}
 }

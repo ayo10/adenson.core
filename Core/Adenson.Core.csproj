@@ -9,7 +9,7 @@
 		<RepositoryType>private</RepositoryType>
 		<PackageTags>utilities; helpers</PackageTags>
 		<CodeAnalysisRuleSet>..\ruleset.ruleset</CodeAnalysisRuleSet>
-		<Version>2.0.0.2-beta</Version>
+		<Version>2.0.0.3-beta</Version>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net45|AnyCPU'">
 		<DocumentationFile>bin\Debug\net45\Adenson.Core.xml</DocumentationFile>

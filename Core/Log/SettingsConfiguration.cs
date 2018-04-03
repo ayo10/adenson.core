@@ -35,10 +35,10 @@ namespace Adenson.Log
 		/// <summary>
 		/// Gets the format name.
 		/// </summary>
-		[ConfigurationProperty("secondsFormat", DefaultValue = "0.00")]
-		public string SecondsFormat
+		[ConfigurationProperty("round", DefaultValue = 4)]
+		public int Round
 		{
-			get { return (string)this["secondsFormat"]; }
+			get { return (int)this["round"]; }
 		}
 
 		/// <summary>

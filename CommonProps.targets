@@ -11,4 +11,8 @@
 	<PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
 		<DefineConstants>NETSTANDARD</DefineConstants>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<IncludeSource>True</IncludeSource>
+		<IncludeSymbols>True</IncludeSymbols>
+	</PropertyGroup>
 </Project>

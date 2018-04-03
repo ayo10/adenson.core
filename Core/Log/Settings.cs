@@ -28,7 +28,7 @@ namespace Adenson.Log
 			this.Handlers = new HandlerCollection(this);
 			this.Formatter = new DefaultFormatter();
 			this.Severity = Severity.Error;
-			this.SecondsFormat = "N3";
+			this.Round = 2;
 		}
 
 		#endregion
@@ -69,9 +69,9 @@ namespace Adenson.Log
 		}
 
 		/// <summary>
-		/// Gets or sets the formatting to use for profiler seconds measurement, defaults to '0.000000'.
+		/// Gets or sets the formatting to use for profiler time measurement, defaults to 4.
 		/// </summary>
-		public string SecondsFormat
+		public int Round
 		{
 			get;
 			set;
@@ -150,8 +150,8 @@ namespace Adenson.Log
 						case "formatter":
 							settings.Formatter = TypeUtil.CreateInstance<BaseFormatter>(value);
 							break;
-						case "secondsformat":
-							settings.SecondsFormat = value;
+						case "round":
+							settings.Round = Int32.Parse(value);
 							break;
 						case "severity":
 							settings.Severity = (Severity)Enum.Parse(typeof(Severity), value);
@@ -170,14 +170,13 @@ namespace Adenson.Log
 		/// <returns>Created settings object if any, null otherwise.</returns>
 		public static Settings FromConfigSection(string sectionName)
 		{
-			SettingsConfiguration config = ConfigurationManager.GetSection(sectionName) as SettingsConfiguration;
 			Settings settings = null;
-			if (config != null)
+			if (ConfigurationManager.GetSection(sectionName) is SettingsConfiguration config)
 			{
 				settings = new Settings
 				{
 					Severity = config.Severity,
-					SecondsFormat = config.SecondsFormat,
+					Round = config.Round,
 					Formatter = String.IsNullOrEmpty(config.Formatter) ? new DefaultFormatter() : TypeUtil.CreateInstance<BaseFormatter>(config.Formatter),
 				};
 				HandlerElement.Load(settings, config.Handlers.Cast<HandlerElement>());

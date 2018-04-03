@@ -10,16 +10,16 @@ namespace Adenson.Log
 	public sealed class LogMarker : IDisposable
 	{
 		#region Variables
-		private List<Tuple<double, string>> marks = new List<Tuple<double, string>>();
-		private TimeSpan? lastmark;
+		private List<Tuple<long, string>> marks = new List<Tuple<long, string>>();
 		private LogProfiler _profiler;
+		private long lastTick;
 		#endregion
 		#region Constructor
 
 		internal LogMarker(LogProfiler profiler)
 		{
 			_profiler = profiler;
-			lastmark = DateTime.Now.TimeOfDay;
+			lastTick = profiler.Stopwatch.ElapsedTicks;
 		}
 
 		#endregion
@@ -41,10 +41,11 @@ namespace Adenson.Log
 		/// <param name="message">A message to display.</param>
 		public void Mark(string message)
 		{
-			double key = DateTime.Now.TimeOfDay.Subtract(lastmark.Value).TotalSeconds;
-			Tuple<double, string> kv = new Tuple<double, string>(key, message);
+			long last = _profiler.Stopwatch.ElapsedTicks;
+			long key = last - lastTick;
+			Tuple<long, string> kv = new Tuple<long, string>(key, message);
 			marks.Add(kv);
-			lastmark = DateTime.Now.TimeOfDay;
+			lastTick = last;
 		}
 
 		/// <summary>
@@ -55,16 +56,16 @@ namespace Adenson.Log
 			if (marks.Count > 0)
 			{
 				var e = marks.Select(s => s.Item1).OrderBy(s => s).ToList();
-				double avg = e.Average();
-				double min = e.First();
-				double max = e.Last();
-				string ns = marks.Where(k => k.Item1 == min).First().Item2;
-				string xs = marks.Where(k => k.Item1 == max).First().Item2;
+				long avg = (long)e.Average();
+				long first = e.First();
+				long last = e.Last();
+				string ns = marks.Where(k => k.Item1 == first).First().Item2;
+				string xs = marks.Where(k => k.Item1 == last).First().Item2;
 				_profiler.Debug("Markers:");
 				_profiler.Debug($"  Count: {marks.Count}");
-				_profiler.Debug($"  Avg: {Logger.Round(avg)}");
-				_profiler.Debug($"  Max: {Logger.Round(max)}, {ns ?? "--"}");
-				_profiler.Debug($"  Min: {Logger.Round(min)}, {xs ?? "--"}");
+				_profiler.Debug($"  Avg: {Logger.Round(TimeSpan.FromTicks(avg))}");
+				_profiler.Debug($"  Max: {Logger.Round(TimeSpan.FromTicks(last))}, {ns ?? "--"}");
+				_profiler.Debug($"  Min: {Logger.Round(TimeSpan.FromTicks(first))}, {xs ?? "--"}");
 			}
 			else
 			{

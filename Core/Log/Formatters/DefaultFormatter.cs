@@ -17,7 +17,7 @@ namespace Adenson.Log
 		public override string Format(LogEntry entry)
 		{
 			Arg.IsNotNull(entry, "entry");
-			return $"{entry.Date:H:mm:ss.fff} {entry.Severity.ToString().Substring(0, 1)}] {entry.TypeName} {this.ToString(entry.Message)}";
+			return $"{entry.Date:H:mm:ss.fff} {entry.Severity.ToString().Substring(0, 1)} {entry.TypeName} {this.ToString(entry.Message)}";
 		}
 
 		#endregion

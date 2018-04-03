@@ -19,7 +19,7 @@ namespace Adenson.Log
 		internal LogProfiler(Logger parent, string identifier)
 		{
 			memoryStart = GC.GetTotalMemory(false);
-			this.Start = DateTime.Now;
+			this.Stopwatch = new Stopwatch();
 			this.Parent = parent;
 			this.Identifier = identifier;
 			this.Uid = Guid.NewGuid();
@@ -49,7 +49,7 @@ namespace Adenson.Log
 					throw new ObjectDisposedException("LogProfiler");
 				}
 
-				return DateTime.Now.Subtract(this.Start);
+				return this.Stopwatch.Elapsed;
 			}
 		}
 
@@ -103,11 +103,7 @@ namespace Adenson.Log
 		/// </summary>
 		public Action Disposed { get; internal set; }
 
-		private DateTime Start
-		{
-			get;
-			set;
-		}
+		internal Stopwatch Stopwatch { get; private set; }
 
 		#endregion
 		#region Methods
@@ -118,9 +114,9 @@ namespace Adenson.Log
 		/// <param name="message">Message to log.</param>
 		/// <exception cref="ArgumentNullException">If message is null or whitespace</exception>
 		[Conditional("DEBUG")]
-		public void Debug(string message)
+		public void Debug(object message)
 		{
-			this.Write(Severity.Profile, message);
+			this.Parent.Debug(message);
 		}
 
 		/// <summary>
@@ -128,6 +124,8 @@ namespace Adenson.Log
 		/// </summary>
 		public void Dispose()
 		{
+			this.Stopwatch.Stop();
+			this.Parent.Write(Severity.Debug, $"{this.Identifier}: {Logger.Round(this.Elapsed)}");
 			this.Disposed?.Invoke();
 			this.IsDisposed = true;
 		}
@@ -149,11 +147,6 @@ namespace Adenson.Log
 			}
 
 			return marker;
-		}
-
-		private void Write(Severity severity, string message)
-		{
-			this.Parent.Write(severity, $"[{Logger.Round(this.Elapsed.TotalSeconds)}] {this.Identifier} {message}");
 		}
 
 		#endregion

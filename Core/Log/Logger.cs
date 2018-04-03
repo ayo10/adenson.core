@@ -200,9 +200,22 @@ namespace Adenson.Log
 			this.Write(Severity.Warn, value);
 		}
 
-		internal static string Round(double seconds)
+		internal static string Round(TimeSpan time)
 		{
-			return seconds.ToString(Settings.SecondsFormat, System.Globalization.CultureInfo.CurrentCulture);
+			if (time.TotalMilliseconds < 1000)
+			{
+				return $"{time.TotalMilliseconds.Round(4)} ms";
+			}
+			else if (time.TotalSeconds < 60)
+			{
+				return $"{time.TotalSeconds.Round(4)} s";
+			}
+			else if (time.TotalMinutes < 60)
+			{
+				return $"{time.TotalMinutes.Round(4)} m";
+			}
+
+			return $"{time.TotalHours.Round(4)} h";
 		}
 
 		internal void Write(Severity severity, object message)
